@@ -1,1 +1,2 @@
 --exclude ext/llama_cpp/src/
+--exclude ext/llama_cpp/llama_cpp.cpp

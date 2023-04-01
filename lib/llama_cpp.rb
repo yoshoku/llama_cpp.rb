@@ -7,6 +7,11 @@ require_relative 'llama_cpp/llama_cpp'
 module LLaMACpp
   module_function
 
+  # Generates sentences following the given prompt for operation check.
+  #
+  # @param context [LLaMACpp::Context]
+  # @param prompt [String]
+  # @return [String]
   def generate(context, prompt) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity
     prompt.insert(0, ' ')
 
