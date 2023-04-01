@@ -1,0 +1,42 @@
+require:
+  - rubocop-rake
+  - rubocop-minitest
+
+AllCops:
+  TargetRubyVersion: 2.7
+  NewCops: enable
+  DisplayCopNames: true
+  DisplayStyleGuide: true
+  Exclude:
+    - 'tmp/**/*'
+    - 'vendor/**/*'
+    - 'Steepfile'
+
+Gemspec/RequiredRubyVersion:
+  Enabled: false
+
+Layout/LineLength:
+  AllowedPatterns: ['(\A|\s)#']
+
+Metrics/AbcSize:
+  Exclude:
+    - 'test/**/*'
+
+Metrics/CyclomaticComplexity:
+  Max: 10
+
+Metrics/BlockLength:
+  Exclude:
+    - 'test/**/*'
+
+Metrics/BlockNesting:
+  Max: 5
+
+Metrics/MethodLength:
+  Exclude:
+    - 'test/**/*'
+
+Style/GlobalVars:
+  Exclude:
+    - 'ext/**/*'
+
