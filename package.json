@@ -1,0 +1,15 @@
+{
+  "name": "llama_cpp.rb",
+  "repository": "git@github.com:yoshoku/llama_cpp.rb.git",
+  "author": "Atsushi Tatsuma <yoshoku@outlook.com>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.5.1",
+    "@commitlint/config-conventional": "^17.4.4",
+    "husky": "^8.0.3"
+  }
+}

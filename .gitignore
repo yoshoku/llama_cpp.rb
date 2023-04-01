@@ -6,6 +6,7 @@
 /pkg/
 /spec/reports/
 /tmp/
+/node_modules/
 *.bundle
 *.so
 *.o
