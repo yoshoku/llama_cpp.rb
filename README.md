@@ -20,6 +20,8 @@ If bundler is not being used to manage dependencies, install the gem by executin
 
 ## Usage
 
+Prepare a quantized model file by refering to [the usage section on the llama.cpp README](https://github.com/ggerganov/llama.cpp#usage).
+
 ```ruby
 require 'llama_cpp'
 
