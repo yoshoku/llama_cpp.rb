@@ -11,8 +11,9 @@ module LLaMACpp
   #
   # @param context [LLaMACpp::Context]
   # @param prompt [String]
+  # @parma n_threads [Integer]
   # @return [String]
-  def generate(context, prompt) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity
+  def generate(context, prompt, n_threads: 1) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity
     prompt.insert(0, ' ')
 
     embd_input = context.tokenize(text: prompt, add_bos: true)
@@ -36,7 +37,7 @@ module LLaMACpp
           embd.insert(0, last_n_tokens[(n_ctx - (n_left / 2) - embd.size)...-embd.size])
         end
 
-        context.eval(tokens: embd, n_past: n_past)
+        context.eval(tokens: embd, n_past: n_past, n_threads: n_threads)
       end
 
       n_past += embd.size
