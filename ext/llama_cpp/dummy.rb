@@ -8,7 +8,7 @@ module LLaMACpp
   LLAMA_FILE_VERSION = '1'
 
   # LLaMA file magic.
-  LLAMA_FILE_MAGIC = '0x67676d66'
+  LLAMA_FILE_MAGIC = '0x67676a74'
 
   # LLaMA file magic unversioned.
   LLAMA_FILE_MAGIC_UNVERSIONED = '0x67676d6c'

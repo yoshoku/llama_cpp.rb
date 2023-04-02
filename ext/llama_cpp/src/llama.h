@@ -6,7 +6,7 @@
 #include <stdbool.h>
 
 #ifdef LLAMA_SHARED
-#    ifdef _WIN32
+#    if defined(_WIN32) && !defined(__MINGW32__)
 #        ifdef LLAMA_BUILD
 #            define LLAMA_API __declspec(dllexport)
 #        else
@@ -20,7 +20,7 @@
 #endif
 
 #define LLAMA_FILE_VERSION 1
-#define LLAMA_FILE_MAGIC 0x67676d66 // 'ggmf' in hex
+#define LLAMA_FILE_MAGIC 0x67676a74 // 'ggjt' in hex
 #define LLAMA_FILE_MAGIC_UNVERSIONED 0x67676d6c // pre-versioned files
 
 #ifdef __cplusplus
