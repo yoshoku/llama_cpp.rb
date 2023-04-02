@@ -42,9 +42,9 @@ module LLaMACpp
     # @param tokens [Array<Integer>] The tokens to be evaluated.
     # @param n_past [Integer] The number of past tokens.
     # @param n_tokens [Integer] The number of tokens to be evaluated.
-    # @param n_threds [Integer] The number of threads.
+    # @param n_threads [Integer] The number of threads.
     # @return [NilClass]
-    def eval(tokens:, n_past:, n_tokens: nil, n_threds: 1); end
+    def eval(tokens:, n_past:, n_tokens: nil, n_threads: 1); end
 
     # Returns the logits.
     #
