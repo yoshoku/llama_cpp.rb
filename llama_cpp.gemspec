@@ -23,7 +23,13 @@ Gem::Specification.new do |spec|
     `git ls-files -z`.split("\x0").reject do |f|
       (f == __FILE__) || f.match(%r{\A(?:(?:bin|test|spec|features)/|\.(?:git|circleci)|appveyor)})
     end
+    `git ls-files -z`.split("\x0")
+                     .reject { |f| f.match(%r{\A(?:(?:bin|doc|test|spec|node_modules|pkg|tmp|\.git|\.github|\.husky|sig)/)}) }
+                     .select { |f| f.match(/\.(?:rb|rbs|h|hpp|c|cpp|md|txt)$/) }
   end
+  spec.files.delete('ext/llama_cpp/dummy.rb')
+  spec.files.append('ext/llama_cpp/src/LICENSE')
+
   spec.bindir = 'exe'
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
