@@ -17,6 +17,7 @@ Gemspec/RequiredRubyVersion:
 
 Layout/LineLength:
   AllowedPatterns: ['(\A|\s)#']
+  Max: 128
 
 Metrics/AbcSize:
   Exclude:
@@ -28,6 +29,7 @@ Metrics/CyclomaticComplexity:
 Metrics/BlockLength:
   Exclude:
     - 'test/**/*'
+  Max: 32
 
 Metrics/BlockNesting:
   Max: 5
