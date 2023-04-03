@@ -256,6 +256,9 @@ private:
       return Qnil;
     }
 
+    rb_iv_set(self, "@params", kw_values[1]);
+    rb_iv_set(self, "@has_evaluated", Qfalse);
+
     RB_GC_GUARD(filename);
     return self;
   };
@@ -304,6 +307,8 @@ private:
       rb_raise(rb_eRuntimeError, "Failed to evaluate");
       return Qnil;
     }
+
+    rb_iv_set(self, "@has_evaluated", Qtrue);
 
     return Qnil;
   };
@@ -365,6 +370,15 @@ private:
     LLaMAContextWrapper* ptr = get_llama_context(self);
     if (ptr->ctx == NULL) {
       rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
+      return Qnil;
+    }
+    LLaMAContextParamsWrapper* prms_ptr = RbLLaMAContextParams::get_llama_context_params(rb_iv_get(self, "@params"));
+    if (!prms_ptr->params.embedding) {
+      rb_raise(rb_eRuntimeError, "embedding parameter is false");
+      return Qnil;
+    }
+    if (rb_iv_get(self, "@has_evaluated") != Qtrue) {
+      rb_raise(rb_eRuntimeError, "LLaMA context has not been evaluated");
       return Qnil;
     }
 
