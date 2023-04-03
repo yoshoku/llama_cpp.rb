@@ -217,7 +217,7 @@ public:
     rb_define_method(rb_cLLaMAContext, "initialize", RUBY_METHOD_FUNC(_llama_context_initialize), -1);
     rb_define_method(rb_cLLaMAContext, "eval", RUBY_METHOD_FUNC(_llama_context_eval), -1);
     rb_define_method(rb_cLLaMAContext, "tokenize", RUBY_METHOD_FUNC(_llama_context_tokenize), -1);
-    // rb_define_method(rb_cLLaMAContext, "logits", RUBY_METHOD_FUNC(_llama_context_logits), 0);
+    rb_define_method(rb_cLLaMAContext, "logits", RUBY_METHOD_FUNC(_llama_context_logits), 0);
     rb_define_method(rb_cLLaMAContext, "embeddings", RUBY_METHOD_FUNC(_llama_context_embeddings), 0);
     rb_define_method(rb_cLLaMAContext, "token_to_str", RUBY_METHOD_FUNC(_llama_context_token_to_str), 1);
     rb_define_method(rb_cLLaMAContext, "sample_top_p_top_k", RUBY_METHOD_FUNC(_llama_context_sample_top_p_top_k), -1);
@@ -308,6 +308,7 @@ private:
       return Qnil;
     }
 
+    rb_iv_set(self, "@n_tokens", INT2NUM(n_tokens));
     rb_iv_set(self, "@has_evaluated", Qtrue);
 
     return Qnil;
@@ -364,6 +365,29 @@ private:
     const llama_token token = NUM2INT(token_);
     const char* str = llama_token_to_str(ptr->ctx, token);
     return str != nullptr ? rb_utf8_str_new_cstr(str) : rb_utf8_str_new_cstr("");
+  };
+
+  static VALUE _llama_context_logits(VALUE self) {
+    LLaMAContextWrapper* ptr = get_llama_context(self);
+    if (ptr->ctx == NULL) {
+      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
+      return Qnil;
+    }
+    if (rb_iv_get(self, "@has_evaluated") != Qtrue) {
+      rb_raise(rb_eRuntimeError, "LLaMA context has not been evaluated");
+      return Qnil;
+    }
+
+    LLaMAContextParamsWrapper* prms_ptr = RbLLaMAContextParams::get_llama_context_params(rb_iv_get(self, "@params"));
+    const int n_tokens = prms_ptr->params.logits_all ? NUM2INT(rb_iv_get(self, "@n_tokens")) : 1;
+    const int n_vocab = llama_n_vocab(ptr->ctx);
+    const float* logits = llama_get_logits(ptr->ctx);
+    VALUE output = rb_ary_new();
+    for (int i = 0; i < n_tokens * n_vocab; i++) {
+      rb_ary_push(output, DBL2NUM((double)(logits[i])));
+    }
+
+    return output;
   };
 
   static VALUE _llama_context_embeddings(VALUE self) {
