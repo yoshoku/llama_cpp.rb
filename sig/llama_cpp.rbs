@@ -47,4 +47,6 @@ module LLaMACpp
     def vocab_only: () -> bool
     def vocab_only=: (bool) -> bool
   end
+
+  class Params = ContextParams
 end

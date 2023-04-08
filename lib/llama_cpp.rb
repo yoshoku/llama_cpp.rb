@@ -5,13 +5,16 @@ require_relative 'llama_cpp/llama_cpp'
 
 # llama_cpp.rb provides Ruby bindings for the llama.cpp.
 module LLaMACpp
+  # Class alias to match interface of whispercpp gem.
+  Params = ContextParams
+
   module_function
 
   # Generates sentences following the given prompt for operation check.
   #
   # @param context [LLaMACpp::Context]
   # @param prompt [String]
-  # @parma n_threads [Integer]
+  # @param n_threads [Integer]
   # @return [String]
   def generate(context, prompt, n_threads: 1) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity
     prompt.insert(0, ' ')
