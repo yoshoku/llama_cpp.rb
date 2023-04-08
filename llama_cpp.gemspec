@@ -25,7 +25,7 @@ Gem::Specification.new do |spec|
       (f == __FILE__) || f.match(%r{\A(?:(?:bin|test|spec|features)/|\.(?:git|circleci)|appveyor)})
     end
     `git ls-files -z`.split("\x0")
-                     .reject { |f| f.match(%r{\A(?:(?:bin|doc|test|spec|node_modules|pkg|tmp|\.git|\.github|\.husky|sig)/)}) }
+                     .reject { |f| f.match(%r{\A(?:(?:bin|doc|test|spec|node_modules|pkg|tmp|\.git|\.github|\.husky)/)}) }
                      .select { |f| f.match(/\.(?:rb|rbs|h|hpp|c|cpp|md|txt)$/) }
   end
   spec.files.delete('ext/llama_cpp/dummy.rb')

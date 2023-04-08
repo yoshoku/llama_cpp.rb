@@ -1,4 +1,50 @@
 module LLaMACpp
   VERSION: String
-  # See the writing guide of rbs: https://github.com/ruby/rbs#guides
+  LLAMA_CPP_VERSION: String
+  LLAMA_FILE_VERSION: String
+  LLAMA_FILE_MAGIC: String
+  LLAMA_FILE_MAGIC_UNVERSIONED: String
+
+  def self?.generate: (::LLaMACpp::Context, String, ?n_threads: Integer) -> String
+  def self?.print_system_info: () -> void
+  def self?.token_bos: () -> Integer
+  def self?.token_eos: () -> Integer
+
+  class Context
+    public
+
+    def initialize: (model_path: String, params: ::LLaMACpp::ContextParams) -> void
+    def embeddings: () -> Array[Float]
+    def eval: (tokens: Array[Integer], n_past: Integer, ?n_tokens: Integer, ?n_threads: Integer) -> Qnil
+    def logits: () -> Array[Float]
+    def n_ctx: () -> Integer
+    def n_embd: () -> Integer
+    def n_vocab: () -> Integer
+    def print_timings: () -> void
+    def reset_timings: () -> void
+    def sample_top_p_top_k: (top_k: Integer, top_p: Float, temp: Float, penalty: Float) -> Integer
+    def token_to_str: (Integer) -> String
+    def tokenize: (text: String, ?n_max_tokens: Integer, ?add_bos: bool) -> Array[Integer]
+  end
+
+  class ContextParams
+    public
+
+    def embedding: () -> bool
+    def embedding=: (bool) -> bool
+    def f16_kv: () -> bool
+    def f16_kv=: (bool) -> bool
+    def logits_all: () -> bool
+    def logits_all=: (bool) -> bool
+    def n_ctx: () -> Integer
+    def n_ctx=: (Integer) -> Integer
+    def n_parts: () -> Integer
+    def n_parts=: (Integer) -> Integer
+    def seed: () -> Integer
+    def seed=: (Integer) -> Integer
+    def use_mlock: () -> bool
+    def use_mlock=: (bool) -> bool
+    def vocab_only: () -> bool
+    def vocab_only=: (bool) -> bool
+  end
 end
