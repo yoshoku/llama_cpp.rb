@@ -31,6 +31,7 @@ params.seed = 123456
 context = LLaMACpp::Context.new(model_path: '/path/to/ggml-model-q4_0.bin', params: params)
 
 puts LLaMACpp.generate(context, 'Please tell me the largest city in Japan.')
+# => "There are two major cities in Japan, Tokyo and Osaka, which have about 30 million populations."
 ```
 
 ## Contributing
