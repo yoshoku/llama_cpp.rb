@@ -26,11 +26,11 @@ Prepare a quantized model file by refering to [the usage section on the llama.cp
 require 'llama_cpp'
 
 params = LLaMACpp::ContextParams.new
-params.seed = 123456
+params.seed = 12
 
 context = LLaMACpp::Context.new(model_path: '/path/to/ggml-model-q4_0.bin', params: params)
 
-puts LLaMACpp.generate(context, 'Please tell me the largest city in Japan.')
+puts LLaMACpp.generate(context, 'Please tell me the largest city in Japan.', n_threads: 4)
 # => "There are two major cities in Japan, Tokyo and Osaka, which have about 30 million populations."
 ```
 
