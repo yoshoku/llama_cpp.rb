@@ -99,6 +99,11 @@ module LLaMACpp
     #
     # @return [NilClass]
     def reset_timings; end
+
+    # Deallocates context.
+    #
+    # @return [NilClass]
+    def free; end
   end
 
   # Class for parameters

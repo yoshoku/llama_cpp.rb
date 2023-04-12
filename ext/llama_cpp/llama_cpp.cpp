@@ -226,6 +226,7 @@ public:
     rb_define_method(rb_cLLaMAContext, "n_embd", RUBY_METHOD_FUNC(_llama_context_n_embd), 0);
     rb_define_method(rb_cLLaMAContext, "print_timings", RUBY_METHOD_FUNC(_llama_context_print_timings), 0);
     rb_define_method(rb_cLLaMAContext, "reset_timings", RUBY_METHOD_FUNC(_llama_context_reset_timings), 0);
+    rb_define_method(rb_cLLaMAContext, "free", RUBY_METHOD_FUNC(_llama_context_free), 0);
   };
 
 private:
@@ -492,6 +493,17 @@ private:
     llama_reset_timings(ptr->ctx);
     return Qnil;
   };
+
+  static VALUE _llama_context_free(VALUE self) {
+    LLaMAContextWrapper* ptr = get_llama_context(self);
+    if (ptr->ctx != NULL) {
+      llama_free(ptr->ctx);
+      ptr->ctx = NULL;
+      rb_iv_set(self, "@params", Qnil);
+      rb_iv_set(self, "@has_evaluated", Qfalse);
+    }
+    return Qnil;
+  }
 };
 
 const rb_data_type_t RbLLaMAContext::llama_context_type = {
