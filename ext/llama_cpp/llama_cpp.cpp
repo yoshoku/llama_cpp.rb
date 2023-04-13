@@ -227,6 +227,7 @@ public:
     rb_define_method(rb_cLLaMAContext, "print_timings", RUBY_METHOD_FUNC(_llama_context_print_timings), 0);
     rb_define_method(rb_cLLaMAContext, "reset_timings", RUBY_METHOD_FUNC(_llama_context_reset_timings), 0);
     rb_define_method(rb_cLLaMAContext, "free", RUBY_METHOD_FUNC(_llama_context_free), 0);
+    rb_define_method(rb_cLLaMAContext, "load", RUBY_METHOD_FUNC(_llama_context_load), -1);
   };
 
 private:
@@ -504,6 +505,43 @@ private:
     }
     return Qnil;
   }
+
+  static VALUE _llama_context_load(int argc, VALUE* argv, VALUE self) {
+    VALUE kw_args = Qnil;
+    ID kw_table[2] = { rb_intern("model_path"), rb_intern("params") };
+    VALUE kw_values[2] = { Qundef, Qundef };
+    rb_scan_args(argc, argv, ":", &kw_args);
+    rb_get_kwargs(kw_args, kw_table, 2, 0, kw_values);
+
+    if (!RB_TYPE_P(kw_values[0], T_STRING)) {
+      rb_raise(rb_eArgError, "model_path must be a string");
+      return Qnil;
+    }
+    if (!rb_obj_is_kind_of(kw_values[1], rb_cLLaMAContextParams)) {
+      rb_raise(rb_eArgError, "params must be a LLaMAContextParams");
+      return Qnil;
+    }
+
+    LLaMAContextWrapper* ctx_ptr = get_llama_context(self);
+    if (ctx_ptr->ctx != NULL) {
+      rb_raise(rb_eRuntimeError, "LLaMA context is already loaded");
+      return Qnil;
+    }
+
+    VALUE filename = kw_values[0];
+    LLaMAContextParamsWrapper* prms_ptr = RbLLaMAContextParams::get_llama_context_params(kw_values[1]);
+    ctx_ptr->ctx = llama_init_from_file(StringValueCStr(filename), prms_ptr->params);
+    if (ctx_ptr->ctx == NULL) {
+      rb_raise(rb_eRuntimeError, "Failed to initialize LLaMA context");
+      return Qnil;
+    }
+
+    rb_iv_set(self, "@params", kw_values[1]);
+    rb_iv_set(self, "@has_evaluated", Qfalse);
+
+    RB_GC_GUARD(filename);
+    return Qnil;
+  };
 };
 
 const rb_data_type_t RbLLaMAContext::llama_context_type = {

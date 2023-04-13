@@ -104,6 +104,12 @@ module LLaMACpp
     #
     # @return [NilClass]
     def free; end
+
+    # Loads model.
+    #
+    # @param model_path [String] The path to the model file.
+    # @param params [ContextParams] The parameters for context.
+    def load(model_path:, params:); end
   end
 
   # Class for parameters
