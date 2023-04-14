@@ -238,7 +238,13 @@ private:
     ID kw_table[2] = { rb_intern("model_path"), rb_intern("params") };
     VALUE kw_values[2] = { Qundef, Qundef };
     rb_scan_args(argc, argv, ":", &kw_args);
-    rb_get_kwargs(kw_args, kw_table, 2, 0, kw_values);
+    rb_get_kwargs(kw_args, kw_table, 0, 2, kw_values);
+
+    if (kw_values[0] == Qundef && kw_values[1] == Qundef) {
+      rb_iv_set(self, "@params", Qnil);
+      rb_iv_set(self, "@has_evaluated", Qfalse);
+      return Qnil;
+    }
 
     if (!RB_TYPE_P(kw_values[0], T_STRING)) {
       rb_raise(rb_eArgError, "model_path must be a string");
@@ -262,7 +268,7 @@ private:
     rb_iv_set(self, "@has_evaluated", Qfalse);
 
     RB_GC_GUARD(filename);
-    return self;
+    return Qnil;
   };
 
   static VALUE _llama_context_eval(int argc, VALUE* argv, VALUE self) {

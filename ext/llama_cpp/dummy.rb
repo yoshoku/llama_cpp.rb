@@ -35,7 +35,7 @@ module LLaMACpp
     #
     # @param model_path [String] The path to the model file.
     # @param params [ContextParams] The parameters for context.
-    def initialize(model_path:, params:); end
+    def initialize(model_path: nil, params: nil); end
 
     # Evaluates the tokens.
     #

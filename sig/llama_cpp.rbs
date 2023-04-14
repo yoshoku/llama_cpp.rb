@@ -14,6 +14,7 @@ module LLaMACpp
     public
 
     def initialize: (model_path: String, params: ::LLaMACpp::ContextParams) -> void
+                  | () -> void
     def embeddings: () -> Array[Float]
     def eval: (tokens: Array[Integer], n_past: Integer, ?n_tokens: Integer, ?n_threads: Integer) -> Qnil
     def free: () -> void
