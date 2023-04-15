@@ -17,9 +17,9 @@ module LLaMACpp
   # @param n_threads [Integer]
   # @return [String]
   def generate(context, prompt, n_threads: 1) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/PerceivedComplexity
-    prompt.insert(0, ' ')
+    spaced_prompt = " #{prompt}"
 
-    embd_input = context.tokenize(text: prompt, add_bos: true)
+    embd_input = context.tokenize(text: spaced_prompt, add_bos: true)
 
     n_ctx = context.n_ctx
     last_n_tokens = [0] * n_ctx
@@ -71,6 +71,6 @@ module LLaMACpp
       break if embd[-1] == LLaMACpp.token_eos
     end
 
-    output.join.delete_prefix(prompt).strip
+    output.join.delete_prefix(spaced_prompt).strip
   end
 end
