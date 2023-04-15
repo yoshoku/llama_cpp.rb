@@ -9,6 +9,7 @@ module LLaMACpp
   def self?.print_system_info: () -> void
   def self?.token_bos: () -> Integer
   def self?.token_eos: () -> Integer
+  def self?.mmap_supported?: () -> bool
 
   class Context
     public

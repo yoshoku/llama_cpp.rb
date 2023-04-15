@@ -25,6 +25,10 @@ module LLaMACpp
 
   # Prints system information.
   def print_system_info; end
+
+  # Returns the flag for supporting mmap.
+  # @return [Boolean]
+  def mmap_supported?; end
 end
 
 # llama_cpp.rb provides Ruby bindings for the llama.cpp.
