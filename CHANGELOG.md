@@ -1,5 +1,23 @@
 ## [Unreleased]
 
+## [[0.0.4](https://github.com/yoshoku/llama_cpp.rb/compare/v0.0.3...v0.0.4)] - 2023-04-15
+
+- Bump bundled llama.cpp from master-698f7b5 to master-c85e03d.
+- Add parameterless constructor to LLaMACpp::Context.
+- Add free and load methods to LLaMACpp::Context.
+  ```ruby
+  require 'llama_cpp'
+
+  context = LLaMACpp::Context.new
+
+  params = LLaMACpp::ContextParams.new
+  context.load(model_path: '/path/to/ggml-model-q4_0.bin', params: params)
+
+  # ...
+
+  context.free
+  ```
+
 ## [[0.0.3](https://github.com/yoshoku/llama_cpp.rb/compare/v0.0.2...v0.0.3)] - 2023-04-08
 
 - Bump bundled llama.cpp from master-5b70e7d to master-698f7b5.
