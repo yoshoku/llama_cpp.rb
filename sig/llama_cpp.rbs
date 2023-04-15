@@ -10,6 +10,7 @@ module LLaMACpp
   def self?.token_bos: () -> Integer
   def self?.token_eos: () -> Integer
   def self?.mmap_supported?: () -> bool
+  def self?.mlock_supported?: () -> bool
 
   class Context
     public

@@ -579,6 +579,10 @@ static VALUE rb_llama_mmap_supported(VALUE self) {
   return llama_mmap_supported() ? Qtrue : Qfalse;
 }
 
+static VALUE rb_llama_mlock_supported(VALUE self) {
+  return llama_mlock_supported() ? Qtrue : Qfalse;
+}
+
 extern "C" void Init_llama_cpp(void) {
   rb_mLLaMACpp = rb_define_module("LLaMACpp");
   RbLLaMAContext::define_class(rb_mLLaMACpp);
@@ -588,6 +592,7 @@ extern "C" void Init_llama_cpp(void) {
   rb_define_module_function(rb_mLLaMACpp, "token_eos", rb_llama_token_eos, 0);
   rb_define_module_function(rb_mLLaMACpp, "print_system_info", rb_llama_print_system_info, 0);
   rb_define_module_function(rb_mLLaMACpp, "mmap_supported?", rb_llama_mmap_supported, 0);
+  rb_define_module_function(rb_mLLaMACpp, "mlock_supported?", rb_llama_mlock_supported, 0);
 
   rb_define_const(rb_mLLaMACpp, "LLAMA_FILE_VERSION", rb_str_new2(std::to_string(LLAMA_FILE_VERSION).c_str()));
   std::stringstream ss_magic;
