@@ -20,7 +20,8 @@ If bundler is not being used to manage dependencies, install the gem by executin
 
 ## Usage
 
-Prepare a quantized model file by refering to [the usage section on the llama.cpp README](https://github.com/ggerganov/llama.cpp#usage).
+Prepare the quantized model by refering to [the usage section on the llama.cpp README](https://github.com/ggerganov/llama.cpp#usage) or
+download the qunatized model, for example [ggml-vicuna-7b-4bit](https://github.com/ggerganov/llama.cpp/discussions/643#discussioncomment-5541351), from Hugging Face.
 
 ```ruby
 require 'llama_cpp'
@@ -28,7 +29,7 @@ require 'llama_cpp'
 params = LLaMACpp::ContextParams.new
 params.seed = 12
 
-context = LLaMACpp::Context.new(model_path: '/path/to/ggml-model-q4_0.bin', params: params)
+context = LLaMACpp::Context.new(model_path: '/path/to/quantized-model.bin', params: params)
 
 puts LLaMACpp.generate(context, 'Please tell me the largest city in Japan.', n_threads: 4)
 # => "There are two major cities in Japan, Tokyo and Osaka, which have about 30 million populations."
