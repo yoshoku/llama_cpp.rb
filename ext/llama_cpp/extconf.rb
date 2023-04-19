@@ -15,6 +15,18 @@ if RUBY_PLATFORM.match?(/darwin|linux|bsd/) && try_compile('#include <stdio.h>',
   $CXXFLAGS << ' -pthread'
 end
 
+if with_config('openblas')
+  abort 'libopenblas is not found.' unless have_library('openblas')
+  abort 'cblas.h is not found.' unless have_header('cblas.h')
+
+  $CFLAGS << ' -DGGML_USE_OPENBLAS'
+end
+
+if with_config('accelerate')
+  $CFLAGS << ' -DGGML_USE_ACCELERATE'
+  $LDFLAGS << ' -framework Accelerate'
+end
+
 UNAME_M = RbConfig::CONFIG['build_cpu'] || RbConfig::CONFIG['host_cpu'] || RbConfig::CONFIG['target_cpu']
 
 # rubocop:disable Layout/LineLength
