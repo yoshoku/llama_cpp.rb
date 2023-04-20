@@ -228,6 +228,7 @@ public:
     rb_define_method(rb_cLLaMAContext, "reset_timings", RUBY_METHOD_FUNC(_llama_context_reset_timings), 0);
     rb_define_method(rb_cLLaMAContext, "free", RUBY_METHOD_FUNC(_llama_context_free), 0);
     rb_define_method(rb_cLLaMAContext, "load", RUBY_METHOD_FUNC(_llama_context_load), -1);
+    rb_define_method(rb_cLLaMAContext, "apply_lora_from_file", RUBY_METHOD_FUNC(_llama_context_apply_lora_from_file), -1);
   };
 
 private:
@@ -558,6 +559,43 @@ private:
     rb_iv_set(self, "@has_evaluated", Qfalse);
 
     RB_GC_GUARD(filename);
+    return Qnil;
+  };
+
+  static VALUE _llama_context_apply_lora_from_file(int argc, VALUE* argv, VALUE self) {
+    VALUE kw_args = Qnil;
+    ID kw_table[3] = { rb_intern("lora_path"), rb_intern("base_model_path"), rb_intern("n_threads") };
+    VALUE kw_values[3] = { Qundef, Qundef, Qundef };
+    rb_scan_args(argc, argv, ":", &kw_args);
+    rb_get_kwargs(kw_args, kw_table, 1, 2, kw_values);
+
+    if (!RB_TYPE_P(kw_values[0], T_STRING)) {
+      rb_raise(rb_eArgError, "lora_path must be a string");
+      return Qnil;
+    }
+    if (kw_values[1] != Qundef && !RB_TYPE_P(kw_values[1], T_STRING)) {
+      rb_raise(rb_eArgError, "base_model_path must be a string");
+      return Qnil;
+    }
+    if (kw_values[2] != Qundef && !RB_INTEGER_TYPE_P(kw_values[2])) {
+      rb_raise(rb_eArgError, "n_threads must be an integer");
+      return Qnil;
+    }
+
+    const char* lora_path = StringValueCStr(kw_values[0]);
+    const char* base_model_path = kw_values[1] == Qundef ? NULL : StringValueCStr(kw_values[1]);
+    const int n_threads = kw_values[2] == Qundef ? 1 : NUM2INT(kw_values[2]);
+
+    LLaMAContextWrapper* ptr = get_llama_context(self);
+    if (ptr->ctx != NULL) {
+      rb_raise(rb_eRuntimeError, "LLaMA context is already loaded");
+      return Qnil;
+    }
+
+    if (llama_apply_lora_from_file(ptr->ctx, lora_path, base_model_path, n_threads) != 0) {
+      rb_raise(rb_eRuntimeError, "Failed to apply LoRA");
+      return Qnil;
+    }
     return Qnil;
   };
 };

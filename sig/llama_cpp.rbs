@@ -30,6 +30,7 @@ module LLaMACpp
     def sample_top_p_top_k: (top_k: Integer, top_p: Float, temp: Float, penalty: Float) -> Integer
     def token_to_str: (Integer) -> String
     def tokenize: (text: String, ?n_max_tokens: Integer, ?add_bos: bool) -> Array[Integer]
+    def apply_lora_from_file: (lora_path: String, ?base_model_path: String, ?n_threads: Integer) -> void
   end
 
   class ContextParams
