@@ -230,6 +230,7 @@ public:
     rb_define_method(rb_cLLaMAContext, "load", RUBY_METHOD_FUNC(_llama_context_load), -1);
     rb_define_method(rb_cLLaMAContext, "kv_cache_size", RUBY_METHOD_FUNC(_llama_context_kv_cache_size), 0);
     rb_define_method(rb_cLLaMAContext, "kv_cache_token_count", RUBY_METHOD_FUNC(_llama_context_kv_cache_token_count), 0);
+    rb_define_method(rb_cLLaMAContext, "set_kv_cache", RUBY_METHOD_FUNC(_llama_context_set_kv_cache), -1);
   };
 
 private:
@@ -567,6 +568,60 @@ private:
       return Qnil;
     }
     return INT2NUM(llama_get_kv_cache_token_count(ptr->ctx));
+  };
+
+  static VALUE _llama_context_set_kv_cache(int argc, VALUE* argv, VALUE self) {
+    VALUE kw_args = Qnil;
+    ID kw_table[3] = { rb_intern("kv_cache"), rb_intern("n_size"), rb_intern("n_token_count") };
+    VALUE kw_values[3] = { Qundef, Qundef, Qundef };
+    rb_scan_args(argc, argv, ":", &kw_args);
+    rb_get_kwargs(kw_args, kw_table, 3, 0, kw_values);
+
+    if (!RB_TYPE_P(kw_values[0], T_ARRAY)) {
+      rb_raise(rb_eArgError, "kv_cache must be an Array");
+      return Qnil;
+    }
+    if (!RB_INTEGER_TYPE_P(kw_values[1])) {
+      rb_raise(rb_eArgError, "n_size must be an Integer");
+      return Qnil;
+    }
+    if (!RB_INTEGER_TYPE_P(kw_values[2])) {
+      rb_raise(rb_eArgError, "n_token_count must be an Integer");
+      return Qnil;
+    }
+
+    LLaMAContextWrapper* ptr = get_llama_context(self);
+    if (ptr->ctx == NULL) {
+      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
+      return Qnil;
+    }
+
+    const size_t cache_size = RARRAY_LEN(kw_values[0]);
+    if (cache_size != llama_get_kv_cache_size(ptr->ctx)) {
+      rb_raise(rb_eArgError, "kv_cache size must be equal to the context's kv_cache_size");
+      return Qnil;
+    }
+    std::vector<uint8_t> kv_cache(cache_size);
+    for (size_t i = 0; i < cache_size; i++) {
+      VALUE cache_value = rb_ary_entry(kw_values[0], i);
+      if (!RB_INTEGER_TYPE_P(cache_value)) {
+        rb_raise(rb_eArgError, "kv_cache must be an array of integers");
+        return Qnil;
+      }
+      kv_cache[i] = NUM2UINT(cache_value);
+    }
+
+    const size_t n_size = NUM2SIZET(kw_values[1]);
+    if (n_size != llama_get_kv_cache_size(ptr->ctx)) {
+      rb_raise(rb_eArgError, "n_size must be equal to the context's kv_cache_size");
+      return Qnil;
+    }
+
+    const int n_token_count = NUM2INT(kw_values[2]);
+
+    llama_set_kv_cache(ptr->ctx, kv_cache.data(), n_size, n_token_count);
+
+    return Qnil;
   };
 };
 
