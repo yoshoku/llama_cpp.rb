@@ -229,6 +229,7 @@ public:
     rb_define_method(rb_cLLaMAContext, "free", RUBY_METHOD_FUNC(_llama_context_free), 0);
     rb_define_method(rb_cLLaMAContext, "load", RUBY_METHOD_FUNC(_llama_context_load), -1);
     rb_define_method(rb_cLLaMAContext, "kv_cache_size", RUBY_METHOD_FUNC(_llama_context_kv_cache_size), 0);
+    rb_define_method(rb_cLLaMAContext, "kv_cache_token_count", RUBY_METHOD_FUNC(_llama_context_kv_cache_token_count), 0);
   };
 
 private:
@@ -557,6 +558,15 @@ private:
       return Qnil;
     }
     return SIZET2NUM(llama_get_kv_cache_size(ptr->ctx));
+  };
+
+  static VALUE _llama_context_kv_cache_token_count(VALUE self) {
+    LLaMAContextWrapper* ptr = get_llama_context(self);
+    if (ptr->ctx == NULL) {
+      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
+      return Qnil;
+    }
+    return INT2NUM(llama_get_kv_cache_token_count(ptr->ctx));
   };
 };
 

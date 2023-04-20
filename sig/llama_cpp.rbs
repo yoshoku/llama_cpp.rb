@@ -31,6 +31,7 @@ module LLaMACpp
     def token_to_str: (Integer) -> String
     def tokenize: (text: String, ?n_max_tokens: Integer, ?add_bos: bool) -> Array[Integer]
     def kv_cache_size: () -> Integer
+    def kv_cache_token_count: () -> Integer
   end
 
   class ContextParams
