@@ -311,6 +311,10 @@ private:
     const int n_threads = kw_values[3] == Qundef ? 1 : NUM2INT(kw_values[3]);
 
     LLaMAContextWrapper* ptr = get_llama_context(self);
+    if (ptr->ctx == NULL) {
+      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
+      return Qnil;
+    }
     if (llama_eval(ptr->ctx, embd.data(), n_tokens, n_past, n_threads) != 0) {
       rb_raise(rb_eRuntimeError, "Failed to evaluate");
       return Qnil;
@@ -349,6 +353,10 @@ private:
 
     std::vector<llama_token> tokens(n_max_tokens);
     LLaMAContextWrapper* ptr = get_llama_context(self);
+    if (ptr->ctx == NULL) {
+      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
+      return Qnil;
+    }
     const int n = llama_tokenize(ptr->ctx, text.c_str(), tokens.data(), n_max_tokens, add_bos);
     if (n < 0) {
       rb_raise(rb_eRuntimeError, "Failed to tokenize");
@@ -449,6 +457,10 @@ private:
     }
 
     LLaMAContextWrapper* ptr = get_llama_context(self);
+    if (ptr->ctx == NULL) {
+      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
+      return Qnil;
+    }
     llama_token token = llama_sample_top_p_top_k(ptr->ctx, last_n_tokens_data.data(), last_n_tokens_size, top_k, top_p, temp, penalty);
 
     return INT2NUM(token);
