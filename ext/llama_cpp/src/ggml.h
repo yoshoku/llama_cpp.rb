@@ -204,6 +204,7 @@ enum ggml_type {
     GGML_TYPE_F16  = 1,
     GGML_TYPE_Q4_0 = 2,
     GGML_TYPE_Q4_1 = 3,
+    GGML_TYPE_Q8_0 = 4,
     GGML_TYPE_I8,
     GGML_TYPE_I16,
     GGML_TYPE_I32,
@@ -425,6 +426,12 @@ struct ggml_tensor * ggml_dup(
         struct ggml_tensor  * a);
 
 struct ggml_tensor * ggml_add(
+        struct ggml_context * ctx,
+        struct ggml_tensor  * a,
+        struct ggml_tensor  * b);
+
+
+struct ggml_tensor * ggml_add_inplace(
         struct ggml_context * ctx,
         struct ggml_tensor  * a,
         struct ggml_tensor  * b);
@@ -807,6 +814,8 @@ size_t ggml_quantize_q4_1(const float * src, void * dst, int n, int k, int64_t *
 int ggml_cpu_has_avx(void);
 int ggml_cpu_has_avx2(void);
 int ggml_cpu_has_avx512(void);
+int ggml_cpu_has_avx512_vbmi(void);
+int ggml_cpu_has_avx512_vnni(void);
 int ggml_cpu_has_fma(void);
 int ggml_cpu_has_neon(void);
 int ggml_cpu_has_arm_fma(void);
@@ -836,6 +845,7 @@ typedef struct {
     dequantize_row_q_t dequantize_row_q;
     quantize_row_q_t   quantize_row_q;
     quantize_row_q_t   quantize_row_q_reference;
+    quantize_row_q_t   quantize_row_q_dot;
     vec_dot_q_t        vec_dot_q;
 } quantize_fns_t;
 
