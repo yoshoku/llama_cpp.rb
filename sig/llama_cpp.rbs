@@ -33,6 +33,7 @@ module LLaMACpp
     def kv_cache_size: () -> Integer
     def kv_cache_token_count: () -> Integer
     def set_kv_cache: (kv_cache: Array[Integer], n_size: Integer, n_token_count: Integer) -> void
+    def kv_cache: () -> Array[Integer]
   end
 
   class ContextParams

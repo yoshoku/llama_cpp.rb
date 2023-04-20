@@ -231,6 +231,7 @@ public:
     rb_define_method(rb_cLLaMAContext, "kv_cache_size", RUBY_METHOD_FUNC(_llama_context_kv_cache_size), 0);
     rb_define_method(rb_cLLaMAContext, "kv_cache_token_count", RUBY_METHOD_FUNC(_llama_context_kv_cache_token_count), 0);
     rb_define_method(rb_cLLaMAContext, "set_kv_cache", RUBY_METHOD_FUNC(_llama_context_set_kv_cache), -1);
+    rb_define_method(rb_cLLaMAContext, "kv_cache", RUBY_METHOD_FUNC(_llama_context_kv_cache), 0);
   };
 
 private:
@@ -622,6 +623,23 @@ private:
     llama_set_kv_cache(ptr->ctx, kv_cache.data(), n_size, n_token_count);
 
     return Qnil;
+  };
+
+  static VALUE _llama_context_kv_cache(VALUE self) {
+    LLaMAContextWrapper* ptr = get_llama_context(self);
+    if (ptr->ctx == NULL) {
+      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
+      return Qnil;
+    }
+
+    const size_t cache_size = llama_get_kv_cache_size(ptr->ctx);
+    const uint8_t* cache = llama_get_kv_cache(ptr->ctx);
+    VALUE output = rb_ary_new();
+    for (size_t i = 0; i < cache_size; i++) {
+      rb_ary_push(output, UINT2NUM(cache[i]));
+    }
+
+    return output;
   };
 };
 
