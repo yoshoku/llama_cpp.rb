@@ -23,8 +23,9 @@ if with_config('openblas')
 end
 
 if with_config('accelerate')
+  abort 'Accelerate framework is not found.' unless have_framework('Accelerate')
+
   $CFLAGS << ' -DGGML_USE_ACCELERATE'
-  $LDFLAGS << ' -framework Accelerate'
 end
 
 UNAME_M = RbConfig::CONFIG['build_cpu'] || RbConfig::CONFIG['host_cpu'] || RbConfig::CONFIG['target_cpu']
