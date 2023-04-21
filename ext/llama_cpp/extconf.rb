@@ -28,6 +28,12 @@ if with_config('accelerate')
   $CFLAGS << ' -DGGML_USE_ACCELERATE'
 end
 
+if with_config('cublas')
+  $CFLAGS << ' -DGGML_USE_CUBLAS -I/usr/local/cuda/include'
+  $LDFLAGS << ' -lcublas -lculibos -lcudart -lcublasLt -lpthread -ldl -lrt -L/usr/local/cuda/lib64'
+  $objs = %w[ggml-cuda.o ggml.o llama.o llama_cpp.o]
+end
+
 UNAME_M = RbConfig::CONFIG['build_cpu'] || RbConfig::CONFIG['host_cpu'] || RbConfig::CONFIG['target_cpu']
 
 # rubocop:disable Layout/LineLength
@@ -50,3 +56,10 @@ end
 # rubocop:enable Layout/LineLength
 
 create_makefile('llama_cpp/llama_cpp')
+
+if with_config('cublas')
+  File.open('Makefile', 'a') do |f|
+    f.puts 'ggml-cuda.o: ggml-cuda.cu ggml-cuda.h'
+    f.puts "\tnvcc -arch=native -c -o $@ $<"
+  end
+end
