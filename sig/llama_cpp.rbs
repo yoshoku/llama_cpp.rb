@@ -5,6 +5,14 @@ module LLaMACpp
   LLAMA_FILE_MAGIC: String
   LLAMA_FILE_MAGIC_UNVERSIONED: String
 
+  LLAMA_FTYPE_ALL_F32: Integer
+  LLAMA_FTYPE_MOSTLY_F16: Integer
+  LLAMA_FTYPE_MOSTLY_Q4_0: Integer
+  LLAMA_FTYPE_MOSTLY_Q4_1: Integer
+  LLAMA_FTYPE_MOSTLY_Q4_1_SOME_F16: Integer
+  LLAMA_FTYPE_MOSTLY_Q4_2: Integer
+  LLAMA_FTYPE_MOSTLY_Q4_3: Integer
+
   def self?.generate: (::LLaMACpp::Context, String, ?n_threads: Integer) -> String
   def self?.print_system_info: () -> void
   def self?.token_bos: () -> Integer

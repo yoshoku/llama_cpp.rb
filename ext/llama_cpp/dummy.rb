@@ -13,6 +13,27 @@ module LLaMACpp
   # LLaMA file magic unversioned.
   LLAMA_FILE_MAGIC_UNVERSIONED = '0x67676d6c'
 
+  # LLaMA model file type.
+  LLAMA_FTYPE_ALL_F32 = 0
+
+  # LLaMA model file type.
+  LLAMA_FTYPE_MOSTLY_F16  = 1
+
+  # LLaMA model file type.
+  LLAMA_FTYPE_MOSTLY_Q4_0 = 2
+
+  # LLaMA model file type.
+  LLAMA_FTYPE_MOSTLY_Q4_1 = 3
+
+  # LLaMA model file type.
+  LLAMA_FTYPE_MOSTLY_Q4_1_SOME_F16 = 4 # tok_embeddings.weight and output. weight are F16
+
+  # LLaMA model file type.
+  LLAMA_FTYPE_MOSTLY_Q4_2 = 5
+
+  # LLaMA model file type.
+  LLAMA_FTYPE_MOSTLY_Q4_3 = 6
+
   module_function
 
   # Returns the token id the beginning of sentence token.
