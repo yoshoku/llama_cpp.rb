@@ -1,5 +1,15 @@
 ## [Unreleased]
 
+## [[0.0.6](https://github.com/yoshoku/llama_cpp.rb/compare/v0.0.5...v0.0.6)] - 2023-04-22
+
+- Bump bundled llama.cpp from master-315a95a to master-12b5900.
+- Add model file type constants
+- Add `model_quantize` module function to LLaMACpp.
+- Add cublas config option:
+  ```
+  $ gem install llama_cpp -- --with-cublas
+  ```
+
 ## [[0.0.5](https://github.com/yoshoku/llama_cpp.rb/compare/v0.0.4...v0.0.5)] - 2023-04-20
 
 - Bump bundled llama.cpp from master-c85e03d to master-315a95a.
