@@ -36,6 +36,14 @@ module LLaMACpp
 
   module_function
 
+  # Quantizes the model.
+  #
+  # @param input_path [String] The path to the input model file.
+  # @param output_path [String] The path to the output model file.
+  # @param ftype [Integer] The file type.
+  # @param n_threads [Integer] The number of threads.
+  def model_quantize(input_path:, output_path:, ftype:, n_threads: 1); end
+
   # Returns the token id the beginning of sentence token.
   # @return [Integer]
   def token_bos; end

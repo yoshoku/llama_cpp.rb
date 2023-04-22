@@ -612,6 +612,43 @@ const rb_data_type_t RbLLaMAContext::llama_context_type = {
 
 // module functions
 
+static VALUE rb_llama_model_quantize(int argc, VALUE* argv, VALUE self) {
+  VALUE kw_args = Qnil;
+  ID kw_table[4] = { rb_intern("input_path"), rb_intern("output_path"), rb_intern("ftype"), rb_intern("n_threads") };
+  VALUE kw_values[4] = { Qundef, Qundef, Qundef, Qundef };
+  rb_scan_args(argc, argv, ":", &kw_args);
+  rb_get_kwargs(kw_args, kw_table, 3, 1, kw_values);
+
+  if (!RB_TYPE_P(kw_values[0], T_STRING)) {
+    rb_raise(rb_eArgError, "input_path must be a string");
+    return Qnil;
+  }
+  if (!RB_TYPE_P(kw_values[1], T_STRING)) {
+    rb_raise(rb_eArgError, "output_path must be a string");
+    return Qnil;
+  }
+  if (!RB_INTEGER_TYPE_P(kw_values[2])) {
+    rb_raise(rb_eArgError, "ftype must be an integer");
+    return Qnil;
+  }
+  if (kw_values[3] != Qundef && !RB_INTEGER_TYPE_P(kw_values[3])) {
+    rb_raise(rb_eArgError, "n_threads must be an integer");
+    return Qnil;
+  }
+
+  const char* input_path = StringValueCStr(kw_values[0]);
+  const char* output_path = StringValueCStr(kw_values[1]);
+  const int ftype = NUM2INT(kw_values[2]);
+  const int n_threads = kw_values[3] == Qundef ? 1 : NUM2INT(kw_values[3]);
+
+  if (llama_model_quantize(input_path, output_path, (llama_ftype)ftype, n_threads) != 0) {
+    rb_raise(rb_eRuntimeError, "Failed to quantize model");
+    return Qnil;
+  }
+
+  return Qnil;
+}
+
 static VALUE rb_llama_token_bos(VALUE self) {
   return INT2NUM(llama_token_bos());
 }
@@ -638,6 +675,7 @@ extern "C" void Init_llama_cpp(void) {
   RbLLaMAContext::define_class(rb_mLLaMACpp);
   RbLLaMAContextParams::define_class(rb_mLLaMACpp);
 
+  rb_define_module_function(rb_mLLaMACpp, "model_quantize", rb_llama_model_quantize, -1);
   rb_define_module_function(rb_mLLaMACpp, "token_bos", rb_llama_token_bos, 0);
   rb_define_module_function(rb_mLLaMACpp, "token_eos", rb_llama_token_eos, 0);
   rb_define_module_function(rb_mLLaMACpp, "print_system_info", rb_llama_print_system_info, 0);
@@ -651,7 +689,6 @@ extern "C" void Init_llama_cpp(void) {
   rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_Q4_1_SOME_F16", INT2NUM(LLAMA_FTYPE_MOSTLY_Q4_1_SOME_F16));
   rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_Q4_2", INT2NUM(LLAMA_FTYPE_MOSTLY_Q4_2));
   rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_Q4_3", INT2NUM(LLAMA_FTYPE_MOSTLY_Q4_3));
-
 
   rb_define_const(rb_mLLaMACpp, "LLAMA_FILE_VERSION", rb_str_new2(std::to_string(LLAMA_FILE_VERSION).c_str()));
   std::stringstream ss_magic;
