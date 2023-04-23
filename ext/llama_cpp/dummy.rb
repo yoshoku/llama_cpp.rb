@@ -142,6 +142,11 @@ module LLaMACpp
     # @return [NilClass]
     def free; end
 
+    # Returns whether the context is not load model.
+    #
+    # @return [Boolean]
+    def empty?; end
+
     # Loads model.
     #
     # @param model_path [String] The path to the model file.
