@@ -2,6 +2,7 @@
 
 require_relative 'llama_cpp/version'
 require_relative 'llama_cpp/llama_cpp'
+require_relative 'llama_cpp/client'
 
 # llama_cpp.rb provides Ruby bindings for the llama.cpp.
 module LLaMACpp
