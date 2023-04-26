@@ -60,6 +60,8 @@ module LLaMACpp
     def seed=: (Integer) -> Integer
     def use_mlock: () -> bool
     def use_mlock=: (bool) -> bool
+    def use_mmap: () -> bool
+    def use_mmap=: (bool) -> bool
     def vocab_only: () -> bool
     def vocab_only=: (bool) -> bool
   end

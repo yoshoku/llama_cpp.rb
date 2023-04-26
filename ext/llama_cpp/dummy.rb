@@ -219,6 +219,14 @@ module LLaMACpp
     # @return [Boolean]
     def use_mlock; end
 
+    # Sets the flag to use mmap.
+    # @param flag [Boolean]
+    def use_mmap=(flag); end
+
+    # Returns the flag to use mmap.
+    # @return [Boolean]
+    def use_mmap; end
+
     # Sets the flag for embedding mode only.
     # @param flag [Boolean]
     def embedding=(flag); end

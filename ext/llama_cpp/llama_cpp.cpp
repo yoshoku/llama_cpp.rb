@@ -53,6 +53,8 @@ public:
     rb_define_method(rb_cLLaMAContextParams, "logits_all", RUBY_METHOD_FUNC(_llama_context_params_get_logits_all), 0);
     rb_define_method(rb_cLLaMAContextParams, "vocab_only=", RUBY_METHOD_FUNC(_llama_context_params_set_vocab_only), 1);
     rb_define_method(rb_cLLaMAContextParams, "vocab_only", RUBY_METHOD_FUNC(_llama_context_params_get_vocab_only), 0);
+    rb_define_method(rb_cLLaMAContextParams, "use_mmap=", RUBY_METHOD_FUNC(_llama_context_params_set_use_mmap), 1);
+    rb_define_method(rb_cLLaMAContextParams, "use_mmap", RUBY_METHOD_FUNC(_llama_context_params_get_use_mmap), 0);
     rb_define_method(rb_cLLaMAContextParams, "use_mlock=", RUBY_METHOD_FUNC(_llama_context_params_set_use_mlock), 1);
     rb_define_method(rb_cLLaMAContextParams, "use_mlock", RUBY_METHOD_FUNC(_llama_context_params_get_use_mlock), 0);
     rb_define_method(rb_cLLaMAContextParams, "embedding=", RUBY_METHOD_FUNC(_llama_context_params_set_embedding), 1);
@@ -138,6 +140,18 @@ private:
   static VALUE _llama_context_params_get_vocab_only(VALUE self) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     return ptr->params.vocab_only ? Qtrue : Qfalse;
+  };
+
+  // use_mmap
+  static VALUE _llama_context_params_set_use_mmap(VALUE self, VALUE use_mmap) {
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    ptr->params.use_mmap = use_mmap == Qtrue ? true : false;
+    return ptr->params.use_mmap ? Qtrue : Qfalse;
+  };
+
+  static VALUE _llama_context_params_get_use_mmap(VALUE self) {
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    return ptr->params.use_mmap ? Qtrue : Qfalse;
   };
 
   // use_mlock
