@@ -128,7 +128,19 @@ module LLaMACpp
 
     # def chat(prompt); end
 
-    # def embeddings(text); end
+    # Obtains the embedding for a given text.
+    #
+    # @param text [String] The text to obtain the embedding for.
+    # @return [Array<Float>]
+    def embeddings(text)
+      raise 'The embedding option is set to false' unless @params[:embedding]
+
+      embd_input = tokenize_prompt(text)
+      raise 'The result of tokenizing the input text is empty' unless embd_input.size.positive?
+
+      @context.eval(tokens: embd_input, n_past: 0, n_threads: @params[:n_threads])
+      @context.embeddings
+    end
 
     private
 
