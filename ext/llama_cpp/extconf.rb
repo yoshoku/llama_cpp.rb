@@ -5,6 +5,8 @@ require 'mkmf'
 abort 'libstdc++ is not found.' unless have_library('stdc++')
 
 $srcs = %w[ggml.c llama.cpp llama_cpp.cpp]
+$srcs << 'ggml-opencl.c' if with_config('clblast')
+
 $CFLAGS << ' -w'
 $CXXFLAGS << ' -std=c++11'
 $INCFLAGS << ' -I$(srcdir)/src'
@@ -32,6 +34,13 @@ if with_config('cublas')
   $CFLAGS << ' -DGGML_USE_CUBLAS -I/usr/local/cuda/include'
   $LDFLAGS << ' -lcublas -lculibos -lcudart -lcublasLt -lpthread -ldl -lrt -L/usr/local/cuda/lib64'
   $objs = %w[ggml-cuda.o ggml.o llama.o llama_cpp.o]
+end
+
+if with_config('clblast')
+  abort 'libclblast is not found.' unless have_library('clblast')
+  abort 'libOpenCL is not found.' unless have_library('OpenCL')
+
+  $CFLAGS << ' -DGGML_USE_CLBLAST'
 end
 
 UNAME_M = RbConfig::CONFIG['build_cpu'] || RbConfig::CONFIG['host_cpu'] || RbConfig::CONFIG['target_cpu']
