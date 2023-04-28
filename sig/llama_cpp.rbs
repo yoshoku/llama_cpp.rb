@@ -12,6 +12,9 @@ module LLaMACpp
   LLAMA_FTYPE_MOSTLY_Q4_1_SOME_F16: Integer
   LLAMA_FTYPE_MOSTLY_Q4_2: Integer
   LLAMA_FTYPE_MOSTLY_Q4_3: Integer
+  LLAMA_FTYPE_MOSTLY_Q8_0: Integer
+  LLAMA_FTYPE_MOSTLY_Q5_0: Integer
+  LLAMA_FTYPE_MOSTLY_Q5_1: Integer
 
   def self?.model_quantize: (input_path: String, output_path: String, ftype: Integer, ?n_threads: Integer) -> void
   def self?.generate: (::LLaMACpp::Context, String, ?n_predict: Integer, ?n_threads: Integer) -> String

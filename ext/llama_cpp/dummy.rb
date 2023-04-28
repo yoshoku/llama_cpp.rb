@@ -34,6 +34,15 @@ module LLaMACpp
   # LLaMA model file type.
   LLAMA_FTYPE_MOSTLY_Q4_3 = 6
 
+  # LLaMA model file type.
+  LLAMA_FTYPE_MOSTLY_Q8_0 = 7
+
+  # LLaMA model file type.
+  LLAMA_FTYPE_MOSTLY_Q5_0 = 8
+
+  # LLaMA model file type.
+  LLAMA_FTYPE_MOSTLY_Q5_1 = 9
+
   module_function
 
   # Quantizes the model.
