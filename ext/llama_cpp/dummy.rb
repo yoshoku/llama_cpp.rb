@@ -168,6 +168,11 @@ module LLaMACpp
     # @param base_model_path [String] The path to the base model file.
     # @param n_threads [Integer] The number of threads.
     def apply_lora_from_file(lora_path:, base_model_path: nil, n_threads: 1); end
+
+    # Sets the current rng seed.
+    #
+    # @param seed [Integer] The rng seed.
+    def set_rng_seed(seed); end # rubocop:disable Naming/AccessorMethodName
   end
 
   # Class for parameters
