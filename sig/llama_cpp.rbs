@@ -44,6 +44,7 @@ module LLaMACpp
     def token_to_str: (Integer) -> String
     def tokenize: (text: String, ?n_max_tokens: Integer, ?add_bos: bool) -> Array[Integer]
     def apply_lora_from_file: (lora_path: String, ?base_model_path: String, ?n_threads: Integer) -> void
+    def kv_cache_token_count: () -> Integer
     def set_rng_seed: (Integer) -> void
   end
 

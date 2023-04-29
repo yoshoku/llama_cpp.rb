@@ -169,6 +169,11 @@ module LLaMACpp
     # @param n_threads [Integer] The number of threads.
     def apply_lora_from_file(lora_path:, base_model_path: nil, n_threads: 1); end
 
+    # Returns the number of tokens in the kv cache.
+    #
+    # @return [Integer]
+    def kv_cache_token_count; end
+
     # Sets the current rng seed.
     #
     # @param seed [Integer] The rng seed.
