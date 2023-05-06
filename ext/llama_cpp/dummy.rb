@@ -58,6 +58,10 @@ module LLaMACpp
   # @return [Integer]
   def token_eos; end
 
+  # Returns the token id the new line token.
+  # @return [Integer]
+  def token_nl; end
+
   # Prints system information.
   def print_system_info; end
 

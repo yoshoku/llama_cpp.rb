@@ -667,6 +667,10 @@ static VALUE rb_llama_token_eos(VALUE self) {
   return INT2NUM(llama_token_eos());
 }
 
+static VALUE rb_llama_token_nl(VALUE self) {
+  return INT2NUM(llama_token_nl());
+}
+
 static VALUE rb_llama_print_system_info(VALUE self) {
   const char* result = llama_print_system_info();
   return rb_utf8_str_new_cstr(result);
@@ -688,6 +692,7 @@ extern "C" void Init_llama_cpp(void) {
   rb_define_module_function(rb_mLLaMACpp, "model_quantize", rb_llama_model_quantize, -1);
   rb_define_module_function(rb_mLLaMACpp, "token_bos", rb_llama_token_bos, 0);
   rb_define_module_function(rb_mLLaMACpp, "token_eos", rb_llama_token_eos, 0);
+  rb_define_module_function(rb_mLLaMACpp, "token_nl", rb_llama_token_nl, 0);
   rb_define_module_function(rb_mLLaMACpp, "print_system_info", rb_llama_print_system_info, 0);
   rb_define_module_function(rb_mLLaMACpp, "mmap_supported?", rb_llama_mmap_supported, 0);
   rb_define_module_function(rb_mLLaMACpp, "mlock_supported?", rb_llama_mlock_supported, 0);
