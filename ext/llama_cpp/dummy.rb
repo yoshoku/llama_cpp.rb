@@ -76,6 +76,33 @@ end
 
 # llama_cpp.rb provides Ruby bindings for the llama.cpp.
 module LLaMACpp
+  # Class for token data
+  class TokenData
+    # Sets the id of token data.
+    # @param id [Integer]
+    def id=(id); end
+
+    # Returns the id of token data.
+    # @return [Integer]
+    def id; end
+
+    # Sets the logit of token data.
+    # @param logit [Float]
+    def logit=(logit); end
+
+    # Returns the logit of token data.
+    # @return [Float]
+    def logit; end
+
+    # Sets the probability of token data.
+    # @param prob [Float]
+    def p=(prob); end
+
+    # Returns the probability of token data.
+    # @return [Float]
+    def p; end
+  end
+
   # Class for context
   class Context
     # Create context.

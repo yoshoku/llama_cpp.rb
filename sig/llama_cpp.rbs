@@ -24,6 +24,17 @@ module LLaMACpp
   def self?.mmap_supported?: () -> bool
   def self?.mlock_supported?: () -> bool
 
+  class TokenData
+    public
+
+    def id: () -> Integer
+    def id=: (Integer) -> Integer
+    def logit: () -> Float
+    def logit=: (Float) -> Float
+    def p: () -> Float
+    def p=: (Float) -> Float
+  end
+
   class Context
     public
 

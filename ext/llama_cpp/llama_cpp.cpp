@@ -4,6 +4,111 @@
 VALUE rb_mLLaMACpp;
 VALUE rb_cLLaMAContext;
 VALUE rb_cLLaMAContextParams;
+VALUE rb_cLLaMATokenData;
+
+class LLaMATokenDataWrapper {
+public:
+  llama_token_data data;
+
+  LLaMATokenDataWrapper() {
+    data.id = 0;
+    data.logit = 0.0;
+    data.p = 0.0;
+  };
+
+  ~LLaMATokenDataWrapper(){};
+};
+
+class RbLLaMATokenData {
+public:
+  static VALUE llama_token_data_alloc(VALUE self) {
+    LLaMATokenDataWrapper* ptr = (LLaMATokenDataWrapper*)ruby_xmalloc(sizeof(LLaMATokenDataWrapper));
+    new (ptr) LLaMATokenDataWrapper();
+    return TypedData_Wrap_Struct(self, &llama_token_data_type, ptr);
+  };
+
+  static void llama_token_data_free(void* ptr) {
+    ((LLaMATokenDataWrapper*)ptr)->~LLaMATokenDataWrapper();
+    ruby_xfree(ptr);
+  };
+
+  static size_t llama_token_data_size(const void* ptr) {
+    return sizeof(*((LLaMATokenDataWrapper*)ptr));
+  };
+
+  static LLaMATokenDataWrapper* get_llama_token_data(VALUE self) {
+    LLaMATokenDataWrapper* ptr;
+    TypedData_Get_Struct(self, LLaMATokenDataWrapper, &llama_token_data_type, ptr);
+    return ptr;
+  };
+
+  static void define_class(VALUE outer) {
+    rb_cLLaMATokenData = rb_define_class_under(outer, "TokenData", rb_cObject);
+    rb_define_alloc_func(rb_cLLaMATokenData, llama_token_data_alloc);
+    // rb_define_method(rb_cLLaMATokenData, "initialize", RUBY_METHOD_FUNC(_llama_token_data_init), 0);
+    rb_define_method(rb_cLLaMATokenData, "id=", RUBY_METHOD_FUNC(_llama_token_data_set_id), 1);
+    rb_define_method(rb_cLLaMATokenData, "id", RUBY_METHOD_FUNC(_llama_token_data_get_id), 0);
+    rb_define_method(rb_cLLaMATokenData, "logit=", RUBY_METHOD_FUNC(_llama_token_data_set_logit), 1);
+    rb_define_method(rb_cLLaMATokenData, "logit", RUBY_METHOD_FUNC(_llama_token_data_get_logit), 0);
+    rb_define_method(rb_cLLaMATokenData, "p=", RUBY_METHOD_FUNC(_llama_token_data_set_p), 1);
+    rb_define_method(rb_cLLaMATokenData, "p", RUBY_METHOD_FUNC(_llama_token_data_get_p), 0);
+  }
+
+private:
+  static const rb_data_type_t llama_token_data_type;
+
+  // static VALUE _llama_token_data_init(VALUE self) {
+  //   LLaMATokenDataWrapper* ptr = get_llama_token_data(self);
+  //   new (ptr) LLaMATokenDataWrapper();
+  //   return self;
+  // }
+
+  // id
+  static VALUE _llama_token_data_set_id(VALUE self, VALUE id) {
+    LLaMATokenDataWrapper* ptr = get_llama_token_data(self);
+    ptr->data.id = NUM2INT(id);
+    return INT2NUM(ptr->data.id);
+  };
+
+  static VALUE _llama_token_data_get_id(VALUE self) {
+    LLaMATokenDataWrapper* ptr = get_llama_token_data(self);
+    return INT2NUM(ptr->data.id);
+  };
+
+  // logit
+  static VALUE _llama_token_data_set_logit(VALUE self, VALUE logit) {
+    LLaMATokenDataWrapper* ptr = get_llama_token_data(self);
+    ptr->data.logit = NUM2DBL(logit);
+    return DBL2NUM(ptr->data.logit);
+  };
+
+  static VALUE _llama_token_data_get_logit(VALUE self) {
+    LLaMATokenDataWrapper* ptr = get_llama_token_data(self);
+    return DBL2NUM(ptr->data.logit);
+  };
+
+  // p
+  static VALUE _llama_token_data_set_p(VALUE self, VALUE p) {
+    LLaMATokenDataWrapper* ptr = get_llama_token_data(self);
+    ptr->data.p = NUM2DBL(p);
+    return DBL2NUM(ptr->data.p);
+  };
+
+  static VALUE _llama_token_data_get_p(VALUE self) {
+    LLaMATokenDataWrapper* ptr = get_llama_token_data(self);
+    return DBL2NUM(ptr->data.p);
+  };
+};
+
+const rb_data_type_t RbLLaMATokenData::llama_token_data_type = {
+  "RbLLaMATokenData",
+  { NULL,
+    RbLLaMATokenData::llama_token_data_free,
+    RbLLaMATokenData::llama_token_data_size },
+  NULL,
+  NULL,
+  RUBY_TYPED_FREE_IMMEDIATELY
+};
 
 class LLaMAContextParamsWrapper {
 public:
@@ -686,6 +791,8 @@ static VALUE rb_llama_mlock_supported(VALUE self) {
 
 extern "C" void Init_llama_cpp(void) {
   rb_mLLaMACpp = rb_define_module("LLaMACpp");
+
+  RbLLaMATokenData::define_class(rb_mLLaMACpp);
   RbLLaMAContext::define_class(rb_mLLaMACpp);
   RbLLaMAContextParams::define_class(rb_mLLaMACpp);
 
