@@ -234,7 +234,6 @@ public:
     rb_define_method(rb_cLLaMAContext, "logits", RUBY_METHOD_FUNC(_llama_context_logits), 0);
     rb_define_method(rb_cLLaMAContext, "embeddings", RUBY_METHOD_FUNC(_llama_context_embeddings), 0);
     rb_define_method(rb_cLLaMAContext, "token_to_str", RUBY_METHOD_FUNC(_llama_context_token_to_str), 1);
-    rb_define_method(rb_cLLaMAContext, "sample_top_p_top_k", RUBY_METHOD_FUNC(_llama_context_sample_top_p_top_k), -1);
     rb_define_method(rb_cLLaMAContext, "n_vocab", RUBY_METHOD_FUNC(_llama_context_n_vocab), 0);
     rb_define_method(rb_cLLaMAContext, "n_ctx", RUBY_METHOD_FUNC(_llama_context_n_ctx), 0);
     rb_define_method(rb_cLLaMAContext, "n_embd", RUBY_METHOD_FUNC(_llama_context_n_embd), 0);
@@ -449,40 +448,6 @@ private:
 
     return output;
   };
-
-  static VALUE _llama_context_sample_top_p_top_k(int argc, VALUE* argv, VALUE self) {
-    VALUE last_n_tokens = Qnil;
-    VALUE kw_args = Qnil;
-    ID kw_table[4] = { rb_intern("top_k"), rb_intern("top_p"), rb_intern("temp"), rb_intern("penalty") };
-    VALUE kw_values[4] = { Qundef, Qundef, Qundef, Qundef };
-    rb_scan_args(argc, argv, "1:", &last_n_tokens, &kw_args);
-    rb_get_kwargs(kw_args, kw_table, 4, 0, kw_values);
-
-    if (!RB_TYPE_P(last_n_tokens, T_ARRAY)) {
-      rb_raise(rb_eArgError, "last_n_tokens must be an Array");
-      return Qnil;
-    }
-
-    const int last_n_tokens_size = RARRAY_LEN(last_n_tokens);
-    const int top_k = NUM2INT(kw_values[0]);
-    const double top_p = NUM2DBL(kw_values[1]);
-    const double temp = NUM2DBL(kw_values[2]);
-    const double penalty = NUM2DBL(kw_values[3]);
-
-    std::vector<llama_token> last_n_tokens_data(last_n_tokens_size);
-    for (int i = 0; i < last_n_tokens_size; i++) {
-      last_n_tokens_data[i] = NUM2INT(rb_ary_entry(last_n_tokens, i));
-    }
-
-    LLaMAContextWrapper* ptr = get_llama_context(self);
-    if (ptr->ctx == NULL) {
-      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
-      return Qnil;
-    }
-    llama_token token = llama_sample_top_p_top_k(ptr->ctx, last_n_tokens_data.data(), last_n_tokens_size, top_k, top_p, temp, penalty);
-
-    return INT2NUM(token);
-  }
 
   static VALUE _llama_context_n_vocab(VALUE self) {
     LLaMAContextWrapper* ptr = get_llama_context(self);

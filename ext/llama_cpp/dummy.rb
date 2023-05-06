@@ -108,16 +108,6 @@ module LLaMACpp
     # @return [String]
     def token_to_str(token_id) end
 
-    # Samples token id along with top_p and top_k.
-    #
-    # @param last_n_token [Array<Integer>]
-    # @param top_k [Integer]
-    # @param top_p [Float]
-    # @param temp [Float]
-    # @param penalty [Float]
-    # @return [Integer]
-    def sample_top_p_top_k(last_n_token, top_k:, top_p:, temp:, penalty:); end
-
     # Returns the number of vocabulary.
     #
     # @return [Integer]
