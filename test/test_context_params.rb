@@ -10,7 +10,7 @@ class TestContextParams < Minitest::Test
   def test_default_values
     assert_equal(512, @params.n_ctx)
     assert_equal(-1, @params.n_parts)
-    assert_equal(0, @params.seed)
+    assert_equal(-1, @params.seed)
     refute(@params.f16_kv)
     refute(@params.logits_all)
     refute(@params.vocab_only)
