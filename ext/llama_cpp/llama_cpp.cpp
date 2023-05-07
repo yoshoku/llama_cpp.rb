@@ -470,6 +470,7 @@ public:
     rb_define_method(rb_cLLaMAContext, "apply_lora_from_file", RUBY_METHOD_FUNC(_llama_context_apply_lora_from_file), -1);
     rb_define_method(rb_cLLaMAContext, "kv_cache_token_count", RUBY_METHOD_FUNC(_llama_context_kv_cache_token_count), 0);
     rb_define_method(rb_cLLaMAContext, "set_rng_seed", RUBY_METHOD_FUNC(_llama_context_set_rng_seed), 1);
+    rb_define_method(rb_cLLaMAContext, "sample_token_greedy", RUBY_METHOD_FUNC(_llama_context_sample_token_greedy), 1);
     rb_define_method(rb_cLLaMAContext, "sample_token", RUBY_METHOD_FUNC(_llama_context_sample_token), 1);
   };
 
@@ -833,6 +834,25 @@ private:
     const int seed = NUM2INT(seed_);
     llama_set_rng_seed(ptr->ctx, seed);
     return Qnil;
+  };
+
+  static VALUE _llama_context_sample_token_greedy(VALUE self, VALUE candidates) {
+    LLaMAContextWrapper* ctx_ptr = get_llama_context(self);
+    if (ctx_ptr->ctx == NULL) {
+      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
+      return Qnil;
+    }
+    if (!rb_obj_is_kind_of(candidates, rb_cLLaMATokenDataArray)) {
+      rb_raise(rb_eArgError, "1st argument must be a TokenDataArray");
+      return Qnil;
+    }
+    LLaMATokenDataArrayWrapper* cnd_ptr = RbLLaMATokenDataArray::get_llama_token_data_array(candidates);
+    if (cnd_ptr->array.data == nullptr) {
+      rb_raise(rb_eRuntimeError, "TokenDataArray is empty");
+      return Qnil;
+    }
+    llama_token id = llama_sample_token_greedy(ctx_ptr->ctx, &(cnd_ptr->array));
+    return INT2NUM(id);
   };
 
   static VALUE _llama_context_sample_token(VALUE self, VALUE candidates) {

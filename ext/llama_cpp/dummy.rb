@@ -211,11 +211,17 @@ module LLaMACpp
     # @param seed [Integer] The rng seed.
     def set_rng_seed(seed); end # rubocop:disable Naming/AccessorMethodName
 
+    # Returns the selected token with the highest probability.
+    #
+    # @param candidates [TokenDataArray] The array of token data.
+    # @return [Integer]
+    def sample_token_greedy(candidates); end
+
     # Returns the randomly selected token from the candidates based on their probabilities.
     #
-    # @param array [TokenDataArray] The array of token data.
+    # @param candidates [TokenDataArray] The array of token data.
     # @return [Integer]
-    def sample_token(array); end
+    def sample_token(candidates); end
   end
 
   # Class for parameters
