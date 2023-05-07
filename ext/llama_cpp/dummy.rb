@@ -103,6 +103,20 @@ module LLaMACpp
     def p; end
   end
 
+  # Class for token data array
+  class TokenDataArray
+    # Create token data array.
+    def initialize(arr, sorted: false); end
+
+    # Returns the size of token data array.
+    # @return [Integer]
+    def size; end
+
+    # Returns the flag for sorted.
+    # @return [Boolean]
+    def sorted; end
+  end
+
   # Class for context
   class Context
     # Create context.

@@ -35,6 +35,14 @@ module LLaMACpp
     def p=: (Float) -> Float
   end
 
+  class TokenDataArray
+    public
+
+    def initialize: (Array[::LLaMACpp::TokenData], ?sorted: bool) -> void
+    def size: () -> Integer
+    def sorted: () -> bool
+  end
+
   class Context
     public
 

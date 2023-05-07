@@ -5,6 +5,7 @@ VALUE rb_mLLaMACpp;
 VALUE rb_cLLaMAContext;
 VALUE rb_cLLaMAContextParams;
 VALUE rb_cLLaMATokenData;
+VALUE rb_cLLaMATokenDataArray;
 
 class LLaMATokenDataWrapper {
 public:
@@ -105,6 +106,125 @@ const rb_data_type_t RbLLaMATokenData::llama_token_data_type = {
   { NULL,
     RbLLaMATokenData::llama_token_data_free,
     RbLLaMATokenData::llama_token_data_size },
+  NULL,
+  NULL,
+  RUBY_TYPED_FREE_IMMEDIATELY
+};
+
+class LLaMATokenDataArrayWrapper {
+public:
+  llama_token_data_array array;
+
+  LLaMATokenDataArrayWrapper() {
+    array.data = nullptr;
+    array.size = 0;
+    array.sorted = false;
+  };
+
+  ~LLaMATokenDataArrayWrapper() {
+    if (array.data) {
+      ruby_xfree(array.data);
+      array.data = nullptr;
+    }
+  };
+};
+
+class RbLLaMATokenDataArray {
+public:
+  static VALUE llama_token_data_array_alloc(VALUE self) {
+    LLaMATokenDataArrayWrapper* ptr = (LLaMATokenDataArrayWrapper*)ruby_xmalloc(sizeof(LLaMATokenDataArrayWrapper));
+    new (ptr) LLaMATokenDataArrayWrapper();
+    return TypedData_Wrap_Struct(self, &llama_token_data_array_type, ptr);
+  };
+
+  static void llama_token_data_array_free(void* ptr) {
+    ((LLaMATokenDataArrayWrapper*)ptr)->~LLaMATokenDataArrayWrapper();
+    ruby_xfree(ptr);
+  };
+
+  static size_t llama_token_data_array_size(const void* ptr) {
+    return sizeof(*((LLaMATokenDataArrayWrapper*)ptr));
+  };
+
+  static LLaMATokenDataArrayWrapper* get_llama_token_data_array(VALUE self) {
+    LLaMATokenDataArrayWrapper* ptr;
+    TypedData_Get_Struct(self, LLaMATokenDataArrayWrapper, &llama_token_data_array_type, ptr);
+    return ptr;
+  };
+
+  static void define_class(VALUE outer) {
+    rb_cLLaMATokenDataArray = rb_define_class_under(outer, "TokenDataArray", rb_cObject);
+    rb_define_alloc_func(rb_cLLaMATokenDataArray, llama_token_data_array_alloc);
+    rb_define_method(rb_cLLaMATokenDataArray, "initialize", RUBY_METHOD_FUNC(_llama_token_data_array_init), -1);
+    rb_define_method(rb_cLLaMATokenDataArray, "size", RUBY_METHOD_FUNC(_llama_token_data_array_get_size), 0);
+    rb_define_method(rb_cLLaMATokenDataArray, "sorted", RUBY_METHOD_FUNC(_llama_token_data_array_get_sorted), 0);
+  };
+
+private:
+  static const rb_data_type_t llama_token_data_array_type;
+
+  static VALUE _llama_token_data_array_init(int argc, VALUE* argv, VALUE self) {
+    VALUE kw_args = Qnil;
+    ID kw_table[1] = { rb_intern("sorted") };
+    VALUE kw_values[1] = { Qundef };
+    VALUE arr = Qnil;
+    rb_scan_args(argc, argv, "1:", &arr, &kw_args);
+    rb_get_kwargs(kw_args, kw_table, 0, 1, kw_values);
+
+    if (!RB_TYPE_P(arr, T_ARRAY)) {
+      rb_raise(rb_eArgError, "1st argument must be an array");
+      return Qnil;
+    }
+    size_t sz_array = RARRAY_LEN(arr);
+    if (sz_array == 0) {
+      rb_raise(rb_eArgError, "array must not be empty");
+      return Qnil;
+    }
+    if (kw_values[0] != Qundef && !RB_TYPE_P(kw_values[0], T_TRUE) && !RB_TYPE_P(kw_values[0], T_FALSE)) {
+      rb_raise(rb_eArgError, "sorted must be a boolean");
+      return Qnil;
+    }
+
+    LLaMATokenDataArrayWrapper* ptr = get_llama_token_data_array(self);
+    new (ptr) LLaMATokenDataArrayWrapper();
+
+    ptr->array.data = (llama_token_data*)ruby_xmalloc(sizeof(llama_token_data) * sz_array);
+    for (size_t i = 0; i < sz_array; ++i) {
+      VALUE el = rb_ary_entry(arr, i);
+      if (!rb_obj_is_kind_of(el, rb_cLLaMATokenData)) {
+        rb_raise(rb_eArgError, "array element must be a TokenData");
+        xfree(ptr->array.data);
+        ptr->array.data = nullptr;
+        return Qnil;
+      }
+      llama_token_data token_data = RbLLaMATokenData::get_llama_token_data(el)->data;
+      ptr->array.data[i].id = token_data.id;
+      ptr->array.data[i].logit = token_data.logit;
+      ptr->array.data[i].p = token_data.p;
+    }
+
+    ptr->array.size = sz_array;
+    ptr->array.sorted = kw_values[0] == Qtrue;
+
+    return self;
+  };
+
+  static VALUE _llama_token_data_array_get_size(VALUE self) {
+    LLaMATokenDataArrayWrapper* ptr = get_llama_token_data_array(self);
+    return SIZET2NUM(ptr->array.size);
+  };
+
+  static VALUE _llama_token_data_array_get_sorted(VALUE self) {
+    LLaMATokenDataArrayWrapper* ptr = get_llama_token_data_array(self);
+    return ptr->array.sorted ? Qtrue : Qfalse;
+  };
+};
+
+const rb_data_type_t RbLLaMATokenDataArray::llama_token_data_array_type = {
+  "RbLLaMATokenDataArray",
+  { NULL,
+    RbLLaMATokenDataArray::llama_token_data_array_free,
+    RbLLaMATokenDataArray::llama_token_data_array_size },
   NULL,
   NULL,
   RUBY_TYPED_FREE_IMMEDIATELY
@@ -793,6 +913,7 @@ extern "C" void Init_llama_cpp(void) {
   rb_mLLaMACpp = rb_define_module("LLaMACpp");
 
   RbLLaMATokenData::define_class(rb_mLLaMACpp);
+  RbLLaMATokenDataArray::define_class(rb_mLLaMACpp);
   RbLLaMAContext::define_class(rb_mLLaMACpp);
   RbLLaMAContextParams::define_class(rb_mLLaMACpp);
 
