@@ -64,6 +64,7 @@ module LLaMACpp
     def apply_lora_from_file: (lora_path: String, ?base_model_path: String, ?n_threads: Integer) -> void
     def kv_cache_token_count: () -> Integer
     def set_rng_seed: (Integer) -> void
+    def sample_token: (::LLaMACpp::TokenDataArray) -> Integer
   end
 
   class ContextParams
