@@ -470,6 +470,7 @@ public:
     rb_define_method(rb_cLLaMAContext, "apply_lora_from_file", RUBY_METHOD_FUNC(_llama_context_apply_lora_from_file), -1);
     rb_define_method(rb_cLLaMAContext, "kv_cache_token_count", RUBY_METHOD_FUNC(_llama_context_kv_cache_token_count), 0);
     rb_define_method(rb_cLLaMAContext, "set_rng_seed", RUBY_METHOD_FUNC(_llama_context_set_rng_seed), 1);
+    rb_define_method(rb_cLLaMAContext, "sample_temperature", RUBY_METHOD_FUNC(_llama_context_sample_temperature), -1);
     rb_define_method(rb_cLLaMAContext, "sample_token_mirostat", RUBY_METHOD_FUNC(_llama_context_sample_token_mirostat), -1);
     rb_define_method(rb_cLLaMAContext, "sample_token_mirostat_v2", RUBY_METHOD_FUNC(_llama_context_sample_token_mirostat_v2), -1);
     rb_define_method(rb_cLLaMAContext, "sample_token_greedy", RUBY_METHOD_FUNC(_llama_context_sample_token_greedy), 1);
@@ -835,6 +836,40 @@ private:
     }
     const int seed = NUM2INT(seed_);
     llama_set_rng_seed(ptr->ctx, seed);
+    return Qnil;
+  };
+
+  static VALUE _llama_context_sample_temperature(int argc, VALUE* argv, VALUE self) {
+    VALUE kw_args = Qnil;
+    ID kw_table[1] = { rb_intern("temperature") };
+    VALUE kw_values[1] = { Qundef };
+    VALUE candidates = Qnil;
+    rb_scan_args(argc, argv, "1:", &candidates, &kw_args);
+    rb_get_kwargs(kw_args, kw_table, 1, 0, kw_values);
+
+    if (!rb_obj_is_kind_of(candidates, rb_cLLaMATokenDataArray)) {
+      rb_raise(rb_eArgError, "1st argument must be a TokenDataArray");
+      return Qnil;
+    }
+    if (!RB_FLOAT_TYPE_P(kw_values[0])) {
+      rb_raise(rb_eArgError, "temperature must be a float");
+      return Qnil;
+    }
+
+    LLaMAContextWrapper* ctx_ptr = get_llama_context(self);
+    if (ctx_ptr->ctx == NULL) {
+      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
+      return Qnil;
+    }
+    LLaMATokenDataArrayWrapper* cnd_ptr = RbLLaMATokenDataArray::get_llama_token_data_array(candidates);
+    if (cnd_ptr->array.data == nullptr) {
+      rb_raise(rb_eRuntimeError, "TokenDataArray is empty");
+      return Qnil;
+    }
+    const float temperature = NUM2DBL(kw_values[0]);
+
+    llama_sample_temperature(ctx_ptr->ctx, &(cnd_ptr->array), temperature);
+
     return Qnil;
   };
 

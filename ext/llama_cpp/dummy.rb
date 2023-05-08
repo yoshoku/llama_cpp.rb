@@ -211,6 +211,13 @@ module LLaMACpp
     # @param seed [Integer] The rng seed.
     def set_rng_seed(seed); end # rubocop:disable Naming/AccessorMethodName
 
+    # Samples temeperature.
+    #
+    # @param candidates [TokenDataArray] The array of token data.
+    # @param temperature [Float] The temperature.
+    # @return [Nil]
+    def sample_temperature(candidates, temperature:); end
+
     # Returns the token with Mirostat 1.0 algorithm.
     #
     # @param candidates [TokenDataArray] The array of token data.
