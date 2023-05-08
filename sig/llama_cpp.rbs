@@ -64,6 +64,7 @@ module LLaMACpp
     def apply_lora_from_file: (lora_path: String, ?base_model_path: String, ?n_threads: Integer) -> void
     def kv_cache_token_count: () -> Integer
     def set_rng_seed: (Integer) -> void
+    def sample_token_mirostat: (::LLaMACpp::TokenDataArray, tau: Float, eta: Float, m: Integer, mu: Float) -> [Integer, Float]
     def sample_token_mirostat_v2: (::LLaMACpp::TokenDataArray, tau: Float, eta: Float, mu: Float) -> [Integer, Float]
     def sample_token_greedy: (::LLaMACpp::TokenDataArray) -> Integer
     def sample_token: (::LLaMACpp::TokenDataArray) -> Integer
