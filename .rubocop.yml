@@ -38,7 +38,9 @@ Metrics/MethodLength:
   Exclude:
     - 'test/**/*'
 
+Naming/MethodParameterName:
+  Enabled: false
+
 Style/GlobalVars:
   Exclude:
     - 'ext/**/*'
-
