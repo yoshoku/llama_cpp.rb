@@ -212,10 +212,21 @@ module LLaMACpp
     def set_rng_seed(seed); end # rubocop:disable Naming/AccessorMethodName
 
     # Returns the token with Mirostat 1.0 algorithm.
+    #
+    # @param candidates [TokenDataArray] The array of token data.
+    # @param tau [Float] The target cross-entropy value.
+    # @param eta [Float] The learning rate.
+    # @param m [Float] The number of tokens considered in the estimation of `s_hat`.
+    # @param mu [Float] The maximum cross-entropy.
     # @return [Array<Integer, Float>] The array of token id and updated mu.
     def sample_token_mirostat(candidates, tau:, eta:, m:, mu:); end
 
     # Returns the token with Mirostat 2.0 algorithm.
+    #
+    # @param candidates [TokenDataArray] The array of token data.
+    # @param tau [Float] The target cross-entropy value.
+    # @param eta [Float] The learning rate.
+    # @param mu [Float] The maximum cross-entropy.
     # @return [Array<Integer, Float>] The array of token id and updated mu.
     def sample_token_mirostat_v2(candidates, tau:, eta:, mu:); end
 
