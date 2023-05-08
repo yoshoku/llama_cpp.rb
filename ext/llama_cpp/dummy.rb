@@ -211,6 +211,10 @@ module LLaMACpp
     # @param seed [Integer] The rng seed.
     def set_rng_seed(seed); end # rubocop:disable Naming/AccessorMethodName
 
+    # Returns the token with Mirostat 2.0 algorithm.
+    # @return [Array<Integer, Float>] The array of token id and updated mu.
+    def sample_token_mirostat_v2(candidates, tau:, eta:, mu:); end
+
     # Returns the selected token with the highest probability.
     #
     # @param candidates [TokenDataArray] The array of token data.
