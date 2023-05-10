@@ -470,6 +470,7 @@ public:
     rb_define_method(rb_cLLaMAContext, "apply_lora_from_file", RUBY_METHOD_FUNC(_llama_context_apply_lora_from_file), -1);
     rb_define_method(rb_cLLaMAContext, "kv_cache_token_count", RUBY_METHOD_FUNC(_llama_context_kv_cache_token_count), 0);
     rb_define_method(rb_cLLaMAContext, "set_rng_seed", RUBY_METHOD_FUNC(_llama_context_set_rng_seed), 1);
+    rb_define_method(rb_cLLaMAContext, "sample_top_p", RUBY_METHOD_FUNC(_llama_context_sample_top_p), -1);
     rb_define_method(rb_cLLaMAContext, "sample_tail_free", RUBY_METHOD_FUNC(_llama_context_sample_tail_free), -1);
     rb_define_method(rb_cLLaMAContext, "sample_typical", RUBY_METHOD_FUNC(_llama_context_sample_typical), -1);
     rb_define_method(rb_cLLaMAContext, "sample_temperature", RUBY_METHOD_FUNC(_llama_context_sample_temperature), -1);
@@ -828,7 +829,7 @@ private:
       return Qnil;
     }
     return INT2NUM(llama_get_kv_cache_token_count(ptr->ctx));
-  }
+  };
 
   static VALUE _llama_context_set_rng_seed(VALUE self, VALUE seed_) {
     LLaMAContextWrapper* ptr = get_llama_context(self);
@@ -838,6 +839,45 @@ private:
     }
     const int seed = NUM2INT(seed_);
     llama_set_rng_seed(ptr->ctx, seed);
+    return Qnil;
+  };
+
+  static VALUE _llama_context_sample_top_p(int argc, VALUE* argv, VALUE self) {
+    VALUE kw_args = Qnil;
+    ID kw_table[2] = { rb_intern("prob"), rb_intern("min_keep") };
+    VALUE kw_values[2] = { Qundef, Qundef };
+    VALUE candidates = Qnil;
+    rb_scan_args(argc, argv, "1:", &candidates, &kw_args);
+    rb_get_kwargs(kw_args, kw_table, 1, 1, kw_values);
+
+    if (!rb_obj_is_kind_of(candidates, rb_cLLaMATokenDataArray)) {
+      rb_raise(rb_eArgError, "1st argument must be a TokenDataArray");
+      return Qnil;
+    }
+    if (!RB_FLOAT_TYPE_P(kw_values[0])) {
+      rb_raise(rb_eArgError, "prob must be a float");
+      return Qnil;
+    }
+    if (kw_values[1] != Qundef && !RB_INTEGER_TYPE_P(kw_values[1])) {
+      rb_raise(rb_eArgError, "min_keep must be an integer");
+      return Qnil;
+    }
+
+    LLaMAContextWrapper* ctx_ptr = get_llama_context(self);
+    if (ctx_ptr->ctx == NULL) {
+      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
+      return Qnil;
+    }
+    LLaMATokenDataArrayWrapper* cnd_ptr = RbLLaMATokenDataArray::get_llama_token_data_array(candidates);
+    if (cnd_ptr->array.data == nullptr) {
+      rb_raise(rb_eRuntimeError, "TokenDataArray is empty");
+      return Qnil;
+    }
+    const float prob = NUM2DBL(kw_values[0]);
+    const size_t min_keep = kw_values[1] != Qundef ? NUM2SIZET(kw_values[1]) : 1;
+
+    llama_sample_top_p(ctx_ptr->ctx, &(cnd_ptr->array), prob, min_keep);
+
     return Qnil;
   };
 

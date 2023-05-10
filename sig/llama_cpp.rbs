@@ -64,6 +64,7 @@ module LLaMACpp
     def apply_lora_from_file: (lora_path: String, ?base_model_path: String, ?n_threads: Integer) -> void
     def kv_cache_token_count: () -> Integer
     def set_rng_seed: (Integer) -> void
+    def sample_top_p: (::LLaMACpp::TokenDataArray, prob: Float, ?min_keep: Integer) -> void
     def sample_tail_free: (::LLaMACpp::TokenDataArray, z: Float, ?min_keep: Integer) -> void
     def sample_typical: (::LLaMACpp::TokenDataArray, prob: Float, ?min_keep: Integer) -> void
     def sample_temperature: (::LLaMACpp::TokenDataArray, temperature: Float) -> void
