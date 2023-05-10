@@ -211,6 +211,14 @@ module LLaMACpp
     # @param seed [Integer] The rng seed.
     def set_rng_seed(seed); end # rubocop:disable Naming/AccessorMethodName
 
+    # Top-K sampling.
+    #
+    # @param candidates [TokenDataArray] The array of token data.
+    # @param k [Integer] The top-k.
+    # @param min_keep [Integer] The minimum number of tokens to keep.
+    # @return [Nil]
+    def sample_top_k(candidates, k:, min_keep: 1); end
+
     # Nucleus sampling.
     #
     # @param candidates [TokenDataArray] The array of token data.
