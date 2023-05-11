@@ -211,6 +211,12 @@ module LLaMACpp
     # @param seed [Integer] The rng seed.
     def set_rng_seed(seed); end # rubocop:disable Naming/AccessorMethodName
 
+    # Sorts candates by their probablities with logits.
+    #
+    # @param candidates [TokenDataArray] The array of token data.
+    # @return [Nil]
+    def sample_softmax(candidates); end
+
     # Top-K sampling.
     #
     # @param candidates [TokenDataArray] The array of token data.
