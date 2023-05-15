@@ -211,6 +211,14 @@ module LLaMACpp
     # @param seed [Integer] The rng seed.
     def set_rng_seed(seed); end # rubocop:disable Naming/AccessorMethodName
 
+    # Sampling with repetition penalty.
+    #
+    # @param candidates [TokenDataArray] The array of token data.
+    # @param last_n_tokens [Array<Integer>] The last n tokens.
+    # @param penalty [Float] The penalty.
+    # @return [Nil]
+    def sample_repetition_penalty(candidates, last_n_tokens, penalty:); end
+
     # Sorts candates by their probablities with logits.
     #
     # @param candidates [TokenDataArray] The array of token data.
