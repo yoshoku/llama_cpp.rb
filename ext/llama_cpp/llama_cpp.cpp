@@ -471,6 +471,7 @@ public:
     rb_define_method(rb_cLLaMAContext, "kv_cache_token_count", RUBY_METHOD_FUNC(_llama_context_kv_cache_token_count), 0);
     rb_define_method(rb_cLLaMAContext, "set_rng_seed", RUBY_METHOD_FUNC(_llama_context_set_rng_seed), 1);
     rb_define_method(rb_cLLaMAContext, "sample_repetition_penalty", RUBY_METHOD_FUNC(_llama_context_sample_repetition_penalty), -1);
+    rb_define_method(rb_cLLaMAContext, "sample_frequency_and_presence_penalties", RUBY_METHOD_FUNC(_llama_context_sample_frequency_and_presence_penalties), -1);
     rb_define_method(rb_cLLaMAContext, "sample_softmax", RUBY_METHOD_FUNC(_llama_context_sample_softmax), 1);
     rb_define_method(rb_cLLaMAContext, "sample_top_k", RUBY_METHOD_FUNC(_llama_context_sample_top_k), -1);
     rb_define_method(rb_cLLaMAContext, "sample_top_p", RUBY_METHOD_FUNC(_llama_context_sample_top_p), -1);
@@ -886,6 +887,57 @@ private:
     const float penalty = NUM2DBL(kw_values[0]);
 
     llama_sample_repetition_penalty(ctx_ptr->ctx, &(cnd_ptr->array), last_n_tokens_data.data(), last_tokens_size, penalty);
+
+    return Qnil;
+  };
+
+  static VALUE _llama_context_sample_frequency_and_presence_penalties(int argc, VALUE* argv, VALUE self) {
+    VALUE kw_args = Qnil;
+    ID kw_table[2] = { rb_intern("frequency"), rb_intern("presence") };
+    VALUE kw_values[2] = { Qundef, Qundef };
+    VALUE candidates = Qnil;
+    VALUE last_n_tokens = Qnil;
+    rb_scan_args(argc, argv, "2:", &candidates, &last_n_tokens, &kw_args);
+    rb_get_kwargs(kw_args, kw_table, 2, 0, kw_values);
+
+    if (!rb_obj_is_kind_of(candidates, rb_cLLaMATokenDataArray)) {
+      rb_raise(rb_eArgError, "candidates must be a TokenDataArray");
+      return Qnil;
+    }
+    if (!RB_TYPE_P(last_n_tokens, T_ARRAY)) {
+      rb_raise(rb_eArgError, "last_n_tokens must be an Array");
+      return Qnil;
+    }
+    if (!RB_FLOAT_TYPE_P(kw_values[0])) {
+      rb_raise(rb_eArgError, "frequency must be a float");
+      return Qnil;
+    }
+    if (!RB_FLOAT_TYPE_P(kw_values[1])) {
+      rb_raise(rb_eArgError, "presence must be a float");
+      return Qnil;
+    }
+
+    const size_t last_tokens_size = RARRAY_LEN(last_n_tokens);
+    std::vector<llama_token> last_n_tokens_data(last_tokens_size);
+    for (size_t i = 0; i < last_tokens_size; i++) {
+      last_n_tokens_data[i] = NUM2INT(rb_ary_entry(last_n_tokens, i));
+    }
+
+    LLaMAContextWrapper* ctx_ptr = get_llama_context(self);
+    if (ctx_ptr->ctx == NULL) {
+      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
+      return Qnil;
+    }
+    LLaMATokenDataArrayWrapper* cnd_ptr = RbLLaMATokenDataArray::get_llama_token_data_array(candidates);
+    if (cnd_ptr->array.data == nullptr) {
+      rb_raise(rb_eRuntimeError, "TokenDataArray is empty");
+      return Qnil;
+    }
+
+    const float alpha_frequency = NUM2DBL(kw_values[0]);
+    const float alpha_presence = NUM2DBL(kw_values[1]);
+
+    llama_sample_frequency_and_presence_penalties(ctx_ptr->ctx, &(cnd_ptr->array), last_n_tokens_data.data(), last_tokens_size, alpha_frequency, alpha_presence);
 
     return Qnil;
   };
