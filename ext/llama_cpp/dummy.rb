@@ -5,7 +5,7 @@
 # llama_cpp.rb provides Ruby bindings for the llama.cpp.
 module LLaMACpp
   # LLaMA file version.
-  LLAMA_FILE_VERSION = '1'
+  LLAMA_FILE_VERSION = '2'
 
   # LLaMA file magic.
   LLAMA_FILE_MAGIC = '0x67676a74'
