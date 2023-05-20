@@ -226,7 +226,7 @@ module LLaMACpp
     #
     # @param session_path [String] The path to the session file.
     # @param session_tokens [Array<Integer>] The session tokens.
-    # @return [Boolean]
+    # @return [Nil]
     def save_session_file(session_path:, session_tokens:); end
 
     # Sampling with repetition penalty.

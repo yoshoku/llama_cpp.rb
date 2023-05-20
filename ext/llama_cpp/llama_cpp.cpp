@@ -940,8 +940,13 @@ private:
 
     bool res = llama_save_session_file(ctx_ptr->ctx, StringValueCStr(filename), session_tokens.data(), sz_session_tokens);
 
+    if (!res) {
+      rb_raise(rb_eRuntimeError, "Failed to save session file");
+      return Qnil;
+    }
+
     RB_GC_GUARD(filename);
-    return res ? Qtrue : Qfalse;
+    return Qnil;
   }
 
   static VALUE _llama_context_sample_repetition_penalty(int argc, VALUE* argv, VALUE self) {

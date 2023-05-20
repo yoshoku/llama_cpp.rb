@@ -65,7 +65,7 @@ module LLaMACpp
     def kv_cache_token_count: () -> Integer
     def set_rng_seed: (Integer) -> void
     def load_session_file: (session_path: String) -> void
-    def save_session_file: (session_path: String, session_tokens: Array[Integer]) -> bool
+    def save_session_file: (session_path: String, session_tokens: Array[Integer]) -> void
     def sample_repetition_penalty: (::LLaMACpp::TokenDataArray, Array[Integer], penalty: Float) -> void
     def sample_frequency_and_presence_penalties: (::LLaMACpp::TokenDataArray, Array[Integer], frequency: Float, presence: Float) -> void
     def sample_softmax: (::LLaMACpp::TokenDataArray) -> void
