@@ -2,7 +2,7 @@
 
 module LLaMACpp
   # Client provides a high-level interface to the LLM model.
-  class Client
+  class Client # rubocop:disable Metrics/ClassLength
     # Creates a new client.
     #
     # @param model_path [String] The path to the model file.
@@ -61,14 +61,19 @@ module LLaMACpp
     # @param n_keep [Integer] The number of tokens to keep from the initial prompt.
     # @param repeat_last_n [Integer] The number of tokens to use for repeat penalty.
     # @param n_batch [Integer] The batch size.
+    # @param frequency [Float] The frequency penalty value.
+    # @param presence [Float] The presence penalty value.
     # @param top_k [Integer] The top-k value.
     # @param top_p [Float] The top-p value.
+    # @param tfs_z [Float] The tail free sampling parameter.
+    # @param typical_p [Float] The typical probability value.
     # @param temperature [Float] The temperature value.
     # @param repeat_penalty [Float] The repeat penalty value.
     # @return [String]
     # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/ParameterLists, Metrics/PerceivedComplexity
     def completions(prompt, max_tokens: 64, n_keep: 10, repeat_last_n: 64, n_batch: 512,
-                    top_k: 40, top_p: 0.95, temperature: 0.80, repeat_penalty: 1.1)
+                    frequency: 0.0, presence: 0.0,
+                    top_k: 40, top_p: 0.95, tfs_z: 1.0, typical_p: 1.0, temperature: 0.8, repeat_penalty: 1.1)
       embd_input = tokenize_prompt(prompt)
 
       n_ctx = @context.n_ctx
@@ -80,6 +85,7 @@ module LLaMACpp
       n_consumed = 0
       n_past = 0
       n_remain = max_tokens
+      n_vocab = @context.n_vocab
       output = []
 
       while n_remain != 0
@@ -97,11 +103,28 @@ module LLaMACpp
         embd.clear
 
         if embd_input.size <= n_consumed
-          start = n_ctx - repeat_last_n
-          id = @context.sample_top_p_top_k(
-            last_n_tokens[start...(start + repeat_last_n)],
-            top_k: top_k, top_p: top_p, temp: temperature, penalty: repeat_penalty
+          logits = @context.logits
+          base_candidates = Array.new(n_vocab) { |i| LLaMACpp::TokenData.new(id: i, logit: logits[i], p: 0.0) }
+          candidates = LLaMACpp::TokenDataArray.new(base_candidates)
+
+          # apply penalties
+          last_n_repeat = [last_n_tokens.size, repeat_last_n, n_ctx].min
+          @context.sample_repetition_penalty(candidates, last_n_tokens[-last_n_repeat..], penalty: repeat_penalty)
+          @context.sample_frequency_and_presence_penalties(
+            candidates, last_n_tokens[-last_n_repeat..], frequency: frequency, presence: presence
           )
+
+          # temperature sampling
+          @context.sample_top_k(candidates, k: top_k)
+          @context.sample_tail_free(candidates, z: tfs_z)
+          @context.sample_typical(candidates, prob: typical_p)
+          @context.sample_top_p(candidates, prob: top_p)
+          @context.sample_temperature(candidates, temperature: temperature)
+          id = @context.sample_token(candidates)
+
+          last_n_tokens.shift
+          last_n_tokens.push(id)
+
           last_n_tokens.shift
           last_n_tokens.push(id)
 

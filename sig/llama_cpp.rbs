@@ -109,7 +109,9 @@ module LLaMACpp
                    ?n_ctx: Integer, ?n_parts: Integer, ?memory_f16: bool, ?use_mmap: bool, ?use_mlock: bool,
                    ?embedding: bool, ?n_threads: Integer, ?seed: Integer) -> void
     def completions(String, ?max_tokens: Integer, ?n_keep: Integer, ?repeat_last_n: Integer, ?n_batch: Integer,
-                    ?top_k: Integer, ?top_p: Float, ?temperature: Float, ?repeat_penalty: Float) -> String
+                    ?frequency: Float, ?presence: Float,
+                    ?top_k: Integer, ?top_p: Float, ?tfs_z: Float, ?typical_p: Float, ?temperature: Float,
+                    ?repeat_penalty: Float) -> String
     def embeddings(String) -> Array[Float]
   end
 end
