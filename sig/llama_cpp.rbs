@@ -27,6 +27,7 @@ module LLaMACpp
   class TokenData
     public
 
+    def initialize: (id: Integer, logit: Float, p: Float) -> void
     def id: () -> Integer
     def id=: (Integer) -> Integer
     def logit: () -> Float

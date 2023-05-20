@@ -78,6 +78,14 @@ end
 module LLaMACpp
   # Class for token data
   class TokenData
+    # Create token data.
+    #
+    # @param id [Integer] The id of token data.
+    # @param logit [Float] The logit of token data.
+    # @param p [Float] The probability of token data.
+    # @return [TokenData]
+    def initialize(id:, logit:, p:); end
+
     # Sets the id of token data.
     # @param id [Integer]
     def id=(id); end

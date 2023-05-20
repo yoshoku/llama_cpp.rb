@@ -46,7 +46,7 @@ public:
   static void define_class(VALUE outer) {
     rb_cLLaMATokenData = rb_define_class_under(outer, "TokenData", rb_cObject);
     rb_define_alloc_func(rb_cLLaMATokenData, llama_token_data_alloc);
-    // rb_define_method(rb_cLLaMATokenData, "initialize", RUBY_METHOD_FUNC(_llama_token_data_init), 0);
+    rb_define_method(rb_cLLaMATokenData, "initialize", RUBY_METHOD_FUNC(_llama_token_data_init), -1);
     rb_define_method(rb_cLLaMATokenData, "id=", RUBY_METHOD_FUNC(_llama_token_data_set_id), 1);
     rb_define_method(rb_cLLaMATokenData, "id", RUBY_METHOD_FUNC(_llama_token_data_get_id), 0);
     rb_define_method(rb_cLLaMATokenData, "logit=", RUBY_METHOD_FUNC(_llama_token_data_set_logit), 1);
@@ -58,11 +58,35 @@ public:
 private:
   static const rb_data_type_t llama_token_data_type;
 
-  // static VALUE _llama_token_data_init(VALUE self) {
-  //   LLaMATokenDataWrapper* ptr = get_llama_token_data(self);
-  //   new (ptr) LLaMATokenDataWrapper();
-  //   return self;
-  // }
+  static VALUE _llama_token_data_init(int argc, VALUE* argv, VALUE self) {
+    VALUE kw_args = Qnil;
+    ID kw_table[3] = { rb_intern("id"), rb_intern("logit"), rb_intern("p") };
+    VALUE kw_values[3] = { Qundef, Qundef, Qundef };
+    rb_scan_args(argc, argv, ":", &kw_args);
+    rb_get_kwargs(kw_args, kw_table, 3, 0, kw_values);
+
+    if (!RB_INTEGER_TYPE_P(kw_values[0])) {
+      rb_raise(rb_eArgError, "id must be an integer");
+      return Qnil;
+    }
+    if (!RB_FLOAT_TYPE_P(kw_values[1])) {
+      rb_raise(rb_eArgError, "logit must be a float");
+      return Qnil;
+    }
+    if (!RB_FLOAT_TYPE_P(kw_values[2])) {
+      rb_raise(rb_eArgError, "p must be a float");
+      return Qnil;
+    }
+
+    LLaMATokenDataWrapper* ptr = get_llama_token_data(self);
+    new (ptr) LLaMATokenDataWrapper();
+
+    ptr->data.id = NUM2INT(kw_values[0]);
+    ptr->data.logit = NUM2DBL(kw_values[1]);
+    ptr->data.p = NUM2DBL(kw_values[2]);
+
+    return self;
+  }
 
   // id
   static VALUE _llama_token_data_set_id(VALUE self, VALUE id) {
