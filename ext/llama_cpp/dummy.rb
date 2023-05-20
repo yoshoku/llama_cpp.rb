@@ -29,9 +29,6 @@ module LLaMACpp
   LLAMA_FTYPE_MOSTLY_Q4_1_SOME_F16 = 4 # tok_embeddings.weight and output. weight are F16
 
   # LLaMA model file type.
-  LLAMA_FTYPE_MOSTLY_Q4_2 = 5
-
-  # LLaMA model file type.
   LLAMA_FTYPE_MOSTLY_Q8_0 = 7
 
   # LLaMA model file type.
