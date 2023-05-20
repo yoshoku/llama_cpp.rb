@@ -20,6 +20,7 @@ Layout/LineLength:
   Max: 128
 
 Metrics/AbcSize:
+  Max: 20
   Exclude:
     - 'test/**/*'
 
