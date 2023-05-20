@@ -89,8 +89,6 @@ module LLaMACpp
     def logits_all=: (bool) -> bool
     def n_ctx: () -> Integer
     def n_ctx=: (Integer) -> Integer
-    def n_parts: () -> Integer
-    def n_parts=: (Integer) -> Integer
     def seed: () -> Integer
     def seed=: (Integer) -> Integer
     def use_mlock: () -> bool
@@ -105,7 +103,7 @@ module LLaMACpp
 
   class Client
     def initialize(model_path: String, ?lora_adapter_path: String, ?lora_base_path: String,
-                   ?n_ctx: Integer, ?n_parts: Integer, ?memory_f16: bool, ?use_mmap: bool, ?use_mlock: bool,
+                   ?n_ctx: Integer, ?memory_f16: bool, ?use_mmap: bool, ?use_mlock: bool,
                    ?embedding: bool, ?n_threads: Integer, ?seed: Integer) -> void
     def completions(String, ?max_tokens: Integer, ?n_keep: Integer, ?repeat_last_n: Integer, ?n_batch: Integer,
                     ?frequency: Float, ?presence: Float,

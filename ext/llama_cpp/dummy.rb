@@ -320,14 +320,6 @@ module LLaMACpp
     # @return [Integer]
     def n_ctx; end
 
-    # Sets the number of part.
-    # @param n_parts [Integer]
-    def n_parts=(n_parts); end
-
-    # Return the number of part.
-    # @return [Integer]
-    def n_parts; end
-
     # Sets the random seed.
     # @param seed [Integer]
     def seed=(seed); end

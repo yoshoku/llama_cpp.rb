@@ -9,7 +9,6 @@ module LLaMACpp
     # @param lora_adapter_path [String] The path to the LoRA adapter file.
     # @param lora_base_path [String] The path to the LoRA base model file.
     # @param n_ctx [Integer] The context size.
-    # @param n_parts [Integer] The amount of model parts (-1 = determine from model dimensions).
     # @param memory_f16 [Boolean] The flag wheter to use f16 instead of f32 for memory kv.
     # @param use_mmap [Boolean] The flag whether to use mmap.
     # @param use_mlock [Boolean] The flag hether to use mlock.
@@ -19,7 +18,7 @@ module LLaMACpp
     # @return [Client]
     # rubocop:disable Metrics/MethodLength, Metrics/ParameterLists
     def initialize(model_path:, lora_adapter_path: nil, lora_base_path: nil,
-                   n_ctx: 512, n_parts: -1, memory_f16: false, use_mmap: true, use_mlock: false,
+                   n_ctx: 512, memory_f16: false, use_mmap: true, use_mlock: false,
                    embedding: false,
                    n_threads: 1, seed: 0)
       @params = {
@@ -27,7 +26,6 @@ module LLaMACpp
         lora_adapter_path: lora_adapter_path,
         lora_base_path: lora_base_path,
         n_ctx: n_ctx,
-        n_parts: n_parts,
         memory_f16: memory_f16,
         use_mmap: use_mmap,
         use_mlock: use_mlock,

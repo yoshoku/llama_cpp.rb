@@ -9,7 +9,6 @@ class TestContextParams < Minitest::Test
 
   def test_default_values
     assert_equal(512, @params.n_ctx)
-    assert_equal(-1, @params.n_parts)
     assert_equal(-1, @params.seed)
     refute(@params.f16_kv)
     refute(@params.logits_all)
@@ -20,7 +19,6 @@ class TestContextParams < Minitest::Test
 
   def test_setter_and_getter
     @params.n_ctx = 1024
-    @params.n_parts = 2
     @params.seed = 1
     @params.f16_kv = true
     @params.logits_all = true
@@ -29,7 +27,6 @@ class TestContextParams < Minitest::Test
     @params.embedding = true
 
     assert_equal(1024, @params.n_ctx)
-    assert_equal(2, @params.n_parts)
     assert_equal(1, @params.seed)
     assert(@params.f16_kv)
     assert(@params.logits_all)

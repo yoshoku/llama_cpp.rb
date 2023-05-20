@@ -292,8 +292,6 @@ public:
     // rb_define_method(rb_cLLaMAContextParams, "initialize", RUBY_METHOD_FUNC(_llama_context_params_init), 0);
     rb_define_method(rb_cLLaMAContextParams, "n_ctx=", RUBY_METHOD_FUNC(_llama_context_params_set_n_ctx), 1);
     rb_define_method(rb_cLLaMAContextParams, "n_ctx", RUBY_METHOD_FUNC(_llama_context_params_get_n_ctx), 0);
-    rb_define_method(rb_cLLaMAContextParams, "n_parts=", RUBY_METHOD_FUNC(_llama_context_params_set_n_parts), 1);
-    rb_define_method(rb_cLLaMAContextParams, "n_parts", RUBY_METHOD_FUNC(_llama_context_params_get_n_parts), 0);
     rb_define_method(rb_cLLaMAContextParams, "seed=", RUBY_METHOD_FUNC(_llama_context_params_set_seed), 1);
     rb_define_method(rb_cLLaMAContextParams, "seed", RUBY_METHOD_FUNC(_llama_context_params_get_seed), 0);
     rb_define_method(rb_cLLaMAContextParams, "f16_kv=", RUBY_METHOD_FUNC(_llama_context_params_set_f16_kv), 1);
@@ -329,18 +327,6 @@ private:
   static VALUE _llama_context_params_get_n_ctx(VALUE self) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     return INT2NUM(ptr->params.n_ctx);
-  };
-
-  // n_parts
-  static VALUE _llama_context_params_set_n_parts(VALUE self, VALUE n_parts) {
-    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
-    ptr->params.n_parts = NUM2INT(n_parts);
-    return INT2NUM(ptr->params.n_parts);
-  };
-
-  static VALUE _llama_context_params_get_n_parts(VALUE self) {
-    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
-    return INT2NUM(ptr->params.n_parts);
   };
 
   // seed
