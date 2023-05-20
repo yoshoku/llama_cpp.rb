@@ -216,6 +216,13 @@ module LLaMACpp
     # @param seed [Integer] The rng seed.
     def set_rng_seed(seed); end # rubocop:disable Naming/AccessorMethodName
 
+    # Saves session file.
+    #
+    # @param session_path [String] The path to the session file.
+    # @param session_tokens [Array<Integer>] The session tokens.
+    # @return [Boolean]
+    def save_session_file(session_path:, session_tokens:); end
+
     # Sampling with repetition penalty.
     #
     # @param candidates [TokenDataArray] The array of token data.

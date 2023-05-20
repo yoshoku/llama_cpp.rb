@@ -480,6 +480,7 @@ public:
     rb_define_method(rb_cLLaMAContext, "apply_lora_from_file", RUBY_METHOD_FUNC(_llama_context_apply_lora_from_file), -1);
     rb_define_method(rb_cLLaMAContext, "kv_cache_token_count", RUBY_METHOD_FUNC(_llama_context_kv_cache_token_count), 0);
     rb_define_method(rb_cLLaMAContext, "set_rng_seed", RUBY_METHOD_FUNC(_llama_context_set_rng_seed), 1);
+    rb_define_method(rb_cLLaMAContext, "save_session_file", RUBY_METHOD_FUNC(_llama_context_save_session_file), -1);
     rb_define_method(rb_cLLaMAContext, "sample_repetition_penalty", RUBY_METHOD_FUNC(_llama_context_sample_repetition_penalty), -1);
     rb_define_method(rb_cLLaMAContext, "sample_frequency_and_presence_penalties", RUBY_METHOD_FUNC(_llama_context_sample_frequency_and_presence_penalties), -1);
     rb_define_method(rb_cLLaMAContext, "sample_softmax", RUBY_METHOD_FUNC(_llama_context_sample_softmax), 1);
@@ -855,6 +856,43 @@ private:
     llama_set_rng_seed(ptr->ctx, seed);
     return Qnil;
   };
+
+  static VALUE _llama_context_save_session_file(int argc, VALUE* argv, VALUE self) {
+    VALUE kw_args = Qnil;
+    ID kw_table[2] = { rb_intern("session_path"), rb_intern("session_tokens") };
+    VALUE kw_values[2] = { Qundef, Qundef };
+    VALUE candidates = Qnil;
+    VALUE last_n_tokens = Qnil;
+    rb_scan_args(argc, argv, ":", &kw_args);
+    rb_get_kwargs(kw_args, kw_table, 2, 0, kw_values);
+
+    if (!RB_TYPE_P(kw_values[0], T_STRING)) {
+      rb_raise(rb_eArgError, "session_path must be a String");
+      return Qnil;
+    }
+    if (!RB_TYPE_P(kw_values[1], T_ARRAY)) {
+      rb_raise(rb_eArgError, "session_tokens must be an Array");
+      return Qnil;
+    }
+
+    VALUE filename = kw_values[0];
+    const size_t sz_session_tokens = RARRAY_LEN(kw_values[1]);
+    std::vector<llama_token> session_tokens(sz_session_tokens);
+    for (size_t i = 0; i < sz_session_tokens; i++) {
+      session_tokens[i] = NUM2INT(rb_ary_entry(kw_values[1], i));
+    }
+
+    LLaMAContextWrapper* ctx_ptr = get_llama_context(self);
+    if (ctx_ptr->ctx == NULL) {
+      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
+      return Qnil;
+    }
+
+    bool res = llama_save_session_file(ctx_ptr->ctx, StringValueCStr(filename), session_tokens.data(), sz_session_tokens);
+
+    RB_GC_GUARD(filename);
+    return res ? Qtrue : Qfalse;
+  }
 
   static VALUE _llama_context_sample_repetition_penalty(int argc, VALUE* argv, VALUE self) {
     VALUE kw_args = Qnil;
