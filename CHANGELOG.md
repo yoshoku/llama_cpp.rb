@@ -1,5 +1,15 @@
 ## [Unreleased]
 
+## [[0.1.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.1.0...v0.1.1)] - 2023-05-21
+
+- Add load_session_file method to Context
+- Add save_session_file method to Context
+
+**Breaking Changes**
+
+- Bump bundled llama.cpp from master-173d0e6 to master-6986c78
+  - bump LLAMA_FILE_VERSION to 2
+
 ## [[0.1.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.0.7...v0.1.0)] - 2023-05-20
 
 **Breaking Changes**
