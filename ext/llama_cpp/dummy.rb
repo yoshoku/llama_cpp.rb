@@ -216,6 +216,12 @@ module LLaMACpp
     # @param seed [Integer] The rng seed.
     def set_rng_seed(seed); end # rubocop:disable Naming/AccessorMethodName
 
+    # Loads session file.
+    #
+    # @param session_path [String] The path to the session file.
+    # @return [Array<Integer>]
+    def load_session_file(session_path:); end
+
     # Saves session file.
     #
     # @param session_path [String] The path to the session file.

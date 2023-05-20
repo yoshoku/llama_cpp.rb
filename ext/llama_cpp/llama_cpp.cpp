@@ -480,6 +480,7 @@ public:
     rb_define_method(rb_cLLaMAContext, "apply_lora_from_file", RUBY_METHOD_FUNC(_llama_context_apply_lora_from_file), -1);
     rb_define_method(rb_cLLaMAContext, "kv_cache_token_count", RUBY_METHOD_FUNC(_llama_context_kv_cache_token_count), 0);
     rb_define_method(rb_cLLaMAContext, "set_rng_seed", RUBY_METHOD_FUNC(_llama_context_set_rng_seed), 1);
+    rb_define_method(rb_cLLaMAContext, "load_session_file", RUBY_METHOD_FUNC(_llama_context_load_session_file), -1);
     rb_define_method(rb_cLLaMAContext, "save_session_file", RUBY_METHOD_FUNC(_llama_context_save_session_file), -1);
     rb_define_method(rb_cLLaMAContext, "sample_repetition_penalty", RUBY_METHOD_FUNC(_llama_context_sample_repetition_penalty), -1);
     rb_define_method(rb_cLLaMAContext, "sample_frequency_and_presence_penalties", RUBY_METHOD_FUNC(_llama_context_sample_frequency_and_presence_penalties), -1);
@@ -856,6 +857,55 @@ private:
     llama_set_rng_seed(ptr->ctx, seed);
     return Qnil;
   };
+
+  static VALUE _llama_context_load_session_file(int argc, VALUE* argv, VALUE self) {
+    VALUE kw_args = Qnil;
+    ID kw_table[1] = { rb_intern("session_path") };
+    VALUE kw_values[1] = { Qundef };
+    VALUE candidates = Qnil;
+    VALUE last_n_tokens = Qnil;
+    rb_scan_args(argc, argv, ":", &kw_args);
+    rb_get_kwargs(kw_args, kw_table, 1, 0, kw_values);
+
+    if (!RB_TYPE_P(kw_values[0], T_STRING)) {
+      rb_raise(rb_eArgError, "session_path must be a String");
+      return Qnil;
+    }
+
+    VALUE filename = kw_values[0];
+
+    LLaMAContextWrapper* ctx_ptr = get_llama_context(self);
+    if (ctx_ptr->ctx == NULL) {
+      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
+      return Qnil;
+    }
+
+    LLaMAContextParamsWrapper* prms_ptr = RbLLaMAContextParams::get_llama_context_params(rb_iv_get(self, "@params"));
+    const int n_ctx = prms_ptr->params.n_ctx;
+
+    std::vector<llama_token> session_tokens(n_ctx);
+    size_t n_token_count_out = 0;
+
+    try {
+      bool res = llama_load_session_file(ctx_ptr->ctx, StringValueCStr(filename), session_tokens.data(), session_tokens.capacity(), &n_token_count_out);
+      if (!res) {
+        rb_raise(rb_eRuntimeError, "Failed to load session file");
+        return Qnil;
+      }
+      session_tokens.resize(n_token_count_out);
+    } catch (const std::runtime_error& e) {
+      rb_raise(rb_eRuntimeError, "%s", e.what());
+      return Qnil;
+    }
+
+    VALUE ary_session_tokens = rb_ary_new2(n_token_count_out);
+    for (size_t i = 0; i < n_token_count_out; i++) {
+      rb_ary_store(ary_session_tokens, i, INT2NUM(session_tokens[i]));
+    }
+
+    RB_GC_GUARD(filename);
+    return ary_session_tokens;
+  }
 
   static VALUE _llama_context_save_session_file(int argc, VALUE* argv, VALUE self) {
     VALUE kw_args = Qnil;
