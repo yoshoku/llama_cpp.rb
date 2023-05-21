@@ -13,6 +13,12 @@ module LLaMACpp
   # LLaMA file magic unversioned.
   LLAMA_FILE_MAGIC_UNVERSIONED = '0x67676d6c'
 
+  # LLaMA session magic.
+  LLAMA_SESSION_MAGIC = '0x6767736e'
+
+  # LLaMA session version.
+  LLAMA_SESSION_VERSION = '1'
+
   # LLaMA model file type.
   LLAMA_FTYPE_ALL_F32 = 0
 

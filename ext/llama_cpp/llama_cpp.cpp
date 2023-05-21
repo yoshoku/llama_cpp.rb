@@ -1514,11 +1514,45 @@ extern "C" void Init_llama_cpp(void) {
   rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_Q5_0", INT2NUM(LLAMA_FTYPE_MOSTLY_Q5_0));
   rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_Q5_1", INT2NUM(LLAMA_FTYPE_MOSTLY_Q5_1));
 
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FILE_VERSION", rb_str_new2(std::to_string(LLAMA_FILE_VERSION).c_str()));
   std::stringstream ss_magic;
+  ss_magic << std::showbase << std::hex << LLAMA_FILE_MAGIC_GGJT;
+  rb_define_const(rb_mLLaMACpp, "LLAMA_FILE_MAGIC_GGJT", rb_str_new2(ss_magic.str().c_str()));
+
+  ss_magic.str("");
+  ss_magic.clear(std::stringstream::goodbit);
+  ss_magic << std::showbase << std::hex << LLAMA_FILE_MAGIC_GGLA;
+  rb_define_const(rb_mLLaMACpp, "LLAMA_FILE_MAGIC_GGLA", rb_str_new2(ss_magic.str().c_str()));
+
+  ss_magic.str("");
+  ss_magic.clear(std::stringstream::goodbit);
+  ss_magic << std::showbase << std::hex << LLAMA_FILE_MAGIC_GGMF;
+  rb_define_const(rb_mLLaMACpp, "LLAMA_FILE_MAGIC_GGMF", rb_str_new2(ss_magic.str().c_str()));
+
+  ss_magic.str("");
+  ss_magic.clear(std::stringstream::goodbit);
+  ss_magic << std::showbase << std::hex << LLAMA_FILE_MAGIC_GGML;
+  rb_define_const(rb_mLLaMACpp, "LLAMA_FILE_MAGIC_GGML", rb_str_new2(ss_magic.str().c_str()));
+
+  ss_magic.str("");
+  ss_magic.clear(std::stringstream::goodbit);
+  ss_magic << std::showbase << std::hex << LLAMA_FILE_MAGIC_GGSN;
+  rb_define_const(rb_mLLaMACpp, "LLAMA_FILE_MAGIC_GGSN", rb_str_new2(ss_magic.str().c_str()));
+
+  ss_magic.str("");
+  ss_magic.clear(std::stringstream::goodbit);
   ss_magic << std::showbase << std::hex << LLAMA_FILE_MAGIC;
   rb_define_const(rb_mLLaMACpp, "LLAMA_FILE_MAGIC", rb_str_new2(ss_magic.str().c_str()));
-  std::stringstream ss_magic_unversioned;
-  ss_magic_unversioned << std::showbase << std::hex << LLAMA_FILE_MAGIC_UNVERSIONED;
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FILE_MAGIC_UNVERSIONED", rb_str_new2(ss_magic_unversioned.str().c_str()));
+
+  ss_magic.str("");
+  ss_magic.clear(std::stringstream::goodbit);
+  ss_magic << std::showbase << std::hex << LLAMA_FILE_MAGIC_UNVERSIONED;
+  rb_define_const(rb_mLLaMACpp, "LLAMA_FILE_MAGIC_UNVERSIONED", rb_str_new2(ss_magic.str().c_str()));
+
+  ss_magic.str("");
+  ss_magic.clear(std::stringstream::goodbit);
+  ss_magic << std::showbase << std::hex << LLAMA_SESSION_MAGIC;
+  rb_define_const(rb_mLLaMACpp, "LLAMA_SESSION_MAGIC", rb_str_new2(ss_magic.str().c_str()));
+
+  rb_define_const(rb_mLLaMACpp, "LLAMA_FILE_VERSION", rb_str_new2(std::to_string(LLAMA_FILE_VERSION).c_str()));
+  rb_define_const(rb_mLLaMACpp, "LLAMA_SESSION_VERSION", rb_str_new2(std::to_string(LLAMA_SESSION_VERSION).c_str()));
 }
