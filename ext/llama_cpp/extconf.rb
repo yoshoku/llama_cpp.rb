@@ -24,6 +24,13 @@ if with_config('openblas')
   $CFLAGS << ' -DGGML_USE_OPENBLAS'
 end
 
+if with_config('blis')
+  abort 'libblis is not found.' unless have_library('blis')
+  abort 'cblas.h is not found.' unless have_header('cblas.h')
+
+  $CFLAGS << ' -DGGML_USE_OPENBLAS'
+end
+
 if with_config('accelerate')
   abort 'Accelerate framework is not found.' unless have_framework('Accelerate')
 
