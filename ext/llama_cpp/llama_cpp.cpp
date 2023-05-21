@@ -524,7 +524,14 @@ private:
     VALUE filename = kw_values[0];
     LLaMAContextParamsWrapper* prms_ptr = RbLLaMAContextParams::get_llama_context_params(kw_values[1]);
     LLaMAContextWrapper* ctx_ptr = get_llama_context(self);
-    ctx_ptr->ctx = llama_init_from_file(StringValueCStr(filename), prms_ptr->params);
+
+    try {
+      ctx_ptr->ctx = llama_init_from_file(StringValueCStr(filename), prms_ptr->params);
+    } catch (const std::runtime_error& e) {
+      rb_raise(rb_eRuntimeError, "%s", e.what());
+      return Qnil;
+    }
+
     if (ctx_ptr->ctx == NULL) {
       rb_raise(rb_eRuntimeError, "Failed to initialize LLaMA context");
       return Qnil;
@@ -788,7 +795,14 @@ private:
 
     VALUE filename = kw_values[0];
     LLaMAContextParamsWrapper* prms_ptr = RbLLaMAContextParams::get_llama_context_params(kw_values[1]);
-    ctx_ptr->ctx = llama_init_from_file(StringValueCStr(filename), prms_ptr->params);
+
+    try {
+      ctx_ptr->ctx = llama_init_from_file(StringValueCStr(filename), prms_ptr->params);
+    } catch (const std::runtime_error& e) {
+      rb_raise(rb_eRuntimeError, "%s", e.what());
+      return Qnil;
+    }
+
     if (ctx_ptr->ctx == NULL) {
       rb_raise(rb_eRuntimeError, "Failed to initialize LLaMA context");
       return Qnil;
