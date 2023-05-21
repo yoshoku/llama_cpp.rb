@@ -106,3 +106,5 @@ module LLaMACpp
     output.join.delete_prefix(spaced_prompt).strip
   end
 end
+
+LLaMACpp.init_backend

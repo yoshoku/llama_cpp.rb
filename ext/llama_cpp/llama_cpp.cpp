@@ -1421,6 +1421,11 @@ const rb_data_type_t RbLLaMAContext::llama_context_type = {
 
 // module functions
 
+static VALUE rb_llama_llama_init_backend(VALUE self) {
+  llama_init_backend();
+  return Qnil;
+}
+
 static VALUE rb_llama_model_quantize(int argc, VALUE* argv, VALUE self) {
   VALUE kw_args = Qnil;
   ID kw_table[4] = { rb_intern("input_path"), rb_intern("output_path"), rb_intern("ftype"), rb_intern("n_threads") };
@@ -1491,6 +1496,7 @@ extern "C" void Init_llama_cpp(void) {
   RbLLaMAContext::define_class(rb_mLLaMACpp);
   RbLLaMAContextParams::define_class(rb_mLLaMACpp);
 
+  rb_define_module_function(rb_mLLaMACpp, "init_backend", rb_llama_llama_init_backend, 0);
   rb_define_module_function(rb_mLLaMACpp, "model_quantize", rb_llama_model_quantize, -1);
   rb_define_module_function(rb_mLLaMACpp, "token_bos", rb_llama_token_bos, 0);
   rb_define_module_function(rb_mLLaMACpp, "token_eos", rb_llama_token_eos, 0);
