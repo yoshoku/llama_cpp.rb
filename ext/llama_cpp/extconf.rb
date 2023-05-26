@@ -5,8 +5,7 @@ require 'mkmf'
 abort 'libstdc++ is not found.' unless have_library('stdc++')
 
 $srcs = %w[ggml.c llama.cpp llama_cpp.cpp]
-$srcs << 'ggml-opencl.c' if with_config('clblast')
-
+$srcs << 'ggml-opencl.cpp' if with_config('clblast')
 $CFLAGS << ' -w'
 $CXXFLAGS << ' -std=c++11'
 $INCFLAGS << ' -I$(srcdir)/src'
