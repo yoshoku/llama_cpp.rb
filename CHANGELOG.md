@@ -1,25 +1,27 @@
-## [Unreleased]
+## [[0.1.4](https://github.com/yoshoku/llama_cpp.rb/compare/v0.1.3...v0.1.4)] - 2023-06-03
+
+- Bump bundled llama.cpp from master-66874d4 to master-ffb06a3.
 
 ## [[0.1.3](https://github.com/yoshoku/llama_cpp.rb/compare/v0.1.2...v0.1.3)] - 2023-05-27
 
-- Bump bundled llama.cpp from master-265db98 to master-66874d4
+- Bump bundled llama.cpp from master-265db98 to master-66874d4.
 
 ## [[0.1.2](https://github.com/yoshoku/llama_cpp.rb/compare/v0.1.1...v0.1.2)] - 2023-05-22
 
 **Breaking Changes**
 
-- Bump bundled llama.cpp from master-6986c78 to master-265db98
-  - bump LLAMA_FILE_VERSION to 3
+- Bump bundled llama.cpp from master-6986c78 to master-265db98.
+  - bump LLAMA_FILE_VERSION to 3.
 
 ## [[0.1.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.1.0...v0.1.1)] - 2023-05-21
 
-- Add load_session_file method to Context
-- Add save_session_file method to Context
+- Add load_session_file method to Context.
+- Add save_session_file method to Context.
 
 **Breaking Changes**
 
-- Bump bundled llama.cpp from master-173d0e6 to master-6986c78
-  - bump LLAMA_FILE_VERSION to 2
+- Bump bundled llama.cpp from master-173d0e6 to master-6986c78.
+  - bump LLAMA_FILE_VERSION to 2.
 
 ## [[0.1.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.0.7...v0.1.0)] - 2023-05-20
 
