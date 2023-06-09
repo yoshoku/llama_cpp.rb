@@ -19,6 +19,9 @@ module LLaMACpp
   # LLaMA session version.
   LLAMA_SESSION_VERSION = '1'
 
+  # LLaMA cuda max devices.
+  LLAMA_MAX_DEVICES = 1
+
   # LLaMA model file type.
   LLAMA_FTYPE_ALL_F32 = 0
 
@@ -42,6 +45,33 @@ module LLaMACpp
 
   # LLaMA model file type.
   LLAMA_FTYPE_MOSTLY_Q5_1 = 9
+
+  # LLaMA model file type.
+  LLAMA_FTYPE_MOSTLY_Q2_K = 10
+
+  # LLaMA model file type.
+  LLAMA_FTYPE_MOSTLY_Q3_K_S = 11
+
+  # LLaMA model file type.
+  LLAMA_FTYPE_MOSTLY_Q3_K_M = 12
+
+  # LLaMA model file type.
+  LLAMA_FTYPE_MOSTLY_Q3_K_L = 13
+
+  # LLaMA model file type.
+  LLAMA_FTYPE_MOSTLY_Q4_K_S = 14
+
+  # LLaMA model file type.
+  LLAMA_FTYPE_MOSTLY_Q4_K_M = 15
+
+  # LLaMA model file type.
+  LLAMA_FTYPE_MOSTLY_Q5_K_S = 16
+
+  # LLaMA model file type.
+  LLAMA_FTYPE_MOSTLY_Q5_K_M = 17
+
+  # LLaMA model file type.
+  LLAMA_FTYPE_MOSTLY_Q6_K = 18
 
   module_function
 

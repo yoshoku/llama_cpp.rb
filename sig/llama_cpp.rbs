@@ -5,6 +5,8 @@ module LLaMACpp
   LLAMA_FILE_MAGIC: String
   LLAMA_FILE_MAGIC_UNVERSIONED: String
 
+  LLAMA_MAX_DEVICES: Integer
+
   LLAMA_FTYPE_ALL_F32: Integer
   LLAMA_FTYPE_MOSTLY_F16: Integer
   LLAMA_FTYPE_MOSTLY_Q4_0: Integer
@@ -13,6 +15,15 @@ module LLaMACpp
   LLAMA_FTYPE_MOSTLY_Q8_0: Integer
   LLAMA_FTYPE_MOSTLY_Q5_0: Integer
   LLAMA_FTYPE_MOSTLY_Q5_1: Integer
+  LLAMA_FTYPE_MOSTLY_Q2_K: Integer
+  LLAMA_FTYPE_MOSTLY_Q3_K_S: Integer
+  LLAMA_FTYPE_MOSTLY_Q3_K_M: Integer
+  LLAMA_FTYPE_MOSTLY_Q3_K_L: Integer
+  LLAMA_FTYPE_MOSTLY_Q4_K_S: Integer
+  LLAMA_FTYPE_MOSTLY_Q4_K_M: Integer
+  LLAMA_FTYPE_MOSTLY_Q5_K_S: Integer
+  LLAMA_FTYPE_MOSTLY_Q5_K_M: Integer
+  LLAMA_FTYPE_MOSTLY_Q6_K: Integer
 
   def self?.init_backend: () -> void
   def self?.model_quantize: (input_path: String, output_path: String, ftype: Integer, ?n_threads: Integer) -> void
