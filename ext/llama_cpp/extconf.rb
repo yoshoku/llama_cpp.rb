@@ -36,6 +36,13 @@ if with_config('accelerate')
   $CFLAGS << ' -DGGML_USE_ACCELERATE'
 end
 
+if with_config('metal')
+  $CFLAGS << ' -DGGML_USE_METAL -DGGML_METAL_NDEBUG'
+  $CXXFLAGS << ' -DGGML_USE_METAL'
+  $LDFLAGS << ' -framework Foundation -framework Metal -framework MetalKit -framework MetalPerformanceShaders'
+  $objs = %w[ggml.o llama.o llama_cpp.o ggml-metal.o]
+end
+
 if with_config('cublas')
   $CFLAGS << ' -DGGML_USE_CUBLAS -I/usr/local/cuda/include'
   $CXXFLAGS << ' -DGGML_USE_CUBLAS -I/usr/local/cuda/include'
@@ -82,5 +89,12 @@ if with_config('cublas')
   File.open('Makefile', 'a') do |f|
     f.puts 'ggml-cuda.o: ggml-cuda.cu ggml-cuda.h'
     f.puts "\tnvcc -arch=native -c -o $@ $<"
+  end
+end
+
+if with_config('metal')
+  File.open('Makefile', 'a') do |f|
+    f.puts 'ggml-metal.o: ggml-metal.m ggml-metal.h'
+    f.puts "\t$(CC) $(CFLAGS) -c $< -o $@"
   end
 end
