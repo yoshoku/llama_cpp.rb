@@ -369,6 +369,14 @@ module LLaMACpp
     # @return [Integer]
     def n_ctx; end
 
+    # Sets the batch size of prompt processing.
+    # @param n_batch [Integer]
+    def n_batch=(n_batch); end
+
+    # Returns the batch size of prompt processing.
+    # @return [Integer]
+    def n_batch; end
+
     # Sets the random seed.
     # @param seed [Integer]
     def seed=(seed); end

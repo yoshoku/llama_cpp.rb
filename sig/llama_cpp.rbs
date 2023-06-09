@@ -103,6 +103,8 @@ module LLaMACpp
     def logits_all=: (bool) -> bool
     def n_ctx: () -> Integer
     def n_ctx=: (Integer) -> Integer
+    def n_batch: () -> Integer
+    def n_batch=: (Integer) -> Integer
     def seed: () -> Integer
     def seed=: (Integer) -> Integer
     def use_mlock: () -> bool
