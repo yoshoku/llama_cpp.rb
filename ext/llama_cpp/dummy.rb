@@ -377,6 +377,14 @@ module LLaMACpp
     # @return [Integer]
     def n_batch; end
 
+    # Sets the number of layers to stor in VRAM.
+    # @param n_batch [Integer]
+    def n_gpu_layers=(n_gpu_layers); end
+
+    # Returns the number of layers to stor in VRAM.
+    # @return [Integer]
+    def n_gpu_layers; end
+
     # Sets the random seed.
     # @param seed [Integer]
     def seed=(seed); end

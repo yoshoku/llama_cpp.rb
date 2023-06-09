@@ -105,6 +105,8 @@ module LLaMACpp
     def n_ctx=: (Integer) -> Integer
     def n_batch: () -> Integer
     def n_batch=: (Integer) -> Integer
+    def n_gpu_layers: () -> Integer
+    def n_gpu_layers=: (Integer) -> Integer
     def seed: () -> Integer
     def seed=: (Integer) -> Integer
     def use_mlock: () -> bool
