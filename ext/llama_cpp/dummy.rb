@@ -385,6 +385,14 @@ module LLaMACpp
     # @return [Integer]
     def n_gpu_layers; end
 
+    # Sets the GPU that is used.
+    # @param n_batch [Integer]
+    def main_gpu=(main_gpu); end
+
+    # Returns the GPU that is used.
+    # @return [Integer]
+    def main_gpu; end
+
     # Sets the random seed.
     # @param seed [Integer]
     def seed=(seed); end

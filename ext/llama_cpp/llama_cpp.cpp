@@ -296,6 +296,8 @@ public:
     rb_define_method(rb_cLLaMAContextParams, "n_batch", RUBY_METHOD_FUNC(_llama_context_params_get_n_batch), 0);
     rb_define_method(rb_cLLaMAContextParams, "n_gpu_layers=", RUBY_METHOD_FUNC(_llama_context_params_set_n_gpu_layers), 1);
     rb_define_method(rb_cLLaMAContextParams, "n_gpu_layers", RUBY_METHOD_FUNC(_llama_context_params_get_n_gpu_layers), 0);
+    rb_define_method(rb_cLLaMAContextParams, "main_gpu=", RUBY_METHOD_FUNC(_llama_context_params_set_main_gpu), 1);
+    rb_define_method(rb_cLLaMAContextParams, "main_gpu", RUBY_METHOD_FUNC(_llama_context_params_get_main_gpu), 0);
     rb_define_method(rb_cLLaMAContextParams, "seed=", RUBY_METHOD_FUNC(_llama_context_params_set_seed), 1);
     rb_define_method(rb_cLLaMAContextParams, "seed", RUBY_METHOD_FUNC(_llama_context_params_get_seed), 0);
     rb_define_method(rb_cLLaMAContextParams, "f16_kv=", RUBY_METHOD_FUNC(_llama_context_params_set_f16_kv), 1);
@@ -355,6 +357,18 @@ private:
   static VALUE _llama_context_params_get_n_gpu_layers(VALUE self) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     return INT2NUM(ptr->params.n_gpu_layers);
+  };
+
+  // main_gpu
+  static VALUE _llama_context_params_set_main_gpu(VALUE self, VALUE main_gpu) {
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    ptr->params.main_gpu = NUM2INT(main_gpu);
+    return INT2NUM(ptr->params.main_gpu);
+  };
+
+  static VALUE _llama_context_params_get_main_gpu(VALUE self) {
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    return INT2NUM(ptr->params.main_gpu);
   };
 
   // seed
