@@ -175,6 +175,12 @@ module LLaMACpp
     # @return [NilClass]
     def eval(tokens:, n_past:, n_tokens: nil, n_threads: 1); end
 
+    # Export a static computation graph for context.
+    #
+    # @param fname [String] The path to the export file.
+    # @return [Boolean]
+    def eval_export(fname); end
+
     # Returns the logits.
     #
     # @param text [String] The text to be tokenized.

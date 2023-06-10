@@ -63,6 +63,7 @@ module LLaMACpp
     def embeddings: () -> Array[Float]
     def empty?: () -> bool
     def eval: (tokens: Array[Integer], n_past: Integer, ?n_tokens: Integer, ?n_threads: Integer) -> void
+    def eval_export: (String) -> bool
     def free: () -> void
     def load: (model_path: String, params: ::LLaMACpp::ContextParams) -> void
     def logits: () -> Array[Float]
