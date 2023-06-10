@@ -298,6 +298,7 @@ public:
     rb_define_method(rb_cLLaMAContextParams, "n_gpu_layers", RUBY_METHOD_FUNC(_llama_context_params_get_n_gpu_layers), 0);
     rb_define_method(rb_cLLaMAContextParams, "main_gpu=", RUBY_METHOD_FUNC(_llama_context_params_set_main_gpu), 1);
     rb_define_method(rb_cLLaMAContextParams, "main_gpu", RUBY_METHOD_FUNC(_llama_context_params_get_main_gpu), 0);
+    rb_define_method(rb_cLLaMAContextParams, "tensor_split", RUBY_METHOD_FUNC(_llama_context_params_get_tensor_split), 0);
     rb_define_method(rb_cLLaMAContextParams, "seed=", RUBY_METHOD_FUNC(_llama_context_params_set_seed), 1);
     rb_define_method(rb_cLLaMAContextParams, "seed", RUBY_METHOD_FUNC(_llama_context_params_get_seed), 0);
     rb_define_method(rb_cLLaMAContextParams, "f16_kv=", RUBY_METHOD_FUNC(_llama_context_params_set_f16_kv), 1);
@@ -369,6 +370,19 @@ private:
   static VALUE _llama_context_params_get_main_gpu(VALUE self) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     return INT2NUM(ptr->params.main_gpu);
+  };
+
+  // tensor_split
+  static VALUE _llama_context_params_get_tensor_split(VALUE self) {
+    if (LLAMA_MAX_DEVICES < 1) {
+      return rb_ary_new();
+    }
+    VALUE ret = rb_ary_new2(LLAMA_MAX_DEVICES);
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    for (size_t i = 0; i < LLAMA_MAX_DEVICES; i++) {
+      rb_ary_store(ret, i, DBL2NUM(ptr->params.tensor_split[i]));
+    }
+    return ret;
   };
 
   // seed

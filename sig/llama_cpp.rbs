@@ -109,6 +109,7 @@ module LLaMACpp
     def n_gpu_layers=: (Integer) -> Integer
     def main_gpu: () -> Integer
     def main_gpu=: (Integer) -> Integer
+    def tensor_split: () -> Array[Float]
     def seed: () -> Integer
     def seed=: (Integer) -> Integer
     def use_mlock: () -> bool

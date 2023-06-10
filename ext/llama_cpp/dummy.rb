@@ -393,6 +393,10 @@ module LLaMACpp
     # @return [Integer]
     def main_gpu; end
 
+    # Returns the how layers are split across multi-GPUs.
+    # @return [Array<Float>]
+    def tensor_split; end
+
     # Sets the random seed.
     # @param seed [Integer]
     def seed=(seed); end
