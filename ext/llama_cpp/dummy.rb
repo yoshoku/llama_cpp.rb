@@ -459,4 +459,39 @@ module LLaMACpp
     # @return [Boolean]
     def embedding; end
   end
+
+  # Class for quantization parameters
+  class ModelQuantizeParams
+    # Sets the number of threads.
+    # @param n_thread [Intger]
+    def n_thread=(n_thread); end
+
+    # Returns the number of threads.
+    # @return [Integer]
+    def n_thread; end
+
+    # Sets the file type of quantized model.
+    # @param ftype [Integer]
+    def ftype=(ftype); end
+
+    # Returns the file type of quantized model.
+    # @return [Integer]
+    def ftype; end
+
+    # Sets the flag to allow quantizing non-f32/f16 tensors.
+    # @param flag [Boolean]
+    def allow_quantization=(flag); end
+
+    # Returns the flag to allow quantizing non-f32/f16 tensors.
+    # @return [Boolean]
+    def allow_quantization; end
+
+    # Sets the flag to quantize output.weight.
+    # @param flag [Boolean]
+    def quantize_output_tensor=(flag); end
+
+    # Returns the flag to quantize output.weight.
+    # @return [Boolean]
+    def quantize_output_tensor; end
+  end
 end

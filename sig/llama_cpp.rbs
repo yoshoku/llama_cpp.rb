@@ -121,6 +121,19 @@ module LLaMACpp
     def vocab_only=: (bool) -> bool
   end
 
+  class ModelQuantizeParams
+    public
+
+    def n_thread: () -> Integer
+    def n_thread=: (Integer) -> Integer
+    def ftype: () -> Integer
+    def ftype=: (Integer) -> Integer
+    def allow_quantization: () -> bool
+    def allow_quantization=: (bool) -> bool
+    def quantize_output_tensor: () -> bool
+    def quantize_output_tensor=: (bool) -> bool
+  end
+
   class Params = ContextParams
 
   class Client

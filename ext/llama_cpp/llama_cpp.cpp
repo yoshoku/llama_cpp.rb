@@ -4,6 +4,7 @@
 VALUE rb_mLLaMACpp;
 VALUE rb_cLLaMAContext;
 VALUE rb_cLLaMAContextParams;
+VALUE rb_cLLaMAModelQuantizeParams;
 VALUE rb_cLLaMATokenData;
 VALUE rb_cLLaMATokenDataArray;
 
@@ -475,6 +476,121 @@ const rb_data_type_t RbLLaMAContextParams::llama_context_params_type = {
   { NULL,
     RbLLaMAContextParams::llama_context_params_free,
     RbLLaMAContextParams::llama_context_params_size },
+  NULL,
+  NULL,
+  RUBY_TYPED_FREE_IMMEDIATELY
+};
+
+class LLaMAModelQuantizeParamsWrapper {
+public:
+  llama_model_quantize_params params;
+
+  LLaMAModelQuantizeParamsWrapper() : params(llama_model_quantize_default_params()){};
+
+  ~LLaMAModelQuantizeParamsWrapper(){};
+};
+
+class RbLLaMAModelQuantizeParams {
+public:
+  static VALUE llama_model_quantize_params_alloc(VALUE self) {
+    LLaMAModelQuantizeParamsWrapper* ptr = (LLaMAModelQuantizeParamsWrapper*)ruby_xmalloc(sizeof(LLaMAModelQuantizeParamsWrapper));
+    new (ptr) LLaMAModelQuantizeParamsWrapper();
+    return TypedData_Wrap_Struct(self, &llama_model_quantize_params_type, ptr);
+  };
+
+  static void llama_model_quantize_params_free(void* ptr) {
+    ((LLaMAModelQuantizeParamsWrapper*)ptr)->~LLaMAModelQuantizeParamsWrapper();
+    ruby_xfree(ptr);
+  };
+
+  static size_t llama_model_quantize_params_size(const void* ptr) {
+    return sizeof(*((LLaMAModelQuantizeParamsWrapper*)ptr));
+  };
+
+  static LLaMAModelQuantizeParamsWrapper* get_llama_model_quantize_params(VALUE self) {
+    LLaMAModelQuantizeParamsWrapper* ptr;
+    TypedData_Get_Struct(self, LLaMAModelQuantizeParamsWrapper, &llama_model_quantize_params_type, ptr);
+    return ptr;
+  };
+
+  static void define_class(VALUE outer) {
+    rb_cLLaMAModelQuantizeParams = rb_define_class_under(outer, "ModelQuantizeParams", rb_cObject);
+    rb_define_alloc_func(rb_cLLaMAModelQuantizeParams, llama_model_quantize_params_alloc);
+    rb_define_method(rb_cLLaMAModelQuantizeParams, "n_thread=", RUBY_METHOD_FUNC(_llama_model_quantize_params_set_n_thread), 1);
+    rb_define_method(rb_cLLaMAModelQuantizeParams, "n_thread", RUBY_METHOD_FUNC(_llama_model_quantize_params_get_n_thread), 0);
+    rb_define_method(rb_cLLaMAModelQuantizeParams, "ftype=", RUBY_METHOD_FUNC(_llama_model_quantize_params_set_ftype), 1);
+    rb_define_method(rb_cLLaMAModelQuantizeParams, "ftype", RUBY_METHOD_FUNC(_llama_model_quantize_params_get_ftype), 0);
+    rb_define_method(rb_cLLaMAModelQuantizeParams, "allow_requantize=", RUBY_METHOD_FUNC(_llama_model_quantize_params_set_allow_requantize), 1);
+    rb_define_method(rb_cLLaMAModelQuantizeParams, "allow_requantize", RUBY_METHOD_FUNC(_llama_model_quantize_params_get_allow_requantize), 0);
+    rb_define_method(rb_cLLaMAModelQuantizeParams, "quantize_output_tensor=", RUBY_METHOD_FUNC(_llama_model_quantize_params_set_quantize_output_tensor), 1);
+    rb_define_method(rb_cLLaMAModelQuantizeParams, "quantize_output_tensor", RUBY_METHOD_FUNC(_llama_model_quantize_params_get_quantize_output_tensor), 0);
+  };
+
+private:
+  static const rb_data_type_t llama_model_quantize_params_type;
+
+  // n_thread
+  static VALUE _llama_model_quantize_params_set_n_thread(VALUE self, VALUE n_thread) {
+    LLaMAModelQuantizeParamsWrapper* ptr = get_llama_model_quantize_params(self);
+    ptr->params.nthread = NUM2INT(n_thread);
+    return INT2NUM(ptr->params.nthread);
+  };
+
+  static VALUE _llama_model_quantize_params_get_n_thread(VALUE self) {
+    LLaMAModelQuantizeParamsWrapper* ptr = get_llama_model_quantize_params(self);
+    return INT2NUM(ptr->params.nthread);
+  };
+
+  // ftype
+  static VALUE _llama_model_quantize_params_set_ftype(VALUE self, VALUE ftype) {
+    LLaMAModelQuantizeParamsWrapper* ptr = get_llama_model_quantize_params(self);
+    ptr->params.ftype = static_cast<enum llama_ftype>(NUM2INT(ftype));
+    return INT2NUM(ptr->params.ftype);
+  };
+
+  static VALUE _llama_model_quantize_params_get_ftype(VALUE self) {
+    LLaMAModelQuantizeParamsWrapper* ptr = get_llama_model_quantize_params(self);
+    return INT2NUM(ptr->params.ftype);
+  };
+
+  // allow_requantize
+  static VALUE _llama_model_quantize_params_set_allow_requantize(VALUE self, VALUE allow_requantize) {
+    LLaMAModelQuantizeParamsWrapper* ptr = get_llama_model_quantize_params(self);
+    if (NIL_P(allow_requantize) || allow_requantize == Qfalse) {
+      ptr->params.allow_requantize = false;
+    } else {
+      ptr->params.allow_requantize = true;
+    }
+    return ptr->params.allow_requantize ? Qtrue : Qfalse;
+  };
+
+  static VALUE _llama_model_quantize_params_get_allow_requantize(VALUE self) {
+    LLaMAModelQuantizeParamsWrapper* ptr = get_llama_model_quantize_params(self);
+    return ptr->params.allow_requantize ? Qtrue : Qfalse;
+  };
+
+  // quantize_output_tensor
+  static VALUE _llama_model_quantize_params_set_quantize_output_tensor(VALUE self, VALUE quantize_output_tensor) {
+    LLaMAModelQuantizeParamsWrapper* ptr = get_llama_model_quantize_params(self);
+    if (NIL_P(quantize_output_tensor) || quantize_output_tensor == Qfalse) {
+      ptr->params.quantize_output_tensor = false;
+    } else {
+      ptr->params.quantize_output_tensor = true;
+    }
+    return ptr->params.quantize_output_tensor ? Qtrue : Qfalse;
+  };
+
+  static VALUE _llama_model_quantize_params_get_quantize_output_tensor(VALUE self) {
+    LLaMAModelQuantizeParamsWrapper* ptr = get_llama_model_quantize_params(self);
+    return ptr->params.quantize_output_tensor ? Qtrue : Qfalse;
+  };
+};
+
+const rb_data_type_t RbLLaMAModelQuantizeParams::llama_model_quantize_params_type = {
+  "RbLLaMAModelQuantizeParams",
+  { NULL,
+    RbLLaMAModelQuantizeParams::llama_model_quantize_params_free,
+    RbLLaMAModelQuantizeParams::llama_model_quantize_params_size },
   NULL,
   NULL,
   RUBY_TYPED_FREE_IMMEDIATELY
