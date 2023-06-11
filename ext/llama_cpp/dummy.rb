@@ -383,7 +383,7 @@ module LLaMACpp
     def n_batch; end
 
     # Sets the number of layers to stor in VRAM.
-    # @param n_batch [Integer]
+    # @param n_gpu_layers [Integer]
     def n_gpu_layers=(n_gpu_layers); end
 
     # Returns the number of layers to stor in VRAM.
@@ -391,7 +391,7 @@ module LLaMACpp
     def n_gpu_layers; end
 
     # Sets the GPU that is used.
-    # @param n_batch [Integer]
+    # @param main_gpu [Integer]
     def main_gpu=(main_gpu); end
 
     # Returns the GPU that is used.
