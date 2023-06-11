@@ -1,3 +1,32 @@
+## [[0.2.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.1.4...v0.2.0)] - 2023-06-11
+
+- Bump bundled llama.cpp from master-ffb06a3 to master-4de0334.
+- Fix installation files for CUDA.
+- Add metal config option:
+  ```
+  $ gem install llama_cpp -- --with-metal
+  ```
+  ```ruby
+  require 'llama_cpp'
+
+  params = LLaMACpp::ContextParams.new
+  params.n_gpu_layers = 1
+
+  context = LLaMACpp::Context.new(model_path: '/path/to/quantized-model.bin', params: params)
+  LLaMACpp.generate(context, 'Hello, world.')
+  ```
+
+**Breaking Changes**
+
+- Add ModelQuantizationParams class.
+- Change the argument of the `model_quantize` module function in LLaMACpp.
+  ```ruby
+  require 'llama_cpp'
+
+  params = LLaMACpp::ModelQuantizeParams.new
+  LLaMACpp.model_quantize(input_path: 'foo.model', output_path: 'bar.model', params: params)
+  ```
+
 ## [[0.1.4](https://github.com/yoshoku/llama_cpp.rb/compare/v0.1.3...v0.1.4)] - 2023-06-03
 
 - Bump bundled llama.cpp from master-66874d4 to master-ffb06a3.
