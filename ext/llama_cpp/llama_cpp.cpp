@@ -690,7 +690,7 @@ private:
       return Qnil;
     }
     if (!rb_obj_is_kind_of(kw_values[1], rb_cLLaMAContextParams)) {
-      rb_raise(rb_eArgError, "params must be a LLaMAContextParams");
+      rb_raise(rb_eArgError, "params must be a ContextParams");
       return Qnil;
     }
 
@@ -1619,10 +1619,10 @@ static VALUE rb_llama_llama_init_backend(VALUE self) {
 
 static VALUE rb_llama_model_quantize(int argc, VALUE* argv, VALUE self) {
   VALUE kw_args = Qnil;
-  ID kw_table[4] = { rb_intern("input_path"), rb_intern("output_path"), rb_intern("ftype"), rb_intern("n_threads") };
-  VALUE kw_values[4] = { Qundef, Qundef, Qundef, Qundef };
+  ID kw_table[3] = { rb_intern("input_path"), rb_intern("output_path"), rb_intern("params") };
+  VALUE kw_values[3] = { Qundef, Qundef, Qundef };
   rb_scan_args(argc, argv, ":", &kw_args);
-  rb_get_kwargs(kw_args, kw_table, 3, 1, kw_values);
+  rb_get_kwargs(kw_args, kw_table, 3, 0, kw_values);
 
   if (!RB_TYPE_P(kw_values[0], T_STRING)) {
     rb_raise(rb_eArgError, "input_path must be a string");
@@ -1632,21 +1632,16 @@ static VALUE rb_llama_model_quantize(int argc, VALUE* argv, VALUE self) {
     rb_raise(rb_eArgError, "output_path must be a string");
     return Qnil;
   }
-  if (!RB_INTEGER_TYPE_P(kw_values[2])) {
-    rb_raise(rb_eArgError, "ftype must be an integer");
-    return Qnil;
-  }
-  if (kw_values[3] != Qundef && !RB_INTEGER_TYPE_P(kw_values[3])) {
-    rb_raise(rb_eArgError, "n_threads must be an integer");
+  if (!rb_obj_is_kind_of(kw_values[2], rb_cLLaMAModelQuantizeParams)) {
+    rb_raise(rb_eArgError, "params must be a ModelQuantizeParams");
     return Qnil;
   }
 
   const char* input_path = StringValueCStr(kw_values[0]);
   const char* output_path = StringValueCStr(kw_values[1]);
-  const int ftype = NUM2INT(kw_values[2]);
-  const int n_threads = kw_values[3] == Qundef ? 1 : NUM2INT(kw_values[3]);
+  LLaMAModelQuantizeParamsWrapper* wrapper = RbLLaMAModelQuantizeParams::get_llama_model_quantize_params(kw_values[2]);
 
-  if (llama_model_quantize(input_path, output_path, (llama_ftype)ftype, n_threads) != 0) {
+  if (llama_model_quantize(input_path, output_path, &(wrapper->params)) != 0) {
     rb_raise(rb_eRuntimeError, "Failed to quantize model");
     return Qnil;
   }
