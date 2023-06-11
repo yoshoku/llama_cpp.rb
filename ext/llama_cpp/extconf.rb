@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'mkmf'
+require 'fileutils'
 
 abort 'libstdc++ is not found.' unless have_library('stdc++')
 
@@ -97,4 +98,8 @@ if with_config('metal')
     f.puts 'ggml-metal.o: ggml-metal.m ggml-metal.h'
     f.puts "\t$(CC) $(CFLAGS) -c $< -o $@"
   end
+
+  metal_path = File.expand_path("#{__dir__}/src/ggml-metal.metal")
+  dest_path = File.expand_path("#{__dir__}/../../lib/llama_cpp/")
+  FileUtils.cp(metal_path, dest_path)
 end
