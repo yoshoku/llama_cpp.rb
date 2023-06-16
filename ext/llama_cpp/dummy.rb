@@ -402,6 +402,14 @@ module LLaMACpp
     # @return [Array<Float>]
     def tensor_split; end
 
+    # Sets the flag to reduce VRAM usage at the cost of performance.
+    # @param flag [Boolean]
+    def low_vram=(flag); end
+
+    # Returns the flag to reduce VRAM usage at the cost of performance.
+    # @return [Boolean]
+    def low_vram; end
+
     # Sets the random seed.
     # @param seed [Integer]
     def seed=(seed); end

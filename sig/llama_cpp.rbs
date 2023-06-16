@@ -111,6 +111,8 @@ module LLaMACpp
     def main_gpu: () -> Integer
     def main_gpu=: (Integer) -> Integer
     def tensor_split: () -> Array[Float]
+    def low_vram: () -> bool
+    def low_vram=: (bool) -> bool
     def seed: () -> Integer
     def seed=: (Integer) -> Integer
     def use_mlock: () -> bool

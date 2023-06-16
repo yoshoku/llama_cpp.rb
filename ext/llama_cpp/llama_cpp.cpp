@@ -300,6 +300,8 @@ public:
     rb_define_method(rb_cLLaMAContextParams, "main_gpu=", RUBY_METHOD_FUNC(_llama_context_params_set_main_gpu), 1);
     rb_define_method(rb_cLLaMAContextParams, "main_gpu", RUBY_METHOD_FUNC(_llama_context_params_get_main_gpu), 0);
     rb_define_method(rb_cLLaMAContextParams, "tensor_split", RUBY_METHOD_FUNC(_llama_context_params_get_tensor_split), 0);
+    rb_define_method(rb_cLLaMAContextParams, "low_vram=", RUBY_METHOD_FUNC(_llama_context_params_set_low_vram), 1);
+    rb_define_method(rb_cLLaMAContextParams, "low_vram", RUBY_METHOD_FUNC(_llama_context_params_get_low_vram), 0);
     rb_define_method(rb_cLLaMAContextParams, "seed=", RUBY_METHOD_FUNC(_llama_context_params_set_seed), 1);
     rb_define_method(rb_cLLaMAContextParams, "seed", RUBY_METHOD_FUNC(_llama_context_params_get_seed), 0);
     rb_define_method(rb_cLLaMAContextParams, "f16_kv=", RUBY_METHOD_FUNC(_llama_context_params_set_f16_kv), 1);
@@ -384,6 +386,18 @@ private:
       rb_ary_store(ret, i, DBL2NUM(ptr->params.tensor_split[i]));
     }
     return ret;
+  };
+
+  // low_vram
+  static VALUE _llama_context_params_set_low_vram(VALUE self, VALUE low_vram) {
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    ptr->params.low_vram = low_vram == Qtrue ? true : false;
+    return ptr->params.low_vram ? Qtrue : Qfalse;
+  };
+
+  static VALUE _llama_context_params_get_low_vram(VALUE self) {
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    return ptr->params.low_vram ? Qtrue : Qfalse;
   };
 
   // seed
