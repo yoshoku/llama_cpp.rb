@@ -214,6 +214,11 @@ module LLaMACpp
     # @return [Integer]
     def n_embd; end
 
+    # Returns the vocabulary as output parameters.
+    #
+    # @return [Array<Array<String>, Array<Float>>]
+    def vocab(capacity:); end
+
     # Prints timings.
     #
     # @return [NilClass]

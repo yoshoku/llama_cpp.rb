@@ -655,6 +655,7 @@ public:
     rb_define_method(rb_cLLaMAContext, "tokenize", RUBY_METHOD_FUNC(_llama_context_tokenize), -1);
     rb_define_method(rb_cLLaMAContext, "logits", RUBY_METHOD_FUNC(_llama_context_logits), 0);
     rb_define_method(rb_cLLaMAContext, "embeddings", RUBY_METHOD_FUNC(_llama_context_embeddings), 0);
+    rb_define_method(rb_cLLaMAContext, "vocab", RUBY_METHOD_FUNC(_llama_context_vocab), -1);
     rb_define_method(rb_cLLaMAContext, "token_to_str", RUBY_METHOD_FUNC(_llama_context_token_to_str), 1);
     rb_define_method(rb_cLLaMAContext, "n_vocab", RUBY_METHOD_FUNC(_llama_context_n_vocab), 0);
     rb_define_method(rb_cLLaMAContext, "n_ctx", RUBY_METHOD_FUNC(_llama_context_n_ctx), 0);
@@ -908,6 +909,43 @@ private:
     }
 
     return output;
+  };
+
+  static VALUE _llama_context_vocab(int argc, VALUE* argv, VALUE self) {
+    VALUE kw_args = Qnil;
+    ID kw_table[1] = { rb_intern("capacity") };
+    VALUE kw_values[1] = { Qundef };
+    rb_scan_args(argc, argv, ":", &kw_args);
+    rb_get_kwargs(kw_args, kw_table, 1, 0, kw_values);
+
+    if (!RB_INTEGER_TYPE_P(kw_values[0])) {
+      rb_raise(rb_eArgError, "capacity must be an integer");
+      return Qnil;
+    }
+
+    LLaMAContextWrapper* ptr = get_llama_context(self);
+    if (ptr->ctx == NULL) {
+      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
+      return Qnil;
+    }
+
+    const int capacity = NUM2INT(kw_values[0]);
+    std::vector<const char*> strings;
+    std::vector<float> scores;
+    int n_vocab = llama_n_vocab(ptr->ctx);
+    strings.resize(n_vocab, NULL);
+    scores.resize(n_vocab, 0);
+
+    n_vocab = llama_get_vocab(ptr->ctx, strings.data(), scores.data(), capacity);
+
+    VALUE ret_strings = rb_ary_new();
+    VALUE ret_scores = rb_ary_new();
+    for (int i = 0; i < n_vocab; i++) {
+      rb_ary_push(ret_strings, rb_utf8_str_new_cstr(strings[i]));
+      rb_ary_push(ret_scores, DBL2NUM(static_cast<double>(scores[i])));
+    }
+
+    return rb_ary_new_from_args(2, ret_strings, ret_scores);
   };
 
   static VALUE _llama_context_n_vocab(VALUE self) {
