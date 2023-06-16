@@ -1,3 +1,10 @@
+## [[0.2.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.2.0...v0.2.1)] - 2023-06-17
+
+- Bump bundled llama.cpp from master-4de0334 to master-a09f919.
+- Add `low_vram` parameter to ContextParams.
+- Add `vocab` method to Context.
+- Add example script: https://github.com/yoshoku/llama_cpp.rb/tree/main/examples
+
 ## [[0.2.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.1.4...v0.2.0)] - 2023-06-11
 
 - Bump bundled llama.cpp from master-ffb06a3 to master-4de0334.
