@@ -58,3 +58,35 @@ Options:
 
 Start chat
 ```
+
+## embedding.rb
+
+### Usage
+
+```sh
+$ cd examples
+$ gem install llama_cpp thor
+$ ./embedding.rb -m /path/to/quantized-model.bin -t 4 -p 'Hello, World.'
+...
+0.7191136479377747 0.5564611554145813 1.4210394620895386 -1.4874695539474487
+```
+
+### Options
+
+```
+$ ./embedding.rb help main
+Usage:
+  embedding.rb main -m, --model=MODEL -p, --prompt=PROMPT
+
+Options:
+  -s, [--seed=N]          # random seed
+                          # Default: -1
+  -t, [--threads=N]       # number of threads
+                          # Default: 2
+  -m, --model=MODEL       # path to model file
+  -p, --prompt=PROMPT     # prompt to generate embedding
+      [--n-gpu-layers=N]  # number of layers on GPU
+                          # Default: 0
+
+Extract embedding from prompt
+```
