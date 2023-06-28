@@ -2,6 +2,7 @@
 #include "llama_cpp.h"
 
 VALUE rb_mLLaMACpp;
+VALUE rb_cLLaMAModel;
 VALUE rb_cLLaMAContext;
 VALUE rb_cLLaMAContextParams;
 VALUE rb_cLLaMAModelQuantizeParams;
@@ -605,6 +606,169 @@ const rb_data_type_t RbLLaMAModelQuantizeParams::llama_model_quantize_params_typ
   { NULL,
     RbLLaMAModelQuantizeParams::llama_model_quantize_params_free,
     RbLLaMAModelQuantizeParams::llama_model_quantize_params_size },
+  NULL,
+  NULL,
+  RUBY_TYPED_FREE_IMMEDIATELY
+};
+
+class LLaMAModelWrapper {
+public:
+  struct llama_model* model;
+
+  LLaMAModelWrapper() : model(NULL){};
+
+  ~LLaMAModelWrapper() {
+    if (model != NULL) {
+      llama_free_model(model);
+    }
+  };
+};
+
+class RbLLaMAModel {
+public:
+  static VALUE llama_model_alloc(VALUE self) {
+    LLaMAModelWrapper* ptr = (LLaMAModelWrapper*)ruby_xmalloc(sizeof(LLaMAModelWrapper));
+    new (ptr) LLaMAModelWrapper();
+    return TypedData_Wrap_Struct(self, &llama_model_type, ptr);
+  }
+
+  static void llama_model_free(void* ptr) {
+    ((LLaMAModelWrapper*)ptr)->~LLaMAModelWrapper();
+    ruby_xfree(ptr);
+  }
+
+  static size_t llama_model_size(const void* ptr) {
+    return sizeof(*((LLaMAModelWrapper*)ptr));
+  }
+
+  static LLaMAModelWrapper* get_llama_model(VALUE self) {
+    LLaMAModelWrapper* ptr;
+    TypedData_Get_Struct(self, LLaMAModelWrapper, &llama_model_type, ptr);
+    return ptr;
+  }
+
+  static void define_class(VALUE outer) {
+    rb_cLLaMAModel = rb_define_class_under(outer, "Model", rb_cObject);
+    rb_define_alloc_func(rb_cLLaMAModel, llama_model_alloc);
+    rb_define_method(rb_cLLaMAModel, "initialize", RUBY_METHOD_FUNC(_llama_model_initialize), -1);
+    rb_define_method(rb_cLLaMAModel, "empty?", RUBY_METHOD_FUNC(_llama_model_empty), 0);
+    rb_define_method(rb_cLLaMAModel, "free", RUBY_METHOD_FUNC(_llama_model_free), 0);
+    rb_define_method(rb_cLLaMAModel, "load", RUBY_METHOD_FUNC(_llama_model_load), -1);
+  }
+
+private:
+  static const rb_data_type_t llama_model_type;
+
+  static VALUE _llama_model_initialize(int argc, VALUE* argv, VALUE self) {
+    VALUE kw_args = Qnil;
+    ID kw_table[2] = { rb_intern("model_path"), rb_intern("params") };
+    VALUE kw_values[2] = { Qundef, Qundef };
+    rb_scan_args(argc, argv, ":", &kw_args);
+    rb_get_kwargs(kw_args, kw_table, 0, 2, kw_values);
+
+    if (kw_values[0] == Qundef && kw_values[1] == Qundef) {
+      rb_iv_set(self, "@params", Qnil);
+      return Qnil;
+    }
+
+    if (!RB_TYPE_P(kw_values[0], T_STRING)) {
+      rb_raise(rb_eArgError, "model_path must be a string");
+      return Qnil;
+    }
+    if (!rb_obj_is_kind_of(kw_values[1], rb_cLLaMAContextParams)) {
+      rb_raise(rb_eArgError, "params must be a ContextParams");
+      return Qnil;
+    }
+
+    VALUE filename = kw_values[0];
+    LLaMAContextParamsWrapper* prms_ptr = RbLLaMAContextParams::get_llama_context_params(kw_values[1]);
+    LLaMAModelWrapper* model_ptr = get_llama_model(self);
+
+    try {
+      model_ptr->model = llama_load_model_from_file(StringValueCStr(filename), prms_ptr->params);
+    } catch (const std::runtime_error& e) {
+      rb_raise(rb_eRuntimeError, "%s", e.what());
+      return Qnil;
+    }
+
+    if (model_ptr->model == NULL) {
+      rb_raise(rb_eRuntimeError, "Failed to initialize LLaMA model");
+      return Qnil;
+    }
+
+    rb_iv_set(self, "@params", kw_values[1]);
+
+    RB_GC_GUARD(filename);
+    return Qnil;
+  }
+
+  static VALUE _llama_model_empty(VALUE self) {
+    LLaMAModelWrapper* ptr = get_llama_model(self);
+    if (ptr->model != NULL) {
+      return Qfalse;
+    }
+    return Qtrue;
+  }
+
+  static VALUE _llama_model_free(VALUE self) {
+    LLaMAModelWrapper* ptr = get_llama_model(self);
+    if (ptr->model != NULL) {
+      llama_free_model(ptr->model);
+      ptr->model = NULL;
+      rb_iv_set(self, "@params", Qnil);
+    }
+    return Qnil;
+  }
+
+  static VALUE _llama_model_load(int argc, VALUE* argv, VALUE self) {
+    VALUE kw_args = Qnil;
+    ID kw_table[2] = { rb_intern("model_path"), rb_intern("params") };
+    VALUE kw_values[2] = { Qundef, Qundef };
+    rb_scan_args(argc, argv, ":", &kw_args);
+    rb_get_kwargs(kw_args, kw_table, 2, 0, kw_values);
+
+    if (!RB_TYPE_P(kw_values[0], T_STRING)) {
+      rb_raise(rb_eArgError, "model_path must be a string");
+      return Qnil;
+    }
+    if (!rb_obj_is_kind_of(kw_values[1], rb_cLLaMAContextParams)) {
+      rb_raise(rb_eArgError, "params must be a LLaMAContextParams");
+      return Qnil;
+    }
+
+    LLaMAModelWrapper* model_ptr = get_llama_model(self);
+    if (model_ptr->model != NULL) {
+      rb_raise(rb_eRuntimeError, "LLaMA model is already loaded");
+      return Qnil;
+    }
+
+    VALUE filename = kw_values[0];
+    LLaMAContextParamsWrapper* prms_ptr = RbLLaMAContextParams::get_llama_context_params(kw_values[1]);
+
+    try {
+      model_ptr->model = llama_load_model_from_file(StringValueCStr(filename), prms_ptr->params);
+    } catch (const std::runtime_error& e) {
+      rb_raise(rb_eRuntimeError, "%s", e.what());
+      return Qnil;
+    }
+
+    if (model_ptr->model == NULL) {
+      rb_raise(rb_eRuntimeError, "Failed to initialize LLaMA model");
+      return Qnil;
+    }
+
+    rb_iv_set(self, "@params", kw_values[1]);
+
+    RB_GC_GUARD(filename);
+    return Qnil;
+  }
+};
+
+const rb_data_type_t RbLLaMAModel::llama_model_type = {
+  "RbLLaMAModel",
+  { NULL,
+    RbLLaMAModel::llama_model_free,
+    RbLLaMAModel::llama_model_size },
   NULL,
   NULL,
   RUBY_TYPED_FREE_IMMEDIATELY
@@ -1739,6 +1903,7 @@ extern "C" void Init_llama_cpp(void) {
 
   RbLLaMATokenData::define_class(rb_mLLaMACpp);
   RbLLaMATokenDataArray::define_class(rb_mLLaMACpp);
+  RbLLaMAModel::define_class(rb_mLLaMACpp);
   RbLLaMAContext::define_class(rb_mLLaMACpp);
   RbLLaMAContextParams::define_class(rb_mLLaMACpp);
 

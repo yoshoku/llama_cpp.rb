@@ -162,6 +162,31 @@ module LLaMACpp
     def sorted; end
   end
 
+  # Class for model
+  class Model
+    # Create model.
+    #
+    # @param model_path [String] The path to the model file.
+    # @param params [ContextParams] The parameters for context.
+    def initialize(model_path: nil, params: nil); end
+
+    # Returns whether the model is not loaded.
+    #
+    # @return [Boolean]
+    def empty?; end
+
+    # Deallocates model.
+    #
+    # @return [NilClass]
+    def free; end
+
+    # Loads model.
+    #
+    # @param model_path [String] The path to the model file.
+    # @param params [ContextParams] The parameters for context.
+    def load(model_path:, params:); end
+  end
+
   # Class for context
   class Context
     # Create context.

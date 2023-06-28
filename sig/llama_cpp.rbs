@@ -55,6 +55,16 @@ module LLaMACpp
     def sorted: () -> bool
   end
 
+  class Model
+    public
+
+    def initialize: (model_path: String, params: ::LLaMACpp::ContextParams) -> void
+                  | () -> void
+    def empty?: () -> bool
+    def free: () -> void
+    def load: (model_path: String, params: ::LLaMACpp::ContextParams) -> void
+  end
+
   class Context
     public
 
