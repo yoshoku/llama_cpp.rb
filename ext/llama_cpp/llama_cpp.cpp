@@ -853,19 +853,20 @@ private:
 
   static VALUE _llama_context_initialize(int argc, VALUE* argv, VALUE self) {
     VALUE kw_args = Qnil;
-    ID kw_table[2] = { rb_intern("model_path"), rb_intern("params") };
+    ID kw_table[2] = { rb_intern("model"), rb_intern("params") };
     VALUE kw_values[2] = { Qundef, Qundef };
     rb_scan_args(argc, argv, ":", &kw_args);
     rb_get_kwargs(kw_args, kw_table, 0, 2, kw_values);
 
     if (kw_values[0] == Qundef && kw_values[1] == Qundef) {
+      rb_iv_set(self, "@model", Qnil);
       rb_iv_set(self, "@params", Qnil);
       rb_iv_set(self, "@has_evaluated", Qfalse);
       return Qnil;
     }
 
-    if (!RB_TYPE_P(kw_values[0], T_STRING)) {
-      rb_raise(rb_eArgError, "model_path must be a string");
+    if (!rb_obj_is_kind_of(kw_values[0], rb_cLLaMAModel)) {
+      rb_raise(rb_eArgError, "model must be a Model");
       return Qnil;
     }
     if (!rb_obj_is_kind_of(kw_values[1], rb_cLLaMAContextParams)) {
@@ -873,26 +874,26 @@ private:
       return Qnil;
     }
 
-    VALUE filename = kw_values[0];
+    LLaMAModelWrapper* model_ptr = RbLLaMAModel::get_llama_model(kw_values[0]);
+    if (model_ptr->model == NULL) {
+      rb_raise(rb_eRuntimeError, "Model is empty");
+      return Qnil;
+    }
+
     LLaMAContextParamsWrapper* prms_ptr = RbLLaMAContextParams::get_llama_context_params(kw_values[1]);
     LLaMAContextWrapper* ctx_ptr = get_llama_context(self);
 
-    try {
-      ctx_ptr->ctx = llama_init_from_file(StringValueCStr(filename), prms_ptr->params);
-    } catch (const std::runtime_error& e) {
-      rb_raise(rb_eRuntimeError, "%s", e.what());
-      return Qnil;
-    }
+    ctx_ptr->ctx = llama_new_context_with_model(model_ptr->model, prms_ptr->params);
 
     if (ctx_ptr->ctx == NULL) {
       rb_raise(rb_eRuntimeError, "Failed to initialize LLaMA context");
       return Qnil;
     }
 
+    rb_iv_set(self, "@model", kw_values[0]);
     rb_iv_set(self, "@params", kw_values[1]);
     rb_iv_set(self, "@has_evaluated", Qfalse);
 
-    RB_GC_GUARD(filename);
     return Qnil;
   };
 
@@ -1172,6 +1173,7 @@ private:
     if (ptr->ctx != NULL) {
       llama_free(ptr->ctx);
       ptr->ctx = NULL;
+      rb_iv_set(self, "@model", Qnil);
       rb_iv_set(self, "@params", Qnil);
       rb_iv_set(self, "@has_evaluated", Qfalse);
     }
@@ -1180,13 +1182,13 @@ private:
 
   static VALUE _llama_context_load(int argc, VALUE* argv, VALUE self) {
     VALUE kw_args = Qnil;
-    ID kw_table[2] = { rb_intern("model_path"), rb_intern("params") };
+    ID kw_table[2] = { rb_intern("model"), rb_intern("params") };
     VALUE kw_values[2] = { Qundef, Qundef };
     rb_scan_args(argc, argv, ":", &kw_args);
     rb_get_kwargs(kw_args, kw_table, 2, 0, kw_values);
 
-    if (!RB_TYPE_P(kw_values[0], T_STRING)) {
-      rb_raise(rb_eArgError, "model_path must be a string");
+    if (!rb_obj_is_kind_of(kw_values[0], rb_cLLaMAModel)) {
+      rb_raise(rb_eArgError, "model must be a Model");
       return Qnil;
     }
     if (!rb_obj_is_kind_of(kw_values[1], rb_cLLaMAContextParams)) {
@@ -1200,25 +1202,25 @@ private:
       return Qnil;
     }
 
-    VALUE filename = kw_values[0];
-    LLaMAContextParamsWrapper* prms_ptr = RbLLaMAContextParams::get_llama_context_params(kw_values[1]);
-
-    try {
-      ctx_ptr->ctx = llama_init_from_file(StringValueCStr(filename), prms_ptr->params);
-    } catch (const std::runtime_error& e) {
-      rb_raise(rb_eRuntimeError, "%s", e.what());
+    LLaMAModelWrapper* model_ptr = RbLLaMAModel::get_llama_model(kw_values[0]);
+    if (model_ptr->model == NULL) {
+      rb_raise(rb_eRuntimeError, "Model is empty");
       return Qnil;
     }
+
+    LLaMAContextParamsWrapper* prms_ptr = RbLLaMAContextParams::get_llama_context_params(kw_values[1]);
+
+    ctx_ptr->ctx = llama_new_context_with_model(model_ptr->model, prms_ptr->params);
 
     if (ctx_ptr->ctx == NULL) {
       rb_raise(rb_eRuntimeError, "Failed to initialize LLaMA context");
       return Qnil;
     }
 
+    rb_iv_set(self, "@model", kw_values[0]);
     rb_iv_set(self, "@params", kw_values[1]);
     rb_iv_set(self, "@has_evaluated", Qfalse);
 
-    RB_GC_GUARD(filename);
     return Qnil;
   };
 

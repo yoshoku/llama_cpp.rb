@@ -191,9 +191,9 @@ module LLaMACpp
   class Context
     # Create context.
     #
-    # @param model_path [String] The path to the model file.
+    # @param model [Model] The model.
     # @param params [ContextParams] The parameters for context.
-    def initialize(model_path: nil, params: nil); end
+    def initialize(model: nil, params: nil); end
 
     # Evaluates the tokens.
     #
@@ -269,11 +269,11 @@ module LLaMACpp
     # @return [Boolean]
     def empty?; end
 
-    # Loads model.
+    # Loads context with model.
     #
-    # @param model_path [String] The path to the model file.
+    # @param model [Model] The model.
     # @param params [ContextParams] The parameters for context.
-    def load(model_path:, params:); end
+    def load(model:, params:); end
 
     # Applies LLoRa from file.
     #
