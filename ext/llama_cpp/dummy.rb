@@ -185,6 +185,13 @@ module LLaMACpp
     # @param model_path [String] The path to the model file.
     # @param params [ContextParams] The parameters for context.
     def load(model_path:, params:); end
+
+    # Applies LLoRa from file.
+    #
+    # @param lora_path [String] The path to the LoRA file.
+    # @param base_model_path [String] The path to the base model file.
+    # @param n_threads [Integer] The number of threads.
+    def apply_lora_from_file(lora_path:, base_model_path: nil, n_threads: 1); end
   end
 
   # Class for context
@@ -274,13 +281,6 @@ module LLaMACpp
     # @param model [Model] The model.
     # @param params [ContextParams] The parameters for context.
     def load(model:, params:); end
-
-    # Applies LLoRa from file.
-    #
-    # @param lora_path [String] The path to the LoRA file.
-    # @param base_model_path [String] The path to the base model file.
-    # @param n_threads [Integer] The number of threads.
-    def apply_lora_from_file(lora_path:, base_model_path: nil, n_threads: 1); end
 
     # Returns the number of tokens in the kv cache.
     #

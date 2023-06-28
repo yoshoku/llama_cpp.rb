@@ -654,6 +654,7 @@ public:
     rb_define_method(rb_cLLaMAModel, "empty?", RUBY_METHOD_FUNC(_llama_model_empty), 0);
     rb_define_method(rb_cLLaMAModel, "free", RUBY_METHOD_FUNC(_llama_model_free), 0);
     rb_define_method(rb_cLLaMAModel, "load", RUBY_METHOD_FUNC(_llama_model_load), -1);
+    rb_define_method(rb_cLLaMAModel, "apply_lora_from_file", RUBY_METHOD_FUNC(_llama_model_apply_lora_from_file), -1);
   }
 
 private:
@@ -762,6 +763,38 @@ private:
     RB_GC_GUARD(filename);
     return Qnil;
   }
+
+  static VALUE _llama_model_apply_lora_from_file(int argc, VALUE* argv, VALUE self) {
+    VALUE kw_args = Qnil;
+    ID kw_table[3] = { rb_intern("lora_path"), rb_intern("base_model_path"), rb_intern("n_threads") };
+    VALUE kw_values[3] = { Qundef, Qundef, Qundef };
+    rb_scan_args(argc, argv, ":", &kw_args);
+    rb_get_kwargs(kw_args, kw_table, 1, 2, kw_values);
+
+    if (!RB_TYPE_P(kw_values[0], T_STRING)) {
+      rb_raise(rb_eArgError, "lora_path must be a string");
+      return Qnil;
+    }
+    if (kw_values[1] != Qundef && !RB_TYPE_P(kw_values[1], T_STRING)) {
+      rb_raise(rb_eArgError, "base_model_path must be a string");
+      return Qnil;
+    }
+    if (kw_values[2] != Qundef && !RB_INTEGER_TYPE_P(kw_values[2])) {
+      rb_raise(rb_eArgError, "n_threads must be an integer");
+      return Qnil;
+    }
+
+    const char* lora_path = StringValueCStr(kw_values[0]);
+    const char* base_model_path = kw_values[1] == Qundef ? NULL : StringValueCStr(kw_values[1]);
+    const int n_threads = kw_values[2] == Qundef ? 1 : NUM2INT(kw_values[2]);
+
+    LLaMAModelWrapper* ptr = get_llama_model(self);
+    if (llama_model_apply_lora_from_file(ptr->model, lora_path, base_model_path, n_threads) != 0) {
+      rb_raise(rb_eRuntimeError, "Failed to apply LoRA");
+      return Qnil;
+    }
+    return Qnil;
+  };
 };
 
 const rb_data_type_t RbLLaMAModel::llama_model_type = {
@@ -829,7 +862,6 @@ public:
     rb_define_method(rb_cLLaMAContext, "empty?", RUBY_METHOD_FUNC(_llama_context_empty), 0);
     rb_define_method(rb_cLLaMAContext, "free", RUBY_METHOD_FUNC(_llama_context_free), 0);
     rb_define_method(rb_cLLaMAContext, "load", RUBY_METHOD_FUNC(_llama_context_load), -1);
-    rb_define_method(rb_cLLaMAContext, "apply_lora_from_file", RUBY_METHOD_FUNC(_llama_context_apply_lora_from_file), -1);
     rb_define_method(rb_cLLaMAContext, "kv_cache_token_count", RUBY_METHOD_FUNC(_llama_context_kv_cache_token_count), 0);
     rb_define_method(rb_cLLaMAContext, "set_rng_seed", RUBY_METHOD_FUNC(_llama_context_set_rng_seed), 1);
     rb_define_method(rb_cLLaMAContext, "load_session_file", RUBY_METHOD_FUNC(_llama_context_load_session_file), -1);
@@ -1221,43 +1253,6 @@ private:
     rb_iv_set(self, "@params", kw_values[1]);
     rb_iv_set(self, "@has_evaluated", Qfalse);
 
-    return Qnil;
-  };
-
-  static VALUE _llama_context_apply_lora_from_file(int argc, VALUE* argv, VALUE self) {
-    VALUE kw_args = Qnil;
-    ID kw_table[3] = { rb_intern("lora_path"), rb_intern("base_model_path"), rb_intern("n_threads") };
-    VALUE kw_values[3] = { Qundef, Qundef, Qundef };
-    rb_scan_args(argc, argv, ":", &kw_args);
-    rb_get_kwargs(kw_args, kw_table, 1, 2, kw_values);
-
-    if (!RB_TYPE_P(kw_values[0], T_STRING)) {
-      rb_raise(rb_eArgError, "lora_path must be a string");
-      return Qnil;
-    }
-    if (kw_values[1] != Qundef && !RB_TYPE_P(kw_values[1], T_STRING)) {
-      rb_raise(rb_eArgError, "base_model_path must be a string");
-      return Qnil;
-    }
-    if (kw_values[2] != Qundef && !RB_INTEGER_TYPE_P(kw_values[2])) {
-      rb_raise(rb_eArgError, "n_threads must be an integer");
-      return Qnil;
-    }
-
-    const char* lora_path = StringValueCStr(kw_values[0]);
-    const char* base_model_path = kw_values[1] == Qundef ? NULL : StringValueCStr(kw_values[1]);
-    const int n_threads = kw_values[2] == Qundef ? 1 : NUM2INT(kw_values[2]);
-
-    LLaMAContextWrapper* ptr = get_llama_context(self);
-    if (ptr->ctx != NULL) {
-      rb_raise(rb_eRuntimeError, "LLaMA context is already loaded");
-      return Qnil;
-    }
-
-    if (llama_apply_lora_from_file(ptr->ctx, lora_path, base_model_path, n_threads) != 0) {
-      rb_raise(rb_eRuntimeError, "Failed to apply LoRA");
-      return Qnil;
-    }
     return Qnil;
   };
 
