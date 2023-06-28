@@ -20,7 +20,6 @@ module LLaMACpp
   # @return [String]
   def generate(context, prompt, n_predict: 128, n_threads: 1) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
     raise ArgumentError, 'context must be an instance of LLaMACpp::Context' unless context.is_a?(LLaMACpp::Context)
-    raise ArgumentError, 'context must have loaded the model' if context.empty?
     raise ArgumentError, 'prompt must be a String' unless prompt.is_a?(String)
 
     spaced_prompt = " #{prompt}"

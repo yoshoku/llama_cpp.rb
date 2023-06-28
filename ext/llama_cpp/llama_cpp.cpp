@@ -859,9 +859,6 @@ public:
     rb_define_method(rb_cLLaMAContext, "n_embd", RUBY_METHOD_FUNC(_llama_context_n_embd), 0);
     rb_define_method(rb_cLLaMAContext, "print_timings", RUBY_METHOD_FUNC(_llama_context_print_timings), 0);
     rb_define_method(rb_cLLaMAContext, "reset_timings", RUBY_METHOD_FUNC(_llama_context_reset_timings), 0);
-    rb_define_method(rb_cLLaMAContext, "empty?", RUBY_METHOD_FUNC(_llama_context_empty), 0);
-    rb_define_method(rb_cLLaMAContext, "free", RUBY_METHOD_FUNC(_llama_context_free), 0);
-    rb_define_method(rb_cLLaMAContext, "load", RUBY_METHOD_FUNC(_llama_context_load), -1);
     rb_define_method(rb_cLLaMAContext, "kv_cache_token_count", RUBY_METHOD_FUNC(_llama_context_kv_cache_token_count), 0);
     rb_define_method(rb_cLLaMAContext, "set_rng_seed", RUBY_METHOD_FUNC(_llama_context_set_rng_seed), 1);
     rb_define_method(rb_cLLaMAContext, "load_session_file", RUBY_METHOD_FUNC(_llama_context_load_session_file), -1);
@@ -888,7 +885,7 @@ private:
     ID kw_table[2] = { rb_intern("model"), rb_intern("params") };
     VALUE kw_values[2] = { Qundef, Qundef };
     rb_scan_args(argc, argv, ":", &kw_args);
-    rb_get_kwargs(kw_args, kw_table, 0, 2, kw_values);
+    rb_get_kwargs(kw_args, kw_table, 2, 0, kw_values);
 
     if (kw_values[0] == Qundef && kw_values[1] == Qundef) {
       rb_iv_set(self, "@model", Qnil);
@@ -1189,70 +1186,6 @@ private:
       return Qnil;
     }
     llama_reset_timings(ptr->ctx);
-    return Qnil;
-  };
-
-  static VALUE _llama_context_empty(VALUE self) {
-    LLaMAContextWrapper* ptr = get_llama_context(self);
-    if (ptr->ctx != NULL) {
-      return Qfalse;
-    }
-    return Qtrue;
-  }
-
-  static VALUE _llama_context_free(VALUE self) {
-    LLaMAContextWrapper* ptr = get_llama_context(self);
-    if (ptr->ctx != NULL) {
-      llama_free(ptr->ctx);
-      ptr->ctx = NULL;
-      rb_iv_set(self, "@model", Qnil);
-      rb_iv_set(self, "@params", Qnil);
-      rb_iv_set(self, "@has_evaluated", Qfalse);
-    }
-    return Qnil;
-  }
-
-  static VALUE _llama_context_load(int argc, VALUE* argv, VALUE self) {
-    VALUE kw_args = Qnil;
-    ID kw_table[2] = { rb_intern("model"), rb_intern("params") };
-    VALUE kw_values[2] = { Qundef, Qundef };
-    rb_scan_args(argc, argv, ":", &kw_args);
-    rb_get_kwargs(kw_args, kw_table, 2, 0, kw_values);
-
-    if (!rb_obj_is_kind_of(kw_values[0], rb_cLLaMAModel)) {
-      rb_raise(rb_eArgError, "model must be a Model");
-      return Qnil;
-    }
-    if (!rb_obj_is_kind_of(kw_values[1], rb_cLLaMAContextParams)) {
-      rb_raise(rb_eArgError, "params must be a LLaMAContextParams");
-      return Qnil;
-    }
-
-    LLaMAContextWrapper* ctx_ptr = get_llama_context(self);
-    if (ctx_ptr->ctx != NULL) {
-      rb_raise(rb_eRuntimeError, "LLaMA context is already loaded");
-      return Qnil;
-    }
-
-    LLaMAModelWrapper* model_ptr = RbLLaMAModel::get_llama_model(kw_values[0]);
-    if (model_ptr->model == NULL) {
-      rb_raise(rb_eRuntimeError, "Model is empty");
-      return Qnil;
-    }
-
-    LLaMAContextParamsWrapper* prms_ptr = RbLLaMAContextParams::get_llama_context_params(kw_values[1]);
-
-    ctx_ptr->ctx = llama_new_context_with_model(model_ptr->model, prms_ptr->params);
-
-    if (ctx_ptr->ctx == NULL) {
-      rb_raise(rb_eRuntimeError, "Failed to initialize LLaMA context");
-      return Qnil;
-    }
-
-    rb_iv_set(self, "@model", kw_values[0]);
-    rb_iv_set(self, "@params", kw_values[1]);
-    rb_iv_set(self, "@has_evaluated", Qfalse);
-
     return Qnil;
   };
 

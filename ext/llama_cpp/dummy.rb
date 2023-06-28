@@ -200,7 +200,7 @@ module LLaMACpp
     #
     # @param model [Model] The model.
     # @param params [ContextParams] The parameters for context.
-    def initialize(model: nil, params: nil); end
+    def initialize(model:, params:); end
 
     # Evaluates the tokens.
     #
@@ -265,22 +265,6 @@ module LLaMACpp
     #
     # @return [NilClass]
     def reset_timings; end
-
-    # Deallocates context.
-    #
-    # @return [NilClass]
-    def free; end
-
-    # Returns whether the context is not load model.
-    #
-    # @return [Boolean]
-    def empty?; end
-
-    # Loads context with model.
-    #
-    # @param model [Model] The model.
-    # @param params [ContextParams] The parameters for context.
-    def load(model:, params:); end
 
     # Returns the number of tokens in the kv cache.
     #
