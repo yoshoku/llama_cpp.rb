@@ -35,7 +35,8 @@ class Chat < Thor # rubocop:disable Metrics/ClassLength, Style/Documentation
     params = LLaMACpp::ContextParams.new
     params.seed = options[:seed]
     params.n_gpu_layers = options[:n_gpu_layers]
-    context = LLaMACpp::Context.new(model_path: options[:model], params: params)
+    model = LLaMACpp::Model.new(model_path: options[:model], params: params)
+    context = LLaMACpp::Context.new(model: model, params: params)
 
     antiprompt = options[:reverse_prompt] || 'User:'
     start_prompt = read_prompt(options[:file]) || default_prompt(antiprompt)

@@ -16,12 +16,13 @@ class Embedding < Thor # rubocop:disable Style/Documentation
   option :model, type: :string, aliases: '-m', desc: 'path to model file', required: true
   option :prompt, type: :string, aliases: '-p', desc: 'prompt to generate embedding', required: true
   option :n_gpu_layers, type: :numeric, desc: 'number of layers on GPU', default: 0
-  def main # rubocop:disable Metrics/AbcSize
+  def main # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     params = LLaMACpp::ContextParams.new
     params.seed = options[:seed]
     params.n_gpu_layers = options[:n_gpu_layers]
     params.embedding = true
-    context = LLaMACpp::Context.new(model_path: options[:model], params: params)
+    model = LLaMACpp::Model.new(model_path: options[:model], params: params)
+    context = LLaMACpp::Context.new(model: model, params: params)
 
     embd_input = context.tokenize(text: options[:prompt], add_bos: true)
 
