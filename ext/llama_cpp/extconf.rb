@@ -17,6 +17,12 @@ if RUBY_PLATFORM.match?(/darwin|linux|bsd/) && try_compile('#include <stdio.h>',
   $CXXFLAGS << ' -pthread'
 end
 
+unless with_config('no_k_quants')
+  $CFLAGS << ' -DGGML_USE_K_QUANTS'
+  $CXXFLAGS << ' -DGGML_USE_K_QUANTS'
+  $srcs << 'k_quants.c'
+end
+
 if with_config('openblas')
   abort 'libopenblas is not found.' unless have_library('openblas')
   abort 'cblas.h is not found.' unless have_header('cblas.h')
@@ -42,6 +48,7 @@ if with_config('metal')
   $CXXFLAGS << ' -DGGML_USE_METAL'
   $LDFLAGS << ' -framework Foundation -framework Metal -framework MetalKit -framework MetalPerformanceShaders'
   $objs = %w[ggml.o llama.o llama_cpp.o ggml-metal.o]
+  $objs << 'k_quants.o' unless with_config('no_k_quants')
 end
 
 if with_config('cublas')
@@ -49,6 +56,7 @@ if with_config('cublas')
   $CXXFLAGS << ' -DGGML_USE_CUBLAS -I/usr/local/cuda/include'
   $LDFLAGS << ' -lcublas -lculibos -lcudart -lcublasLt -lpthread -ldl -lrt -L/usr/local/cuda/lib64'
   $objs = %w[ggml-cuda.o ggml.o llama.o llama_cpp.o]
+  $objs << 'k_quants.o' unless with_config('no_k_quants')
 end
 
 if with_config('clblast')
