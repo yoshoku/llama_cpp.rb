@@ -22,7 +22,7 @@ class Embedding < Thor # rubocop:disable Style/Documentation
     params.n_gpu_layers = options[:n_gpu_layers]
     params.embedding = true
     model = LLaMACpp::Model.new(model_path: options[:model], params: params)
-    context = LLaMACpp::Context.new(model: model, params: params)
+    context = LLaMACpp::Context.new(model: model)
 
     embd_input = context.tokenize(text: options[:prompt], add_bos: true)
 

@@ -882,34 +882,25 @@ private:
 
   static VALUE _llama_context_initialize(int argc, VALUE* argv, VALUE self) {
     VALUE kw_args = Qnil;
-    ID kw_table[2] = { rb_intern("model"), rb_intern("params") };
-    VALUE kw_values[2] = { Qundef, Qundef };
+    ID kw_table[1] = { rb_intern("model") };
+    VALUE kw_values[1] = { Qundef };
     rb_scan_args(argc, argv, ":", &kw_args);
-    rb_get_kwargs(kw_args, kw_table, 2, 0, kw_values);
+    rb_get_kwargs(kw_args, kw_table, 1, 0, kw_values);
 
-    if (kw_values[0] == Qundef && kw_values[1] == Qundef) {
-      rb_iv_set(self, "@model", Qnil);
-      rb_iv_set(self, "@params", Qnil);
-      rb_iv_set(self, "@has_evaluated", Qfalse);
-      return Qnil;
-    }
-
-    if (!rb_obj_is_kind_of(kw_values[0], rb_cLLaMAModel)) {
+    VALUE model = kw_values[0];
+    if (!rb_obj_is_kind_of(model, rb_cLLaMAModel)) {
       rb_raise(rb_eArgError, "model must be a Model");
       return Qnil;
     }
-    if (!rb_obj_is_kind_of(kw_values[1], rb_cLLaMAContextParams)) {
-      rb_raise(rb_eArgError, "params must be a ContextParams");
-      return Qnil;
-    }
 
-    LLaMAModelWrapper* model_ptr = RbLLaMAModel::get_llama_model(kw_values[0]);
+    LLaMAModelWrapper* model_ptr = RbLLaMAModel::get_llama_model(model);
     if (model_ptr->model == NULL) {
       rb_raise(rb_eRuntimeError, "Model is empty");
       return Qnil;
     }
 
-    LLaMAContextParamsWrapper* prms_ptr = RbLLaMAContextParams::get_llama_context_params(kw_values[1]);
+    VALUE params = rb_iv_get(model, "@params");
+    LLaMAContextParamsWrapper* prms_ptr = RbLLaMAContextParams::get_llama_context_params(params);
     LLaMAContextWrapper* ctx_ptr = get_llama_context(self);
 
     ctx_ptr->ctx = llama_new_context_with_model(model_ptr->model, prms_ptr->params);
@@ -919,8 +910,7 @@ private:
       return Qnil;
     }
 
-    rb_iv_set(self, "@model", kw_values[0]);
-    rb_iv_set(self, "@params", kw_values[1]);
+    rb_iv_set(self, "@model", model);
     rb_iv_set(self, "@has_evaluated", Qfalse);
 
     return Qnil;
@@ -1067,7 +1057,9 @@ private:
       return Qnil;
     }
 
-    LLaMAContextParamsWrapper* prms_ptr = RbLLaMAContextParams::get_llama_context_params(rb_iv_get(self, "@params"));
+    VALUE model = rb_iv_get(self, "@model");
+    VALUE params = rb_iv_get(model, "@params");
+    LLaMAContextParamsWrapper* prms_ptr = RbLLaMAContextParams::get_llama_context_params(params);
     const int n_tokens = prms_ptr->params.logits_all ? NUM2INT(rb_iv_get(self, "@n_tokens")) : 1;
     const int n_vocab = llama_n_vocab(ptr->ctx);
     const float* logits = llama_get_logits(ptr->ctx);
@@ -1085,7 +1077,9 @@ private:
       rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
       return Qnil;
     }
-    LLaMAContextParamsWrapper* prms_ptr = RbLLaMAContextParams::get_llama_context_params(rb_iv_get(self, "@params"));
+    VALUE model = rb_iv_get(self, "@model");
+    VALUE params = rb_iv_get(model, "@params");
+    LLaMAContextParamsWrapper* prms_ptr = RbLLaMAContextParams::get_llama_context_params(params);
     if (!prms_ptr->params.embedding) {
       rb_raise(rb_eRuntimeError, "embedding parameter is false");
       return Qnil;
@@ -1231,7 +1225,9 @@ private:
       return Qnil;
     }
 
-    LLaMAContextParamsWrapper* prms_ptr = RbLLaMAContextParams::get_llama_context_params(rb_iv_get(self, "@params"));
+    VALUE model = rb_iv_get(self, "@model");
+    VALUE params = rb_iv_get(model, "@params");
+    LLaMAContextParamsWrapper* prms_ptr = RbLLaMAContextParams::get_llama_context_params(params);
     const int n_ctx = prms_ptr->params.n_ctx;
 
     std::vector<llama_token> session_tokens(n_ctx);
