@@ -52,6 +52,22 @@ context = LLaMACpp::Context.new(model: model)
 puts LLaMACpp.generate(context, 'Hello, World.', n_threads: 4)
 ```
 
+## Examples
+There is a sample program in the [examples](https://github.com/yoshoku/llama_cpp.rb/tree/main/examples) directory that allow interactvie communication like ChatGPT.
+
+```sh
+$ git clone https://github.com/yoshoku/llama_cpp.rb.git
+$ cd examples
+$ bundle install
+$ ruby chat.rb --model /home/user/llama.cpp/models/open_llama_7b/ggml-model-q4_0.bin --seed 2023
+...
+User: Who is the originator of the Ruby programming language?
+Bob: The originator of the Ruby programming language is Mr. Yukihiro Matsumoto.
+User:
+```
+
+![llama_cpp_chat_example](https://github.com/yoshoku/llama_cpp.rb/assets/5562409/374ae3d8-63a6-498f-ae6e-5552b464bdda)
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/yoshoku/llama_cpp.rb.
