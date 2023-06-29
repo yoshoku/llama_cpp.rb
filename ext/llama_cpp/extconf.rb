@@ -23,6 +23,11 @@ unless with_config('no_k_quants')
   $srcs << 'k_quants.c'
 end
 
+if with_config('qkk_64')
+  $CFLAGS << ' -DGGML_QKK_64'
+  $CXXFLAGS << ' -DGGML_QKK_64'
+end
+
 if with_config('openblas')
   abort 'libopenblas is not found.' unless have_library('openblas')
   abort 'cblas.h is not found.' unless have_header('cblas.h')
