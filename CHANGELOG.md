@@ -1,3 +1,31 @@
+## [[0.3.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.2.2...v0.3.0)] - 2023-06-30
+
+- Add no_k_quants and qkk_64 config options:
+  ```
+  $ gem install llama_cpp -- --with-no_k_quants
+  ```
+  ```
+  $ gem install llama_cpp -- --with-qkk_64
+  ```
+
+**Breaking Changes**
+- Remove `Client` class to concentrate on developing bindings.
+- Bump bundled llama.cpp from master-7487137 to master-9d23589.
+  - llama_init_from_file and llama_apply_lora_from_file are deprecated.
+- Add `Model` class for wrapping llama_model.
+- Move the `apply_lora_from_file method`, `free`, `load`, and `empty?` methods to `Model` class from `Context` class.
+- Change arguments of initialize method of Context. Its initialize method requires Model object instead of the model's file path.
+  ```ruby
+  requre 'llama_cpp'
+
+  params = LLaMACpp::ContextParams.new
+
+  model = LLaMACpp::Model.new(model_path: '/path/to/quantized-model.bin', params: params)
+  context = LLaMACpp::Context.new(model: model)
+
+  LLaMACpp.generate(context, 'Hello, world.')
+  ```
+
 ## [[0.2.2](https://github.com/yoshoku/llama_cpp.rb/compare/v0.2.1...v0.2.2)] - 2023-06-24
 
 - Bump bundled llama.cpp from master-a09f919 to master-7487137.
