@@ -20,19 +20,36 @@ If bundler is not being used to manage dependencies, install the gem by executin
 
 ## Usage
 
-Prepare the quantized model by refering to [the usage section on the llama.cpp README](https://github.com/ggerganov/llama.cpp#usage) or
-download the qunatized model, for example [ggml-vicuna-7b-4bit](https://github.com/ggerganov/llama.cpp/discussions/643#discussioncomment-5541351), from Hugging Face.
+Prepare the quantized model by refering to [the usage section on the llama.cpp README](https://github.com/ggerganov/llama.cpp#usage).
+For example, preparing the quatization model based on [open_llama_7b](https://huggingface.co/openlm-research/open_llama_7b) is as follows:
+
+```sh
+$ cd ~/
+$ brew install git-lfs
+$ git lfs install
+$ git clone https://github.com/ggerganov/llama.cpp.git
+$ cd llama.cpp
+$ python3 -m pip install -r requirements.txt
+$ cd models
+$ git clone https://huggingface.co/openlm-research/open_llama_7b
+$ cd ../
+$ python3 convert.py models/open_llama_7b
+$ make
+$ ./quantize ./models/open_llama_7b/ggml-model-f16.bin ./models/open_llama_7b/ggml-model-q4_0.bin q4_0
+```
+
+An example of Ruby code that generates sentences with the quantization model is as follows:
 
 ```ruby
 require 'llama_cpp'
 
 params = LLaMACpp::ContextParams.new
-params.seed = 12
+params.seed = 42
 
-context = LLaMACpp::Context.new(model_path: '/path/to/quantized-model.bin', params: params)
+model = LLaMACpp::Model.new(model_path: '/home/user/llama.cpp/models/open_llama_7b/ggml-model-q4_0.bin', params: params)
+context = LLaMACpp::Context.new(model: model)
 
-puts LLaMACpp.generate(context, 'Please tell me the largest city in Japan.', n_threads: 4)
-# => "There are two major cities in Japan, Tokyo and Osaka, which have about 30 million populations."
+puts LLaMACpp.generate(context, 'Hello, World.', n_threads: 4)
 ```
 
 ## Contributing
