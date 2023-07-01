@@ -19,6 +19,9 @@ module LLaMACpp
   # LLaMA session version.
   LLAMA_SESSION_VERSION = '1'
 
+  # LLaMA default random seed.
+  LLAMA_DEFALUT_SEED = '0xFFFFFFFF'
+
   # LLaMA cuda max devices.
   LLAMA_MAX_DEVICES = 1
 

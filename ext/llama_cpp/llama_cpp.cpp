@@ -404,6 +404,10 @@ private:
   // seed
   static VALUE _llama_context_params_set_seed(VALUE self, VALUE seed) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    if (NUM2INT(seed) < 0) {
+      rb_raise(rb_eArgError, "seed must be positive");
+      return Qnil;
+    }
     ptr->params.seed = NUM2INT(seed);
     return INT2NUM(ptr->params.seed);
   };
@@ -684,6 +688,10 @@ private:
     VALUE filename = kw_values[0];
     LLaMAContextParamsWrapper* prms_ptr = RbLLaMAContextParams::get_llama_context_params(kw_values[1]);
     LLaMAModelWrapper* model_ptr = get_llama_model(self);
+
+    if (prms_ptr->params.seed == LLAMA_DEFAULT_SEED) {
+      prms_ptr->params.seed = time(NULL);
+    }
 
     try {
       model_ptr->model = llama_load_model_from_file(StringValueCStr(filename), prms_ptr->params);
@@ -1198,7 +1206,11 @@ private:
       rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
       return Qnil;
     }
-    const int seed = NUM2INT(seed_);
+    if (NUM2INT(seed_) < 0) {
+      rb_raise(rb_eArgError, "seed must be a non-negative integer");
+      return Qnil;
+    }
+    const uint32_t seed = NUM2INT(seed_);
     llama_set_rng_seed(ptr->ctx, seed);
     return Qnil;
   };
@@ -1900,6 +1912,11 @@ extern "C" void Init_llama_cpp(void) {
   ss_magic.clear(std::stringstream::goodbit);
   ss_magic << std::showbase << std::hex << LLAMA_SESSION_MAGIC;
   rb_define_const(rb_mLLaMACpp, "LLAMA_SESSION_MAGIC", rb_str_new2(ss_magic.str().c_str()));
+
+  ss_magic.str("");
+  ss_magic.clear(std::stringstream::goodbit);
+  ss_magic << std::showbase << std::hex << LLAMA_DEFAULT_SEED;
+  rb_define_const(rb_mLLaMACpp, "LLAMA_DEFAULT_SEED", rb_str_new2(ss_magic.str().c_str()));
 
   rb_define_const(rb_mLLaMACpp, "LLAMA_FILE_VERSION", rb_str_new2(std::to_string(LLAMA_FILE_VERSION).c_str()));
   rb_define_const(rb_mLLaMACpp, "LLAMA_SESSION_VERSION", rb_str_new2(std::to_string(LLAMA_SESSION_VERSION).c_str()));
