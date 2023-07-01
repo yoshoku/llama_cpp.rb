@@ -6,5 +6,5 @@ module LLaMACpp
   VERSION = '0.3.0'
 
   # The version of llama.cpp bundled with llama_cpp.rb.
-  LLAMA_CPP_VERSION = 'master-9d23589'
+  LLAMA_CPP_VERSION = 'master-b8c8dda'
 end
