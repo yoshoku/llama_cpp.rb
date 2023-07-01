@@ -1,3 +1,9 @@
+## [[0.3.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.3.0...v0.3.1)] - 2023-07-02
+
+- Bump bundled llama.cpp from master-9d23589 to master-b8c8dda.
+  - Use unsigned values for random seed.
+- Add `eval_embd` method to `Context` class.
+
 ## [[0.3.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.2.2...v0.3.0)] - 2023-06-30
 
 - Add no_k_quants and qkk_64 config options:
