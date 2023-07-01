@@ -213,6 +213,15 @@ module LLaMACpp
     # @return [NilClass]
     def eval(tokens:, n_past:, n_tokens: nil, n_threads: 1); end
 
+    # Evaluates the embedding.
+    #
+    # @param embd [Array<Float>] The embedding to be evaluated.
+    # @param n_past [Integer] The number of past tokens.
+    # @param n_tokens [Integer] The number of tokens to be evaluated.
+    # @param n_threads [Integer] The number of threads.
+    # @return [NilClass]
+    def eval_embd(embd:, n_past:, n_tokens: nil, n_threads: 1); end
+
     # Export a static computation graph for context.
     #
     # @param fname [String] The path to the export file.

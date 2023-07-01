@@ -73,6 +73,7 @@ module LLaMACpp
     def initialize: (model: ::LLaMACpp::Model) -> void
     def embeddings: () -> Array[Float]
     def eval: (tokens: Array[Integer], n_past: Integer, ?n_tokens: Integer, ?n_threads: Integer) -> void
+    def eval_embd: (tokens: Array[Float], n_past: Integer, ?n_tokens: Integer, ?n_threads: Integer) -> void
     def eval_export: (String) -> bool
     def logits: () -> Array[Float]
     def n_ctx: () -> Integer

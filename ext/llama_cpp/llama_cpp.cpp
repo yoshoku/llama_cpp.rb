@@ -856,6 +856,7 @@ public:
     rb_define_alloc_func(rb_cLLaMAContext, llama_context_alloc);
     rb_define_method(rb_cLLaMAContext, "initialize", RUBY_METHOD_FUNC(_llama_context_initialize), -1);
     rb_define_method(rb_cLLaMAContext, "eval", RUBY_METHOD_FUNC(_llama_context_eval), -1);
+    rb_define_method(rb_cLLaMAContext, "eval_embd", RUBY_METHOD_FUNC(_llama_context_eval_embd), -1);
     rb_define_method(rb_cLLaMAContext, "eval_export", RUBY_METHOD_FUNC(_llama_context_eval_export), 1);
     rb_define_method(rb_cLLaMAContext, "tokenize", RUBY_METHOD_FUNC(_llama_context_tokenize), -1);
     rb_define_method(rb_cLLaMAContext, "logits", RUBY_METHOD_FUNC(_llama_context_logits), 0);
@@ -978,6 +979,61 @@ private:
 
     return Qnil;
   };
+
+  static VALUE _llama_context_eval_embd(int argc, VALUE* argv, VALUE self) {
+    VALUE kw_args = Qnil;
+    ID kw_table[4] = { rb_intern("embd"), rb_intern("n_past"), rb_intern("n_tokens"), rb_intern("n_threads") };
+    VALUE kw_values[4] = { Qundef, Qundef, Qundef, Qundef };
+    rb_scan_args(argc, argv, ":", &kw_args);
+    rb_get_kwargs(kw_args, kw_table, 2, 2, kw_values);
+
+    if (!RB_TYPE_P(kw_values[0], T_ARRAY)) {
+      rb_raise(rb_eArgError, "tokens must be an Array");
+      return Qnil;
+    }
+    if (!RB_INTEGER_TYPE_P(kw_values[1])) {
+      rb_raise(rb_eArgError, "n_past must be an integer");
+      return Qnil;
+    }
+    if (kw_values[2] != Qundef && !RB_INTEGER_TYPE_P(kw_values[2])) {
+      rb_raise(rb_eArgError, "n_tokens must be an integer");
+      return Qnil;
+    }
+    if (kw_values[3] != Qundef && !RB_INTEGER_TYPE_P(kw_values[3])) {
+      rb_raise(rb_eArgError, "n_threads must be an integer");
+      return Qnil;
+    }
+
+    const size_t tokens_len = RARRAY_LEN(kw_values[0]);
+    std::vector<float> embd(tokens_len);
+    for (size_t i = 0; i < tokens_len; i++) {
+      VALUE el = rb_ary_entry(kw_values[0], i);
+      if (!RB_FLOAT_TYPE_P(el)) {
+        rb_raise(rb_eArgError, "embd must be an array of floats");
+        return Qnil;
+      }
+      embd[i] = NUM2DBL(el);
+    }
+
+    const int n_tokens = kw_values[2] == Qundef ? (int)tokens_len : NUM2INT(kw_values[2]);
+    const int n_past = NUM2INT(kw_values[1]);
+    const int n_threads = kw_values[3] == Qundef ? 1 : NUM2INT(kw_values[3]);
+
+    LLaMAContextWrapper* ptr = get_llama_context(self);
+    if (ptr->ctx == NULL) {
+      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
+      return Qnil;
+    }
+    if (llama_eval_embd(ptr->ctx, embd.data(), n_tokens, n_past, n_threads) != 0) {
+      rb_raise(rb_eRuntimeError, "Failed to evaluate");
+      return Qnil;
+    }
+
+    rb_iv_set(self, "@n_tokens", INT2NUM(n_tokens));
+    rb_iv_set(self, "@has_evaluated", Qtrue);
+
+    return Qnil;
+  }
 
   static VALUE _llama_context_eval_export(VALUE self, VALUE fname_) {
     LLaMAContextWrapper* ptr = get_llama_context(self);
