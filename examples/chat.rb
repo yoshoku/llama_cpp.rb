@@ -33,7 +33,7 @@ class Chat < Thor # rubocop:disable Metrics/ClassLength, Style/Documentation
   option :n_gpu_layers, type: :numeric, desc: 'number of layers on GPU', default: 0
   def main # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
     params = LLaMACpp::ContextParams.new
-    params.seed = options[:seed]
+    params.seed = options[:seed] if options[:seed] != -1
     params.n_gpu_layers = options[:n_gpu_layers]
     model = LLaMACpp::Model.new(model_path: options[:model], params: params)
     context = LLaMACpp::Context.new(model: model)

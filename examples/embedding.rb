@@ -18,7 +18,7 @@ class Embedding < Thor # rubocop:disable Style/Documentation
   option :n_gpu_layers, type: :numeric, desc: 'number of layers on GPU', default: 0
   def main # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     params = LLaMACpp::ContextParams.new
-    params.seed = options[:seed]
+    params.seed = options[:seed] if options[:seed] != -1
     params.n_gpu_layers = options[:n_gpu_layers]
     params.embedding = true
     model = LLaMACpp::Model.new(model_path: options[:model], params: params)
