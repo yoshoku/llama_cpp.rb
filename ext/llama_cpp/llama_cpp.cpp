@@ -2019,6 +2019,7 @@ extern "C" void Init_llama_cpp(void) {
   RbLLaMATimings::define_class(rb_mLLaMACpp);
   RbLLaMAContext::define_class(rb_mLLaMACpp);
   RbLLaMAContextParams::define_class(rb_mLLaMACpp);
+  RbLLaMAModelQuantizeParams::define_class(rb_mLLaMACpp);
 
   rb_define_module_function(rb_mLLaMACpp, "init_backend", rb_llama_llama_init_backend, -1);
   rb_define_module_function(rb_mLLaMACpp, "model_quantize", rb_llama_model_quantize, -1);
