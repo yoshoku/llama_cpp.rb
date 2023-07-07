@@ -267,6 +267,11 @@ module LLaMACpp
     # @return [Array<Array<String>, Array<Float>>]
     def vocab(capacity:); end
 
+    # Returns the timing information
+    #
+    # @return [Timings]
+    def timings; end
+
     # Prints timings.
     #
     # @return [NilClass]

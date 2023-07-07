@@ -94,6 +94,7 @@ module LLaMACpp
     def n_embd: () -> Integer
     def n_vocab: () -> Integer
     def vocab: (capacity: Integer) -> [Array[String], Array[Float]]
+    def timings: () -> ::LLaMACpp::Timings
     def print_timings: () -> void
     def reset_timings: () -> void
     def token_to_str: (Integer) -> String
