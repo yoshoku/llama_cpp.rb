@@ -28,7 +28,10 @@ module LLaMACpp
 
   def self?.init_backend: (?numa: bool) -> void
   def self?.model_quantize: (input_path: String, output_path: String, params: ModelQuantizeParams) -> void
-  def self?.generate: (::LLaMACpp::Context, String, ?n_predict: Integer, ?n_threads: Integer) -> String
+  def self?.generate: (::LLaMACpp::Context, String,
+    ?n_predict: Integer, ?n_threads: Integer, ?n_keep: Integer, ?n_batch: Integer,
+    ?repeat_last_n: Integer, ?repeat_penalty: Float, ?frequency: Float, ?presence: Float,
+    ?top_k: Integer, ?top_p: Float, ?tfs_z: Float, ?typical_p: Float, ?temperature: Float) -> String
   def self?.print_system_info: () -> void
   def self?.token_bos: () -> Integer
   def self?.token_eos: () -> Integer

@@ -16,8 +16,22 @@ module LLaMACpp
   # @param prompt [String] The prompt to start generation with.
   # @param n_predict [Integer] The number of tokens to predict.
   # @param n_threads [Integer] The number of threads.
+  # @param n_keep [Integer] The number of tokens to keep in the context.
+  # @param n_batch [Integer] The number of tokens to process in a batch.
+  # @param repeat_last_n [Integer] The number of tokens to consider for repetition penalty.
+  # @param repeat_penalty [Float] The repetition penalty.
+  # @param frequency [Float] The frequency penalty.
+  # @param presence [Float] The presence penalty.
+  # @param top_k [Integer] The number of tokens to consider for top-k sampling.
+  # @param top_p [Float] The probability threshold for nucleus sampling.
+  # @param tfs_z [Float] The z parameter for tail-free sampling.
+  # @param typical_p [Float] The probability for typical sampling.
+  # @param temperature [Float] The temperature for temperature sampling.
   # @return [String]
-  def generate(context, prompt, n_predict: 128, n_threads: 1) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
+  def generate(context, prompt, # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/ParameterLists, Metrics/PerceivedComplexity
+               n_predict: 128, n_threads: 1, n_keep: 10, n_batch: 512, repeat_last_n: 64,
+               repeat_penalty: 1.1, frequency: 0.0, presence: 0.0, top_k: 40,
+               top_p: 0.95, tfs_z: 1.0, typical_p: 1.0, temperature: 0.8)
     raise ArgumentError, 'context must be an instance of LLaMACpp::Context' unless context.is_a?(LLaMACpp::Context)
     raise ArgumentError, 'prompt must be a String' unless prompt.is_a?(String)
 
@@ -31,19 +45,8 @@ module LLaMACpp
 
     embd = []
     n_consumed = 0
-    n_keep = 10
     n_past = 0
     n_remain = n_predict
-    repeat_last_n = 64
-    repeat_penalty = 1.1
-    frequency = 0.0
-    presence = 0.0
-    top_k = 40
-    top_p = 0.95
-    tfs_z = 1.0
-    typical_p = 1.0
-    temperature = 0.8
-    n_batch = 512
     n_vocab = context.n_vocab
     output = []
 
