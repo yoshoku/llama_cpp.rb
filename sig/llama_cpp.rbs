@@ -67,6 +67,20 @@ module LLaMACpp
     def apply_lora_from_file: (lora_path: String, ?base_model_path: String, ?n_threads: Integer) -> void
   end
 
+  class Timings
+    public
+
+    def t_start_ms: () -> Float
+    def t_end_ms: () -> Float
+    def t_load_ms: () -> Float
+    def t_sample_ms: () -> Float
+    def t_p_eval_ms: () -> Float
+    def t_eval_ms: () -> Float
+    def n_sample: () -> Integer
+    def n_p_eval: () -> Integer
+    def n_eval: () -> Integer
+  end
+
   class Context
     public
 

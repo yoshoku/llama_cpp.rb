@@ -1,8 +1,8 @@
-
 #include "llama_cpp.h"
 
 VALUE rb_mLLaMACpp;
 VALUE rb_cLLaMAModel;
+VALUE rb_cLLaMATimings;
 VALUE rb_cLLaMAContext;
 VALUE rb_cLLaMAContextParams;
 VALUE rb_cLLaMAModelQuantizeParams;
@@ -251,6 +251,111 @@ const rb_data_type_t RbLLaMATokenDataArray::llama_token_data_array_type = {
   { NULL,
     RbLLaMATokenDataArray::llama_token_data_array_free,
     RbLLaMATokenDataArray::llama_token_data_array_size },
+  NULL,
+  NULL,
+  RUBY_TYPED_FREE_IMMEDIATELY
+};
+
+class LLaMATimingsWrapper {
+public:
+  struct llama_timings timings;
+
+  LLaMATimingsWrapper(){};
+
+  ~LLaMATimingsWrapper(){};
+};
+
+class RbLLaMATimings {
+public:
+  static VALUE llama_timings_alloc(VALUE self) {
+    LLaMATimingsWrapper* ptr = (LLaMATimingsWrapper*)ruby_xmalloc(sizeof(LLaMATimingsWrapper));
+    new (ptr) LLaMATimingsWrapper();
+    return TypedData_Wrap_Struct(self, &llama_timings_type, ptr);
+  }
+
+  static void llama_timings_free(void* ptr) {
+    ((LLaMATimingsWrapper*)ptr)->~LLaMATimingsWrapper();
+    ruby_xfree(ptr);
+  }
+
+  static size_t llama_timings_size(const void* ptr) {
+    return sizeof(*((LLaMATimingsWrapper*)ptr));
+  }
+
+  static LLaMATimingsWrapper* get_llama_timings(VALUE self) {
+    LLaMATimingsWrapper* ptr;
+    TypedData_Get_Struct(self, LLaMATimingsWrapper, &llama_timings_type, ptr);
+    return ptr;
+  }
+
+  static void define_class(VALUE outer) {
+    rb_cLLaMATimings = rb_define_class_under(outer, "Timings", rb_cObject);
+    rb_define_alloc_func(rb_cLLaMATimings, llama_timings_alloc);
+    rb_define_method(rb_cLLaMATimings, "t_start_ms", RUBY_METHOD_FUNC(_llama_timings_get_t_start_ms), 0);
+    rb_define_method(rb_cLLaMATimings, "t_end_ms", RUBY_METHOD_FUNC(_llama_timings_get_t_end_ms), 0);
+    rb_define_method(rb_cLLaMATimings, "t_load_ms", RUBY_METHOD_FUNC(_llama_timings_get_t_load_ms), 0);
+    rb_define_method(rb_cLLaMATimings, "t_sample_ms", RUBY_METHOD_FUNC(_llama_timings_get_t_sample_ms), 0);
+    rb_define_method(rb_cLLaMATimings, "t_p_eval_ms", RUBY_METHOD_FUNC(_llama_timings_get_t_p_eval_ms), 0);
+    rb_define_method(rb_cLLaMATimings, "t_eval_ms", RUBY_METHOD_FUNC(_llama_timings_get_t_eval_ms), 0);
+    rb_define_method(rb_cLLaMATimings, "n_sample", RUBY_METHOD_FUNC(_llama_timings_get_n_sample), 0);
+    rb_define_method(rb_cLLaMATimings, "n_p_eval", RUBY_METHOD_FUNC(_llama_timings_get_n_p_eval), 0);
+    rb_define_method(rb_cLLaMATimings, "n_eval", RUBY_METHOD_FUNC(_llama_timings_get_n_eval), 0);
+  }
+
+private:
+  static const rb_data_type_t llama_timings_type;
+
+  static VALUE _llama_timings_get_t_start_ms(VALUE self) {
+    LLaMATimingsWrapper* ptr = get_llama_timings(self);
+    return DBL2NUM(ptr->timings.t_start_ms);
+  }
+
+  static VALUE _llama_timings_get_t_end_ms(VALUE self) {
+    LLaMATimingsWrapper* ptr = get_llama_timings(self);
+    return DBL2NUM(ptr->timings.t_end_ms);
+  }
+
+  static VALUE _llama_timings_get_t_load_ms(VALUE self) {
+    LLaMATimingsWrapper* ptr = get_llama_timings(self);
+    return DBL2NUM(ptr->timings.t_load_ms);
+  }
+
+  static VALUE _llama_timings_get_t_sample_ms(VALUE self) {
+    LLaMATimingsWrapper* ptr = get_llama_timings(self);
+    return DBL2NUM(ptr->timings.t_sample_ms);
+  }
+
+  static VALUE _llama_timings_get_t_p_eval_ms(VALUE self) {
+    LLaMATimingsWrapper* ptr = get_llama_timings(self);
+    return DBL2NUM(ptr->timings.t_p_eval_ms);
+  }
+
+  static VALUE _llama_timings_get_t_eval_ms(VALUE self) {
+    LLaMATimingsWrapper* ptr = get_llama_timings(self);
+    return DBL2NUM(ptr->timings.t_eval_ms);
+  }
+
+  static VALUE _llama_timings_get_n_sample(VALUE self) {
+    LLaMATimingsWrapper* ptr = get_llama_timings(self);
+    return INT2NUM(ptr->timings.n_sample);
+  }
+
+  static VALUE _llama_timings_get_n_p_eval(VALUE self) {
+    LLaMATimingsWrapper* ptr = get_llama_timings(self);
+    return INT2NUM(ptr->timings.n_p_eval);
+  }
+
+  static VALUE _llama_timings_get_n_eval(VALUE self) {
+    LLaMATimingsWrapper* ptr = get_llama_timings(self);
+    return INT2NUM(ptr->timings.n_eval);
+  }
+};
+
+const rb_data_type_t RbLLaMATimings::llama_timings_type = {
+  "RbLLaMATimings",
+  { NULL,
+    RbLLaMATimings::llama_timings_free,
+    RbLLaMATimings::llama_timings_size },
   NULL,
   NULL,
   RUBY_TYPED_FREE_IMMEDIATELY
@@ -1898,6 +2003,7 @@ extern "C" void Init_llama_cpp(void) {
   RbLLaMATokenData::define_class(rb_mLLaMACpp);
   RbLLaMATokenDataArray::define_class(rb_mLLaMACpp);
   RbLLaMAModel::define_class(rb_mLLaMACpp);
+  RbLLaMATimings::define_class(rb_mLLaMACpp);
   RbLLaMAContext::define_class(rb_mLLaMACpp);
   RbLLaMAContextParams::define_class(rb_mLLaMACpp);
 

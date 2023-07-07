@@ -394,6 +394,45 @@ module LLaMACpp
     def sample_token(candidates); end
   end
 
+  # Class for timings
+  class Timings
+    # Returns the time to start.
+    # @return [Float]
+    def t_start_ms; end
+
+    # Returns the time to end.
+    # @return [Float]
+    def t_end_ms; end
+
+    # Returns the time to load model.
+    # @return [Float]
+    def t_load_ms; end
+
+    # Returns the sampling time.
+    # @return [Float]
+    def t_sample_ms; end
+
+    # Returns the time to evaluate prompt.
+    # @return [Float]
+    def t_p_eval_ms; end
+
+    # Returns the time to evaluate.
+    # @return [Float]
+    def t_eval_ms; end
+
+    # Returns the number of samples.
+    # @return [Integer]
+    def n_sample; end
+
+    # Returns the number of prompt evaluations.
+    # @return [Integer]
+    def n_p_eval; end
+
+    # Returns the number of evaluations.
+    # @return [Integer]
+    def n_eval; end
+  end
+
   # Class for parameters
   class ContextParams
     # Sets the number of text context
