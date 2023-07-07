@@ -7,8 +7,8 @@ abort 'libstdc++ is not found.' unless have_library('stdc++')
 
 $srcs = %w[ggml.c llama.cpp llama_cpp.cpp]
 $srcs << 'ggml-opencl.cpp' if with_config('clblast')
-$CFLAGS << ' -w'
-$CXXFLAGS << ' -std=c++11'
+$CFLAGS << ' -w -DNDEBUG'
+$CXXFLAGS << ' -std=c++11 -DNDEBUG'
 $INCFLAGS << ' -I$(srcdir)/src'
 $VPATH << '$(srcdir)/src'
 
