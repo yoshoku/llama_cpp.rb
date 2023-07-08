@@ -1,3 +1,31 @@
+## [[0.3.2](https://github.com/yoshoku/llama_cpp.rb/compare/v0.3.1...v0.3.2)] - 2023-07-08
+
+- Bump bundled llama.cpp from master-b8c8dda to master-481f793.
+- Add `Timings` class and `timings` method to `Context`:
+  ```ruby
+  require 'llama_cpp'
+
+  # ...
+
+  context = LLaMACpp::Context.new(model: model)
+  timings = context.timings
+
+  puts timings.class
+  # => LLaMACpp::Timings
+  puts timings.t_load_ms
+  # => 79.61
+  ```
+- Expose sampling options as the arguemnts of `generate` module function:
+  ```ruby
+  require 'llama_cpp'
+
+  # ...
+
+  LLaMACpp.generate(context, 'Hello, world.', top_k: 30, top_p: 0.8, temperature: 0.9)
+  ```
+- Add `ModelQuantizaParams` class, this class was not published because the author forgot to write rb_define_class.
+- Minor update to example scripts, configuration files, and documentations.
+
 ## [[0.3.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.3.0...v0.3.1)] - 2023-07-02
 
 - Bump bundled llama.cpp from master-9d23589 to master-b8c8dda.
