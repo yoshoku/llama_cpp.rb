@@ -68,6 +68,15 @@ User:
 
 ![llama_cpp_chat_example](https://github.com/yoshoku/llama_cpp.rb/assets/5562409/374ae3d8-63a6-498f-ae6e-5552b464bdda)
 
+Japanse chat is also possible using the [Vicuna model on Hugging Face](https://huggingface.co/CRD716/ggml-vicuna-1.1-quantized).
+
+```sh
+$ wget https://huggingface.co/CRD716/ggml-vicuna-1.1-quantized/resolve/main/ggml-vicuna-7b-1.1-q4_0.bin
+$ ruby chat.rb --model ggml-vicuna-7b-1.1-q4_0.bin --file prompt_jp.txt
+```
+
+![llama_cpp rb-jpchat](https://github.com/yoshoku/llama_cpp.rb/assets/5562409/526ff18c-2bb2-4b06-8933-f72960024033)
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/yoshoku/llama_cpp.rb.
