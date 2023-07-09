@@ -17,9 +17,9 @@ public:
     data.id = 0;
     data.logit = 0.0;
     data.p = 0.0;
-  };
+  }
 
-  ~LLaMATokenDataWrapper(){};
+  ~LLaMATokenDataWrapper() {}
 };
 
 class RbLLaMATokenData {
@@ -28,22 +28,22 @@ public:
     LLaMATokenDataWrapper* ptr = (LLaMATokenDataWrapper*)ruby_xmalloc(sizeof(LLaMATokenDataWrapper));
     new (ptr) LLaMATokenDataWrapper();
     return TypedData_Wrap_Struct(self, &llama_token_data_type, ptr);
-  };
+  }
 
   static void llama_token_data_free(void* ptr) {
     ((LLaMATokenDataWrapper*)ptr)->~LLaMATokenDataWrapper();
     ruby_xfree(ptr);
-  };
+  }
 
   static size_t llama_token_data_size(const void* ptr) {
     return sizeof(*((LLaMATokenDataWrapper*)ptr));
-  };
+  }
 
   static LLaMATokenDataWrapper* get_llama_token_data(VALUE self) {
     LLaMATokenDataWrapper* ptr;
     TypedData_Get_Struct(self, LLaMATokenDataWrapper, &llama_token_data_type, ptr);
     return ptr;
-  };
+  }
 
   static void define_class(VALUE outer) {
     rb_cLLaMATokenData = rb_define_class_under(outer, "TokenData", rb_cObject);
@@ -95,36 +95,36 @@ private:
     LLaMATokenDataWrapper* ptr = get_llama_token_data(self);
     ptr->data.id = NUM2INT(id);
     return INT2NUM(ptr->data.id);
-  };
+  }
 
   static VALUE _llama_token_data_get_id(VALUE self) {
     LLaMATokenDataWrapper* ptr = get_llama_token_data(self);
     return INT2NUM(ptr->data.id);
-  };
+  }
 
   // logit
   static VALUE _llama_token_data_set_logit(VALUE self, VALUE logit) {
     LLaMATokenDataWrapper* ptr = get_llama_token_data(self);
     ptr->data.logit = NUM2DBL(logit);
     return DBL2NUM(ptr->data.logit);
-  };
+  }
 
   static VALUE _llama_token_data_get_logit(VALUE self) {
     LLaMATokenDataWrapper* ptr = get_llama_token_data(self);
     return DBL2NUM(ptr->data.logit);
-  };
+  }
 
   // p
   static VALUE _llama_token_data_set_p(VALUE self, VALUE p) {
     LLaMATokenDataWrapper* ptr = get_llama_token_data(self);
     ptr->data.p = NUM2DBL(p);
     return DBL2NUM(ptr->data.p);
-  };
+  }
 
   static VALUE _llama_token_data_get_p(VALUE self) {
     LLaMATokenDataWrapper* ptr = get_llama_token_data(self);
     return DBL2NUM(ptr->data.p);
-  };
+  }
 };
 
 const rb_data_type_t RbLLaMATokenData::llama_token_data_type = {
@@ -145,14 +145,14 @@ public:
     array.data = nullptr;
     array.size = 0;
     array.sorted = false;
-  };
+  }
 
   ~LLaMATokenDataArrayWrapper() {
     if (array.data) {
       ruby_xfree(array.data);
       array.data = nullptr;
     }
-  };
+  }
 };
 
 class RbLLaMATokenDataArray {
@@ -161,22 +161,22 @@ public:
     LLaMATokenDataArrayWrapper* ptr = (LLaMATokenDataArrayWrapper*)ruby_xmalloc(sizeof(LLaMATokenDataArrayWrapper));
     new (ptr) LLaMATokenDataArrayWrapper();
     return TypedData_Wrap_Struct(self, &llama_token_data_array_type, ptr);
-  };
+  }
 
   static void llama_token_data_array_free(void* ptr) {
     ((LLaMATokenDataArrayWrapper*)ptr)->~LLaMATokenDataArrayWrapper();
     ruby_xfree(ptr);
-  };
+  }
 
   static size_t llama_token_data_array_size(const void* ptr) {
     return sizeof(*((LLaMATokenDataArrayWrapper*)ptr));
-  };
+  }
 
   static LLaMATokenDataArrayWrapper* get_llama_token_data_array(VALUE self) {
     LLaMATokenDataArrayWrapper* ptr;
     TypedData_Get_Struct(self, LLaMATokenDataArrayWrapper, &llama_token_data_array_type, ptr);
     return ptr;
-  };
+  }
 
   static void define_class(VALUE outer) {
     rb_cLLaMATokenDataArray = rb_define_class_under(outer, "TokenDataArray", rb_cObject);
@@ -184,7 +184,7 @@ public:
     rb_define_method(rb_cLLaMATokenDataArray, "initialize", RUBY_METHOD_FUNC(_llama_token_data_array_init), -1);
     rb_define_method(rb_cLLaMATokenDataArray, "size", RUBY_METHOD_FUNC(_llama_token_data_array_get_size), 0);
     rb_define_method(rb_cLLaMATokenDataArray, "sorted", RUBY_METHOD_FUNC(_llama_token_data_array_get_sorted), 0);
-  };
+  }
 
 private:
   static const rb_data_type_t llama_token_data_array_type;
@@ -233,17 +233,17 @@ private:
     ptr->array.sorted = kw_values[0] == Qtrue;
 
     return self;
-  };
+  }
 
   static VALUE _llama_token_data_array_get_size(VALUE self) {
     LLaMATokenDataArrayWrapper* ptr = get_llama_token_data_array(self);
     return SIZET2NUM(ptr->array.size);
-  };
+  }
 
   static VALUE _llama_token_data_array_get_sorted(VALUE self) {
     LLaMATokenDataArrayWrapper* ptr = get_llama_token_data_array(self);
     return ptr->array.sorted ? Qtrue : Qfalse;
-  };
+  }
 };
 
 const rb_data_type_t RbLLaMATokenDataArray::llama_token_data_array_type = {
@@ -260,9 +260,9 @@ class LLaMATimingsWrapper {
 public:
   struct llama_timings timings;
 
-  LLaMATimingsWrapper(){};
+  LLaMATimingsWrapper() {}
 
-  ~LLaMATimingsWrapper(){};
+  ~LLaMATimingsWrapper() {}
 };
 
 class RbLLaMATimings {
@@ -365,9 +365,9 @@ class LLaMAContextParamsWrapper {
 public:
   struct llama_context_params params;
 
-  LLaMAContextParamsWrapper() : params(llama_context_default_params()){};
+  LLaMAContextParamsWrapper() : params(llama_context_default_params()) {}
 
-  ~LLaMAContextParamsWrapper(){};
+  ~LLaMAContextParamsWrapper() {}
 };
 
 class RbLLaMAContextParams {
@@ -376,22 +376,22 @@ public:
     LLaMAContextParamsWrapper* ptr = (LLaMAContextParamsWrapper*)ruby_xmalloc(sizeof(LLaMAContextParamsWrapper));
     new (ptr) LLaMAContextParamsWrapper();
     return TypedData_Wrap_Struct(self, &llama_context_params_type, ptr);
-  };
+  }
 
   static void llama_context_params_free(void* ptr) {
     ((LLaMAContextParamsWrapper*)ptr)->~LLaMAContextParamsWrapper();
     ruby_xfree(ptr);
-  };
+  }
 
   static size_t llama_context_params_size(const void* ptr) {
     return sizeof(*((LLaMAContextParamsWrapper*)ptr));
-  };
+  }
 
   static LLaMAContextParamsWrapper* get_llama_context_params(VALUE self) {
     LLaMAContextParamsWrapper* ptr;
     TypedData_Get_Struct(self, LLaMAContextParamsWrapper, &llama_context_params_type, ptr);
     return ptr;
-  };
+  }
 
   static void define_class(VALUE outer) {
     rb_cLLaMAContextParams = rb_define_class_under(outer, "ContextParams", rb_cObject);
@@ -422,7 +422,7 @@ public:
     rb_define_method(rb_cLLaMAContextParams, "use_mlock", RUBY_METHOD_FUNC(_llama_context_params_get_use_mlock), 0);
     rb_define_method(rb_cLLaMAContextParams, "embedding=", RUBY_METHOD_FUNC(_llama_context_params_set_embedding), 1);
     rb_define_method(rb_cLLaMAContextParams, "embedding", RUBY_METHOD_FUNC(_llama_context_params_get_embedding), 0);
-  };
+  }
 
 private:
   static const rb_data_type_t llama_context_params_type;
@@ -431,55 +431,55 @@ private:
   //   LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
   //   new (ptr) LLaMAContextParamsWrapper();
   //   return self;
-  // };
+  // }
 
   // n_ctx
   static VALUE _llama_context_params_set_n_ctx(VALUE self, VALUE n_ctx) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     ptr->params.n_ctx = NUM2INT(n_ctx);
     return INT2NUM(ptr->params.n_ctx);
-  };
+  }
 
   static VALUE _llama_context_params_get_n_ctx(VALUE self) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     return INT2NUM(ptr->params.n_ctx);
-  };
+  }
 
   // n_batch
   static VALUE _llama_context_params_set_n_batch(VALUE self, VALUE n_batch) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     ptr->params.n_batch = NUM2INT(n_batch);
     return INT2NUM(ptr->params.n_batch);
-  };
+  }
 
   static VALUE _llama_context_params_get_n_batch(VALUE self) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     return INT2NUM(ptr->params.n_batch);
-  };
+  }
 
   // n_gpu_layers
   static VALUE _llama_context_params_set_n_gpu_layers(VALUE self, VALUE n_gpu_layers) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     ptr->params.n_gpu_layers = NUM2INT(n_gpu_layers);
     return INT2NUM(ptr->params.n_gpu_layers);
-  };
+  }
 
   static VALUE _llama_context_params_get_n_gpu_layers(VALUE self) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     return INT2NUM(ptr->params.n_gpu_layers);
-  };
+  }
 
   // main_gpu
   static VALUE _llama_context_params_set_main_gpu(VALUE self, VALUE main_gpu) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     ptr->params.main_gpu = NUM2INT(main_gpu);
     return INT2NUM(ptr->params.main_gpu);
-  };
+  }
 
   static VALUE _llama_context_params_get_main_gpu(VALUE self) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     return INT2NUM(ptr->params.main_gpu);
-  };
+  }
 
   // tensor_split
   static VALUE _llama_context_params_get_tensor_split(VALUE self) {
@@ -492,19 +492,19 @@ private:
       rb_ary_store(ret, i, DBL2NUM(ptr->params.tensor_split[i]));
     }
     return ret;
-  };
+  }
 
   // low_vram
   static VALUE _llama_context_params_set_low_vram(VALUE self, VALUE low_vram) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     ptr->params.low_vram = low_vram == Qtrue ? true : false;
     return ptr->params.low_vram ? Qtrue : Qfalse;
-  };
+  }
 
   static VALUE _llama_context_params_get_low_vram(VALUE self) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     return ptr->params.low_vram ? Qtrue : Qfalse;
-  };
+  }
 
   // seed
   static VALUE _llama_context_params_set_seed(VALUE self, VALUE seed) {
@@ -515,84 +515,84 @@ private:
     }
     ptr->params.seed = NUM2INT(seed);
     return INT2NUM(ptr->params.seed);
-  };
+  }
 
   static VALUE _llama_context_params_get_seed(VALUE self) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     return INT2NUM(ptr->params.seed);
-  };
+  }
 
   // f16_kv
   static VALUE _llama_context_params_set_f16_kv(VALUE self, VALUE f16_kv) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     ptr->params.f16_kv = f16_kv == Qtrue ? true : false;
     return ptr->params.f16_kv ? Qtrue : Qfalse;
-  };
+  }
 
   static VALUE _llama_context_params_get_f16_kv(VALUE self) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     return ptr->params.f16_kv ? Qtrue : Qfalse;
-  };
+  }
 
   // logits_all
   static VALUE _llama_context_params_set_logits_all(VALUE self, VALUE logits_all) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     ptr->params.logits_all = logits_all == Qtrue ? true : false;
     return ptr->params.logits_all ? Qtrue : Qfalse;
-  };
+  }
 
   static VALUE _llama_context_params_get_logits_all(VALUE self) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     return ptr->params.logits_all ? Qtrue : Qfalse;
-  };
+  }
 
   // vocab_only
   static VALUE _llama_context_params_set_vocab_only(VALUE self, VALUE vocab_only) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     ptr->params.vocab_only = vocab_only == Qtrue ? true : false;
     return ptr->params.vocab_only ? Qtrue : Qfalse;
-  };
+  }
 
   static VALUE _llama_context_params_get_vocab_only(VALUE self) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     return ptr->params.vocab_only ? Qtrue : Qfalse;
-  };
+  }
 
   // use_mmap
   static VALUE _llama_context_params_set_use_mmap(VALUE self, VALUE use_mmap) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     ptr->params.use_mmap = use_mmap == Qtrue ? true : false;
     return ptr->params.use_mmap ? Qtrue : Qfalse;
-  };
+  }
 
   static VALUE _llama_context_params_get_use_mmap(VALUE self) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     return ptr->params.use_mmap ? Qtrue : Qfalse;
-  };
+  }
 
   // use_mlock
   static VALUE _llama_context_params_set_use_mlock(VALUE self, VALUE use_mlock) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     ptr->params.use_mlock = use_mlock == Qtrue ? true : false;
     return ptr->params.use_mlock ? Qtrue : Qfalse;
-  };
+  }
 
   static VALUE _llama_context_params_get_use_mlock(VALUE self) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     return ptr->params.use_mlock ? Qtrue : Qfalse;
-  };
+  }
 
   // embedding
   static VALUE _llama_context_params_set_embedding(VALUE self, VALUE embedding) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     ptr->params.embedding = embedding == Qtrue ? true : false;
     return ptr->params.embedding ? Qtrue : Qfalse;
-  };
+  }
 
   static VALUE _llama_context_params_get_embedding(VALUE self) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     return ptr->params.embedding ? Qtrue : Qfalse;
-  };
+  }
 };
 
 const rb_data_type_t RbLLaMAContextParams::llama_context_params_type = {
@@ -609,9 +609,9 @@ class LLaMAModelQuantizeParamsWrapper {
 public:
   llama_model_quantize_params params;
 
-  LLaMAModelQuantizeParamsWrapper() : params(llama_model_quantize_default_params()){};
+  LLaMAModelQuantizeParamsWrapper() : params(llama_model_quantize_default_params()) {}
 
-  ~LLaMAModelQuantizeParamsWrapper(){};
+  ~LLaMAModelQuantizeParamsWrapper() {}
 };
 
 class RbLLaMAModelQuantizeParams {
@@ -620,22 +620,22 @@ public:
     LLaMAModelQuantizeParamsWrapper* ptr = (LLaMAModelQuantizeParamsWrapper*)ruby_xmalloc(sizeof(LLaMAModelQuantizeParamsWrapper));
     new (ptr) LLaMAModelQuantizeParamsWrapper();
     return TypedData_Wrap_Struct(self, &llama_model_quantize_params_type, ptr);
-  };
+  }
 
   static void llama_model_quantize_params_free(void* ptr) {
     ((LLaMAModelQuantizeParamsWrapper*)ptr)->~LLaMAModelQuantizeParamsWrapper();
     ruby_xfree(ptr);
-  };
+  }
 
   static size_t llama_model_quantize_params_size(const void* ptr) {
     return sizeof(*((LLaMAModelQuantizeParamsWrapper*)ptr));
-  };
+  }
 
   static LLaMAModelQuantizeParamsWrapper* get_llama_model_quantize_params(VALUE self) {
     LLaMAModelQuantizeParamsWrapper* ptr;
     TypedData_Get_Struct(self, LLaMAModelQuantizeParamsWrapper, &llama_model_quantize_params_type, ptr);
     return ptr;
-  };
+  }
 
   static void define_class(VALUE outer) {
     rb_cLLaMAModelQuantizeParams = rb_define_class_under(outer, "ModelQuantizeParams", rb_cObject);
@@ -648,7 +648,7 @@ public:
     rb_define_method(rb_cLLaMAModelQuantizeParams, "allow_requantize", RUBY_METHOD_FUNC(_llama_model_quantize_params_get_allow_requantize), 0);
     rb_define_method(rb_cLLaMAModelQuantizeParams, "quantize_output_tensor=", RUBY_METHOD_FUNC(_llama_model_quantize_params_set_quantize_output_tensor), 1);
     rb_define_method(rb_cLLaMAModelQuantizeParams, "quantize_output_tensor", RUBY_METHOD_FUNC(_llama_model_quantize_params_get_quantize_output_tensor), 0);
-  };
+  }
 
 private:
   static const rb_data_type_t llama_model_quantize_params_type;
@@ -658,24 +658,24 @@ private:
     LLaMAModelQuantizeParamsWrapper* ptr = get_llama_model_quantize_params(self);
     ptr->params.nthread = NUM2INT(n_thread);
     return INT2NUM(ptr->params.nthread);
-  };
+  }
 
   static VALUE _llama_model_quantize_params_get_n_thread(VALUE self) {
     LLaMAModelQuantizeParamsWrapper* ptr = get_llama_model_quantize_params(self);
     return INT2NUM(ptr->params.nthread);
-  };
+  }
 
   // ftype
   static VALUE _llama_model_quantize_params_set_ftype(VALUE self, VALUE ftype) {
     LLaMAModelQuantizeParamsWrapper* ptr = get_llama_model_quantize_params(self);
     ptr->params.ftype = static_cast<enum llama_ftype>(NUM2INT(ftype));
     return INT2NUM(ptr->params.ftype);
-  };
+  }
 
   static VALUE _llama_model_quantize_params_get_ftype(VALUE self) {
     LLaMAModelQuantizeParamsWrapper* ptr = get_llama_model_quantize_params(self);
     return INT2NUM(ptr->params.ftype);
-  };
+  }
 
   // allow_requantize
   static VALUE _llama_model_quantize_params_set_allow_requantize(VALUE self, VALUE allow_requantize) {
@@ -686,12 +686,12 @@ private:
       ptr->params.allow_requantize = true;
     }
     return ptr->params.allow_requantize ? Qtrue : Qfalse;
-  };
+  }
 
   static VALUE _llama_model_quantize_params_get_allow_requantize(VALUE self) {
     LLaMAModelQuantizeParamsWrapper* ptr = get_llama_model_quantize_params(self);
     return ptr->params.allow_requantize ? Qtrue : Qfalse;
-  };
+  }
 
   // quantize_output_tensor
   static VALUE _llama_model_quantize_params_set_quantize_output_tensor(VALUE self, VALUE quantize_output_tensor) {
@@ -702,12 +702,12 @@ private:
       ptr->params.quantize_output_tensor = true;
     }
     return ptr->params.quantize_output_tensor ? Qtrue : Qfalse;
-  };
+  }
 
   static VALUE _llama_model_quantize_params_get_quantize_output_tensor(VALUE self) {
     LLaMAModelQuantizeParamsWrapper* ptr = get_llama_model_quantize_params(self);
     return ptr->params.quantize_output_tensor ? Qtrue : Qfalse;
-  };
+  }
 };
 
 const rb_data_type_t RbLLaMAModelQuantizeParams::llama_model_quantize_params_type = {
@@ -724,13 +724,13 @@ class LLaMAModelWrapper {
 public:
   struct llama_model* model;
 
-  LLaMAModelWrapper() : model(NULL){};
+  LLaMAModelWrapper() : model(NULL) {}
 
   ~LLaMAModelWrapper() {
     if (model != NULL) {
       llama_free_model(model);
     }
-  };
+  }
 };
 
 class RbLLaMAModel {
@@ -907,7 +907,7 @@ private:
       return Qnil;
     }
     return Qnil;
-  };
+  }
 };
 
 const rb_data_type_t RbLLaMAModel::llama_model_type = {
@@ -924,13 +924,13 @@ class LLaMAContextWrapper {
 public:
   struct llama_context* ctx;
 
-  LLaMAContextWrapper() : ctx(NULL){};
+  LLaMAContextWrapper() : ctx(NULL) {}
 
   ~LLaMAContextWrapper() {
     if (ctx != NULL) {
       llama_free(ctx);
     }
-  };
+  }
 };
 
 class RbLLaMAContext {
@@ -939,22 +939,22 @@ public:
     LLaMAContextWrapper* ptr = (LLaMAContextWrapper*)ruby_xmalloc(sizeof(LLaMAContextWrapper));
     new (ptr) LLaMAContextWrapper();
     return TypedData_Wrap_Struct(self, &llama_context_type, ptr);
-  };
+  }
 
   static void llama_context_free(void* ptr) {
     ((LLaMAContextWrapper*)ptr)->~LLaMAContextWrapper();
     ruby_xfree(ptr);
-  };
+  }
 
   static size_t llama_context_size(const void* ptr) {
     return sizeof(*((LLaMAContextWrapper*)ptr));
-  };
+  }
 
   static LLaMAContextWrapper* get_llama_context(VALUE self) {
     LLaMAContextWrapper* ptr;
     TypedData_Get_Struct(self, LLaMAContextWrapper, &llama_context_type, ptr);
     return ptr;
-  };
+  }
 
   static void define_class(VALUE outer) {
     rb_cLLaMAContext = rb_define_class_under(outer, "Context", rb_cObject);
@@ -990,7 +990,7 @@ public:
     rb_define_method(rb_cLLaMAContext, "sample_token_mirostat_v2", RUBY_METHOD_FUNC(_llama_context_sample_token_mirostat_v2), -1);
     rb_define_method(rb_cLLaMAContext, "sample_token_greedy", RUBY_METHOD_FUNC(_llama_context_sample_token_greedy), 1);
     rb_define_method(rb_cLLaMAContext, "sample_token", RUBY_METHOD_FUNC(_llama_context_sample_token), 1);
-  };
+  }
 
 private:
   static const rb_data_type_t llama_context_type;
@@ -1029,7 +1029,7 @@ private:
     rb_iv_set(self, "@has_evaluated", Qfalse);
 
     return Qnil;
-  };
+  }
 
   static VALUE _llama_context_eval(int argc, VALUE* argv, VALUE self) {
     VALUE kw_args = Qnil;
@@ -1084,7 +1084,7 @@ private:
     rb_iv_set(self, "@has_evaluated", Qtrue);
 
     return Qnil;
-  };
+  }
 
   static VALUE _llama_context_eval_embd(int argc, VALUE* argv, VALUE self) {
     VALUE kw_args = Qnil;
@@ -1157,7 +1157,7 @@ private:
     }
     RB_GC_GUARD(fname_);
     return Qtrue;
-  };
+  }
 
   static VALUE _llama_context_tokenize(int argc, VALUE* argv, VALUE self) {
     VALUE kw_args = Qnil;
@@ -1203,7 +1203,7 @@ private:
 
     RB_GC_GUARD(text_);
     return output;
-  };
+  }
 
   static VALUE _llama_context_token_to_str(VALUE self, VALUE token_) {
     LLaMAContextWrapper* ptr = get_llama_context(self);
@@ -1214,7 +1214,7 @@ private:
     const llama_token token = NUM2INT(token_);
     const char* str = llama_token_to_str(ptr->ctx, token);
     return str != nullptr ? rb_utf8_str_new_cstr(str) : rb_utf8_str_new_cstr("");
-  };
+  }
 
   static VALUE _llama_context_logits(VALUE self) {
     LLaMAContextWrapper* ptr = get_llama_context(self);
@@ -1239,7 +1239,7 @@ private:
     }
 
     return output;
-  };
+  }
 
   static VALUE _llama_context_embeddings(VALUE self) {
     LLaMAContextWrapper* ptr = get_llama_context(self);
@@ -1267,7 +1267,7 @@ private:
     }
 
     return output;
-  };
+  }
 
   static VALUE _llama_context_vocab(int argc, VALUE* argv, VALUE self) {
     VALUE kw_args = Qnil;
@@ -1304,7 +1304,7 @@ private:
     }
 
     return rb_ary_new_from_args(2, ret_strings, ret_scores);
-  };
+  }
 
   static VALUE _llama_context_n_vocab(VALUE self) {
     LLaMAContextWrapper* ptr = get_llama_context(self);
@@ -1313,7 +1313,7 @@ private:
       return Qnil;
     }
     return INT2NUM(llama_n_vocab(ptr->ctx));
-  };
+  }
 
   static VALUE _llama_context_n_ctx(VALUE self) {
     LLaMAContextWrapper* ptr = get_llama_context(self);
@@ -1322,7 +1322,7 @@ private:
       return Qnil;
     }
     return INT2NUM(llama_n_ctx(ptr->ctx));
-  };
+  }
 
   static VALUE _llama_context_n_embd(VALUE self) {
     LLaMAContextWrapper* ptr = get_llama_context(self);
@@ -1331,7 +1331,7 @@ private:
       return Qnil;
     }
     return INT2NUM(llama_n_embd(ptr->ctx));
-  };
+  }
 
   static VALUE _llama_context_get_timings(VALUE self) {
     LLaMAContextWrapper* ptr = get_llama_context(self);
@@ -1353,7 +1353,7 @@ private:
     }
     llama_print_timings(ptr->ctx);
     return Qnil;
-  };
+  }
 
   static VALUE _llama_context_reset_timings(VALUE self) {
     LLaMAContextWrapper* ptr = get_llama_context(self);
@@ -1363,7 +1363,7 @@ private:
     }
     llama_reset_timings(ptr->ctx);
     return Qnil;
-  };
+  }
 
   static VALUE _llama_context_kv_cache_token_count(VALUE self) {
     LLaMAContextWrapper* ptr = get_llama_context(self);
@@ -1372,7 +1372,7 @@ private:
       return Qnil;
     }
     return INT2NUM(llama_get_kv_cache_token_count(ptr->ctx));
-  };
+  }
 
   static VALUE _llama_context_set_rng_seed(VALUE self, VALUE seed_) {
     LLaMAContextWrapper* ptr = get_llama_context(self);
@@ -1387,7 +1387,7 @@ private:
     const uint32_t seed = NUM2INT(seed_);
     llama_set_rng_seed(ptr->ctx, seed);
     return Qnil;
-  };
+  }
 
   static VALUE _llama_context_load_session_file(int argc, VALUE* argv, VALUE self) {
     VALUE kw_args = Qnil;
@@ -1525,7 +1525,7 @@ private:
     llama_sample_repetition_penalty(ctx_ptr->ctx, &(cnd_ptr->array), last_n_tokens_data.data(), last_tokens_size, penalty);
 
     return Qnil;
-  };
+  }
 
   static VALUE _llama_context_sample_frequency_and_presence_penalties(int argc, VALUE* argv, VALUE self) {
     VALUE kw_args = Qnil;
@@ -1576,7 +1576,7 @@ private:
     llama_sample_frequency_and_presence_penalties(ctx_ptr->ctx, &(cnd_ptr->array), last_n_tokens_data.data(), last_tokens_size, alpha_frequency, alpha_presence);
 
     return Qnil;
-  };
+  }
 
   static VALUE _llama_context_sample_softmax(VALUE self, VALUE candidates) {
     if (!rb_obj_is_kind_of(candidates, rb_cLLaMATokenDataArray)) {
@@ -1598,7 +1598,7 @@ private:
     llama_sample_softmax(ctx_ptr->ctx, &(cnd_ptr->array));
 
     return Qnil;
-  };
+  }
 
   static VALUE _llama_context_sample_top_k(int argc, VALUE* argv, VALUE self) {
     VALUE kw_args = Qnil;
@@ -1637,7 +1637,7 @@ private:
     llama_sample_top_k(ctx_ptr->ctx, &(cnd_ptr->array), k, min_keep);
 
     return Qnil;
-  };
+  }
 
   static VALUE _llama_context_sample_top_p(int argc, VALUE* argv, VALUE self) {
     VALUE kw_args = Qnil;
@@ -1676,7 +1676,7 @@ private:
     llama_sample_top_p(ctx_ptr->ctx, &(cnd_ptr->array), prob, min_keep);
 
     return Qnil;
-  };
+  }
 
   static VALUE _llama_context_sample_tail_free(int argc, VALUE* argv, VALUE self) {
     VALUE kw_args = Qnil;
@@ -1715,7 +1715,7 @@ private:
     llama_sample_tail_free(ctx_ptr->ctx, &(cnd_ptr->array), z, min_keep);
 
     return Qnil;
-  };
+  }
 
   static VALUE _llama_context_sample_typical(int argc, VALUE* argv, VALUE self) {
     VALUE kw_args = Qnil;
@@ -1754,7 +1754,7 @@ private:
     llama_sample_typical(ctx_ptr->ctx, &(cnd_ptr->array), prob, min_keep);
 
     return Qnil;
-  };
+  }
 
   static VALUE _llama_context_sample_temperature(int argc, VALUE* argv, VALUE self) {
     VALUE kw_args = Qnil;
@@ -1788,7 +1788,7 @@ private:
     llama_sample_temperature(ctx_ptr->ctx, &(cnd_ptr->array), temperature);
 
     return Qnil;
-  };
+  }
 
   static VALUE _llama_context_sample_token_mirostat(int argc, VALUE* argv, VALUE self) {
     VALUE kw_args = Qnil;
@@ -1840,7 +1840,7 @@ private:
     rb_ary_store(ret, 0, INT2NUM(id));
     rb_ary_store(ret, 1, DBL2NUM(mu));
     return ret;
-  };
+  }
 
   static VALUE _llama_context_sample_token_mirostat_v2(int argc, VALUE* argv, VALUE self) {
     VALUE kw_args = Qnil;
@@ -1887,7 +1887,7 @@ private:
     rb_ary_store(ret, 0, INT2NUM(id));
     rb_ary_store(ret, 1, DBL2NUM(mu));
     return ret;
-  };
+  }
 
   static VALUE _llama_context_sample_token_greedy(VALUE self, VALUE candidates) {
     LLaMAContextWrapper* ctx_ptr = get_llama_context(self);
@@ -1906,7 +1906,7 @@ private:
     }
     llama_token id = llama_sample_token_greedy(ctx_ptr->ctx, &(cnd_ptr->array));
     return INT2NUM(id);
-  };
+  }
 
   static VALUE _llama_context_sample_token(VALUE self, VALUE candidates) {
     LLaMAContextWrapper* ctx_ptr = get_llama_context(self);
@@ -1925,7 +1925,7 @@ private:
     }
     llama_token id = llama_sample_token(ctx_ptr->ctx, &(cnd_ptr->array));
     return INT2NUM(id);
-  };
+  }
 };
 
 const rb_data_type_t RbLLaMAContext::llama_context_type = {
