@@ -78,10 +78,13 @@ module LLaMACpp
 
   module_function
 
-  # Initizalie the backend.
+  # Initializes the backend.
   #
   # @param numa [Boolean] The flag for NUMA optimizations.
   def backend_init(numa: false); end
+
+  # Finalizes the backend, currently only used for MPI.
+  def backend_free; end
 
   # Quantizes the model.
   #

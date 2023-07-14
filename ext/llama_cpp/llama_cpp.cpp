@@ -1999,6 +1999,12 @@ static VALUE rb_llama_llama_backend_init(int argc, VALUE* argv, VALUE self) {
   return Qnil;
 }
 
+static VALUE rb_llama_llama_backend_free(VALUE self) {
+  llama_backend_free();
+
+  return Qnil;
+}
+
 static VALUE rb_llama_model_quantize(int argc, VALUE* argv, VALUE self) {
   VALUE kw_args = Qnil;
   ID kw_table[3] = { rb_intern("input_path"), rb_intern("output_path"), rb_intern("params") };
@@ -2068,6 +2074,7 @@ extern "C" void Init_llama_cpp(void) {
   RbLLaMAModelQuantizeParams::define_class(rb_mLLaMACpp);
 
   rb_define_module_function(rb_mLLaMACpp, "backend_init", rb_llama_llama_backend_init, -1);
+  rb_define_module_function(rb_mLLaMACpp, "backend_free", rb_llama_llama_backend_free, 0);
   rb_define_module_function(rb_mLLaMACpp, "model_quantize", rb_llama_model_quantize, -1);
   rb_define_module_function(rb_mLLaMACpp, "token_bos", rb_llama_token_bos, 0);
   rb_define_module_function(rb_mLLaMACpp, "token_eos", rb_llama_token_eos, 0);

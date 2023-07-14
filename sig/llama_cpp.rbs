@@ -27,6 +27,7 @@ module LLaMACpp
   LLAMA_FTYPE_MOSTLY_Q6_K: Integer
 
   def self?.backend_init: (?numa: bool) -> void
+  def self?.backend_free: () -> void
   def self?.model_quantize: (input_path: String, output_path: String, params: ModelQuantizeParams) -> void
   def self?.generate: (::LLaMACpp::Context, String,
     ?n_predict: Integer, ?n_threads: Integer, ?n_keep: Integer, ?n_batch: Integer,
