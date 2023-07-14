@@ -108,4 +108,4 @@ module LLaMACpp
   end
 end
 
-LLaMACpp.init_backend
+LLaMACpp.backend_init

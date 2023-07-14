@@ -81,7 +81,7 @@ module LLaMACpp
   # Initizalie the backend.
   #
   # @param numa [Boolean] The flag for NUMA optimizations.
-  def init_backend(numa: false); end
+  def backend_init(numa: false); end
 
   # Quantizes the model.
   #
