@@ -7,6 +7,7 @@ abort 'libstdc++ is not found.' unless have_library('stdc++')
 
 $srcs = %w[ggml.c llama.cpp llama_cpp.cpp]
 $srcs << 'ggml-opencl.cpp' if with_config('clblast')
+$srcs << 'ggml-mpi.c' if with_config('mpi')
 $CFLAGS << ' -w -DNDEBUG'
 $CXXFLAGS << ' -std=c++11 -DNDEBUG'
 $INCFLAGS << ' -I$(srcdir)/src'
@@ -74,6 +75,14 @@ if with_config('clblast')
   else
     abort 'libOpenCL is not found.' unless have_library('OpenCL')
   end
+end
+
+if with_config('mpi')
+  abort 'libmpi is not found.' unless have_library('mpi')
+  abort 'mpi.h is not found.' unless have_header('mpi.h')
+
+  $CFLAGS << ' -DGGML_USE_MPI -Wno-cast-qual'
+  $CXXFLAGS << ' -DGGML_USE_MPI -Wno-cast-qual'
 end
 
 UNAME_M = RbConfig::CONFIG['build_cpu'] || RbConfig::CONFIG['host_cpu'] || RbConfig::CONFIG['target_cpu']
