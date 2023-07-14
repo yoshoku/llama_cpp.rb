@@ -1,3 +1,16 @@
+## [[0.3.3](https://github.com/yoshoku/llama_cpp.rb/compare/v0.3.2...v0.3.3)] - 2023-07-15
+
+- Bump bundled llama.cpp from master-481f793 to master-32c5411.
+- Add MPI config options:
+  ```
+  $ gem install llama_cpp -- --with-mpi
+  ```
+- Add `backend_free` module function to `LLaMACpp`. This method should be called once at the end of the program when the MPI option is enabled.
+- Add `sample_classifier_free_guidance` method to `Context`.
+
+**Breaking Changes**
+- Rename `init_backend` method to `backend_init`. This method is called internally at `require 'llama_cpp'`.
+
 ## [[0.3.2](https://github.com/yoshoku/llama_cpp.rb/compare/v0.3.1...v0.3.2)] - 2023-07-08
 
 - Bump bundled llama.cpp from master-b8c8dda to master-481f793.
