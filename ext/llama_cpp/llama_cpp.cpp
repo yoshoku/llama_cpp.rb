@@ -980,6 +980,7 @@ public:
     rb_define_method(rb_cLLaMAContext, "save_session_file", RUBY_METHOD_FUNC(_llama_context_save_session_file), -1);
     rb_define_method(rb_cLLaMAContext, "sample_repetition_penalty", RUBY_METHOD_FUNC(_llama_context_sample_repetition_penalty), -1);
     rb_define_method(rb_cLLaMAContext, "sample_frequency_and_presence_penalties", RUBY_METHOD_FUNC(_llama_context_sample_frequency_and_presence_penalties), -1);
+    rb_define_method(rb_cLLaMAContext, "sample_classifier_free_guidance", RUBY_METHOD_FUNC(_llama_context_sample_classifier_free_guidance), -1);
     rb_define_method(rb_cLLaMAContext, "sample_softmax", RUBY_METHOD_FUNC(_llama_context_sample_softmax), 1);
     rb_define_method(rb_cLLaMAContext, "sample_top_k", RUBY_METHOD_FUNC(_llama_context_sample_top_k), -1);
     rb_define_method(rb_cLLaMAContext, "sample_top_p", RUBY_METHOD_FUNC(_llama_context_sample_top_p), -1);
@@ -1574,6 +1575,51 @@ private:
     const float alpha_presence = NUM2DBL(kw_values[1]);
 
     llama_sample_frequency_and_presence_penalties(ctx_ptr->ctx, &(cnd_ptr->array), last_n_tokens_data.data(), last_tokens_size, alpha_frequency, alpha_presence);
+
+    return Qnil;
+  }
+
+  static VALUE _llama_context_sample_classifier_free_guidance(int argc, VALUE* argv, VALUE self) {
+    VALUE kw_args = Qnil;
+    ID kw_table[3] = { rb_intern("guidance"), rb_intern("scale"), rb_intern("smooth_factor") };
+    VALUE kw_values[3] = { Qundef, Qundef, Qundef };
+    VALUE candidates = Qnil;
+    rb_scan_args(argc, argv, "1:", &candidates, &kw_args);
+    rb_get_kwargs(kw_args, kw_table, 3, 0, kw_values);
+
+    if (!rb_obj_is_kind_of(kw_values[0], rb_cLLaMAContext)) {
+      rb_raise(rb_eArgError, "guidance must be a Context");
+      return Qnil;
+    }
+    if (!RB_FLOAT_TYPE_P(kw_values[1])) {
+      rb_raise(rb_eArgError, "scale must be a float");
+      return Qnil;
+    }
+    if (!RB_FLOAT_TYPE_P(kw_values[2])) {
+      rb_raise(rb_eArgError, "smooth_factor must be a float");
+      return Qnil;
+    }
+
+    LLaMAContextWrapper* ctx_ptr = get_llama_context(self);
+    if (ctx_ptr->ctx == NULL) {
+      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
+      return Qnil;
+    }
+    LLaMATokenDataArrayWrapper* cnd_ptr = RbLLaMATokenDataArray::get_llama_token_data_array(candidates);
+    if (cnd_ptr->array.data == nullptr) {
+      rb_raise(rb_eRuntimeError, "TokenDataArray is empty");
+      return Qnil;
+    }
+
+    LLaMAContextWrapper* guidance_ptr = get_llama_context(kw_values[0]);
+    if (guidance_ptr->ctx == NULL) {
+      rb_raise(rb_eRuntimeError, "guidance context is not initialized");
+      return Qnil;
+    }
+    const float scale = NUM2DBL(kw_values[1]);
+    const float smooth_factor = NUM2DBL(kw_values[2]);
+
+    llama_sample_classifier_free_guidance(ctx_ptr->ctx, &(cnd_ptr->array), guidance_ptr->ctx, scale, smooth_factor);
 
     return Qnil;
   }
