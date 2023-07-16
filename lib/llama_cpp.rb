@@ -109,3 +109,4 @@ module LLaMACpp
 end
 
 LLaMACpp.backend_init
+at_exit { LLaMACpp.backend_free }
