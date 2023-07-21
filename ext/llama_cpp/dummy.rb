@@ -330,9 +330,8 @@ module LLaMACpp
     # @param candidates [TokenDataArray] The array of token data.
     # @param guidance [Context] The separate context from the same model.
     # @param scale [Float] The guidance strength.
-    # @param smooth_factor [Float] The smooth factor between guidance logits and original logits.
     # @return [Nil]
-    def sample_classifier_free_guidance(candidates, guidance:, scale:, smooth_factor:); end
+    def sample_classifier_free_guidance(candidates, guidance:, scale:); end
 
     # Sorts candates by their probablities with logits.
     #
