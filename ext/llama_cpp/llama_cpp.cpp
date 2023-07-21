@@ -792,6 +792,9 @@ public:
     rb_define_method(rb_cLLaMAModel, "free", RUBY_METHOD_FUNC(_llama_model_free), 0);
     rb_define_method(rb_cLLaMAModel, "load", RUBY_METHOD_FUNC(_llama_model_load), -1);
     rb_define_method(rb_cLLaMAModel, "apply_lora_from_file", RUBY_METHOD_FUNC(_llama_model_apply_lora_from_file), -1);
+    rb_define_method(rb_cLLaMAModel, "n_vocab", RUBY_METHOD_FUNC(_llama_model_get_n_vocab_from_model), 0);
+    rb_define_method(rb_cLLaMAModel, "n_ctx", RUBY_METHOD_FUNC(_llama_model_get_n_ctx_from_model), 0);
+    rb_define_method(rb_cLLaMAModel, "n_embd", RUBY_METHOD_FUNC(_llama_model_get_n_embd_from_model), 0);
   }
 
 private:
@@ -935,6 +938,21 @@ private:
       return Qnil;
     }
     return Qnil;
+  }
+
+  static VALUE _llama_model_get_n_vocab_from_model(VALUE self) {
+    LLaMAModelWrapper* ptr = get_llama_model(self);
+    return INT2NUM(llama_n_vocab_from_model(ptr->model));
+  }
+
+  static VALUE _llama_model_get_n_ctx_from_model(VALUE self) {
+    LLaMAModelWrapper* ptr = get_llama_model(self);
+    return INT2NUM(llama_n_ctx_from_model(ptr->model));
+  }
+
+  static VALUE _llama_model_get_n_embd_from_model(VALUE self) {
+    LLaMAModelWrapper* ptr = get_llama_model(self);
+    return INT2NUM(llama_n_embd_from_model(ptr->model));
   }
 };
 

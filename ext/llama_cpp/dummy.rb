@@ -202,6 +202,17 @@ module LLaMACpp
     # @param base_model_path [String] The path to the base model file.
     # @param n_threads [Integer] The number of threads.
     def apply_lora_from_file(lora_path:, base_model_path: nil, n_threads: 1); end
+
+    # Returns the number of vocabulary.
+    # @return [Integer]
+    def n_vocab; end
+
+    # Returns the number of context.
+    # @return [Integer]
+    def n_ctx; end
+
+    # Returns the number of embedding.
+    def n_embd; end
   end
 
   # Class for context
