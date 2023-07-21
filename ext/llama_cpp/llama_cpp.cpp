@@ -2085,6 +2085,10 @@ static VALUE rb_llama_mlock_supported(VALUE self) {
   return llama_mlock_supported() ? Qtrue : Qfalse;
 }
 
+static VALUE rb_llama_max_devices(VALUE self) {
+  return INT2NUM(llama_max_devices());
+}
+
 extern "C" void Init_llama_cpp(void) {
   rb_mLLaMACpp = rb_define_module("LLaMACpp");
 
@@ -2105,6 +2109,7 @@ extern "C" void Init_llama_cpp(void) {
   rb_define_module_function(rb_mLLaMACpp, "print_system_info", rb_llama_print_system_info, 0);
   rb_define_module_function(rb_mLLaMACpp, "mmap_supported?", rb_llama_mmap_supported, 0);
   rb_define_module_function(rb_mLLaMACpp, "mlock_supported?", rb_llama_mlock_supported, 0);
+  rb_define_module_function(rb_mLLaMACpp, "max_devices", rb_llama_max_devices, 0);
 
   rb_define_const(rb_mLLaMACpp, "LLAMA_MAX_DEVICES", INT2NUM(LLAMA_MAX_DEVICES));
 

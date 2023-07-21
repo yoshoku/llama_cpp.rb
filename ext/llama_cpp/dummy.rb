@@ -115,6 +115,10 @@ module LLaMACpp
   # Returns the flag for supporting mlock.
   # @return [Boolean]
   def mlock_supported?; end
+
+  # Returns the maximum number of devices.
+  # @return [Integer]
+  def max_devices; end
 end
 
 # llama_cpp.rb provides Ruby bindings for the llama.cpp.

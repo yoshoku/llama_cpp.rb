@@ -39,6 +39,7 @@ module LLaMACpp
   def self?.token_nl: () -> Integer
   def self?.mmap_supported?: () -> bool
   def self?.mlock_supported?: () -> bool
+  def self?.max_devices: () -> Integer
 
   class TokenData
     public
