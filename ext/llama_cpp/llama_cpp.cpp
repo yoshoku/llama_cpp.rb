@@ -406,6 +406,10 @@ public:
     rb_define_method(rb_cLLaMAContextParams, "main_gpu=", RUBY_METHOD_FUNC(_llama_context_params_set_main_gpu), 1);
     rb_define_method(rb_cLLaMAContextParams, "main_gpu", RUBY_METHOD_FUNC(_llama_context_params_get_main_gpu), 0);
     rb_define_method(rb_cLLaMAContextParams, "tensor_split", RUBY_METHOD_FUNC(_llama_context_params_get_tensor_split), 0);
+    rb_define_method(rb_cLLaMAContextParams, "rope_freq_base=", RUBY_METHOD_FUNC(_llama_context_params_set_rope_freq_base), 1);
+    rb_define_method(rb_cLLaMAContextParams, "rope_freq_base", RUBY_METHOD_FUNC(_llama_context_params_get_rope_freq_base), 0);
+    rb_define_method(rb_cLLaMAContextParams, "rope_freq_scale=", RUBY_METHOD_FUNC(_llama_context_params_set_rope_freq_scale), 1);
+    rb_define_method(rb_cLLaMAContextParams, "rope_freq_scale", RUBY_METHOD_FUNC(_llama_context_params_get_rope_freq_scale), 0);
     rb_define_method(rb_cLLaMAContextParams, "low_vram=", RUBY_METHOD_FUNC(_llama_context_params_set_low_vram), 1);
     rb_define_method(rb_cLLaMAContextParams, "low_vram", RUBY_METHOD_FUNC(_llama_context_params_get_low_vram), 0);
     rb_define_method(rb_cLLaMAContextParams, "seed=", RUBY_METHOD_FUNC(_llama_context_params_set_seed), 1);
@@ -492,6 +496,30 @@ private:
       rb_ary_store(ret, i, DBL2NUM(ptr->params.tensor_split[i]));
     }
     return ret;
+  }
+
+  // rope_freq_base
+  static VALUE _llama_context_params_set_rope_freq_base(VALUE self, VALUE rope_freq_base) {
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    ptr->params.rope_freq_base = NUM2DBL(rope_freq_base);
+    return DBL2NUM(ptr->params.rope_freq_base);
+  }
+
+  static VALUE _llama_context_params_get_rope_freq_base(VALUE self) {
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    return DBL2NUM(ptr->params.rope_freq_base);
+  }
+
+  // rope_freq_scale
+  static VALUE _llama_context_params_set_rope_freq_scale(VALUE self, VALUE rope_freq_scale) {
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    ptr->params.rope_freq_scale = NUM2DBL(rope_freq_scale);
+    return DBL2NUM(ptr->params.rope_freq_scale);
+  }
+
+  static VALUE _llama_context_params_get_rope_freq_scale(VALUE self) {
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    return DBL2NUM(ptr->params.rope_freq_scale);
   }
 
   // low_vram

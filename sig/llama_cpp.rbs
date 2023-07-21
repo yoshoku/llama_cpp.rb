@@ -140,6 +140,10 @@ module LLaMACpp
     def main_gpu: () -> Integer
     def main_gpu=: (Integer) -> Integer
     def tensor_split: () -> Array[Float]
+    def rope_freq_base=: (Float) -> Float
+    def rope_freq_base: () -> Float
+    def rope_freq_scale=: (Float) -> Float
+    def rope_freq_scale: () -> Float
     def low_vram: () -> bool
     def low_vram=: (bool) -> bool
     def seed: () -> Integer

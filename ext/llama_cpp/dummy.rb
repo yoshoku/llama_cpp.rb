@@ -487,6 +487,22 @@ module LLaMACpp
     # @return [Array<Float>]
     def tensor_split; end
 
+    # Sets the RoPE base frequency.
+    # @param rope_freq_base [Float]
+    def rope_freq_base=(rope_freq_base); end
+
+    # Returns the RoPE base frequency.
+    # @return [Float]
+    def rope_freq_base; end
+
+    # Sets the RoPE frequency scaling factor.
+    # @param rope_freq_scale [Float]
+    def rope_freq_scale=(rope_freq_scale); end
+
+    # Returns the RoPE frequency scaling factor.
+    # @return [Float]
+    def rope_freq_scale; end
+
     # Sets the flag to reduce VRAM usage at the cost of performance.
     # @param flag [Boolean]
     def low_vram=(flag); end
