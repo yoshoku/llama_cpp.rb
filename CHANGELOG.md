@@ -1,3 +1,27 @@
+## [[0.3.4](https://github.com/yoshoku/llama_cpp.rb/compare/v0.3.3...v0.3.4)] - 2023-07-23
+
+- Bump bundled llama.cpp from master-32c5411 to master-d924522.
+  - Add `rope_freq_base` and `rope_freq_scale` options to ContextParams.
+  - Add `max_devices` module function to LLaMACpp.
+  - Add `n_vocab`, `n_ctx`, and `n_embd` methods to Model.
+  - Add `vocab`, `tokenize`, and `token_to_str` methods to Model.
+  ```ruby
+  require 'llama_cpp'
+
+  params = LLaMACpp::ContextParams.new
+  model = LLaMACpp::Model.new(model_path: '/path/to/model.bin', params: params)
+
+  p model.tokenize(text: 'hello, world')
+  # => [12199, 29892, 3186]
+
+  p model.token_to_str(12199)
+  # => "hello"
+  ```
+
+**Breaking Changes**
+- Fix to automatically call `backend_free` method when Ruby script exits.
+- Remove `smooth_factor` argument from `sample_classifier_free_guidance methos` on Context.
+
 ## [[0.3.3](https://github.com/yoshoku/llama_cpp.rb/compare/v0.3.2...v0.3.3)] - 2023-07-15
 
 - Bump bundled llama.cpp from master-481f793 to master-32c5411.
