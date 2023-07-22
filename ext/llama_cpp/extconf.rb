@@ -85,6 +85,7 @@ if with_config('mpi')
   $CXXFLAGS << ' -DGGML_USE_MPI -Wno-cast-qual'
 end
 
+# @!visibility private
 UNAME_M = RbConfig::CONFIG['build_cpu'] || RbConfig::CONFIG['host_cpu'] || RbConfig::CONFIG['target_cpu']
 
 # rubocop:disable Layout/LineLength
