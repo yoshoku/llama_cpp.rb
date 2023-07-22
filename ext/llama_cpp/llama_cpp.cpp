@@ -797,6 +797,7 @@ public:
     rb_define_method(rb_cLLaMAModel, "n_embd", RUBY_METHOD_FUNC(_llama_model_get_n_embd_from_model), 0);
     rb_define_method(rb_cLLaMAModel, "vocab", RUBY_METHOD_FUNC(_llama_model_get_vocab_from_model), -1);
     rb_define_method(rb_cLLaMAModel, "token_to_str", RUBY_METHOD_FUNC(_llama_model_token_to_str_with_model), 1);
+    rb_define_method(rb_cLLaMAModel, "tokenize", RUBY_METHOD_FUNC(_llama_model_tokenize_with_model), -1);
   }
 
 private:
@@ -1000,6 +1001,49 @@ private:
     LLaMAModelWrapper* ptr = get_llama_model(self);
     const char* str = llama_token_to_str_with_model(ptr->model, token);
     return rb_str_new_cstr(str);
+  }
+
+  static VALUE _llama_model_tokenize_with_model(int argc, VALUE* argv, VALUE self) {
+    VALUE kw_args = Qnil;
+    ID kw_table[3] = { rb_intern("text"), rb_intern("n_max_tokens"), rb_intern("add_bos") };
+    VALUE kw_values[3] = { Qundef, Qundef, Qundef };
+    rb_scan_args(argc, argv, ":", &kw_args);
+    rb_get_kwargs(kw_args, kw_table, 1, 2, kw_values);
+
+    if (!RB_TYPE_P(kw_values[0], T_STRING)) {
+      rb_raise(rb_eArgError, "text must be a String");
+      return Qnil;
+    }
+    if (kw_values[1] != Qundef && !RB_INTEGER_TYPE_P(kw_values[1])) {
+      rb_raise(rb_eArgError, "n_max_tokens must be an integer");
+      return Qnil;
+    }
+    if (kw_values[2] != Qundef && (kw_values[2] != Qtrue && kw_values[2] != Qfalse)) {
+      rb_raise(rb_eArgError, "add_bos must be a boolean");
+      return Qnil;
+    }
+
+    VALUE text_ = kw_values[0];
+    std::string text = StringValueCStr(text_);
+    const bool add_bos = kw_values[2] == Qtrue ? true : false;
+    const int n_max_tokens = kw_values[1] != Qundef ? NUM2INT(kw_values[1]) : text.size() + (add_bos ? 1 : 0);
+
+    llama_token* tokens = ALLOCA_N(llama_token, n_max_tokens);
+    LLaMAModelWrapper* ptr = get_llama_model(self);
+    const int n_tokens = llama_tokenize_with_model(ptr->model, text.c_str(), tokens, n_max_tokens, add_bos);
+
+    if (n_tokens < 0) {
+      rb_raise(rb_eRuntimeError, "failed to tokenize. The numebr of tokens (%d) is greater than n_max_tokens.", -n_tokens);
+      return Qnil;
+    }
+
+    VALUE ret = rb_ary_new2(n_tokens);
+    for (int i = 0; i < n_tokens; i++) {
+      rb_ary_store(ret, i, INT2NUM(tokens[i]));
+    }
+
+    RB_GC_GUARD(text_);
+    return ret;
   }
 };
 

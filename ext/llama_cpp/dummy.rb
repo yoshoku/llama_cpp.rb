@@ -224,6 +224,14 @@ module LLaMACpp
     # @param token [Integer] The token to be converted.
     # @return [String]
     def token_to_str(token); end
+
+    # Returns the logits.
+    #
+    # @param text [String] The text to be tokenized.
+    # @param n_max_tokens [Integer] The maximum number of tokens.
+    # @param add_bos [Boolean] The flag to add the beginning of sentence token.
+    # @return [Array<Integer>]
+    def tokenize(text:, n_max_tokens:, add_bos: true); end
   end
 
   # Class for context
