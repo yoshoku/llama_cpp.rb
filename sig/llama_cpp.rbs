@@ -73,6 +73,8 @@ module LLaMACpp
     def n_vocab: () -> Integer
     def n_ctx: () -> Integer
     def n_embd: () -> Integer
+    def vocab: (capacity: Integer) -> [Array[String], Array[Float]]
+    def token_to_str: (Integer) -> String
   end
 
   class Timings

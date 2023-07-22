@@ -213,6 +213,17 @@ module LLaMACpp
 
     # Returns the number of embedding.
     def n_embd; end
+
+    # Returns the vocabulary from model.
+    #
+    # @param capacity [Integer] The number of vocabularies to be returned.
+    # @return [Array<Array<String>, Array<Float>]
+    def vocab(capacity:); end
+
+    # Converts token to Ruby String.
+    # @param token [Integer] The token to be converted.
+    # @return [String]
+    def token_to_str(token); end
   end
 
   # Class for context
