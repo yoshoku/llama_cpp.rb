@@ -135,6 +135,7 @@ module LLaMACpp
     def sample_token_mirostat_v2: (::LLaMACpp::TokenDataArray, tau: Float, eta: Float, mu: Float) -> [Integer, Float]
     def sample_token_greedy: (::LLaMACpp::TokenDataArray) -> Integer
     def sample_token: (::LLaMACpp::TokenDataArray) -> Integer
+    def sample_grammar: (::LLaMACpp::TokenDataArray, grammar: ::LLaMACpp::Grammar) -> void
   end
 
   class ContextParams
