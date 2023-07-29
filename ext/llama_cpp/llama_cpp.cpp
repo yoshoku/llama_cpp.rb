@@ -2235,9 +2235,13 @@ class LLaMAGrammarWrapper {
 public:
   struct llama_grammar* grammar;
 
-  LLaMAGrammarWrapper() {}
+  LLaMAGrammarWrapper() : grammar(nullptr) {}
 
-  ~LLaMAGrammarWrapper() {}
+  ~LLaMAGrammarWrapper() {
+    if (grammar) {
+      llama_grammar_free(grammar);
+    }
+  }
 };
 
 class RbLLaMAGrammar {
@@ -2266,10 +2270,58 @@ public:
   static void define_class(VALUE outer) {
     rb_cLLaMAGrammar = rb_define_class_under(outer, "Grammar", rb_cObject);
     rb_define_alloc_func(rb_cLLaMAGrammar, llama_grammar_alloc);
+    rb_define_method(rb_cLLaMAGrammar, "initialize", RUBY_METHOD_FUNC(_llama_grammar_init), -1);
   }
 
 private:
   static const rb_data_type_t llama_grammar_type;
+
+  static VALUE _llama_grammar_init(int argc, VALUE* argv, VALUE self) {
+    VALUE kw_args = Qnil;
+    ID kw_table[2] = { rb_intern("rules"), rb_intern("start_rule_index") };
+    VALUE kw_values[2] = { Qundef, Qundef };
+    rb_scan_args(argc, argv, ":", &kw_args);
+    rb_get_kwargs(kw_args, kw_table, 2, 0, kw_values);
+
+    if (!RB_TYPE_P(kw_values[0], T_ARRAY)) {
+      rb_raise(rb_eArgError, "rules must be an array");
+      return Qnil;
+    }
+    if (!RB_INTEGER_TYPE_P(kw_values[1])) {
+      rb_raise(rb_eArgError, "start_rule_index must be an integer");
+      return Qnil;
+    }
+
+    const int n_rules = RARRAY_LEN(kw_values[0]);
+    llama_grammar_element** rules = ALLOCA_N(llama_grammar_element*, n_rules);
+    for (int i = 0; i < n_rules; ++i) {
+      VALUE rule = rb_ary_entry(kw_values[0], i);
+      if (!RB_TYPE_P(rule, T_ARRAY)) {
+        rb_raise(rb_eArgError, "element of rules must be an array");
+        return Qnil;
+      }
+      const int n_elements = RARRAY_LEN(rule);
+      llama_grammar_element* elements = ALLOCA_N(llama_grammar_element, n_elements);
+      for (int j = 0; j < n_elements; ++j) {
+        VALUE element = rb_ary_entry(rule, j);
+        if (!rb_obj_is_kind_of(element, rb_cLLaMAGrammarElement)) {
+          rb_raise(rb_eArgError, "element of rule must be an instance of GrammarElement");
+          return Qnil;
+        }
+        LLaMAGrammarElementWrapper* ptr = RbLLaMAGrammarElement::get_llama_grammar_element(element);
+        elements[j] = ptr->element;
+      }
+      rules[i] = elements;
+    }
+
+    const size_t start_rule_index = NUM2SIZET(kw_values[1]);
+
+    LLaMAGrammarWrapper* ptr = get_llama_grammar(self);
+    new (ptr) LLaMAGrammarWrapper();
+    ptr->grammar = llama_grammar_init((const llama_grammar_element**)rules, n_rules, start_rule_index);
+
+    return self;
+  }
 };
 
 const rb_data_type_t RbLLaMAGrammar::llama_grammar_type = {

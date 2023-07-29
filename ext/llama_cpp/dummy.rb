@@ -683,5 +683,10 @@ module LLaMACpp
   end
 
   # Class for grammar.
-  class Grammar; end # rubocop:disable Lint/EmptyClass
+  class Grammar
+    # Creates a new Grammar.
+    # @param rules [Array<Array<GrammarElement>>] The grammar rules.
+    # @param start_rule_index [Integer] The index of the start rule.
+    def initialize(rules:, start_rule_index:); end # rubocop:disable Style/RedundantInitialize
+  end
 end

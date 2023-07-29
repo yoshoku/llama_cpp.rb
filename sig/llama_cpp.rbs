@@ -197,5 +197,6 @@ module LLaMACpp
   end
 
   class Grammar
+    def initialize: (rules: Array[Array[LLaMACpp::GrammarElement]], start_rule_index: Integer) -> void
   end
 end
