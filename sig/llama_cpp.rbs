@@ -26,6 +26,14 @@ module LLaMACpp
   LLAMA_FTYPE_MOSTLY_Q5_K_M: Integer
   LLAMA_FTYPE_MOSTLY_Q6_K: Integer
 
+  LLAMA_GRETYPE_END: Integer
+  LLAMA_GRETYPE_ALT: Integer
+  LLAMA_GRETYPE_RULE_REF: Integer
+  LLAMA_GRETYPE_CHAR: Integer
+  LLAMA_GRETYPE_CHAR_NOT: Integer
+  LLAMA_GRETYPE_CHAR_RNG_UPPER: Integer
+  LLAMA_GRETYPE_CHAR_ALT: Integer
+
   def self?.backend_init: (?numa: bool) -> void
   def self?.backend_free: () -> void
   def self?.model_quantize: (input_path: String, output_path: String, params: ModelQuantizeParams) -> void

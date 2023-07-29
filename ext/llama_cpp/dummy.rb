@@ -76,6 +76,27 @@ module LLaMACpp
   # LLaMA model file type.
   LLAMA_FTYPE_MOSTLY_Q6_K = 18
 
+  # GrammarElement type: end of rule definition.
+  LLAMA_GRETYPE_END = 0
+
+  # GrammarElement type: start of alternate definition for rule.
+  LLAMA_GRETYPE_ALT = 1
+
+  # GrammarElement type: non-terminal element: reference to rule.
+  LLAMA_GRETYPE_RULE_REF = 2
+
+  # GrammarElement type: terminal element: character (code point).
+  LLAMA_GRETYPE_CHAR = 3
+
+  # GrammarElement type: inverse char(s) ([^a], [^a-b] [^abc]).
+  LLAMA_GRETYPE_CHAR_NOT = 4
+
+  # GrammarElement type: modifies a preceding LLAMA_GRETYPE_CHAR or LLAMA_GRETYPE_CHAR_ALT to be an inclusive range ([a-z]).
+  LLAMA_GRETYPE_CHAR_RNG_UPPER = 5
+
+  # GrammarElement type: modifies a preceding LLAMA_GRETYPE_CHAR or LLAMA_GRETYPE_CHAR_RNG_UPPER to add an alternate char to match ([ab], [a-zA]).
+  LLAMA_GRETYPE_CHAR_ALT = 6
+
   module_function
 
   # Initializes the backend.
