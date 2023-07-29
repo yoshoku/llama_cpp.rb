@@ -467,9 +467,16 @@ module LLaMACpp
     # Applies constraints from grammar
     #
     # @param candidates [TokenDataArray] The array of token data.
-    # @param grammer [Grammar] The grammar.
+    # @param grammar [Grammar] The grammar.
     # @return [Nil]
     def sample_grammar(candidates, grammar:); end
+
+    # Accepts the sampled token into the grammar
+    #
+    # @param grammar [Grammar] The grammar.
+    # @param token [Integer] The token.
+    # @return [Nil]
+    def grammar_accept_token(grammar:, token:); end
   end
 
   # Class for timings
