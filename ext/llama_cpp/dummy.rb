@@ -637,6 +637,30 @@ module LLaMACpp
     def quantize_output_tensor; end
   end
 
+  # Class for grammar element.
+  class GrammarElement
+    # Creates a new GrammarElement.
+    # @param type [Integer] The grammar element type.
+    # @param value [Integer] The unicode value or rule id.
+    def initialize(type: 0, value: 0); end
+
+    # Sets the grammar element type.
+    # @param type [Integer]
+    def type=(type); end
+
+    # Returns the grammar element type.
+    # @return [Integer]
+    def type; end
+
+    # Sets the unicode value or rule id.
+    # @param type [Integer]
+    def value=(type); end
+
+    # Returns the unicode value or rule id.
+    # @return [Integer]
+    def value; end
+  end
+
   # Class for grammar.
   class Grammar; end # rubocop:disable Lint/EmptyClass
 end

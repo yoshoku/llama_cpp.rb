@@ -8,6 +8,7 @@ VALUE rb_cLLaMAContextParams;
 VALUE rb_cLLaMAModelQuantizeParams;
 VALUE rb_cLLaMATokenData;
 VALUE rb_cLLaMATokenDataArray;
+VALUE rb_cLLaMAGrammarElement;
 VALUE rb_cLLaMAGrammar;
 
 class LLaMATokenDataWrapper {
@@ -2107,6 +2108,129 @@ private:
   }
 };
 
+const rb_data_type_t RbLLaMAContext::llama_context_type = {
+  "RbLLaMAContext",
+  { NULL,
+    RbLLaMAContext::llama_context_free,
+    RbLLaMAContext::llama_context_size },
+  NULL,
+  NULL,
+  RUBY_TYPED_FREE_IMMEDIATELY
+};
+
+class LLaMAGrammarElementWrapper {
+public:
+  llama_grammar_element element;
+
+  LLaMAGrammarElementWrapper() {
+    element.type = LLAMA_GRETYPE_END;
+    element.value = 0;
+  }
+
+  ~LLaMAGrammarElementWrapper() {}
+};
+
+class RbLLaMAGrammarElement {
+public:
+  static VALUE llama_grammar_element_alloc(VALUE self) {
+    LLaMAGrammarElementWrapper* ptr = (LLaMAGrammarElementWrapper*)ruby_xmalloc(sizeof(LLaMAGrammarElementWrapper));
+    new (ptr) LLaMAGrammarElementWrapper();
+    return TypedData_Wrap_Struct(self, &llama_grammar_element_type, ptr);
+  }
+
+  static void llama_grammar_element_free(void* ptr) {
+    ((LLaMAGrammarElementWrapper*)ptr)->~LLaMAGrammarElementWrapper();
+    ruby_xfree(ptr);
+  }
+
+  static size_t llama_grammar_element_size(const void* ptr) {
+    return sizeof(*((LLaMAGrammarElementWrapper*)ptr));
+  }
+
+  static LLaMAGrammarElementWrapper* get_llama_grammar_element(VALUE self) {
+    LLaMAGrammarElementWrapper* ptr;
+    TypedData_Get_Struct(self, LLaMAGrammarElementWrapper, &llama_grammar_element_type, ptr);
+    return ptr;
+  }
+
+  static void define_class(VALUE outer) {
+    rb_cLLaMAGrammarElement = rb_define_class_under(outer, "GrammarElement", rb_cObject);
+    rb_define_alloc_func(rb_cLLaMAGrammarElement, llama_grammar_element_alloc);
+    rb_define_method(rb_cLLaMAGrammarElement, "initialize", RUBY_METHOD_FUNC(_llama_grammar_element_init), -1);
+    rb_define_method(rb_cLLaMAGrammarElement, "type=", RUBY_METHOD_FUNC(_llama_grammar_element_set_type), 1);
+    rb_define_method(rb_cLLaMAGrammarElement, "type", RUBY_METHOD_FUNC(_llama_grammar_element_get_type), 0);
+    rb_define_method(rb_cLLaMAGrammarElement, "value=", RUBY_METHOD_FUNC(_llama_grammar_element_set_value), 1);
+    rb_define_method(rb_cLLaMAGrammarElement, "value", RUBY_METHOD_FUNC(_llama_grammar_element_get_value), 0);
+  }
+
+private:
+  static const rb_data_type_t llama_grammar_element_type;
+
+  static VALUE _llama_grammar_element_init(int argc, VALUE* argv, VALUE self) {
+    VALUE kw_args = Qnil;
+    ID kw_table[2] = { rb_intern("type"), rb_intern("value") };
+    VALUE kw_values[2] = { Qundef, Qundef };
+    VALUE arr = Qnil;
+    rb_scan_args(argc, argv, ":", &arr, &kw_args);
+    rb_get_kwargs(kw_args, kw_table, 0, 2, kw_values);
+
+    if (kw_values[0] != Qundef && !RB_INTEGER_TYPE_P(kw_values[0])) {
+      rb_raise(rb_eArgError, "type must be an integer");
+      return Qnil;
+    }
+    if (kw_values[1] != Qundef && !RB_INTEGER_TYPE_P(kw_values[1])) {
+      rb_raise(rb_eArgError, "value must be an integer");
+      return Qnil;
+    }
+
+    LLaMAGrammarElementWrapper* ptr = get_llama_grammar_element(self);
+    new (ptr) LLaMAGrammarElementWrapper();
+
+    if (kw_values[0] != Qundef) {
+      ptr->element.type = (enum llama_gretype)NUM2INT(kw_values[0]);
+    }
+    if (kw_values[1] != Qundef) {
+      ptr->element.value = NUM2INT(kw_values[1]);
+    }
+
+    return self;
+  }
+
+  // type
+  static VALUE _llama_grammar_element_set_type(VALUE self, VALUE type) {
+    LLaMAGrammarElementWrapper* ptr = get_llama_grammar_element(self);
+    ptr->element.type = (enum llama_gretype)NUM2INT(type);
+    return INT2NUM(ptr->element.type);
+  }
+
+  static VALUE _llama_grammar_element_get_type(VALUE self) {
+    LLaMAGrammarElementWrapper* ptr = get_llama_grammar_element(self);
+    return INT2NUM(ptr->element.type);
+  }
+
+  // value
+  static VALUE _llama_grammar_element_set_value(VALUE self, VALUE type) {
+    LLaMAGrammarElementWrapper* ptr = get_llama_grammar_element(self);
+    ptr->element.value = NUM2INT(type);
+    return INT2NUM(ptr->element.value);
+  }
+
+  static VALUE _llama_grammar_element_get_value(VALUE self) {
+    LLaMAGrammarElementWrapper* ptr = get_llama_grammar_element(self);
+    return INT2NUM(ptr->element.value);
+  }
+};
+
+const rb_data_type_t RbLLaMAGrammarElement::llama_grammar_element_type = {
+  "RbLLaMAGrammarElement",
+  { NULL,
+    RbLLaMAGrammarElement::llama_grammar_element_free,
+    RbLLaMAGrammarElement::llama_grammar_element_size },
+  NULL,
+  NULL,
+  RUBY_TYPED_FREE_IMMEDIATELY
+};
+
 class LLaMAGrammarWrapper {
 public:
   struct llama_grammar* grammar;
@@ -2153,16 +2277,6 @@ const rb_data_type_t RbLLaMAGrammar::llama_grammar_type = {
   { NULL,
     RbLLaMAGrammar::llama_grammar_free,
     RbLLaMAGrammar::llama_grammar_size },
-  NULL,
-  NULL,
-  RUBY_TYPED_FREE_IMMEDIATELY
-};
-
-const rb_data_type_t RbLLaMAContext::llama_context_type = {
-  "RbLLaMAContext",
-  { NULL,
-    RbLLaMAContext::llama_context_free,
-    RbLLaMAContext::llama_context_size },
   NULL,
   NULL,
   RUBY_TYPED_FREE_IMMEDIATELY
@@ -2260,6 +2374,7 @@ extern "C" void Init_llama_cpp(void) {
   RbLLaMAContext::define_class(rb_mLLaMACpp);
   RbLLaMAContextParams::define_class(rb_mLLaMACpp);
   RbLLaMAModelQuantizeParams::define_class(rb_mLLaMACpp);
+  RbLLaMAGrammarElement::define_class(rb_mLLaMACpp);
   RbLLaMAGrammar::define_class(rb_mLLaMACpp);
 
   rb_define_module_function(rb_mLLaMACpp, "backend_init", rb_llama_llama_backend_init, -1);
