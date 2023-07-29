@@ -636,4 +636,7 @@ module LLaMACpp
     # @return [Boolean]
     def quantize_output_tensor; end
   end
+
+  # Class for grammar.
+  class Grammar; end # rubocop:disable Lint/EmptyClass
 end

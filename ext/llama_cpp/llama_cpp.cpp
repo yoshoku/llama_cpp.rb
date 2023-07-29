@@ -8,6 +8,7 @@ VALUE rb_cLLaMAContextParams;
 VALUE rb_cLLaMAModelQuantizeParams;
 VALUE rb_cLLaMATokenData;
 VALUE rb_cLLaMATokenDataArray;
+VALUE rb_cLLaMAGrammar;
 
 class LLaMATokenDataWrapper {
 public:
@@ -2106,6 +2107,57 @@ private:
   }
 };
 
+class LLaMAGrammarWrapper {
+public:
+  struct llama_grammar* grammar;
+
+  LLaMAGrammarWrapper() {}
+
+  ~LLaMAGrammarWrapper() {}
+};
+
+class RbLLaMAGrammar {
+public:
+  static VALUE llama_grammar_alloc(VALUE self) {
+    LLaMAGrammarWrapper* ptr = (LLaMAGrammarWrapper*)ruby_xmalloc(sizeof(LLaMAGrammarWrapper));
+    new (ptr) LLaMAGrammarWrapper();
+    return TypedData_Wrap_Struct(self, &llama_grammar_type, ptr);
+  }
+
+  static void llama_grammar_free(void* ptr) {
+    ((LLaMAGrammarWrapper*)ptr)->~LLaMAGrammarWrapper();
+    ruby_xfree(ptr);
+  }
+
+  static size_t llama_grammar_size(const void* ptr) {
+    return sizeof(*((LLaMAGrammarWrapper*)ptr));
+  }
+
+  static LLaMAGrammarWrapper* get_llama_grammar(VALUE self) {
+    LLaMAGrammarWrapper* ptr;
+    TypedData_Get_Struct(self, LLaMAGrammarWrapper, &llama_grammar_type, ptr);
+    return ptr;
+  }
+
+  static void define_class(VALUE outer) {
+    rb_cLLaMAGrammar = rb_define_class_under(outer, "Grammar", rb_cObject);
+    rb_define_alloc_func(rb_cLLaMAGrammar, llama_grammar_alloc);
+  }
+
+private:
+  static const rb_data_type_t llama_grammar_type;
+};
+
+const rb_data_type_t RbLLaMAGrammar::llama_grammar_type = {
+  "RbLLaMAGrammar",
+  { NULL,
+    RbLLaMAGrammar::llama_grammar_free,
+    RbLLaMAGrammar::llama_grammar_size },
+  NULL,
+  NULL,
+  RUBY_TYPED_FREE_IMMEDIATELY
+};
+
 const rb_data_type_t RbLLaMAContext::llama_context_type = {
   "RbLLaMAContext",
   { NULL,
@@ -2208,6 +2260,7 @@ extern "C" void Init_llama_cpp(void) {
   RbLLaMAContext::define_class(rb_mLLaMACpp);
   RbLLaMAContextParams::define_class(rb_mLLaMACpp);
   RbLLaMAModelQuantizeParams::define_class(rb_mLLaMACpp);
+  RbLLaMAGrammar::define_class(rb_mLLaMACpp);
 
   rb_define_module_function(rb_mLLaMACpp, "backend_init", rb_llama_llama_backend_init, -1);
   rb_define_module_function(rb_mLLaMACpp, "backend_free", rb_llama_llama_backend_free, 0);

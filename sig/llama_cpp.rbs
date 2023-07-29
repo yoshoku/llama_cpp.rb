@@ -177,4 +177,7 @@ module LLaMACpp
   end
 
   class Params = ContextParams
+
+  class Grammar
+  end
 end
