@@ -1,3 +1,10 @@
+## [[0.3.5](https://github.com/yoshoku/llama_cpp.rb/compare/v0.3.4...v0.3.5)] - 2023-07-29
+
+- Bump bundled llama.cpp from master-d924522 to master-1a94186.
+  - Add `GrammarElement` and `Grammar` classes.
+  - Add `sample_grammar` method to Context.
+  - Add `grammar_accept_token method` method to Context.
+
 ## [[0.3.4](https://github.com/yoshoku/llama_cpp.rb/compare/v0.3.3...v0.3.4)] - 2023-07-23
 
 - Bump bundled llama.cpp from master-32c5411 to master-d924522.
