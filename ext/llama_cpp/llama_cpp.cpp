@@ -529,7 +529,7 @@ private:
   // low_vram
   static VALUE _llama_context_params_set_low_vram(VALUE self, VALUE low_vram) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
-    ptr->params.low_vram = low_vram == Qtrue ? true : false;
+    ptr->params.low_vram = RTEST(low_vram) ? true : false;
     return ptr->params.low_vram ? Qtrue : Qfalse;
   }
 
@@ -541,7 +541,7 @@ private:
   // mul_mat_q
   static VALUE _llama_context_params_set_mul_mat_q(VALUE self, VALUE mul_mat_q) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
-    ptr->params.mul_mat_q = mul_mat_q == Qtrue ? true : false;
+    ptr->params.mul_mat_q = RTEST(mul_mat_q) ? true : false;
     return ptr->params.mul_mat_q ? Qtrue : Qfalse;
   }
 
@@ -569,7 +569,7 @@ private:
   // f16_kv
   static VALUE _llama_context_params_set_f16_kv(VALUE self, VALUE f16_kv) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
-    ptr->params.f16_kv = f16_kv == Qtrue ? true : false;
+    ptr->params.f16_kv = RTEST(f16_kv) ? true : false;
     return ptr->params.f16_kv ? Qtrue : Qfalse;
   }
 
@@ -581,7 +581,7 @@ private:
   // logits_all
   static VALUE _llama_context_params_set_logits_all(VALUE self, VALUE logits_all) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
-    ptr->params.logits_all = logits_all == Qtrue ? true : false;
+    ptr->params.logits_all = RTEST(logits_all) ? true : false;
     return ptr->params.logits_all ? Qtrue : Qfalse;
   }
 
@@ -593,7 +593,7 @@ private:
   // vocab_only
   static VALUE _llama_context_params_set_vocab_only(VALUE self, VALUE vocab_only) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
-    ptr->params.vocab_only = vocab_only == Qtrue ? true : false;
+    ptr->params.vocab_only = RTEST(vocab_only) ? true : false;
     return ptr->params.vocab_only ? Qtrue : Qfalse;
   }
 
@@ -605,7 +605,7 @@ private:
   // use_mmap
   static VALUE _llama_context_params_set_use_mmap(VALUE self, VALUE use_mmap) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
-    ptr->params.use_mmap = use_mmap == Qtrue ? true : false;
+    ptr->params.use_mmap = RTEST(use_mmap) ? true : false;
     return ptr->params.use_mmap ? Qtrue : Qfalse;
   }
 
@@ -617,7 +617,7 @@ private:
   // use_mlock
   static VALUE _llama_context_params_set_use_mlock(VALUE self, VALUE use_mlock) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
-    ptr->params.use_mlock = use_mlock == Qtrue ? true : false;
+    ptr->params.use_mlock = RTEST(use_mlock) ? true : false;
     return ptr->params.use_mlock ? Qtrue : Qfalse;
   }
 
@@ -629,7 +629,7 @@ private:
   // embedding
   static VALUE _llama_context_params_set_embedding(VALUE self, VALUE embedding) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
-    ptr->params.embedding = embedding == Qtrue ? true : false;
+    ptr->params.embedding = RTEST(embedding) ? true : false;
     return ptr->params.embedding ? Qtrue : Qfalse;
   }
 
