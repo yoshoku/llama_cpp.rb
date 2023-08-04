@@ -2422,7 +2422,7 @@ static VALUE rb_llama_llama_backend_init(int argc, VALUE* argv, VALUE self) {
   rb_scan_args(argc, argv, ":", &kw_args);
   rb_get_kwargs(kw_args, kw_table, 0, 1, kw_values);
 
-  const bool numa = kw_values[0] == Qundef ? false : (RTEST ? true : false);
+  const bool numa = kw_values[0] == Qundef ? false : (RTEST(kw_values[0]) ? true : false);
   llama_backend_init(numa);
 
   return Qnil;
