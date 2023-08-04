@@ -414,6 +414,8 @@ public:
     rb_define_method(rb_cLLaMAContextParams, "rope_freq_scale", RUBY_METHOD_FUNC(_llama_context_params_get_rope_freq_scale), 0);
     rb_define_method(rb_cLLaMAContextParams, "low_vram=", RUBY_METHOD_FUNC(_llama_context_params_set_low_vram), 1);
     rb_define_method(rb_cLLaMAContextParams, "low_vram", RUBY_METHOD_FUNC(_llama_context_params_get_low_vram), 0);
+    rb_define_method(rb_cLLaMAContextParams, "mul_mat_q=", RUBY_METHOD_FUNC(_llama_context_params_set_mul_mat_q), 1);
+    rb_define_method(rb_cLLaMAContextParams, "mul_mat_q", RUBY_METHOD_FUNC(_llama_context_params_get_mul_mat_q), 0);
     rb_define_method(rb_cLLaMAContextParams, "seed=", RUBY_METHOD_FUNC(_llama_context_params_set_seed), 1);
     rb_define_method(rb_cLLaMAContextParams, "seed", RUBY_METHOD_FUNC(_llama_context_params_get_seed), 0);
     rb_define_method(rb_cLLaMAContextParams, "f16_kv=", RUBY_METHOD_FUNC(_llama_context_params_set_f16_kv), 1);
@@ -534,6 +536,18 @@ private:
   static VALUE _llama_context_params_get_low_vram(VALUE self) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     return ptr->params.low_vram ? Qtrue : Qfalse;
+  }
+
+  // mul_mat_q
+  static VALUE _llama_context_params_set_mul_mat_q(VALUE self, VALUE mul_mat_q) {
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    ptr->params.mul_mat_q = mul_mat_q == Qtrue ? true : false;
+    return ptr->params.mul_mat_q ? Qtrue : Qfalse;
+  }
+
+  static VALUE _llama_context_params_get_mul_mat_q(VALUE self) {
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    return ptr->params.mul_mat_q ? Qtrue : Qfalse;
   }
 
   // seed

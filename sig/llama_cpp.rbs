@@ -163,6 +163,8 @@ module LLaMACpp
     def rope_freq_scale: () -> Float
     def low_vram: () -> bool
     def low_vram=: (bool) -> bool
+    def mul_mat_q: () -> bool
+    def mul_mat_q=: (bool) -> bool
     def seed: () -> Integer
     def seed=: (Integer) -> Integer
     def use_mlock: () -> bool

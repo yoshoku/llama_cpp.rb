@@ -580,6 +580,14 @@ module LLaMACpp
     # @return [Boolean]
     def low_vram; end
 
+    # Sets the flag to use experimental mul_mat_q kernels.
+    # @param flag [Boolean]
+    def mul_mat_q=(flag); end
+
+    # Returns the flag to use experimental mul_mat_q kernels.
+    # @return [Boolean]
+    def mul_mat_q; end
+
     # Sets the random seed.
     # @param seed [Integer]
     def seed=(seed); end
