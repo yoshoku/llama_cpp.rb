@@ -12,11 +12,27 @@ This gem is still under development and may undergo many changes in the future.
 
 Install the gem and add to the application's Gemfile by executing:
 
-    $ bundle add llama_cpp
+```sh
+$ bundle add llama_cpp
+```
 
 If bundler is not being used to manage dependencies, install the gem by executing:
 
-    $ gem install llama_cpp
+```sh
+$ gem install llama_cpp
+```
+
+There are several installation options for improving execution performance:
+
+```sh
+# use OpenBLAS
+$ gem install llama_cpp -- --with-openblas
+
+# use Metal on macOS
+$ gem install llama_cpp -- --with-metal
+```
+
+Those options are defined in [extconf.rb](https://github.com/yoshoku/llama_cpp.rb/blob/main/ext/llama_cpp/extconf.rb) by with_config method.
 
 ## Usage
 
