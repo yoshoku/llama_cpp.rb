@@ -1,3 +1,8 @@
+## [[0.3.6](https://github.com/yoshoku/llama_cpp.rb/compare/v0.3.5...v0.3.6)] - 2023-08-04
+
+- Bump bundled llama.cpp from master-1a94186 to master-468ea24.
+  - Add `mul_mat_q` option to ContextParams.
+
 ## [[0.3.5](https://github.com/yoshoku/llama_cpp.rb/compare/v0.3.4...v0.3.5)] - 2023-07-29
 
 - Bump bundled llama.cpp from master-d924522 to master-1a94186.
