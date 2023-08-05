@@ -1,0 +1,7 @@
+#ifndef BUILD_INFO_H
+#define BUILD_INFO_H
+
+#define BUILD_NUMBER 944
+#define BUILD_COMMIT "8183159"
+
+#endif // BUILD_INFO_H

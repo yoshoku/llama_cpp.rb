@@ -18,6 +18,26 @@ If bundler is not being used to manage dependencies, install the gem by executin
 
     $ gem install llama_cpp
 
+### With Nvidia CUDA
+
+To install llama.cpp with CUDA support you can use the following, remember to make sure
+you already have the necessary CUDA SDK and libraries installed in your computer.
+
+```
+bundle config build.llama_cpp --with-cublas
+bundle install
+```
+
+### Others like metal, openblas etc
+
+The following other options are supported for other accelearators
+
+```
+--with-metal
+--with-openblas
+--with-clblas
+```
+
 ## Usage
 
 Prepare the quantized model by refering to [the usage section on the llama.cpp README](https://github.com/ggerganov/llama.cpp#usage).
