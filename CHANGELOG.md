@@ -1,3 +1,7 @@
+## [[0.3.7](https://github.com/yoshoku/llama_cpp.rb/compare/v0.3.6...v0.3.7)] - 2023-08-12
+
+- Bump bundled llama.cpp from master-468ea24 to master-9ca4abe .
+
 ## [[0.3.6](https://github.com/yoshoku/llama_cpp.rb/compare/v0.3.5...v0.3.6)] - 2023-08-04
 
 - Bump bundled llama.cpp from master-1a94186 to master-468ea24.
