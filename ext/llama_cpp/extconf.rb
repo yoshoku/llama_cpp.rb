@@ -52,8 +52,8 @@ end
 if with_config('metal')
   $CFLAGS << ' -DGGML_USE_METAL -DGGML_METAL_NDEBUG'
   $CXXFLAGS << ' -DGGML_USE_METAL'
-  $LDFLAGS << ' -framework Foundation -framework Metal -framework MetalKit -framework MetalPerformanceShaders'
-  $objs = %w[ggml.o llama.o llama_cpp.o ggml-metal.o]
+  $LDFLAGS << ' -framework Foundation -framework Metal -framework MetalKit'
+  $objs = %w[ggml.o ggml-alloc.o llama.o llama_cpp.o ggml-metal.o]
   $objs << 'k_quants.o' unless with_config('no_k_quants')
 end
 
