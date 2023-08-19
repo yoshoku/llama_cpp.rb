@@ -1,3 +1,10 @@
+## [[0.3.8](https://github.com/yoshoku/llama_cpp.rb/compare/v0.3.7...v0.3.8)] - 2023-08-19
+
+- Bump bundled llama.cpp from master-9ca4abe to master-097e121.
+  - Add `type` method to Model.
+- Revert pull request #2592 in llama.cpp.
+It seems that PWIN32_MEMORY_RANGE_ENTRY and WIN32_MEMORY_RANGE_ENTRY do not exist in mingw.
+
 ## [[0.3.7](https://github.com/yoshoku/llama_cpp.rb/compare/v0.3.6...v0.3.7)] - 2023-08-12
 
 - Bump bundled llama.cpp from master-468ea24 to master-9ca4abe .
