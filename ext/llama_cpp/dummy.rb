@@ -253,6 +253,10 @@ module LLaMACpp
     # @param add_bos [Boolean] The flag to add the beginning of sentence token.
     # @return [Array<Integer>]
     def tokenize(text:, n_max_tokens:, add_bos: true); end
+
+    # Returns the model type.
+    # @return [String]
+    def type; end
   end
 
   # Class for context

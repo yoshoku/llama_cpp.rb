@@ -84,6 +84,7 @@ module LLaMACpp
     def vocab: (capacity: Integer) -> [Array[String], Array[Float]]
     def token_to_str: (Integer) -> String
     def tokenize: (text: String, ?n_max_tokens: Integer, ?add_bos: bool) -> Array[Integer]
+    def type: () -> String
   end
 
   class Timings

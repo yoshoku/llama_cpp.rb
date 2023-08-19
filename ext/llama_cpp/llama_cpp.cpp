@@ -814,6 +814,7 @@ public:
     rb_define_method(rb_cLLaMAModel, "vocab", RUBY_METHOD_FUNC(_llama_model_get_vocab_from_model), -1);
     rb_define_method(rb_cLLaMAModel, "token_to_str", RUBY_METHOD_FUNC(_llama_model_token_to_str_with_model), 1);
     rb_define_method(rb_cLLaMAModel, "tokenize", RUBY_METHOD_FUNC(_llama_model_tokenize_with_model), -1);
+    rb_define_method(rb_cLLaMAModel, "type", RUBY_METHOD_FUNC(_llama_model_get_model_type), 0);
   }
 
 private:
@@ -1060,6 +1061,13 @@ private:
 
     RB_GC_GUARD(text_);
     return ret;
+  }
+
+  static VALUE _llama_model_get_model_type(VALUE self) {
+    LLaMAModelWrapper* ptr = get_llama_model(self);
+    char buf[128];
+    ::llama_model_type(ptr->model, buf, sizeof(buf));
+    return rb_str_new_cstr(buf);
   }
 };
 
