@@ -1569,8 +1569,20 @@ private:
       return Qnil;
     }
     const llama_token token = NUM2INT(token_);
-    const char* str = llama_token_to_str(ptr->ctx, token);
-    return str != nullptr ? rb_utf8_str_new_cstr(str) : rb_utf8_str_new_cstr("");
+    std::vector<char> result(8, 0);
+    const int n_tokens = llama_token_to_str(ptr->ctx, token, result.data(), result.size());
+    if (n_tokens < 0) {
+      result.resize(-n_tokens);
+      const int check = llama_token_to_str(ptr->ctx, token, result.data(), result.size());
+      if (check != -n_tokens) {
+        rb_raise(rb_eRuntimeError, "failed to convert");
+        return Qnil;
+      }
+    } else {
+      result.resize(n_tokens);
+    }
+    std::string ret(result.data(), result.size());
+    return rb_str_new_cstr(ret.c_str());
   }
 
   static VALUE _llama_context_logits(VALUE self) {
