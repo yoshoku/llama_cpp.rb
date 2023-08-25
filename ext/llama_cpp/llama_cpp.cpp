@@ -2556,38 +2556,8 @@ extern "C" void Init_llama_cpp(void) {
   rb_define_const(rb_mLLaMACpp, "LLAMA_GRETYPE_CHAR_ALT", INT2NUM(LLAMA_GRETYPE_CHAR_ALT));
 
   std::stringstream ss_magic;
-  ss_magic << std::showbase << std::hex << LLAMA_FILE_MAGIC_GGJT;
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FILE_MAGIC_GGJT", rb_str_new2(ss_magic.str().c_str()));
-
-  ss_magic.str("");
-  ss_magic.clear(std::stringstream::goodbit);
-  ss_magic << std::showbase << std::hex << LLAMA_FILE_MAGIC_GGLA;
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FILE_MAGIC_GGLA", rb_str_new2(ss_magic.str().c_str()));
-
-  ss_magic.str("");
-  ss_magic.clear(std::stringstream::goodbit);
-  ss_magic << std::showbase << std::hex << LLAMA_FILE_MAGIC_GGMF;
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FILE_MAGIC_GGMF", rb_str_new2(ss_magic.str().c_str()));
-
-  ss_magic.str("");
-  ss_magic.clear(std::stringstream::goodbit);
-  ss_magic << std::showbase << std::hex << LLAMA_FILE_MAGIC_GGML;
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FILE_MAGIC_GGML", rb_str_new2(ss_magic.str().c_str()));
-
-  ss_magic.str("");
-  ss_magic.clear(std::stringstream::goodbit);
   ss_magic << std::showbase << std::hex << LLAMA_FILE_MAGIC_GGSN;
   rb_define_const(rb_mLLaMACpp, "LLAMA_FILE_MAGIC_GGSN", rb_str_new2(ss_magic.str().c_str()));
-
-  ss_magic.str("");
-  ss_magic.clear(std::stringstream::goodbit);
-  ss_magic << std::showbase << std::hex << LLAMA_FILE_MAGIC;
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FILE_MAGIC", rb_str_new2(ss_magic.str().c_str()));
-
-  ss_magic.str("");
-  ss_magic.clear(std::stringstream::goodbit);
-  ss_magic << std::showbase << std::hex << LLAMA_FILE_MAGIC_UNVERSIONED;
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FILE_MAGIC_UNVERSIONED", rb_str_new2(ss_magic.str().c_str()));
 
   ss_magic.str("");
   ss_magic.clear(std::stringstream::goodbit);
