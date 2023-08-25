@@ -808,9 +808,9 @@ public:
     rb_define_method(rb_cLLaMAModel, "free", RUBY_METHOD_FUNC(_llama_model_free), 0);
     rb_define_method(rb_cLLaMAModel, "load", RUBY_METHOD_FUNC(_llama_model_load), -1);
     rb_define_method(rb_cLLaMAModel, "apply_lora_from_file", RUBY_METHOD_FUNC(_llama_model_apply_lora_from_file), -1);
-    rb_define_method(rb_cLLaMAModel, "n_vocab", RUBY_METHOD_FUNC(_llama_model_get_n_vocab_from_model), 0);
-    rb_define_method(rb_cLLaMAModel, "n_ctx", RUBY_METHOD_FUNC(_llama_model_get_n_ctx_from_model), 0);
-    rb_define_method(rb_cLLaMAModel, "n_embd", RUBY_METHOD_FUNC(_llama_model_get_n_embd_from_model), 0);
+    rb_define_method(rb_cLLaMAModel, "n_vocab", RUBY_METHOD_FUNC(_llama_model_get_model_n_vocab), 0);
+    rb_define_method(rb_cLLaMAModel, "n_ctx", RUBY_METHOD_FUNC(_llama_model_get_model_n_ctx), 0);
+    rb_define_method(rb_cLLaMAModel, "n_embd", RUBY_METHOD_FUNC(_llama_model_get_model_n_embd), 0);
     rb_define_method(rb_cLLaMAModel, "vocab", RUBY_METHOD_FUNC(_llama_model_get_vocab_from_model), -1);
     rb_define_method(rb_cLLaMAModel, "token_to_str", RUBY_METHOD_FUNC(_llama_model_token_to_str_with_model), 1);
     rb_define_method(rb_cLLaMAModel, "tokenize", RUBY_METHOD_FUNC(_llama_model_tokenize_with_model), -1);
@@ -960,19 +960,19 @@ private:
     return Qnil;
   }
 
-  static VALUE _llama_model_get_n_vocab_from_model(VALUE self) {
+  static VALUE _llama_model_get_model_n_vocab(VALUE self) {
     LLaMAModelWrapper* ptr = get_llama_model(self);
-    return INT2NUM(llama_n_vocab_from_model(ptr->model));
+    return INT2NUM(llama_model_n_vocab(ptr->model));
   }
 
-  static VALUE _llama_model_get_n_ctx_from_model(VALUE self) {
+  static VALUE _llama_model_get_model_n_ctx(VALUE self) {
     LLaMAModelWrapper* ptr = get_llama_model(self);
-    return INT2NUM(llama_n_ctx_from_model(ptr->model));
+    return INT2NUM(llama_model_n_ctx(ptr->model));
   }
 
-  static VALUE _llama_model_get_n_embd_from_model(VALUE self) {
+  static VALUE _llama_model_get_model_n_embd(VALUE self) {
     LLaMAModelWrapper* ptr = get_llama_model(self);
-    return INT2NUM(llama_n_embd_from_model(ptr->model));
+    return INT2NUM(llama_model_n_embd(ptr->model));
   }
 
   static VALUE _llama_model_get_vocab_from_model(int argc, VALUE* argv, VALUE self) {
@@ -990,7 +990,7 @@ private:
     const int capacity = NUM2INT(kw_values[0]);
 
     LLaMAModelWrapper* ptr = get_llama_model(self);
-    const int n = std::min(capacity, llama_n_vocab_from_model(ptr->model));
+    const int n = std::min(capacity, llama_model_n_vocab(ptr->model));
     const char** vocabs = ALLOCA_N(const char*, n);
     float* scores = ALLOCA_N(float, n);
 
