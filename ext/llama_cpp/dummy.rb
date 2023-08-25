@@ -108,6 +108,10 @@ module LLaMACpp
   # Prints system information.
   def print_system_info; end
 
+  # Returns the time.
+  # @return [Integer]
+  def time_us; end
+
   # Returns the flag for supporting mmap.
   # @return [Boolean]
   def mmap_supported?; end

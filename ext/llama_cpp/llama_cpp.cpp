@@ -2496,6 +2496,10 @@ static VALUE rb_llama_print_system_info(VALUE self) {
   return rb_utf8_str_new_cstr(result);
 }
 
+static VALUE rb_llama_time_us(VALUE self) {
+  return LONG2NUM(llama_time_us());
+}
+
 static VALUE rb_llama_mmap_supported(VALUE self) {
   return llama_mmap_supported() ? Qtrue : Qfalse;
 }
@@ -2525,6 +2529,7 @@ extern "C" void Init_llama_cpp(void) {
   rb_define_module_function(rb_mLLaMACpp, "backend_free", rb_llama_llama_backend_free, 0);
   rb_define_module_function(rb_mLLaMACpp, "model_quantize", rb_llama_model_quantize, -1);
   rb_define_module_function(rb_mLLaMACpp, "print_system_info", rb_llama_print_system_info, 0);
+  rb_define_module_function(rb_mLLaMACpp, "time_us", rb_llama_time_us, 0);
   rb_define_module_function(rb_mLLaMACpp, "mmap_supported?", rb_llama_mmap_supported, 0);
   rb_define_module_function(rb_mLLaMACpp, "mlock_supported?", rb_llama_mlock_supported, 0);
   rb_define_module_function(rb_mLLaMACpp, "max_devices", rb_llama_max_devices, 0);

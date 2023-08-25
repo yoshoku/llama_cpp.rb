@@ -39,6 +39,7 @@ module LLaMACpp
     ?repeat_last_n: Integer, ?repeat_penalty: Float, ?frequency: Float, ?presence: Float,
     ?top_k: Integer, ?top_p: Float, ?tfs_z: Float, ?typical_p: Float, ?temperature: Float) -> String
   def self?.print_system_info: () -> void
+  def self?.time_us: () -> Integer
   def self?.mmap_supported?: () -> bool
   def self?.mlock_supported?: () -> bool
   def self?.max_devices: () -> Integer
@@ -99,7 +100,7 @@ module LLaMACpp
 
     def initialize: (model: ::LLaMACpp::Model) -> void
     def embeddings: () -> Array[Float]
-    def text: (Intger) -> String
+    def text: (Integer) -> String
     def score: (Integer) -> Float
     def type: (Integer) -> Integer
     def token_bos: () -> Integer
