@@ -1320,6 +1320,9 @@ public:
     rb_define_method(rb_cLLaMAContext, "tokenize", RUBY_METHOD_FUNC(_llama_context_tokenize), -1);
     rb_define_method(rb_cLLaMAContext, "logits", RUBY_METHOD_FUNC(_llama_context_logits), 0);
     rb_define_method(rb_cLLaMAContext, "embeddings", RUBY_METHOD_FUNC(_llama_context_embeddings), 0);
+    rb_define_method(rb_cLLaMAContext, "token_bos", RUBY_METHOD_FUNC(_llama_context_token_bos), 0);
+    rb_define_method(rb_cLLaMAContext, "token_eos", RUBY_METHOD_FUNC(_llama_context_token_eos), 0);
+    rb_define_method(rb_cLLaMAContext, "token_nl", RUBY_METHOD_FUNC(_llama_context_token_nl), 0);
     rb_define_method(rb_cLLaMAContext, "token_to_str", RUBY_METHOD_FUNC(_llama_context_token_to_str), 1);
     rb_define_method(rb_cLLaMAContext, "n_vocab", RUBY_METHOD_FUNC(_llama_context_n_vocab), 0);
     rb_define_method(rb_cLLaMAContext, "n_ctx", RUBY_METHOD_FUNC(_llama_context_n_ctx), 0);
@@ -1635,6 +1638,33 @@ private:
     }
 
     return output;
+  }
+
+  static VALUE _llama_context_token_bos(VALUE self) {
+    LLaMAContextWrapper* ptr = get_llama_context(self);
+    if (ptr->ctx == NULL) {
+      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
+      return Qnil;
+    }
+    return INT2NUM(llama_token_bos(ptr->ctx));
+  }
+
+  static VALUE _llama_context_token_eos(VALUE self) {
+    LLaMAContextWrapper* ptr = get_llama_context(self);
+    if (ptr->ctx == NULL) {
+      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
+      return Qnil;
+    }
+    return INT2NUM(llama_token_eos(ptr->ctx));
+  }
+
+  static VALUE _llama_context_token_nl(VALUE self) {
+    LLaMAContextWrapper* ptr = get_llama_context(self);
+    if (ptr->ctx == NULL) {
+      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
+      return Qnil;
+    }
+    return INT2NUM(llama_token_nl(ptr->ctx));
   }
 
   static VALUE _llama_context_n_vocab(VALUE self) {
@@ -2425,18 +2455,6 @@ static VALUE rb_llama_model_quantize(int argc, VALUE* argv, VALUE self) {
   return Qnil;
 }
 
-static VALUE rb_llama_token_bos(VALUE self) {
-  return INT2NUM(llama_token_bos());
-}
-
-static VALUE rb_llama_token_eos(VALUE self) {
-  return INT2NUM(llama_token_eos());
-}
-
-static VALUE rb_llama_token_nl(VALUE self) {
-  return INT2NUM(llama_token_nl());
-}
-
 static VALUE rb_llama_print_system_info(VALUE self) {
   const char* result = llama_print_system_info();
   return rb_utf8_str_new_cstr(result);
@@ -2470,9 +2488,6 @@ extern "C" void Init_llama_cpp(void) {
   rb_define_module_function(rb_mLLaMACpp, "backend_init", rb_llama_llama_backend_init, -1);
   rb_define_module_function(rb_mLLaMACpp, "backend_free", rb_llama_llama_backend_free, 0);
   rb_define_module_function(rb_mLLaMACpp, "model_quantize", rb_llama_model_quantize, -1);
-  rb_define_module_function(rb_mLLaMACpp, "token_bos", rb_llama_token_bos, 0);
-  rb_define_module_function(rb_mLLaMACpp, "token_eos", rb_llama_token_eos, 0);
-  rb_define_module_function(rb_mLLaMACpp, "token_nl", rb_llama_token_nl, 0);
   rb_define_module_function(rb_mLLaMACpp, "print_system_info", rb_llama_print_system_info, 0);
   rb_define_module_function(rb_mLLaMACpp, "mmap_supported?", rb_llama_mmap_supported, 0);
   rb_define_module_function(rb_mLLaMACpp, "mlock_supported?", rb_llama_mlock_supported, 0);
