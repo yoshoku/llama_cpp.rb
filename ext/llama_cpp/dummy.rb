@@ -4,15 +4,6 @@
 
 # llama_cpp.rb provides Ruby bindings for the llama.cpp.
 module LLaMACpp
-  # LLaMA file version.
-  LLAMA_FILE_VERSION = '3'
-
-  # LLaMA file magic.
-  LLAMA_FILE_MAGIC = '0x67676a74'
-
-  # LLaMA file magic unversioned.
-  LLAMA_FILE_MAGIC_UNVERSIONED = '0x67676d6c'
-
   # LLaMA session magic.
   LLAMA_SESSION_MAGIC = '0x6767736e'
 
@@ -113,18 +104,6 @@ module LLaMACpp
   # @param output_path [String] The path to the output model file.
   # @param params [ModelQuantizeParams] The paramters for model quantization.
   def model_quantize(input_path:, output_path:, params:); end
-
-  # Returns the token id the beginning of sentence token.
-  # @return [Integer]
-  def token_bos; end
-
-  # Returns the token id the end of sentence token.
-  # @return [Integer]
-  def token_eos; end
-
-  # Returns the token id the new line token.
-  # @return [Integer]
-  def token_nl; end
 
   # Prints system information.
   def print_system_info; end
@@ -235,12 +214,6 @@ module LLaMACpp
     # Returns the number of embedding.
     def n_embd; end
 
-    # Returns the vocabulary from model.
-    #
-    # @param capacity [Integer] The number of vocabularies to be returned.
-    # @return [Array<Array<String>, Array<Float>]
-    def vocab(capacity:); end
-
     # Converts token to Ruby String.
     # @param token [Integer] The token to be converted.
     # @return [String]
@@ -303,6 +276,36 @@ module LLaMACpp
     # @return [Array<Float>]
     def embeddings; end
 
+    # Returns the text of token.
+    #
+    # @param token_id [Integer]
+    # @return [String]
+    def text(token_id); end
+
+    # Returns the score of token.
+    #
+    # @param token_id [Integer]
+    # @return [Float]
+    def score(token_id); end
+
+    # Returns the type of token.
+    #
+    # @param token_id [Integer]
+    # @return [Integer]
+    def type(token_id); end
+
+    # Returns the token id the beginning of sentence token.
+    # @return [Integer]
+    def token_bos; end
+
+    # Returns the token id the end of sentence token.
+    # @return [Integer]
+    def token_eos; end
+
+    # Returns the token id the new line token.
+    # @return [Integer]
+    def token_nl; end
+
     # Converts token id to string.
     #
     # @param token_id [Integer]
@@ -323,11 +326,6 @@ module LLaMACpp
     #
     # @return [Integer]
     def n_embd; end
-
-    # Returns the vocabulary as output parameters.
-    #
-    # @return [Array<Array<String>, Array<Float>>]
-    def vocab(capacity:); end
 
     # Returns the timing information
     #

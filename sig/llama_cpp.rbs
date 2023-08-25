@@ -1,9 +1,6 @@
 module LLaMACpp
   VERSION: String
   LLAMA_CPP_VERSION: String
-  LLAMA_FILE_VERSION: String
-  LLAMA_FILE_MAGIC: String
-  LLAMA_FILE_MAGIC_UNVERSIONED: String
   LLAMA_DEFALUT_SEED: String
 
   LLAMA_MAX_DEVICES: Integer
@@ -42,9 +39,6 @@ module LLaMACpp
     ?repeat_last_n: Integer, ?repeat_penalty: Float, ?frequency: Float, ?presence: Float,
     ?top_k: Integer, ?top_p: Float, ?tfs_z: Float, ?typical_p: Float, ?temperature: Float) -> String
   def self?.print_system_info: () -> void
-  def self?.token_bos: () -> Integer
-  def self?.token_eos: () -> Integer
-  def self?.token_nl: () -> Integer
   def self?.mmap_supported?: () -> bool
   def self?.mlock_supported?: () -> bool
   def self?.max_devices: () -> Integer
@@ -81,7 +75,6 @@ module LLaMACpp
     def n_vocab: () -> Integer
     def n_ctx: () -> Integer
     def n_embd: () -> Integer
-    def vocab: (capacity: Integer) -> [Array[String], Array[Float]]
     def token_to_str: (Integer) -> String
     def tokenize: (text: String, ?n_max_tokens: Integer, ?add_bos: bool) -> Array[Integer]
     def type: () -> String
@@ -106,6 +99,12 @@ module LLaMACpp
 
     def initialize: (model: ::LLaMACpp::Model) -> void
     def embeddings: () -> Array[Float]
+    def text: (Intger) -> String
+    def score: (Integer) -> Float
+    def type: (Integer) -> Integer
+    def token_bos: () -> Integer
+    def token_eos: () -> Integer
+    def token_nl: () -> Integer
     def eval: (tokens: Array[Integer], n_past: Integer, ?n_tokens: Integer, ?n_threads: Integer) -> void
     def eval_embd: (tokens: Array[Float], n_past: Integer, ?n_tokens: Integer, ?n_threads: Integer) -> void
     def eval_export: (String) -> bool
@@ -113,7 +112,6 @@ module LLaMACpp
     def n_ctx: () -> Integer
     def n_embd: () -> Integer
     def n_vocab: () -> Integer
-    def vocab: (capacity: Integer) -> [Array[String], Array[Float]]
     def timings: () -> ::LLaMACpp::Timings
     def print_timings: () -> void
     def reset_timings: () -> void
