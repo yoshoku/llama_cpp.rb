@@ -1322,6 +1322,7 @@ public:
     rb_define_method(rb_cLLaMAContext, "embeddings", RUBY_METHOD_FUNC(_llama_context_embeddings), 0);
     rb_define_method(rb_cLLaMAContext, "text", RUBY_METHOD_FUNC(_llama_context_text), 1);
     rb_define_method(rb_cLLaMAContext, "score", RUBY_METHOD_FUNC(_llama_context_score), 1);
+    rb_define_method(rb_cLLaMAContext, "type", RUBY_METHOD_FUNC(_llama_context_type), 1);
     rb_define_method(rb_cLLaMAContext, "token_bos", RUBY_METHOD_FUNC(_llama_context_token_bos), 0);
     rb_define_method(rb_cLLaMAContext, "token_eos", RUBY_METHOD_FUNC(_llama_context_token_eos), 0);
     rb_define_method(rb_cLLaMAContext, "token_nl", RUBY_METHOD_FUNC(_llama_context_token_nl), 0);
@@ -1662,6 +1663,17 @@ private:
     const llama_token token = NUM2INT(token_);
     const float score = llama_token_get_score(ptr->ctx, token);
     return DBL2NUM(score);
+  }
+
+  static VALUE _llama_context_type(VALUE self, VALUE token_) {
+    LLaMAContextWrapper* ptr = get_llama_context(self);
+    if (ptr->ctx == NULL) {
+      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
+      return Qnil;
+    }
+    const llama_token token = NUM2INT(token_);
+    const int type = llama_token_get_type(ptr->ctx, token);
+    return INT2NUM(type);
   }
 
   static VALUE _llama_context_token_bos(VALUE self) {
