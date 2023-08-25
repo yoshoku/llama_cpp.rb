@@ -811,7 +811,6 @@ public:
     rb_define_method(rb_cLLaMAModel, "n_vocab", RUBY_METHOD_FUNC(_llama_model_get_model_n_vocab), 0);
     rb_define_method(rb_cLLaMAModel, "n_ctx", RUBY_METHOD_FUNC(_llama_model_get_model_n_ctx), 0);
     rb_define_method(rb_cLLaMAModel, "n_embd", RUBY_METHOD_FUNC(_llama_model_get_model_n_embd), 0);
-    rb_define_method(rb_cLLaMAModel, "vocab", RUBY_METHOD_FUNC(_llama_model_get_vocab_from_model), -1);
     rb_define_method(rb_cLLaMAModel, "token_to_str", RUBY_METHOD_FUNC(_llama_model_token_to_str_with_model), 1);
     rb_define_method(rb_cLLaMAModel, "tokenize", RUBY_METHOD_FUNC(_llama_model_tokenize_with_model), -1);
     rb_define_method(rb_cLLaMAModel, "type", RUBY_METHOD_FUNC(_llama_model_get_model_type), 0);
@@ -973,40 +972,6 @@ private:
   static VALUE _llama_model_get_model_n_embd(VALUE self) {
     LLaMAModelWrapper* ptr = get_llama_model(self);
     return INT2NUM(llama_model_n_embd(ptr->model));
-  }
-
-  static VALUE _llama_model_get_vocab_from_model(int argc, VALUE* argv, VALUE self) {
-    VALUE kw_args = Qnil;
-    ID kw_table[1] = { rb_intern("capacity") };
-    VALUE kw_values[1] = { Qundef };
-    rb_scan_args(argc, argv, ":", &kw_args);
-    rb_get_kwargs(kw_args, kw_table, 1, 0, kw_values);
-
-    if (!RB_INTEGER_TYPE_P(kw_values[0])) {
-      rb_raise(rb_eArgError, "capacity must be an integer");
-      return Qnil;
-    }
-
-    const int capacity = NUM2INT(kw_values[0]);
-
-    LLaMAModelWrapper* ptr = get_llama_model(self);
-    const int n = std::min(capacity, llama_model_n_vocab(ptr->model));
-    const char** vocabs = ALLOCA_N(const char*, n);
-    float* scores = ALLOCA_N(float, n);
-
-    llama_get_vocab_from_model(ptr->model, vocabs, scores, capacity);
-
-    VALUE vocabs_ary = rb_ary_new();
-    VALUE scores_ary = rb_ary_new();
-
-    for (int i = 0; i < n; i++) {
-      rb_ary_push(vocabs_ary, rb_str_new_cstr(vocabs[i]));
-      rb_ary_push(scores_ary, DBL2NUM(scores[i]));
-    }
-
-    VALUE ret = rb_ary_new3(2, vocabs_ary, scores_ary);
-
-    return ret;
   }
 
   static VALUE _llama_model_token_to_str_with_model(VALUE self, VALUE token_) {
