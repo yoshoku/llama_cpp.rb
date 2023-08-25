@@ -981,8 +981,20 @@ private:
     }
     const llama_token token = NUM2INT(token_);
     LLaMAModelWrapper* ptr = get_llama_model(self);
-    const char* str = llama_token_to_str_with_model(ptr->model, token);
-    return rb_str_new_cstr(str);
+    std::vector<char> result(8, 0);
+    const int n_tokens = llama_token_to_str_with_model(ptr->model, token, result.data(), result.size());
+    if (n_tokens < 0) {
+      result.resize(-n_tokens);
+      const int check = llama_token_to_str_with_model(ptr->model, token, result.data(), result.size());
+      if (check != -n_tokens) {
+        rb_raise(rb_eRuntimeError, "failed to convert");
+        return Qnil;
+      }
+    } else {
+      result.resize(n_tokens);
+    }
+    std::string ret(result.data(), result.size());
+    return rb_str_new_cstr(ret.c_str());
   }
 
   static VALUE _llama_model_tokenize_with_model(int argc, VALUE* argv, VALUE self) {
