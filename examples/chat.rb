@@ -49,8 +49,6 @@ class Chat < Thor # rubocop:disable Metrics/ClassLength, Style/Documentation
     n_keep = options[:keep]
     n_keep = embd_input.size if n_keep > embd_input.size
 
-    token_newline = context.tokenize(text: "\n", add_bos: false)
-
     last_n_tokens = [0] * n_ctx
     interactive = true
     is_interacting = false
@@ -102,7 +100,7 @@ class Chat < Thor # rubocop:disable Metrics/ClassLength, Style/Documentation
         last_n_tokens.push(id)
 
         if id == context.token_eos
-          id = token_newline.first
+          id = context.token_nl
           unless antiprompt.empty?
             first_antiprompt = context.tokenize(text: antiprompt, add_bos: false)
             embd_input.concat(first_antiprompt)
