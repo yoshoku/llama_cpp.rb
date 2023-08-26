@@ -1,3 +1,13 @@
+## [[0.4.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.3.8...v0.4.0)] - 2023-08-26
+
+**Breaking Changes**
+- Bump bundled llama.cpp from master-097e121 to master-b1060.
+  - Support new file format GGUF.
+    - You should re-convert / re-quantize your model files.
+  - Remove vocab methods.
+  - Move token_bos, token_eos, and token_nl methods to Context.
+  - Add text, score, and type methods to Context.
+
 ## [[0.3.8](https://github.com/yoshoku/llama_cpp.rb/compare/v0.3.7...v0.3.8)] - 2023-08-19
 
 - Bump bundled llama.cpp from master-9ca4abe to master-097e121.
