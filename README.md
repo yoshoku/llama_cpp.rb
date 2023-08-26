@@ -51,7 +51,7 @@ $ git clone https://huggingface.co/openlm-research/open_llama_7b
 $ cd ../
 $ python3 convert.py models/open_llama_7b
 $ make
-$ ./quantize ./models/open_llama_7b/ggml-model-f16.bin ./models/open_llama_7b/ggml-model-q4_0.bin q4_0
+$ ./quantize ./models/open_llama_7b/ggml-model-f16.gguf ./models/open_llama_7b/ggml-model-q4_0.bin q4_0
 ```
 
 An example of Ruby code that generates sentences with the quantization model is as follows:
