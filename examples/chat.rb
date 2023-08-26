@@ -101,7 +101,7 @@ class Chat < Thor # rubocop:disable Metrics/ClassLength, Style/Documentation
         last_n_tokens.shift
         last_n_tokens.push(id)
 
-        if id == LLaMACpp.token_eos
+        if id == context.token_eos
           id = token_newline.first
           unless antiprompt.empty?
             first_antiprompt = context.tokenize(text: antiprompt, add_bos: false)

@@ -101,7 +101,7 @@ module LLaMACpp
 
       embd.each { |token| output << context.token_to_str(token) }
 
-      break if !embd.empty? && embd[-1] == LLaMACpp.token_eos
+      break if !embd.empty? && embd[-1] == context.token_eos
     end
 
     output.join.delete_prefix(spaced_prompt).strip
