@@ -6,7 +6,7 @@
 # - https://github.com/ggerganov/llama.cpp/blob/master/examples/main/main.cpp
 # - https://github.com/ggerganov/llama.cpp/blob/master/examples/chat.sh
 
-require_relative '../lib/llama_cpp'
+require 'llama_cpp'
 require 'thor'
 require 'readline'
 
