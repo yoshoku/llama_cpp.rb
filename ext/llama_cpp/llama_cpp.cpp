@@ -815,6 +815,7 @@ public:
     rb_define_method(rb_cLLaMAModel, "tokenize", RUBY_METHOD_FUNC(_llama_model_tokenize_with_model), -1);
     rb_define_method(rb_cLLaMAModel, "desc", RUBY_METHOD_FUNC(_llama_model_get_model_desc), 0);
     rb_define_method(rb_cLLaMAModel, "size", RUBY_METHOD_FUNC(_llama_model_get_model_size), 0);
+    rb_define_method(rb_cLLaMAModel, "n_params", RUBY_METHOD_FUNC(_llama_model_get_model_n_params), 0);
   }
 
 private:
@@ -1051,6 +1052,11 @@ private:
   static VALUE _llama_model_get_model_size(VALUE self) {
     LLaMAModelWrapper* ptr = get_llama_model(self);
     return UINT2NUM(llama_model_size(ptr->model));
+  }
+
+  static VALUE _llama_model_get_model_n_params(VALUE self) {
+    LLaMAModelWrapper* ptr = get_llama_model(self);
+    return UINT2NUM(llama_model_n_params(ptr->model));
   }
 };
 

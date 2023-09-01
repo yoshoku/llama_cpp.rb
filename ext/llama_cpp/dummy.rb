@@ -238,6 +238,10 @@ module LLaMACpp
     # Returns the total size of all the tensors in the model in bytes
     # @return [Integer]
     def size; end
+
+    # Returns the number of parameters in the model
+    # @return [Integer]
+    def n_params; end
   end
 
   # Class for context

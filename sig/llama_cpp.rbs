@@ -80,6 +80,7 @@ module LLaMACpp
     def tokenize: (text: String, ?n_max_tokens: Integer, ?add_bos: bool) -> Array[Integer]
     def desc: () -> String
     def size: () -> Integer
+    def n_params: () -> Integer
   end
 
   class Timings
