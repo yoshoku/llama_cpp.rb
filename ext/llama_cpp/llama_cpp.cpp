@@ -1326,7 +1326,7 @@ public:
     rb_define_method(rb_cLLaMAContext, "token_bos", RUBY_METHOD_FUNC(_llama_context_token_bos), 0);
     rb_define_method(rb_cLLaMAContext, "token_eos", RUBY_METHOD_FUNC(_llama_context_token_eos), 0);
     rb_define_method(rb_cLLaMAContext, "token_nl", RUBY_METHOD_FUNC(_llama_context_token_nl), 0);
-    rb_define_method(rb_cLLaMAContext, "token_to_str", RUBY_METHOD_FUNC(_llama_context_token_to_str), 1);
+    rb_define_method(rb_cLLaMAContext, "token_to_piece", RUBY_METHOD_FUNC(_llama_context_token_to_piece), 1);
     rb_define_method(rb_cLLaMAContext, "n_vocab", RUBY_METHOD_FUNC(_llama_context_n_vocab), 0);
     rb_define_method(rb_cLLaMAContext, "n_ctx", RUBY_METHOD_FUNC(_llama_context_n_ctx), 0);
     rb_define_method(rb_cLLaMAContext, "n_embd", RUBY_METHOD_FUNC(_llama_context_n_embd), 0);
@@ -1567,7 +1567,7 @@ private:
     return output;
   }
 
-  static VALUE _llama_context_token_to_str(VALUE self, VALUE token_) {
+  static VALUE _llama_context_token_to_piece(VALUE self, VALUE token_) {
     LLaMAContextWrapper* ptr = get_llama_context(self);
     if (ptr->ctx == NULL) {
       rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
@@ -1575,10 +1575,10 @@ private:
     }
     const llama_token token = NUM2INT(token_);
     std::vector<char> result(8, 0);
-    const int n_tokens = llama_token_to_str(ptr->ctx, token, result.data(), result.size());
+    const int n_tokens = llama_token_to_piece(ptr->ctx, token, result.data(), result.size());
     if (n_tokens < 0) {
       result.resize(-n_tokens);
-      const int check = llama_token_to_str(ptr->ctx, token, result.data(), result.size());
+      const int check = llama_token_to_piece(ptr->ctx, token, result.data(), result.size());
       if (check != -n_tokens) {
         rb_raise(rb_eRuntimeError, "failed to convert");
         return Qnil;
