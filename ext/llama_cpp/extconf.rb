@@ -50,7 +50,7 @@ if with_config('accelerate')
 end
 
 if with_config('metal')
-  $CFLAGS << ' -DGGML_USE_METAL -DGGML_METAL_NDEBUG'
+  $CFLAGS << ' -DGGML_USE_METAL'
   $CXXFLAGS << ' -DGGML_USE_METAL'
   $LDFLAGS << ' -framework Foundation -framework Metal -framework MetalKit'
   $objs = %w[ggml.o ggml-alloc.o ggml-metal.o llama.o llama_cpp.o]
