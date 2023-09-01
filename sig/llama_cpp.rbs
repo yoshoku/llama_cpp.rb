@@ -78,7 +78,7 @@ module LLaMACpp
     def n_embd: () -> Integer
     def token_to_str: (Integer) -> String
     def tokenize: (text: String, ?n_max_tokens: Integer, ?add_bos: bool) -> Array[Integer]
-    def type: () -> String
+    def desc: () -> String
   end
 
   class Timings
