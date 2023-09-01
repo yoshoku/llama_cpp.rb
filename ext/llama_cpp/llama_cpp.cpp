@@ -811,7 +811,7 @@ public:
     rb_define_method(rb_cLLaMAModel, "n_vocab", RUBY_METHOD_FUNC(_llama_model_get_model_n_vocab), 0);
     rb_define_method(rb_cLLaMAModel, "n_ctx", RUBY_METHOD_FUNC(_llama_model_get_model_n_ctx), 0);
     rb_define_method(rb_cLLaMAModel, "n_embd", RUBY_METHOD_FUNC(_llama_model_get_model_n_embd), 0);
-    rb_define_method(rb_cLLaMAModel, "token_to_str", RUBY_METHOD_FUNC(_llama_model_token_to_str_with_model), 1);
+    rb_define_method(rb_cLLaMAModel, "token_to_piece", RUBY_METHOD_FUNC(_llama_model_token_to_piece_with_model), 1);
     rb_define_method(rb_cLLaMAModel, "tokenize", RUBY_METHOD_FUNC(_llama_model_tokenize_with_model), -1);
     rb_define_method(rb_cLLaMAModel, "desc", RUBY_METHOD_FUNC(_llama_model_get_model_desc), 0);
   }
@@ -974,7 +974,7 @@ private:
     return INT2NUM(llama_model_n_embd(ptr->model));
   }
 
-  static VALUE _llama_model_token_to_str_with_model(VALUE self, VALUE token_) {
+  static VALUE _llama_model_token_to_piece_with_model(VALUE self, VALUE token_) {
     if (!RB_INTEGER_TYPE_P(token_)) {
       rb_raise(rb_eArgError, "token must be an integer");
       return Qnil;
@@ -982,10 +982,10 @@ private:
     const llama_token token = NUM2INT(token_);
     LLaMAModelWrapper* ptr = get_llama_model(self);
     std::vector<char> result(8, 0);
-    const int n_tokens = llama_token_to_str_with_model(ptr->model, token, result.data(), result.size());
+    const int n_tokens = llama_token_to_piece_with_model(ptr->model, token, result.data(), result.size());
     if (n_tokens < 0) {
       result.resize(-n_tokens);
-      const int check = llama_token_to_str_with_model(ptr->model, token, result.data(), result.size());
+      const int check = llama_token_to_piece_with_model(ptr->model, token, result.data(), result.size());
       if (check != -n_tokens) {
         rb_raise(rb_eRuntimeError, "failed to convert");
         return Qnil;
