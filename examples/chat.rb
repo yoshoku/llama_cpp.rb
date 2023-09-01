@@ -6,7 +6,7 @@
 # - https://github.com/ggerganov/llama.cpp/blob/master/examples/main/main.cpp
 # - https://github.com/ggerganov/llama.cpp/blob/master/examples/chat.sh
 
-require 'llama_cpp'
+require_relative '../lib/llama_cpp'
 require 'thor'
 require 'readline'
 
@@ -122,7 +122,7 @@ class Chat < Thor # rubocop:disable Metrics/ClassLength, Style/Documentation
 
       if input_echo
         output = []
-        embd.each { |token| output << context.token_to_str(token) }
+        embd.each { |token| output << context.token_to_piece(token) }
         output_str = output.join
         output_str.chomp!(antiprompt) if first_input
         print(output_str)
@@ -131,7 +131,7 @@ class Chat < Thor # rubocop:disable Metrics/ClassLength, Style/Documentation
       if embd_input.size <= n_consumed
         if antiprompt.size.positive?
           last_output = []
-          last_n_tokens.each { |token| last_output << context.token_to_str(token) }
+          last_n_tokens.each { |token| last_output << context.token_to_piece(token) }
           last_output_str = last_output.join
 
           search_start_pos = last_output_str.size > antiprompt.size ? last_output_str.size - antiprompt.size : 0
