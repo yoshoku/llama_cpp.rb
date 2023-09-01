@@ -221,7 +221,7 @@ module LLaMACpp
     # Converts token to Ruby String.
     # @param token [Integer] The token to be converted.
     # @return [String]
-    def token_to_str(token); end
+    def token_to_piece(token); end
 
     # Returns the logits.
     #
@@ -233,7 +233,7 @@ module LLaMACpp
 
     # Returns the model type.
     # @return [String]
-    def type; end
+    def desc; end
   end
 
   # Class for context
@@ -314,7 +314,7 @@ module LLaMACpp
     #
     # @param token_id [Integer]
     # @return [String]
-    def token_to_str(token_id) end
+    def token_to_piece(token_id) end
 
     # Returns the number of vocabulary.
     #
