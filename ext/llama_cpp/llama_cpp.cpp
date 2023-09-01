@@ -814,6 +814,7 @@ public:
     rb_define_method(rb_cLLaMAModel, "token_to_piece", RUBY_METHOD_FUNC(_llama_model_token_to_piece_with_model), 1);
     rb_define_method(rb_cLLaMAModel, "tokenize", RUBY_METHOD_FUNC(_llama_model_tokenize_with_model), -1);
     rb_define_method(rb_cLLaMAModel, "desc", RUBY_METHOD_FUNC(_llama_model_get_model_desc), 0);
+    rb_define_method(rb_cLLaMAModel, "size", RUBY_METHOD_FUNC(_llama_model_get_model_size), 0);
   }
 
 private:
@@ -1045,6 +1046,11 @@ private:
     char buf[128];
     llama_model_desc(ptr->model, buf, sizeof(buf));
     return rb_str_new_cstr(buf);
+  }
+
+  static VALUE _llama_model_get_model_size(VALUE self) {
+    LLaMAModelWrapper* ptr = get_llama_model(self);
+    return UINT2NUM(llama_model_size(ptr->model));
   }
 };
 

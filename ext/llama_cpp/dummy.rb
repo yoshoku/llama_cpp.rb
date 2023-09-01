@@ -234,6 +234,10 @@ module LLaMACpp
     # Returns the model type.
     # @return [String]
     def desc; end
+
+    # Returns the total size of all the tensors in the model in bytes
+    # @return [Integer]
+    def size; end
   end
 
   # Class for context
