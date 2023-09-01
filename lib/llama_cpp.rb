@@ -99,7 +99,7 @@ module LLaMACpp
         end
       end
 
-      embd.each { |token| output << context.token_to_str(token) }
+      embd.each { |token| output << context.token_to_piece(token) }
 
       break if !embd.empty? && embd[-1] == context.token_eos
     end
