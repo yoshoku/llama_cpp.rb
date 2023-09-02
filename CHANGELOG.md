@@ -1,3 +1,12 @@
+## [[0.5.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.4.0...v0.5.0)] - 2023-09-02
+
+**Breaking Changes**
+- Bump bundled llama.cpp from master-b1060 to master-b1140.
+  - Rename `token_to_str` method on Context to `token_to_piece` method.
+  - Rename `token_to_str` method on Model to `token_to_piece` method.
+  - Rename `type` method on Model to `desc` method.
+  - Add `size` and `n_params` methods to Model.
+
 ## [[0.4.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.3.8...v0.4.0)] - 2023-08-26
 
 **Breaking Changes**
