@@ -164,6 +164,7 @@ extern "C" {
         enum llama_ftype ftype;      // quantize to this llama_ftype
         bool allow_requantize;       // allow quantizing non-f32/f16 tensors
         bool quantize_output_tensor; // quantize output.weight
+        bool only_copy;              // only copy tensors - ftype, allow_requantize and quantize_output_tensor are ignored
     } llama_model_quantize_params;
 
     // grammar types
@@ -408,6 +409,8 @@ extern "C" {
                                  size_t    start_rule_index);
 
     LLAMA_API void llama_grammar_free(struct llama_grammar * grammar);
+
+    LLAMA_API struct llama_grammar * llama_grammar_copy(const struct llama_grammar * grammar);
 
     //
     // Sampling functions

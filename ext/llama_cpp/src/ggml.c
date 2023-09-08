@@ -104,6 +104,9 @@ typedef void * thread_ret_t;
 #include <unistd.h>
 
 #endif
+#ifdef GGML_USE_CPU_HBM
+#include <hbwmalloc.h>
+#endif
 
 // __FMA__ and __F16C__ are not defined in MSVC, however they are implied with AVX2/AVX512
 #if defined(_MSC_VER) && (defined(__AVX2__) || defined(__AVX512F__))
@@ -192,9 +195,15 @@ typedef void * thread_ret_t;
 #define GGML_ALIGNED_FREE(ptr)    _aligned_free(ptr)
 #else
 inline static void * ggml_aligned_malloc(size_t size) {
+    if (size == 0) {
+        GGML_PRINT("WARNING: Behavior may be unexpected when allocating 0 bytes for ggml_aligned_malloc!\n");
+        return NULL;
+    }
     void * aligned_memory = NULL;
-#ifdef GGML_USE_METAL
-    int result = posix_memalign(&aligned_memory, getpagesize(), size);
+#ifdef GGML_USE_CPU_HBM
+    int result = hbw_posix_memalign(&aligned_memory, 16, size);
+#elif GGML_USE_METAL
+    int result = posix_memalign(&aligned_memory, sysconf(_SC_PAGESIZE), size);
 #else
     int result = posix_memalign(&aligned_memory, GGML_MEM_ALIGN, size);
 #endif
@@ -215,7 +224,11 @@ inline static void * ggml_aligned_malloc(size_t size) {
     return aligned_memory;
 }
 #define GGML_ALIGNED_MALLOC(size) ggml_aligned_malloc(size)
+#ifdef GGML_USE_CPU_HBM
+#define GGML_ALIGNED_FREE(ptr)    if(NULL != ptr) hbw_free(ptr)
+#else
 #define GGML_ALIGNED_FREE(ptr)    free(ptr)
+#endif
 #endif
 
 #define UNUSED GGML_UNUSED
@@ -817,58 +830,12 @@ static inline float hsum_float_4x4(const __m128 a, const __m128 b, const __m128 
 
 #if !defined(__aarch64__)
 
-inline static uint16_t vaddvq_u8(uint8x16_t v) {
-    return
-        (uint16_t)vgetq_lane_u8(v, 0)  + (uint16_t)vgetq_lane_u8(v, 1)  +
-        (uint16_t)vgetq_lane_u8(v, 2)  + (uint16_t)vgetq_lane_u8(v, 3)  +
-        (uint16_t)vgetq_lane_u8(v, 4)  + (uint16_t)vgetq_lane_u8(v, 5)  +
-        (uint16_t)vgetq_lane_u8(v, 6)  + (uint16_t)vgetq_lane_u8(v, 7)  +
-        (uint16_t)vgetq_lane_u8(v, 8)  + (uint16_t)vgetq_lane_u8(v, 9)  +
-        (uint16_t)vgetq_lane_u8(v, 10) + (uint16_t)vgetq_lane_u8(v, 11) +
-        (uint16_t)vgetq_lane_u8(v, 12) + (uint16_t)vgetq_lane_u8(v, 13) +
-        (uint16_t)vgetq_lane_u8(v, 14) + (uint16_t)vgetq_lane_u8(v, 15);
-}
-
-inline static int16_t vaddvq_s8(int8x16_t v) {
-    return
-        (int16_t)vgetq_lane_s8(v, 0)  + (int16_t)vgetq_lane_s8(v, 1)  +
-        (int16_t)vgetq_lane_s8(v, 2)  + (int16_t)vgetq_lane_s8(v, 3)  +
-        (int16_t)vgetq_lane_s8(v, 4)  + (int16_t)vgetq_lane_s8(v, 5)  +
-        (int16_t)vgetq_lane_s8(v, 6)  + (int16_t)vgetq_lane_s8(v, 7)  +
-        (int16_t)vgetq_lane_s8(v, 8)  + (int16_t)vgetq_lane_s8(v, 9)  +
-        (int16_t)vgetq_lane_s8(v, 10) + (int16_t)vgetq_lane_s8(v, 11) +
-        (int16_t)vgetq_lane_s8(v, 12) + (int16_t)vgetq_lane_s8(v, 13) +
-        (int16_t)vgetq_lane_s8(v, 14) + (int16_t)vgetq_lane_s8(v, 15);
-}
-
-inline static int32_t vaddvq_s16(int16x8_t v) {
-    return
-        (int32_t)vgetq_lane_s16(v, 0) + (int32_t)vgetq_lane_s16(v, 1) +
-        (int32_t)vgetq_lane_s16(v, 2) + (int32_t)vgetq_lane_s16(v, 3) +
-        (int32_t)vgetq_lane_s16(v, 4) + (int32_t)vgetq_lane_s16(v, 5) +
-        (int32_t)vgetq_lane_s16(v, 6) + (int32_t)vgetq_lane_s16(v, 7);
-}
-
-inline static uint32_t vaddvq_u16(uint16x8_t v) {
-    return
-        (uint32_t)vgetq_lane_u16(v, 0) + (uint32_t)vgetq_lane_u16(v, 1) +
-        (uint32_t)vgetq_lane_u16(v, 2) + (uint32_t)vgetq_lane_u16(v, 3) +
-        (uint32_t)vgetq_lane_u16(v, 4) + (uint32_t)vgetq_lane_u16(v, 5) +
-        (uint32_t)vgetq_lane_u16(v, 6) + (uint32_t)vgetq_lane_u16(v, 7);
-}
-
 inline static int32_t vaddvq_s32(int32x4_t v) {
     return vgetq_lane_s32(v, 0) + vgetq_lane_s32(v, 1) + vgetq_lane_s32(v, 2) + vgetq_lane_s32(v, 3);
 }
 
 inline static float vaddvq_f32(float32x4_t v) {
     return vgetq_lane_f32(v, 0) + vgetq_lane_f32(v, 1) + vgetq_lane_f32(v, 2) + vgetq_lane_f32(v, 3);
-}
-
-inline static float vminvq_f32(float32x4_t v) {
-    return
-        MIN(MIN(vgetq_lane_f32(v, 0), vgetq_lane_f32(v, 1)),
-            MIN(vgetq_lane_f32(v, 2), vgetq_lane_f32(v, 3)));
 }
 
 inline static float vmaxvq_f32(float32x4_t v) {
@@ -4612,6 +4579,11 @@ struct ggml_context * ggml_init(struct ggml_init_params params) {
         return NULL;
     }
 
+    // allow to call ggml_init with 0 size
+    if (params.mem_size == 0) {
+        params.mem_size = GGML_MEM_ALIGN;
+    }
+
     const size_t mem_size = params.mem_buffer ? params.mem_size : GGML_PAD(params.mem_size, GGML_MEM_ALIGN);
 
     *ctx = (struct ggml_context) {
@@ -4814,7 +4786,7 @@ static struct ggml_tensor * ggml_new_tensor_impl(
 
     size_t obj_alloc_size = 0;
 
-    if (view_src == NULL && ctx->no_alloc == false) {
+    if (view_src == NULL && !ctx->no_alloc) {
         if (ctx->scratch.data != NULL) {
             // allocate tensor data in the scratch buffer
             if (ctx->scratch.offs + data_size > ctx->scratch.size) {
@@ -5515,7 +5487,7 @@ static struct ggml_tensor * ggml_mul_impl(
     }
 
     if (inplace) {
-        GGML_ASSERT(is_node == false);
+        GGML_ASSERT(!is_node);
     }
 
     struct ggml_tensor * result = inplace ? ggml_view_tensor(ctx, a) : ggml_dup_tensor(ctx, a);
@@ -5558,7 +5530,7 @@ static struct ggml_tensor * ggml_div_impl(
     }
 
     if (inplace) {
-        GGML_ASSERT(is_node == false);
+        GGML_ASSERT(!is_node);
     }
 
     struct ggml_tensor * result = inplace ? ggml_view_tensor(ctx, a) : ggml_dup_tensor(ctx, a);
@@ -20003,7 +19975,7 @@ struct gguf_context * gguf_init_from_file(const char * fname, struct gguf_init_p
 
         struct ggml_tensor * data = NULL;
 
-        if (params.no_alloc == false) {
+        if (!params.no_alloc) {
             data = ggml_new_tensor_1d(ctx_data, GGML_TYPE_I8, ctx->size);
 
             ok = ok && data != NULL;
@@ -20044,7 +20016,7 @@ struct gguf_context * gguf_init_from_file(const char * fname, struct gguf_init_p
             }
 
             // point the data member to the appropriate location in the binary blob using the tensor infos
-            if (params.no_alloc == false) {
+            if (!params.no_alloc) {
               //cur->data = (char *) data->data + ctx->infos[i].offset - ctx->offset; // offset from start of file
                 cur->data = (char *) data->data + ctx->infos[i].offset;               // offset from data
             }
