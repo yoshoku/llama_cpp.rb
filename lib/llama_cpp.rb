@@ -104,7 +104,7 @@ module LLaMACpp
       break if !embd.empty? && embd[-1] == context.token_eos
     end
 
-    output.join.delete_prefix(spaced_prompt).strip
+    output.join.force_encoding('UTF-8').delete_prefix(spaced_prompt).strip
   end
 end
 
