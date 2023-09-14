@@ -692,6 +692,14 @@ module LLaMACpp
     # Returns the flag to quantize output.weight.
     # @return [Boolean]
     def quantize_output_tensor; end
+
+    # Sets the flag to only copy tensors.
+    # @param flag [Boolean]
+    def only_copy=(flag); end
+
+    # Returns the flag to only copy tensors.
+    # @return [Boolean]
+    def only_copy; end
   end
 
   # Class for grammar element.

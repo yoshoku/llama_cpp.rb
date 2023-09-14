@@ -188,6 +188,8 @@ module LLaMACpp
     def allow_quantization=: (bool) -> bool
     def quantize_output_tensor: () -> bool
     def quantize_output_tensor=: (bool) -> bool
+    def only_copy: () -> bool
+    def only_copy=: (bool) -> bool
   end
 
   class Params = ContextParams

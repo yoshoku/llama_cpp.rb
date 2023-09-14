@@ -692,6 +692,8 @@ public:
     rb_define_method(rb_cLLaMAModelQuantizeParams, "allow_requantize", RUBY_METHOD_FUNC(_llama_model_quantize_params_get_allow_requantize), 0);
     rb_define_method(rb_cLLaMAModelQuantizeParams, "quantize_output_tensor=", RUBY_METHOD_FUNC(_llama_model_quantize_params_set_quantize_output_tensor), 1);
     rb_define_method(rb_cLLaMAModelQuantizeParams, "quantize_output_tensor", RUBY_METHOD_FUNC(_llama_model_quantize_params_get_quantize_output_tensor), 0);
+    rb_define_method(rb_cLLaMAModelQuantizeParams, "only_copy=", RUBY_METHOD_FUNC(_llama_model_quantize_params_set_only_copy), 1);
+    rb_define_method(rb_cLLaMAModelQuantizeParams, "only_copy", RUBY_METHOD_FUNC(_llama_model_quantize_params_get_only_copy), 0);
   }
 
 private:
@@ -751,6 +753,18 @@ private:
   static VALUE _llama_model_quantize_params_get_quantize_output_tensor(VALUE self) {
     LLaMAModelQuantizeParamsWrapper* ptr = get_llama_model_quantize_params(self);
     return ptr->params.quantize_output_tensor ? Qtrue : Qfalse;
+  }
+
+  // only_copy
+  static VALUE _llama_model_quantize_params_set_only_copy(VALUE self, VALUE only_copy) {
+    LLaMAModelQuantizeParamsWrapper* ptr = get_llama_model_quantize_params(self);
+    ptr->params.only_copy = RTEST(only_copy) ? true : false;
+    return ptr->params.only_copy ? Qtrue : Qfalse;
+  }
+
+  static VALUE _llama_model_quantize_params_get_only_copy(VALUE self) {
+    LLaMAModelQuantizeParamsWrapper* ptr = get_llama_model_quantize_params(self);
+    return ptr->params.only_copy ? Qtrue : Qfalse;
   }
 };
 
