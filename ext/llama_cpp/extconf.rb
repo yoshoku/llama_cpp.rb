@@ -112,7 +112,7 @@ create_makefile('llama_cpp/llama_cpp')
 if with_config('cublas')
   File.open('Makefile', 'a') do |f|
     f.puts 'ggml-cuda.o: ggml-cuda.cu ggml-cuda.h'
-    f.puts "\tnvcc -arch=native -c -o $@ $<"
+    f.puts "\tnvcc -shared -Xcompiler -fPIC -arch=native -c -o $@ $<"
   end
 end
 
