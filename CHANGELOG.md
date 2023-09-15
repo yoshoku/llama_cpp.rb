@@ -1,11 +1,19 @@
+## [[0.5.2](https://github.com/yoshoku/llama_cpp.rb/compare/v0.5.1...v0.5.2)] - 2023-09-16
+
+- Bump bundled llama.cpp from b1198 to b1.
+  - Add `n_ctx_train` method to Model and Context.
+- Add nvcc option to avoid link error ([#8](https://github.com/yoshoku/llama_cpp.rb/pull/8)).
+- Set encoding on output of `generate` module function to avoid encoding error ([#9](https://github.com/yoshoku/llama_cpp.rb/pull/9)).
+- Add `only_copy` option to ModelQuantizeParams.
+
 ## [[0.5.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.5.0...v0.5.1)] - 2023-09-08
 
-- Bump bundled llama.cpp from master-b1140 to master-b1198.
+- Bump bundled llama.cpp from b1140 to b1198.
 
 ## [[0.5.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.4.0...v0.5.0)] - 2023-09-02
 
 **Breaking Changes**
-- Bump bundled llama.cpp from master-b1060 to master-b1140.
+- Bump bundled llama.cpp from b1060 to b1140.
   - Rename `token_to_str` method on Context to `token_to_piece` method.
   - Rename `token_to_str` method on Model to `token_to_piece` method.
   - Rename `type` method on Model to `desc` method.
@@ -14,7 +22,7 @@
 ## [[0.4.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.3.8...v0.4.0)] - 2023-08-26
 
 **Breaking Changes**
-- Bump bundled llama.cpp from master-097e121 to master-b1060.
+- Bump bundled llama.cpp from master-097e121 to b1060.
   - Support new file format GGUF.
     - You should re-convert / re-quantize your model files.
   - Remove vocab methods.
