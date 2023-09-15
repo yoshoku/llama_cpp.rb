@@ -215,6 +215,10 @@ module LLaMACpp
     # @return [Integer]
     def n_ctx; end
 
+    # Returns the number of context of training.
+    # @return [Integer]
+    def n_ctx_train; end
+
     # Returns the number of embedding.
     def n_embd; end
 
