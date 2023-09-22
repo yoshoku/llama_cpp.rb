@@ -1046,7 +1046,7 @@ private:
 
     llama_token* tokens = ALLOCA_N(llama_token, n_max_tokens);
     LLaMAModelWrapper* ptr = get_llama_model(self);
-    const int n_tokens = llama_tokenize_with_model(ptr->model, text.c_str(), tokens, n_max_tokens, add_bos);
+    const int n_tokens = llama_tokenize_with_model(ptr->model, text.c_str(), text.size(), tokens, n_max_tokens, add_bos);
 
     if (n_tokens < 0) {
       rb_raise(rb_eRuntimeError, "failed to tokenize. The numebr of tokens (%d) is greater than n_max_tokens.", -n_tokens);
@@ -1585,7 +1585,7 @@ private:
       rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
       return Qnil;
     }
-    const int n = llama_tokenize(ptr->ctx, text.c_str(), tokens.data(), n_max_tokens, add_bos);
+    const int n = llama_tokenize(ptr->ctx, text.c_str(), text.size(), tokens.data(), n_max_tokens, add_bos);
     if (n < 0) {
       rb_raise(rb_eRuntimeError, "Failed to tokenize");
       return Qnil;
