@@ -1596,10 +1596,11 @@ private:
     }
 
     VALUE model = rb_iv_get(self, "@model");
+    LLaMAModelWrapper* model_ptr = RbLLaMAModel::get_llama_model(model);
     VALUE params = rb_iv_get(model, "@params");
     LLaMAContextParamsWrapper* prms_ptr = RbLLaMAContextParams::get_llama_context_params(params);
     const int n_tokens = prms_ptr->params.logits_all ? NUM2INT(rb_iv_get(self, "@n_tokens")) : 1;
-    const int n_vocab = llama_n_vocab(ptr->ctx);
+    const int n_vocab = llama_n_vocab(model_ptr->model);
     const float* logits = llama_get_logits(ptr->ctx);
     VALUE output = rb_ary_new();
     for (int i = 0; i < n_tokens * n_vocab; i++) {
@@ -1616,6 +1617,7 @@ private:
       return Qnil;
     }
     VALUE model = rb_iv_get(self, "@model");
+    LLaMAModelWrapper* model_ptr = RbLLaMAModel::get_llama_model(model);
     VALUE params = rb_iv_get(model, "@params");
     LLaMAContextParamsWrapper* prms_ptr = RbLLaMAContextParams::get_llama_context_params(params);
     if (!prms_ptr->params.embedding) {
@@ -1627,7 +1629,7 @@ private:
       return Qnil;
     }
 
-    const int n_embd = llama_n_embd(ptr->ctx);
+    const int n_embd = llama_n_embd(model_ptr->model);
     const float* embd = llama_get_embeddings(ptr->ctx);
     VALUE output = rb_ary_new();
     for (int i = 0; i < n_embd; i++) {
