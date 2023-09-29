@@ -203,9 +203,10 @@ module LLaMACpp
     # Applies LLoRa from file.
     #
     # @param lora_path [String] The path to the LoRA file.
+    # @param scale [Float] The scale.
     # @param base_model_path [String] The path to the base model file.
     # @param n_threads [Integer] The number of threads.
-    def apply_lora_from_file(lora_path:, base_model_path: nil, n_threads: 1); end
+    def apply_lora_from_file(lora_path:, scale: 1.0, base_model_path: nil, n_threads: 1); end
 
     # Returns the number of vocabulary.
     # @return [Integer]

@@ -72,7 +72,7 @@ module LLaMACpp
     def empty?: () -> bool
     def free: () -> void
     def load: (model_path: String, params: ::LLaMACpp::ModelParams) -> void
-    def apply_lora_from_file: (lora_path: String, ?base_model_path: String, ?n_threads: Integer) -> void
+    def apply_lora_from_file: (lora_path: String, ?scale: Float, ?base_model_path: String, ?n_threads: Integer) -> void
     def n_vocab: () -> Integer
     def n_ctx: () -> Integer
     def n_ctx_train: () -> Integer

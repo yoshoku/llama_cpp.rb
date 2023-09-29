@@ -1011,10 +1011,10 @@ private:
 
   static VALUE _llama_model_apply_lora_from_file(int argc, VALUE* argv, VALUE self) {
     VALUE kw_args = Qnil;
-    ID kw_table[3] = { rb_intern("lora_path"), rb_intern("base_model_path"), rb_intern("n_threads") };
-    VALUE kw_values[3] = { Qundef, Qundef, Qundef };
+    ID kw_table[4] = { rb_intern("lora_path"), rb_intern("base_model_path"), rb_intern("n_threads"), rb_intern("scale") };
+    VALUE kw_values[4] = { Qundef, Qundef, Qundef, Qundef };
     rb_scan_args(argc, argv, ":", &kw_args);
-    rb_get_kwargs(kw_args, kw_table, 1, 2, kw_values);
+    rb_get_kwargs(kw_args, kw_table, 1, 3, kw_values);
 
     if (!RB_TYPE_P(kw_values[0], T_STRING)) {
       rb_raise(rb_eArgError, "lora_path must be a string");
@@ -1028,13 +1028,18 @@ private:
       rb_raise(rb_eArgError, "n_threads must be an integer");
       return Qnil;
     }
+    if (kw_values[3] != Qundef && !RB_FLOAT_TYPE_P(kw_values[3])) {
+      rb_raise(rb_eArgError, "scale must be a float");
+      return Qnil;
+    }
 
     const char* lora_path = StringValueCStr(kw_values[0]);
     const char* base_model_path = kw_values[1] == Qundef ? NULL : StringValueCStr(kw_values[1]);
     const int n_threads = kw_values[2] == Qundef ? 1 : NUM2INT(kw_values[2]);
+    const float scale = kw_values[3] == Qundef ? 1.0 : NUM2DBL(kw_values[3]);
 
     LLaMAModelWrapper* ptr = get_llama_model(self);
-    if (llama_model_apply_lora_from_file(ptr->model, lora_path, base_model_path, n_threads) != 0) {
+    if (llama_model_apply_lora_from_file(ptr->model, lora_path, scale, base_model_path, n_threads) != 0) {
       rb_raise(rb_eRuntimeError, "Failed to apply LoRA");
       return Qnil;
     }
