@@ -315,12 +315,6 @@ module LLaMACpp
     # @return [NilClass]
     def eval_embd(embd:, n_past:, n_tokens: nil); end
 
-    # Export a static computation graph for context.
-    #
-    # @param fname [String] The path to the export file.
-    # @return [Boolean]
-    def eval_export(fname); end
-
     # Returns the embeddings.
     #
     # @return [Array<Float>]

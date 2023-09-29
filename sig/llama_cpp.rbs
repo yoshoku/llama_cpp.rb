@@ -126,7 +126,6 @@ module LLaMACpp
     def token_nl: () -> Integer
     def eval: (tokens: Array[Integer], n_past: Integer, ?n_tokens: Integer) -> void
     def eval_embd: (tokens: Array[Float], n_past: Integer, ?n_tokens: Integer) -> void
-    def eval_export: (String) -> bool
     def logits: () -> Array[Float]
     def n_ctx: () -> Integer
     def timings: () -> ::LLaMACpp::Timings

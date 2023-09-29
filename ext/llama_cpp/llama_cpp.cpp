@@ -1412,7 +1412,6 @@ public:
     rb_define_method(rb_cLLaMAContext, "initialize", RUBY_METHOD_FUNC(_llama_context_initialize), -1);
     rb_define_method(rb_cLLaMAContext, "eval", RUBY_METHOD_FUNC(_llama_context_eval), -1);
     rb_define_method(rb_cLLaMAContext, "eval_embd", RUBY_METHOD_FUNC(_llama_context_eval_embd), -1);
-    rb_define_method(rb_cLLaMAContext, "eval_export", RUBY_METHOD_FUNC(_llama_context_eval_export), 1);
     rb_define_method(rb_cLLaMAContext, "logits", RUBY_METHOD_FUNC(_llama_context_logits), 0);
     rb_define_method(rb_cLLaMAContext, "embeddings", RUBY_METHOD_FUNC(_llama_context_embeddings), 0);
     rb_define_method(rb_cLLaMAContext, "text", RUBY_METHOD_FUNC(_llama_context_text), 1);
@@ -1583,24 +1582,6 @@ private:
     rb_iv_set(self, "@has_evaluated", Qtrue);
 
     return Qnil;
-  }
-
-  static VALUE _llama_context_eval_export(VALUE self, VALUE fname_) {
-    LLaMAContextWrapper* ptr = get_llama_context(self);
-    if (ptr->ctx == NULL) {
-      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
-      return Qnil;
-    }
-    if (!RB_TYPE_P(fname_, T_STRING)) {
-      rb_raise(rb_eArgError, "fname must be a string");
-      return Qnil;
-    }
-    const char* fname = StringValueCStr(fname_);
-    if (llama_eval_export(ptr->ctx, fname) != 0) {
-      return Qfalse;
-    }
-    RB_GC_GUARD(fname_);
-    return Qtrue;
   }
 
   static VALUE _llama_context_logits(VALUE self) {
