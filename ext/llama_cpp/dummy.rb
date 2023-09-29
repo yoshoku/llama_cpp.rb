@@ -542,6 +542,14 @@ module LLaMACpp
 
   # Class for parameters
   class ContextParams
+    # Sets the random seed.
+    # @param seed [Integer]
+    def seed=(seed); end
+
+    # Return the random seed.
+    # @return [Integer]
+    def seed; end
+
     # Sets the number of text context
     # @param n_ctx [Integer]
     def n_ctx=(n_ctx); end
@@ -557,26 +565,6 @@ module LLaMACpp
     # Returns the batch size of prompt processing.
     # @return [Integer]
     def n_batch; end
-
-    # Sets the number of layers to stor in VRAM.
-    # @param n_gpu_layers [Integer]
-    def n_gpu_layers=(n_gpu_layers); end
-
-    # Returns the number of layers to stor in VRAM.
-    # @return [Integer]
-    def n_gpu_layers; end
-
-    # Sets the GPU that is used.
-    # @param main_gpu [Integer]
-    def main_gpu=(main_gpu); end
-
-    # Returns the GPU that is used.
-    # @return [Integer]
-    def main_gpu; end
-
-    # Returns the how layers are split across multi-GPUs.
-    # @return [Array<Float>]
-    def tensor_split; end
 
     # Sets the RoPE base frequency.
     # @param rope_freq_base [Float]
@@ -594,14 +582,6 @@ module LLaMACpp
     # @return [Float]
     def rope_freq_scale; end
 
-    # Sets the flag to reduce VRAM usage at the cost of performance.
-    # @param flag [Boolean]
-    def low_vram=(flag); end
-
-    # Returns the flag to reduce VRAM usage at the cost of performance.
-    # @return [Boolean]
-    def low_vram; end
-
     # Sets the flag to use experimental mul_mat_q kernels.
     # @param flag [Boolean]
     def mul_mat_q=(flag); end
@@ -609,14 +589,6 @@ module LLaMACpp
     # Returns the flag to use experimental mul_mat_q kernels.
     # @return [Boolean]
     def mul_mat_q; end
-
-    # Sets the random seed.
-    # @param seed [Integer]
-    def seed=(seed); end
-
-    # Return the random seed.
-    # @return [Integer]
-    def seed; end
 
     # Sets the flag for using fp16 for KV cache.
     # @param flag [Boolean]
@@ -633,30 +605,6 @@ module LLaMACpp
     # Returns the flag to compute all logits.
     # @return [Boolean]
     def logits_all; end
-
-    # Sets the flag to load only vocabulary.
-    # @param flag [Boolean]
-    def vocab_only=(flag); end
-
-    # Returns the flag to load only vocabulary.
-    # @return [Boolean]
-    def vocab_only; end
-
-    # Sets the flag to force system to keep model in memory.
-    # @param flag [Boolean]
-    def use_mlock=(flag); end
-
-    # Returns the flag to force system to keep model in memory.
-    # @return [Boolean]
-    def use_mlock; end
-
-    # Sets the flag to use mmap.
-    # @param flag [Boolean]
-    def use_mmap=(flag); end
-
-    # Returns the flag to use mmap.
-    # @return [Boolean]
-    def use_mmap; end
 
     # Sets the flag for embedding mode only.
     # @param flag [Boolean]

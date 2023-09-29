@@ -399,35 +399,26 @@ public:
     rb_cLLaMAContextParams = rb_define_class_under(outer, "ContextParams", rb_cObject);
     rb_define_alloc_func(rb_cLLaMAContextParams, llama_context_params_alloc);
     // rb_define_method(rb_cLLaMAContextParams, "initialize", RUBY_METHOD_FUNC(_llama_context_params_init), 0);
+    rb_define_method(rb_cLLaMAContextParams, "seed=", RUBY_METHOD_FUNC(_llama_context_params_set_seed), 1);
+    rb_define_method(rb_cLLaMAContextParams, "seed", RUBY_METHOD_FUNC(_llama_context_params_get_seed), 0);
     rb_define_method(rb_cLLaMAContextParams, "n_ctx=", RUBY_METHOD_FUNC(_llama_context_params_set_n_ctx), 1);
     rb_define_method(rb_cLLaMAContextParams, "n_ctx", RUBY_METHOD_FUNC(_llama_context_params_get_n_ctx), 0);
     rb_define_method(rb_cLLaMAContextParams, "n_batch=", RUBY_METHOD_FUNC(_llama_context_params_set_n_batch), 1);
     rb_define_method(rb_cLLaMAContextParams, "n_batch", RUBY_METHOD_FUNC(_llama_context_params_get_n_batch), 0);
-    rb_define_method(rb_cLLaMAContextParams, "n_gpu_layers=", RUBY_METHOD_FUNC(_llama_context_params_set_n_gpu_layers), 1);
-    rb_define_method(rb_cLLaMAContextParams, "n_gpu_layers", RUBY_METHOD_FUNC(_llama_context_params_get_n_gpu_layers), 0);
-    rb_define_method(rb_cLLaMAContextParams, "main_gpu=", RUBY_METHOD_FUNC(_llama_context_params_set_main_gpu), 1);
-    rb_define_method(rb_cLLaMAContextParams, "main_gpu", RUBY_METHOD_FUNC(_llama_context_params_get_main_gpu), 0);
-    rb_define_method(rb_cLLaMAContextParams, "tensor_split", RUBY_METHOD_FUNC(_llama_context_params_get_tensor_split), 0);
+    rb_define_method(rb_cLLaMAContextParams, "n_threads=", RUBY_METHOD_FUNC(_llama_context_params_set_n_threads), 1);
+    rb_define_method(rb_cLLaMAContextParams, "n_threads", RUBY_METHOD_FUNC(_llama_context_params_get_n_threads), 0);
+    rb_define_method(rb_cLLaMAContextParams, "n_threads_batch=", RUBY_METHOD_FUNC(_llama_context_params_set_n_threads_batch), 1);
+    rb_define_method(rb_cLLaMAContextParams, "n_threads_batch", RUBY_METHOD_FUNC(_llama_context_params_get_n_threads_batch), 0);
     rb_define_method(rb_cLLaMAContextParams, "rope_freq_base=", RUBY_METHOD_FUNC(_llama_context_params_set_rope_freq_base), 1);
     rb_define_method(rb_cLLaMAContextParams, "rope_freq_base", RUBY_METHOD_FUNC(_llama_context_params_get_rope_freq_base), 0);
     rb_define_method(rb_cLLaMAContextParams, "rope_freq_scale=", RUBY_METHOD_FUNC(_llama_context_params_set_rope_freq_scale), 1);
     rb_define_method(rb_cLLaMAContextParams, "rope_freq_scale", RUBY_METHOD_FUNC(_llama_context_params_get_rope_freq_scale), 0);
-    rb_define_method(rb_cLLaMAContextParams, "low_vram=", RUBY_METHOD_FUNC(_llama_context_params_set_low_vram), 1);
-    rb_define_method(rb_cLLaMAContextParams, "low_vram", RUBY_METHOD_FUNC(_llama_context_params_get_low_vram), 0);
     rb_define_method(rb_cLLaMAContextParams, "mul_mat_q=", RUBY_METHOD_FUNC(_llama_context_params_set_mul_mat_q), 1);
     rb_define_method(rb_cLLaMAContextParams, "mul_mat_q", RUBY_METHOD_FUNC(_llama_context_params_get_mul_mat_q), 0);
-    rb_define_method(rb_cLLaMAContextParams, "seed=", RUBY_METHOD_FUNC(_llama_context_params_set_seed), 1);
-    rb_define_method(rb_cLLaMAContextParams, "seed", RUBY_METHOD_FUNC(_llama_context_params_get_seed), 0);
     rb_define_method(rb_cLLaMAContextParams, "f16_kv=", RUBY_METHOD_FUNC(_llama_context_params_set_f16_kv), 1);
     rb_define_method(rb_cLLaMAContextParams, "f16_kv", RUBY_METHOD_FUNC(_llama_context_params_get_f16_kv), 0);
     rb_define_method(rb_cLLaMAContextParams, "logits_all=", RUBY_METHOD_FUNC(_llama_context_params_set_logits_all), 1);
     rb_define_method(rb_cLLaMAContextParams, "logits_all", RUBY_METHOD_FUNC(_llama_context_params_get_logits_all), 0);
-    rb_define_method(rb_cLLaMAContextParams, "vocab_only=", RUBY_METHOD_FUNC(_llama_context_params_set_vocab_only), 1);
-    rb_define_method(rb_cLLaMAContextParams, "vocab_only", RUBY_METHOD_FUNC(_llama_context_params_get_vocab_only), 0);
-    rb_define_method(rb_cLLaMAContextParams, "use_mmap=", RUBY_METHOD_FUNC(_llama_context_params_set_use_mmap), 1);
-    rb_define_method(rb_cLLaMAContextParams, "use_mmap", RUBY_METHOD_FUNC(_llama_context_params_get_use_mmap), 0);
-    rb_define_method(rb_cLLaMAContextParams, "use_mlock=", RUBY_METHOD_FUNC(_llama_context_params_set_use_mlock), 1);
-    rb_define_method(rb_cLLaMAContextParams, "use_mlock", RUBY_METHOD_FUNC(_llama_context_params_get_use_mlock), 0);
     rb_define_method(rb_cLLaMAContextParams, "embedding=", RUBY_METHOD_FUNC(_llama_context_params_set_embedding), 1);
     rb_define_method(rb_cLLaMAContextParams, "embedding", RUBY_METHOD_FUNC(_llama_context_params_get_embedding), 0);
   }
@@ -440,6 +431,22 @@ private:
   //   new (ptr) LLaMAContextParamsWrapper();
   //   return self;
   // }
+
+  // seed
+  static VALUE _llama_context_params_set_seed(VALUE self, VALUE seed) {
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    if (NUM2INT(seed) < 0) {
+      rb_raise(rb_eArgError, "seed must be positive");
+      return Qnil;
+    }
+    ptr->params.seed = NUM2INT(seed);
+    return INT2NUM(ptr->params.seed);
+  }
+
+  static VALUE _llama_context_params_get_seed(VALUE self) {
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    return INT2NUM(ptr->params.seed);
+  }
 
   // n_ctx
   static VALUE _llama_context_params_set_n_ctx(VALUE self, VALUE n_ctx) {
@@ -465,41 +472,28 @@ private:
     return INT2NUM(ptr->params.n_batch);
   }
 
-  // n_gpu_layers
-  static VALUE _llama_context_params_set_n_gpu_layers(VALUE self, VALUE n_gpu_layers) {
+  // n_threads
+  static VALUE _llama_context_params_set_n_threads(VALUE self, VALUE n_threads) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
-    ptr->params.n_gpu_layers = NUM2INT(n_gpu_layers);
-    return INT2NUM(ptr->params.n_gpu_layers);
+    ptr->params.n_threads = NUM2INT(n_threads);
+    return INT2NUM(ptr->params.n_threads);
   }
 
-  static VALUE _llama_context_params_get_n_gpu_layers(VALUE self) {
+  static VALUE _llama_context_params_get_n_threads(VALUE self) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
-    return INT2NUM(ptr->params.n_gpu_layers);
+    return INT2NUM(ptr->params.n_threads);
   }
 
-  // main_gpu
-  static VALUE _llama_context_params_set_main_gpu(VALUE self, VALUE main_gpu) {
+  // n_threads_batch
+  static VALUE _llama_context_params_set_n_threads_batch(VALUE self, VALUE n_threads_batch) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
-    ptr->params.main_gpu = NUM2INT(main_gpu);
-    return INT2NUM(ptr->params.main_gpu);
+    ptr->params.n_threads_batch = NUM2INT(n_threads_batch);
+    return INT2NUM(ptr->params.n_threads_batch);
   }
 
-  static VALUE _llama_context_params_get_main_gpu(VALUE self) {
+  static VALUE _llama_context_params_get_n_threads_batch(VALUE self) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
-    return INT2NUM(ptr->params.main_gpu);
-  }
-
-  // tensor_split
-  static VALUE _llama_context_params_get_tensor_split(VALUE self) {
-    if (LLAMA_MAX_DEVICES < 1) {
-      return rb_ary_new();
-    }
-    VALUE ret = rb_ary_new2(LLAMA_MAX_DEVICES);
-    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
-    for (size_t i = 0; i < LLAMA_MAX_DEVICES; i++) {
-      rb_ary_store(ret, i, DBL2NUM(ptr->params.tensor_split[i]));
-    }
-    return ret;
+    return INT2NUM(ptr->params.n_threads_batch);
   }
 
   // rope_freq_base
@@ -526,18 +520,6 @@ private:
     return DBL2NUM(ptr->params.rope_freq_scale);
   }
 
-  // low_vram
-  static VALUE _llama_context_params_set_low_vram(VALUE self, VALUE low_vram) {
-    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
-    ptr->params.low_vram = RTEST(low_vram) ? true : false;
-    return ptr->params.low_vram ? Qtrue : Qfalse;
-  }
-
-  static VALUE _llama_context_params_get_low_vram(VALUE self) {
-    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
-    return ptr->params.low_vram ? Qtrue : Qfalse;
-  }
-
   // mul_mat_q
   static VALUE _llama_context_params_set_mul_mat_q(VALUE self, VALUE mul_mat_q) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
@@ -548,22 +530,6 @@ private:
   static VALUE _llama_context_params_get_mul_mat_q(VALUE self) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     return ptr->params.mul_mat_q ? Qtrue : Qfalse;
-  }
-
-  // seed
-  static VALUE _llama_context_params_set_seed(VALUE self, VALUE seed) {
-    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
-    if (NUM2INT(seed) < 0) {
-      rb_raise(rb_eArgError, "seed must be positive");
-      return Qnil;
-    }
-    ptr->params.seed = NUM2INT(seed);
-    return INT2NUM(ptr->params.seed);
-  }
-
-  static VALUE _llama_context_params_get_seed(VALUE self) {
-    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
-    return INT2NUM(ptr->params.seed);
   }
 
   // f16_kv
@@ -588,42 +554,6 @@ private:
   static VALUE _llama_context_params_get_logits_all(VALUE self) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     return ptr->params.logits_all ? Qtrue : Qfalse;
-  }
-
-  // vocab_only
-  static VALUE _llama_context_params_set_vocab_only(VALUE self, VALUE vocab_only) {
-    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
-    ptr->params.vocab_only = RTEST(vocab_only) ? true : false;
-    return ptr->params.vocab_only ? Qtrue : Qfalse;
-  }
-
-  static VALUE _llama_context_params_get_vocab_only(VALUE self) {
-    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
-    return ptr->params.vocab_only ? Qtrue : Qfalse;
-  }
-
-  // use_mmap
-  static VALUE _llama_context_params_set_use_mmap(VALUE self, VALUE use_mmap) {
-    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
-    ptr->params.use_mmap = RTEST(use_mmap) ? true : false;
-    return ptr->params.use_mmap ? Qtrue : Qfalse;
-  }
-
-  static VALUE _llama_context_params_get_use_mmap(VALUE self) {
-    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
-    return ptr->params.use_mmap ? Qtrue : Qfalse;
-  }
-
-  // use_mlock
-  static VALUE _llama_context_params_set_use_mlock(VALUE self, VALUE use_mlock) {
-    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
-    ptr->params.use_mlock = RTEST(use_mlock) ? true : false;
-    return ptr->params.use_mlock ? Qtrue : Qfalse;
-  }
-
-  static VALUE _llama_context_params_get_use_mlock(VALUE self) {
-    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
-    return ptr->params.use_mlock ? Qtrue : Qfalse;
   }
 
   // embedding
