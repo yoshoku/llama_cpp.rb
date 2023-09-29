@@ -2,6 +2,7 @@
 
 VALUE rb_mLLaMACpp;
 VALUE rb_cLLaMAModel;
+VALUE rb_cLLaMAModelParams;
 VALUE rb_cLLaMATimings;
 VALUE rb_cLLaMAContext;
 VALUE rb_cLLaMAContextParams;
@@ -358,6 +359,144 @@ const rb_data_type_t RbLLaMATimings::llama_timings_type = {
   { NULL,
     RbLLaMATimings::llama_timings_free,
     RbLLaMATimings::llama_timings_size },
+  NULL,
+  NULL,
+  RUBY_TYPED_FREE_IMMEDIATELY
+};
+
+class LLaMAModelParamsWrapper {
+public:
+  struct llama_model_params params;
+
+  LLaMAModelParamsWrapper() : params(llama_model_default_params()) {}
+
+  ~LLaMAModelParamsWrapper() {}
+};
+
+class RbLLaMAModelParams {
+public:
+  static VALUE llama_model_params_alloc(VALUE self) {
+    LLaMAModelParamsWrapper* ptr = (LLaMAModelParamsWrapper*)ruby_xmalloc(sizeof(LLaMAModelParamsWrapper));
+    new (ptr) LLaMAModelParamsWrapper();
+    return TypedData_Wrap_Struct(self, &llama_model_params_type, ptr);
+  }
+
+  static void llama_model_params_free(void* ptr) {
+    ((LLaMAModelParamsWrapper*)ptr)->~LLaMAModelParamsWrapper();
+    ruby_xfree(ptr);
+  }
+
+  static size_t llama_model_params_size(const void* ptr) {
+    return sizeof(*((LLaMAModelParamsWrapper*)ptr));
+  }
+
+  static LLaMAModelParamsWrapper* get_llama_model_params(VALUE self) {
+    LLaMAModelParamsWrapper* ptr;
+    TypedData_Get_Struct(self, LLaMAModelParamsWrapper, &llama_model_params_type, ptr);
+    return ptr;
+  }
+
+  static void define_class(VALUE outer) {
+    rb_cLLaMAModelParams = rb_define_class_under(outer, "ModelParams", rb_cObject);
+    rb_define_alloc_func(rb_cLLaMAModelParams, llama_model_params_alloc);
+    rb_define_method(rb_cLLaMAModelParams, "n_gpu_layers=", RUBY_METHOD_FUNC(_llama_model_params_set_n_gpu_layers), 1);
+    rb_define_method(rb_cLLaMAModelParams, "n_gpu_layers", RUBY_METHOD_FUNC(_llama_model_params_get_n_gpu_layers), 0);
+    rb_define_method(rb_cLLaMAModelParams, "main_gpu=", RUBY_METHOD_FUNC(_llama_model_params_set_main_gpu), 1);
+    rb_define_method(rb_cLLaMAModelParams, "main_gpu", RUBY_METHOD_FUNC(_llama_model_params_get_main_gpu), 0);
+    rb_define_method(rb_cLLaMAModelParams, "tensor_split", RUBY_METHOD_FUNC(_llama_model_params_get_tensor_split), 0);
+    rb_define_method(rb_cLLaMAModelParams, "vocab_only=", RUBY_METHOD_FUNC(_llama_model_params_set_vocab_only), 1);
+    rb_define_method(rb_cLLaMAModelParams, "vocab_only", RUBY_METHOD_FUNC(_llama_model_params_get_vocab_only), 0);
+    rb_define_method(rb_cLLaMAModelParams, "use_mmap=", RUBY_METHOD_FUNC(_llama_model_params_set_use_mmap), 1);
+    rb_define_method(rb_cLLaMAModelParams, "use_mmap", RUBY_METHOD_FUNC(_llama_model_params_get_use_mmap), 0);
+    rb_define_method(rb_cLLaMAModelParams, "use_mlock=", RUBY_METHOD_FUNC(_llama_model_params_set_use_mlock), 1);
+    rb_define_method(rb_cLLaMAModelParams, "use_mlock", RUBY_METHOD_FUNC(_llama_model_params_get_use_mlock), 0);
+  }
+
+private:
+  static const rb_data_type_t llama_model_params_type;
+
+  // n_gpu_layers
+  static VALUE _llama_model_params_set_n_gpu_layers(VALUE self, VALUE n_gpu_layers) {
+    LLaMAModelParamsWrapper* ptr = get_llama_model_params(self);
+    ptr->params.n_gpu_layers = NUM2INT(n_gpu_layers);
+    return INT2NUM(ptr->params.n_gpu_layers);
+  }
+
+  static VALUE _llama_model_params_get_n_gpu_layers(VALUE self) {
+    LLaMAModelParamsWrapper* ptr = get_llama_model_params(self);
+    return INT2NUM(ptr->params.n_gpu_layers);
+  }
+
+  // main_gpu
+  static VALUE _llama_model_params_set_main_gpu(VALUE self, VALUE main_gpu) {
+    LLaMAModelParamsWrapper* ptr = get_llama_model_params(self);
+    ptr->params.main_gpu = NUM2INT(main_gpu);
+    return INT2NUM(ptr->params.main_gpu);
+  }
+
+  static VALUE _llama_model_params_get_main_gpu(VALUE self) {
+    LLaMAModelParamsWrapper* ptr = get_llama_model_params(self);
+    return INT2NUM(ptr->params.main_gpu);
+  }
+
+  // tensor_split
+  static VALUE _llama_model_params_get_tensor_split(VALUE self) {
+    if (LLAMA_MAX_DEVICES < 1) {
+      return rb_ary_new();
+    }
+    VALUE ret = rb_ary_new2(LLAMA_MAX_DEVICES);
+    LLaMAModelParamsWrapper* ptr = get_llama_model_params(self);
+    if (ptr->params.tensor_split == nullptr) {
+      return rb_ary_new();
+    }
+    for (size_t i = 0; i < LLAMA_MAX_DEVICES; i++) {
+      rb_ary_store(ret, i, DBL2NUM(ptr->params.tensor_split[i]));
+    }
+    return ret;
+  }
+
+  // vocab_only
+  static VALUE _llama_model_params_set_vocab_only(VALUE self, VALUE vocab_only) {
+    LLaMAModelParamsWrapper* ptr = get_llama_model_params(self);
+    ptr->params.vocab_only = RTEST(vocab_only) ? true : false;
+    return ptr->params.vocab_only ? Qtrue : Qfalse;
+  }
+
+  static VALUE _llama_model_params_get_vocab_only(VALUE self) {
+    LLaMAModelParamsWrapper* ptr = get_llama_model_params(self);
+    return ptr->params.vocab_only ? Qtrue : Qfalse;
+  }
+
+  // use_mmap
+  static VALUE _llama_model_params_set_use_mmap(VALUE self, VALUE use_mmap) {
+    LLaMAModelParamsWrapper* ptr = get_llama_model_params(self);
+    ptr->params.use_mmap = RTEST(use_mmap) ? true : false;
+    return ptr->params.use_mmap ? Qtrue : Qfalse;
+  }
+
+  static VALUE _llama_model_params_get_use_mmap(VALUE self) {
+    LLaMAModelParamsWrapper* ptr = get_llama_model_params(self);
+    return ptr->params.use_mmap ? Qtrue : Qfalse;
+  }
+
+  // use_mlock
+  static VALUE _llama_model_params_set_use_mlock(VALUE self, VALUE use_mlock) {
+    LLaMAModelParamsWrapper* ptr = get_llama_model_params(self);
+    ptr->params.use_mlock = RTEST(use_mlock) ? true : false;
+    return ptr->params.use_mlock ? Qtrue : Qfalse;
+  }
+
+  static VALUE _llama_model_params_get_use_mlock(VALUE self) {
+    LLaMAModelParamsWrapper* ptr = get_llama_model_params(self);
+    return ptr->params.use_mlock ? Qtrue : Qfalse;
+  }
+};
+
+const rb_data_type_t RbLLaMAModelParams::llama_model_params_type = {
+  "RbLLaMAModelParams",
+  { NULL,
+    RbLLaMAModelParams::llama_model_params_free,
+    RbLLaMAModelParams::llama_model_params_size },
   NULL,
   NULL,
   RUBY_TYPED_FREE_IMMEDIATELY
@@ -2490,6 +2629,7 @@ extern "C" void Init_llama_cpp(void) {
   RbLLaMATokenData::define_class(rb_mLLaMACpp);
   RbLLaMATokenDataArray::define_class(rb_mLLaMACpp);
   RbLLaMAModel::define_class(rb_mLLaMACpp);
+  RbLLaMAModelParams::define_class(rb_mLLaMACpp);
   RbLLaMATimings::define_class(rb_mLLaMACpp);
   RbLLaMAContext::define_class(rb_mLLaMACpp);
   RbLLaMAContextParams::define_class(rb_mLLaMACpp);

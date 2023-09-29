@@ -248,6 +248,53 @@ module LLaMACpp
     def n_params; end
   end
 
+  # Class for model parameters.
+  class ModelParams
+    # Sets the number of layers to stor in VRAM.
+    # @param n_gpu_layers [Integer]
+    def n_gpu_layers=(n_gpu_layers); end
+
+    # Returns the number of layers to stor in VRAM.
+    # @return [Integer]
+    def n_gpu_layers; end
+
+    # Sets the GPU that is used.
+    # @param main_gpu [Integer]
+    def main_gpu=(main_gpu); end
+
+    # Returns the GPU that is used.
+    # @return [Integer]
+    def main_gpu; end
+
+    # Returns the how layers are split across multi-GPUs.
+    # @return [Array<Float>]
+    def tensor_split; end
+
+    # Sets the flag to load only vocabulary.
+    # @param flag [Boolean]
+    def vocab_only=(flag); end
+
+    # Returns the flag to load only vocabulary.
+    # @return [Boolean]
+    def vocab_only; end
+
+    # Sets the flag to use mmap.
+    # @param flag [Boolean]
+    def use_mmap=(flag); end
+
+    # Returns the flag to use mmap.
+    # @return [Boolean]
+    def use_mmap; end
+
+    # Sets the flag to force system to keep model in memory.
+    # @param flag [Boolean]
+    def use_mlock=(flag); end
+
+    # Returns the flag to force system to keep model in memory.
+    # @return [Boolean]
+    def use_mlock; end
+  end
+
   # Class for context
   class Context
     # Create context.
