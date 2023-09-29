@@ -892,7 +892,6 @@ public:
     rb_define_method(rb_cLLaMAModel, "load", RUBY_METHOD_FUNC(_llama_model_load), -1);
     rb_define_method(rb_cLLaMAModel, "apply_lora_from_file", RUBY_METHOD_FUNC(_llama_model_apply_lora_from_file), -1);
     rb_define_method(rb_cLLaMAModel, "n_vocab", RUBY_METHOD_FUNC(_llama_model_get_model_n_vocab), 0);
-    rb_define_method(rb_cLLaMAModel, "n_ctx", RUBY_METHOD_FUNC(_llama_model_get_model_n_ctx), 0);
     rb_define_method(rb_cLLaMAModel, "n_ctx_train", RUBY_METHOD_FUNC(_llama_model_get_model_n_ctx_train), 0);
     rb_define_method(rb_cLLaMAModel, "n_embd", RUBY_METHOD_FUNC(_llama_model_get_model_n_embd), 0);
     rb_define_method(rb_cLLaMAModel, "token_to_piece", RUBY_METHOD_FUNC(_llama_model_token_to_piece_with_model), 1);
@@ -1048,22 +1047,17 @@ private:
 
   static VALUE _llama_model_get_model_n_vocab(VALUE self) {
     LLaMAModelWrapper* ptr = get_llama_model(self);
-    return INT2NUM(llama_model_n_vocab(ptr->model));
-  }
-
-  static VALUE _llama_model_get_model_n_ctx(VALUE self) {
-    LLaMAModelWrapper* ptr = get_llama_model(self);
-    return INT2NUM(llama_model_n_ctx(ptr->model));
+    return INT2NUM(llama_n_vocab(ptr->model));
   }
 
   static VALUE _llama_model_get_model_n_ctx_train(VALUE self) {
     LLaMAModelWrapper* ptr = get_llama_model(self);
-    return INT2NUM(llama_model_n_ctx_train(ptr->model));
+    return INT2NUM(llama_n_ctx_train(ptr->model));
   }
 
   static VALUE _llama_model_get_model_n_embd(VALUE self) {
     LLaMAModelWrapper* ptr = get_llama_model(self);
-    return INT2NUM(llama_model_n_embd(ptr->model));
+    return INT2NUM(llama_n_embd(ptr->model));
   }
 
   static VALUE _llama_model_token_to_piece_with_model(VALUE self, VALUE token_) {

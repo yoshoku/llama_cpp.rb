@@ -212,10 +212,6 @@ module LLaMACpp
     # @return [Integer]
     def n_vocab; end
 
-    # Returns the number of context.
-    # @return [Integer]
-    def n_ctx; end
-
     # Returns the number of context of training.
     # @return [Integer]
     def n_ctx_train; end
