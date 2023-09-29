@@ -921,18 +921,14 @@ private:
       rb_raise(rb_eArgError, "model_path must be a string");
       return Qnil;
     }
-    if (!rb_obj_is_kind_of(kw_values[1], rb_cLLaMAContextParams)) {
-      rb_raise(rb_eArgError, "params must be a ContextParams");
+    if (!rb_obj_is_kind_of(kw_values[1], rb_cLLaMAModelParams)) {
+      rb_raise(rb_eArgError, "params must be a ModelParams");
       return Qnil;
     }
 
     VALUE filename = kw_values[0];
-    LLaMAContextParamsWrapper* prms_ptr = RbLLaMAContextParams::get_llama_context_params(kw_values[1]);
+    LLaMAModelParamsWrapper* prms_ptr = RbLLaMAModelParams::get_llama_model_params(kw_values[1]);
     LLaMAModelWrapper* model_ptr = get_llama_model(self);
-
-    if (prms_ptr->params.seed == LLAMA_DEFAULT_SEED) {
-      prms_ptr->params.seed = time(NULL);
-    }
 
     try {
       model_ptr->model = llama_load_model_from_file(StringValueCStr(filename), prms_ptr->params);
@@ -981,8 +977,8 @@ private:
       rb_raise(rb_eArgError, "model_path must be a string");
       return Qnil;
     }
-    if (!rb_obj_is_kind_of(kw_values[1], rb_cLLaMAContextParams)) {
-      rb_raise(rb_eArgError, "params must be a LLaMAContextParams");
+    if (!rb_obj_is_kind_of(kw_values[1], rb_cLLaMAModelParams)) {
+      rb_raise(rb_eArgError, "params must be a LLaMAModelParams");
       return Qnil;
     }
 
@@ -993,7 +989,7 @@ private:
     }
 
     VALUE filename = kw_values[0];
-    LLaMAContextParamsWrapper* prms_ptr = RbLLaMAContextParams::get_llama_context_params(kw_values[1]);
+    LLaMAModelParamsWrapper* prms_ptr = RbLLaMAModelParams::get_llama_model_params(kw_values[1]);
 
     try {
       model_ptr->model = llama_load_model_from_file(StringValueCStr(filename), prms_ptr->params);

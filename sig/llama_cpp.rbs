@@ -67,11 +67,11 @@ module LLaMACpp
   class Model
     public
 
-    def initialize: (model_path: String, params: ::LLaMACpp::ContextParams) -> void
+    def initialize: (model_path: String, params: ::LLaMACpp::ModelParams) -> void
                   | () -> void
     def empty?: () -> bool
     def free: () -> void
-    def load: (model_path: String, params: ::LLaMACpp::ContextParams) -> void
+    def load: (model_path: String, params: ::LLaMACpp::ModelParams) -> void
     def apply_lora_from_file: (lora_path: String, ?base_model_path: String, ?n_threads: Integer) -> void
     def n_vocab: () -> Integer
     def n_ctx: () -> Integer

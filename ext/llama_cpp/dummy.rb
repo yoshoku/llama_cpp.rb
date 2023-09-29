@@ -181,7 +181,7 @@ module LLaMACpp
     # Create model.
     #
     # @param model_path [String] The path to the model file.
-    # @param params [ContextParams] The parameters for context.
+    # @param params [ModelParams] The parameters for context.
     def initialize(model_path: nil, params: nil); end
 
     # Returns whether the model is not loaded.
@@ -197,7 +197,7 @@ module LLaMACpp
     # Loads model.
     #
     # @param model_path [String] The path to the model file.
-    # @param params [ContextParams] The parameters for context.
+    # @param params [ModelParams] The parameters for context.
     def load(model_path:, params:); end
 
     # Applies LLoRa from file.
