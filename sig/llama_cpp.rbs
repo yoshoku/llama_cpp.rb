@@ -124,8 +124,8 @@ module LLaMACpp
     def token_bos: () -> Integer
     def token_eos: () -> Integer
     def token_nl: () -> Integer
-    def eval: (tokens: Array[Integer], n_past: Integer, ?n_tokens: Integer, ?n_threads: Integer) -> void
-    def eval_embd: (tokens: Array[Float], n_past: Integer, ?n_tokens: Integer, ?n_threads: Integer) -> void
+    def eval: (tokens: Array[Integer], n_past: Integer, ?n_tokens: Integer) -> void
+    def eval_embd: (tokens: Array[Float], n_past: Integer, ?n_tokens: Integer) -> void
     def eval_export: (String) -> bool
     def logits: () -> Array[Float]
     def n_ctx: () -> Integer

@@ -1487,8 +1487,8 @@ private:
 
   static VALUE _llama_context_eval(int argc, VALUE* argv, VALUE self) {
     VALUE kw_args = Qnil;
-    ID kw_table[4] = { rb_intern("tokens"), rb_intern("n_past"), rb_intern("n_tokens"), rb_intern("n_threads") };
-    VALUE kw_values[4] = { Qundef, Qundef, Qundef, Qundef };
+    ID kw_table[3] = { rb_intern("tokens"), rb_intern("n_past"), rb_intern("n_tokens") };
+    VALUE kw_values[3] = { Qundef, Qundef, Qundef };
     rb_scan_args(argc, argv, ":", &kw_args);
     rb_get_kwargs(kw_args, kw_table, 2, 2, kw_values);
 
@@ -1502,10 +1502,6 @@ private:
     }
     if (kw_values[2] != Qundef && !RB_INTEGER_TYPE_P(kw_values[2])) {
       rb_raise(rb_eArgError, "n_tokens must be an integer");
-      return Qnil;
-    }
-    if (kw_values[3] != Qundef && !RB_INTEGER_TYPE_P(kw_values[3])) {
-      rb_raise(rb_eArgError, "n_threads must be an integer");
       return Qnil;
     }
 
@@ -1522,14 +1518,13 @@ private:
 
     const int n_tokens = kw_values[2] == Qundef ? (int)tokens_len : NUM2INT(kw_values[2]);
     const int n_past = NUM2INT(kw_values[1]);
-    const int n_threads = kw_values[3] == Qundef ? 1 : NUM2INT(kw_values[3]);
 
     LLaMAContextWrapper* ptr = get_llama_context(self);
     if (ptr->ctx == NULL) {
       rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
       return Qnil;
     }
-    if (llama_eval(ptr->ctx, embd.data(), n_tokens, n_past, n_threads) != 0) {
+    if (llama_eval(ptr->ctx, embd.data(), n_tokens, n_past) != 0) {
       rb_raise(rb_eRuntimeError, "Failed to evaluate");
       return Qnil;
     }
@@ -1542,8 +1537,8 @@ private:
 
   static VALUE _llama_context_eval_embd(int argc, VALUE* argv, VALUE self) {
     VALUE kw_args = Qnil;
-    ID kw_table[4] = { rb_intern("embd"), rb_intern("n_past"), rb_intern("n_tokens"), rb_intern("n_threads") };
-    VALUE kw_values[4] = { Qundef, Qundef, Qundef, Qundef };
+    ID kw_table[3] = { rb_intern("embd"), rb_intern("n_past"), rb_intern("n_tokens") };
+    VALUE kw_values[3] = { Qundef, Qundef, Qundef };
     rb_scan_args(argc, argv, ":", &kw_args);
     rb_get_kwargs(kw_args, kw_table, 2, 2, kw_values);
 
@@ -1557,10 +1552,6 @@ private:
     }
     if (kw_values[2] != Qundef && !RB_INTEGER_TYPE_P(kw_values[2])) {
       rb_raise(rb_eArgError, "n_tokens must be an integer");
-      return Qnil;
-    }
-    if (kw_values[3] != Qundef && !RB_INTEGER_TYPE_P(kw_values[3])) {
-      rb_raise(rb_eArgError, "n_threads must be an integer");
       return Qnil;
     }
 
@@ -1577,14 +1568,13 @@ private:
 
     const int n_tokens = kw_values[2] == Qundef ? (int)tokens_len : NUM2INT(kw_values[2]);
     const int n_past = NUM2INT(kw_values[1]);
-    const int n_threads = kw_values[3] == Qundef ? 1 : NUM2INT(kw_values[3]);
 
     LLaMAContextWrapper* ptr = get_llama_context(self);
     if (ptr->ctx == NULL) {
       rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
       return Qnil;
     }
-    if (llama_eval_embd(ptr->ctx, embd.data(), n_tokens, n_past, n_threads) != 0) {
+    if (llama_eval_embd(ptr->ctx, embd.data(), n_tokens, n_past) != 0) {
       rb_raise(rb_eRuntimeError, "Failed to evaluate");
       return Qnil;
     }
