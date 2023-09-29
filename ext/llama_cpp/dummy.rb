@@ -376,24 +376,10 @@ module LLaMACpp
     # @return [String]
     def token_to_piece(token_id) end
 
-    # Returns the number of vocabulary.
-    #
-    # @return [Integer]
-    def n_vocab; end
-
     # Returns the number of text context.
     #
     # @return [Integer]
     def n_ctx; end
-
-    # Returns the number of context of training.
-    # @return [Integer]
-    def n_ctx_train; end
-
-    # Returns the number of embeddings.
-    #
-    # @return [Integer]
-    def n_embd; end
 
     # Returns the timing information
     #

@@ -130,9 +130,6 @@ module LLaMACpp
     def eval_export: (String) -> bool
     def logits: () -> Array[Float]
     def n_ctx: () -> Integer
-    def n_ctx_train: () -> Integer
-    def n_embd: () -> Integer
-    def n_vocab: () -> Integer
     def timings: () -> ::LLaMACpp::Timings
     def print_timings: () -> void
     def reset_timings: () -> void
