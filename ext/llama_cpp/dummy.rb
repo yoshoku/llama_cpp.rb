@@ -323,14 +323,6 @@ module LLaMACpp
     # @return [Boolean]
     def eval_export(fname); end
 
-    # Returns the logits.
-    #
-    # @param text [String] The text to be tokenized.
-    # @param n_max_tokens [Integer] The maximum number of tokens.
-    # @param add_bos [Boolean] The flag to add the beginning of sentence token.
-    # @return [Array<Integer>]
-    def tokenize(text:, n_max_tokens: nil, add_bos: true); end
-
     # Returns the embeddings.
     #
     # @return [Array<Float>]
@@ -365,12 +357,6 @@ module LLaMACpp
     # Returns the token id the new line token.
     # @return [Integer]
     def token_nl; end
-
-    # Converts token id to string.
-    #
-    # @param token_id [Integer]
-    # @return [String]
-    def token_to_piece(token_id) end
 
     # Returns the number of text context.
     #

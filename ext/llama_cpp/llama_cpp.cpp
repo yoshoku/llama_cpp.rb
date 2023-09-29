@@ -894,8 +894,8 @@ public:
     rb_define_method(rb_cLLaMAModel, "n_vocab", RUBY_METHOD_FUNC(_llama_model_get_model_n_vocab), 0);
     rb_define_method(rb_cLLaMAModel, "n_ctx_train", RUBY_METHOD_FUNC(_llama_model_get_model_n_ctx_train), 0);
     rb_define_method(rb_cLLaMAModel, "n_embd", RUBY_METHOD_FUNC(_llama_model_get_model_n_embd), 0);
-    rb_define_method(rb_cLLaMAModel, "token_to_piece", RUBY_METHOD_FUNC(_llama_model_token_to_piece_with_model), 1);
-    rb_define_method(rb_cLLaMAModel, "tokenize", RUBY_METHOD_FUNC(_llama_model_tokenize_with_model), -1);
+    rb_define_method(rb_cLLaMAModel, "token_to_piece", RUBY_METHOD_FUNC(_llama_model_token_to_piece), 1);
+    rb_define_method(rb_cLLaMAModel, "tokenize", RUBY_METHOD_FUNC(_llama_model_tokenize), -1);
     rb_define_method(rb_cLLaMAModel, "desc", RUBY_METHOD_FUNC(_llama_model_get_model_desc), 0);
     rb_define_method(rb_cLLaMAModel, "size", RUBY_METHOD_FUNC(_llama_model_get_model_size), 0);
     rb_define_method(rb_cLLaMAModel, "n_params", RUBY_METHOD_FUNC(_llama_model_get_model_n_params), 0);
@@ -1060,7 +1060,7 @@ private:
     return INT2NUM(llama_n_embd(ptr->model));
   }
 
-  static VALUE _llama_model_token_to_piece_with_model(VALUE self, VALUE token_) {
+  static VALUE _llama_model_token_to_piece(VALUE self, VALUE token_) {
     if (!RB_INTEGER_TYPE_P(token_)) {
       rb_raise(rb_eArgError, "token must be an integer");
       return Qnil;
@@ -1068,10 +1068,10 @@ private:
     const llama_token token = NUM2INT(token_);
     LLaMAModelWrapper* ptr = get_llama_model(self);
     std::vector<char> result(8, 0);
-    const int n_tokens = llama_token_to_piece_with_model(ptr->model, token, result.data(), result.size());
+    const int n_tokens = llama_token_to_piece(ptr->model, token, result.data(), result.size());
     if (n_tokens < 0) {
       result.resize(-n_tokens);
-      const int check = llama_token_to_piece_with_model(ptr->model, token, result.data(), result.size());
+      const int check = llama_token_to_piece(ptr->model, token, result.data(), result.size());
       if (check != -n_tokens) {
         rb_raise(rb_eRuntimeError, "failed to convert");
         return Qnil;
@@ -1083,7 +1083,7 @@ private:
     return rb_str_new_cstr(ret.c_str());
   }
 
-  static VALUE _llama_model_tokenize_with_model(int argc, VALUE* argv, VALUE self) {
+  static VALUE _llama_model_tokenize(int argc, VALUE* argv, VALUE self) {
     VALUE kw_args = Qnil;
     ID kw_table[3] = { rb_intern("text"), rb_intern("n_max_tokens"), rb_intern("add_bos") };
     VALUE kw_values[3] = { Qundef, Qundef, Qundef };
@@ -1110,7 +1110,7 @@ private:
 
     llama_token* tokens = ALLOCA_N(llama_token, n_max_tokens);
     LLaMAModelWrapper* ptr = get_llama_model(self);
-    const int n_tokens = llama_tokenize_with_model(ptr->model, text.c_str(), text.size(), tokens, n_max_tokens, add_bos);
+    const int n_tokens = llama_tokenize(ptr->model, text.c_str(), text.size(), tokens, n_max_tokens, add_bos);
 
     if (n_tokens < 0) {
       rb_raise(rb_eRuntimeError, "failed to tokenize. The numebr of tokens (%d) is greater than n_max_tokens.", -n_tokens);
@@ -1413,7 +1413,6 @@ public:
     rb_define_method(rb_cLLaMAContext, "eval", RUBY_METHOD_FUNC(_llama_context_eval), -1);
     rb_define_method(rb_cLLaMAContext, "eval_embd", RUBY_METHOD_FUNC(_llama_context_eval_embd), -1);
     rb_define_method(rb_cLLaMAContext, "eval_export", RUBY_METHOD_FUNC(_llama_context_eval_export), 1);
-    rb_define_method(rb_cLLaMAContext, "tokenize", RUBY_METHOD_FUNC(_llama_context_tokenize), -1);
     rb_define_method(rb_cLLaMAContext, "logits", RUBY_METHOD_FUNC(_llama_context_logits), 0);
     rb_define_method(rb_cLLaMAContext, "embeddings", RUBY_METHOD_FUNC(_llama_context_embeddings), 0);
     rb_define_method(rb_cLLaMAContext, "text", RUBY_METHOD_FUNC(_llama_context_text), 1);
@@ -1422,7 +1421,6 @@ public:
     rb_define_method(rb_cLLaMAContext, "token_bos", RUBY_METHOD_FUNC(_llama_context_token_bos), 0);
     rb_define_method(rb_cLLaMAContext, "token_eos", RUBY_METHOD_FUNC(_llama_context_token_eos), 0);
     rb_define_method(rb_cLLaMAContext, "token_nl", RUBY_METHOD_FUNC(_llama_context_token_nl), 0);
-    rb_define_method(rb_cLLaMAContext, "token_to_piece", RUBY_METHOD_FUNC(_llama_context_token_to_piece), 1);
     rb_define_method(rb_cLLaMAContext, "n_ctx", RUBY_METHOD_FUNC(_llama_context_n_ctx), 0);
     rb_define_method(rb_cLLaMAContext, "timings", RUBY_METHOD_FUNC(_llama_context_get_timings), 0);
     rb_define_method(rb_cLLaMAContext, "print_timings", RUBY_METHOD_FUNC(_llama_context_print_timings), 0);
@@ -1613,75 +1611,6 @@ private:
     }
     RB_GC_GUARD(fname_);
     return Qtrue;
-  }
-
-  static VALUE _llama_context_tokenize(int argc, VALUE* argv, VALUE self) {
-    VALUE kw_args = Qnil;
-    ID kw_table[3] = { rb_intern("text"), rb_intern("n_max_tokens"), rb_intern("add_bos") };
-    VALUE kw_values[3] = { Qundef, Qundef, Qundef };
-    rb_scan_args(argc, argv, ":", &kw_args);
-    rb_get_kwargs(kw_args, kw_table, 1, 2, kw_values);
-
-    if (!RB_TYPE_P(kw_values[0], T_STRING)) {
-      rb_raise(rb_eArgError, "text must be a String");
-      return Qnil;
-    }
-    if (kw_values[1] != Qundef && !RB_INTEGER_TYPE_P(kw_values[1])) {
-      rb_raise(rb_eArgError, "n_max_tokens must be an integer");
-      return Qnil;
-    }
-    if (kw_values[2] != Qundef && (kw_values[2] != Qtrue && kw_values[2] != Qfalse)) {
-      rb_raise(rb_eArgError, "add_bos must be a boolean");
-      return Qnil;
-    }
-
-    VALUE text_ = kw_values[0];
-    std::string text = StringValueCStr(text_);
-    const bool add_bos = kw_values[2] == Qtrue ? true : false;
-    const int n_max_tokens = kw_values[1] != Qundef ? NUM2INT(kw_values[1]) : text.size() + (add_bos ? 1 : 0);
-
-    std::vector<llama_token> tokens(n_max_tokens);
-    LLaMAContextWrapper* ptr = get_llama_context(self);
-    if (ptr->ctx == NULL) {
-      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
-      return Qnil;
-    }
-    const int n = llama_tokenize(ptr->ctx, text.c_str(), text.size(), tokens.data(), n_max_tokens, add_bos);
-    if (n < 0) {
-      rb_raise(rb_eRuntimeError, "Failed to tokenize");
-      return Qnil;
-    }
-
-    VALUE output = rb_ary_new();
-    for (int i = 0; i < n; i++) {
-      rb_ary_push(output, INT2NUM(tokens[i]));
-    }
-
-    RB_GC_GUARD(text_);
-    return output;
-  }
-
-  static VALUE _llama_context_token_to_piece(VALUE self, VALUE token_) {
-    LLaMAContextWrapper* ptr = get_llama_context(self);
-    if (ptr->ctx == NULL) {
-      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
-      return Qnil;
-    }
-    const llama_token token = NUM2INT(token_);
-    std::vector<char> result(8, 0);
-    const int n_tokens = llama_token_to_piece(ptr->ctx, token, result.data(), result.size());
-    if (n_tokens < 0) {
-      result.resize(-n_tokens);
-      const int check = llama_token_to_piece(ptr->ctx, token, result.data(), result.size());
-      if (check != -n_tokens) {
-        rb_raise(rb_eRuntimeError, "failed to convert");
-        return Qnil;
-      }
-    } else {
-      result.resize(n_tokens);
-    }
-    std::string ret(result.data(), result.size());
-    return rb_str_new_cstr(ret.c_str());
   }
 
   static VALUE _llama_context_logits(VALUE self) {

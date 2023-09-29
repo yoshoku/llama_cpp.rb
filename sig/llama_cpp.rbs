@@ -132,8 +132,6 @@ module LLaMACpp
     def timings: () -> ::LLaMACpp::Timings
     def print_timings: () -> void
     def reset_timings: () -> void
-    def token_to_piece: (Integer) -> String
-    def tokenize: (text: String, ?n_max_tokens: Integer, ?add_bos: bool) -> Array[Integer]
     def kv_cache_token_count: () -> Integer
     def set_rng_seed: (Integer) -> void
     def load_session_file: (session_path: String) -> void
