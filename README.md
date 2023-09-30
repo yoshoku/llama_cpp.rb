@@ -59,13 +59,14 @@ An example of Ruby code that generates sentences with the quantization model is 
 ```ruby
 require 'llama_cpp'
 
-params = LLaMACpp::ContextParams.new
-params.seed = 42
+model_params = LLaMACpp::ModelParams.new
+model = LLaMACpp::Model.new(model_path: '/home/user/llama.cpp/models/open_llama_7b/ggml-model-q4_0.bin', params: model_params)
 
-model = LLaMACpp::Model.new(model_path: '/home/user/llama.cpp/models/open_llama_7b/ggml-model-q4_0.bin', params: params)
-context = LLaMACpp::Context.new(model: model)
+context_params = LLaMACpp::ContextParams.new
+context_params.seed = 42
+context = LLaMACpp::Context.new(model: model, params: context_params)
 
-puts LLaMACpp.generate(context, 'Hello, World.', n_threads: 4)
+puts LLaMACpp.generate(context, 'Hello, World.')
 ```
 
 ## Examples
