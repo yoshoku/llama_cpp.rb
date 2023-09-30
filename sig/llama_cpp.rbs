@@ -113,6 +113,28 @@ module LLaMACpp
     def use_mlock=: (bool) -> bool
   end
 
+  class Batch
+    public
+
+    def initialize: (n_tokens: Integer, embd: Integer) -> void
+    def n_tokens=: (Integer) -> Integer
+    def n_tokens: () -> Integer
+    def all_pos_zero=: (Integer) -> Integer
+    def all_pos_zero: () -> Integer
+    def all_pos_one=: (Integer) -> Integer
+    def all_pos_one: () -> Integer
+    def all_seq_id=: (Integer) -> Integer
+    def all_seq_id: () -> Integer
+    def set_token: (Integer, Integer) -> Integer
+    def get_token: (Integer) -> Integer
+    def set_pos: (Integer, Integer) -> Integer
+    def get_pos: (Integer) -> Integer
+    def set_seq_id: (Integer, Integer) -> Integer
+    def get_seq_id: (Integer) -> Integer
+    def set_logit: (Integer, bool) -> bool
+    def get_logit: (Integer) -> bool
+  end
+
   class Context
     public
 

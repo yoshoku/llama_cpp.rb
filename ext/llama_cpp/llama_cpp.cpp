@@ -1,6 +1,7 @@
 #include "llama_cpp.h"
 
 VALUE rb_mLLaMACpp;
+VALUE rb_cLLaMABatch;
 VALUE rb_cLLaMAModel;
 VALUE rb_cLLaMAModelParams;
 VALUE rb_cLLaMATimings;
@@ -11,6 +12,238 @@ VALUE rb_cLLaMATokenData;
 VALUE rb_cLLaMATokenDataArray;
 VALUE rb_cLLaMAGrammarElement;
 VALUE rb_cLLaMAGrammar;
+
+class LLaMABatchWrapper {
+public:
+  llama_batch batch;
+
+  LLaMABatchWrapper() {}
+
+  ~LLaMABatchWrapper() {
+    llama_batch_free(batch);
+  }
+};
+
+class RbLLaMABatch {
+public:
+  static VALUE llama_batch_alloc(VALUE self) {
+    LLaMABatchWrapper* ptr = (LLaMABatchWrapper*)ruby_xmalloc(sizeof(LLaMABatchWrapper));
+    new (ptr) LLaMABatchWrapper();
+    return TypedData_Wrap_Struct(self, &llama_batch_type, ptr);
+  }
+
+  static void llama_batch_free(void* ptr) {
+    ((LLaMABatchWrapper*)ptr)->~LLaMABatchWrapper();
+    ruby_xfree(ptr);
+  }
+
+  static size_t llama_batch_size(const void* ptr) {
+    return sizeof(*((LLaMABatchWrapper*)ptr));
+  }
+
+  static LLaMABatchWrapper* get_llama_batch(VALUE self) {
+    LLaMABatchWrapper* ptr;
+    TypedData_Get_Struct(self, LLaMABatchWrapper, &llama_batch_type, ptr);
+    return ptr;
+  }
+
+  static void define_class(VALUE outer) {
+    rb_cLLaMABatch = rb_define_class_under(outer, "Batch", rb_cObject);
+    rb_define_alloc_func(rb_cLLaMABatch, llama_batch_alloc);
+    rb_define_method(rb_cLLaMABatch, "initialize", RUBY_METHOD_FUNC(_llama_batch_initialize), -1);
+    rb_define_method(rb_cLLaMABatch, "n_tokens=", RUBY_METHOD_FUNC(_llama_batch_set_n_tokens), 1);
+    rb_define_method(rb_cLLaMABatch, "n_tokens", RUBY_METHOD_FUNC(_llama_batch_get_n_tokens), 0);
+    rb_define_method(rb_cLLaMABatch, "all_pos_zero=", RUBY_METHOD_FUNC(_llama_batch_set_all_pos_zero), 1);
+    rb_define_method(rb_cLLaMABatch, "all_pos_zero", RUBY_METHOD_FUNC(_llama_batch_get_all_pos_zero), 0);
+    rb_define_method(rb_cLLaMABatch, "all_pos_one=", RUBY_METHOD_FUNC(_llama_batch_set_all_pos_one), 1);
+    rb_define_method(rb_cLLaMABatch, "all_pos_one", RUBY_METHOD_FUNC(_llama_batch_get_all_pos_one), 0);
+    rb_define_method(rb_cLLaMABatch, "all_seq_id=", RUBY_METHOD_FUNC(_llama_batch_set_all_seq_id), 1);
+    rb_define_method(rb_cLLaMABatch, "all_seq_id", RUBY_METHOD_FUNC(_llama_batch_get_all_seq_id), 0);
+    rb_define_method(rb_cLLaMABatch, "set_token", RUBY_METHOD_FUNC(_llama_batch_set_token), 2);
+    rb_define_method(rb_cLLaMABatch, "get_token", RUBY_METHOD_FUNC(_llama_batch_get_token), 1);
+    rb_define_method(rb_cLLaMABatch, "set_pos", RUBY_METHOD_FUNC(_llama_batch_set_pos), 2);
+    rb_define_method(rb_cLLaMABatch, "get_pos", RUBY_METHOD_FUNC(_llama_batch_get_pos), 1);
+    rb_define_method(rb_cLLaMABatch, "set_seq_id", RUBY_METHOD_FUNC(_llama_batch_set_seq_id), 2);
+    rb_define_method(rb_cLLaMABatch, "get_seq_id", RUBY_METHOD_FUNC(_llama_batch_get_seq_id), 1);
+    rb_define_method(rb_cLLaMABatch, "set_logits", RUBY_METHOD_FUNC(_llama_batch_set_logits), 2);
+    rb_define_method(rb_cLLaMABatch, "get_logits", RUBY_METHOD_FUNC(_llama_batch_get_logits), 1);
+  }
+
+private:
+  static const rb_data_type_t llama_batch_type;
+
+  static VALUE _llama_batch_initialize(int argc, VALUE* argv, VALUE self) {
+    VALUE kw_args = Qnil;
+    ID kw_table[2] = { rb_intern("n_tokens"), rb_intern("embd") };
+    VALUE kw_values[2] = { Qundef, Qundef };
+    rb_scan_args(argc, argv, ":", &kw_args);
+    rb_get_kwargs(kw_args, kw_table, 2, 0, kw_values);
+
+    if (!RB_INTEGER_TYPE_P(kw_values[0])) {
+      rb_raise(rb_eArgError, "n_tokens must be an integer");
+      return Qnil;
+    }
+    if (!RB_INTEGER_TYPE_P(kw_values[1])) {
+      rb_raise(rb_eArgError, "embd must be an integer");
+      return Qnil;
+    }
+
+    const int32_t n_tokens = NUM2INT(kw_values[0]);
+    const int32_t embd = NUM2INT(kw_values[1]);
+
+    LLaMABatchWrapper* ptr = get_llama_batch(self);
+    ptr->batch = llama_batch_init(n_tokens, embd);
+
+    return Qnil;
+  }
+
+  // n_tokens
+  static VALUE _llama_batch_set_n_tokens(VALUE self, VALUE n_tokens) {
+    LLaMABatchWrapper* ptr = get_llama_batch(self);
+    ptr->batch.n_tokens = NUM2INT(n_tokens);
+    return INT2NUM(ptr->batch.n_tokens);
+  }
+
+  static VALUE _llama_batch_get_n_tokens(VALUE self) {
+    LLaMABatchWrapper* ptr = get_llama_batch(self);
+    return INT2NUM(ptr->batch.n_tokens);
+  }
+
+  // all_pos_0
+  static VALUE _llama_batch_set_all_pos_zero(VALUE self, VALUE all_pos_0) {
+    LLaMABatchWrapper* ptr = get_llama_batch(self);
+    ptr->batch.all_pos_0 = NUM2INT(all_pos_0);
+    return INT2NUM(ptr->batch.all_pos_0);
+  }
+
+  static VALUE _llama_batch_get_all_pos_zero(VALUE self) {
+    LLaMABatchWrapper* ptr = get_llama_batch(self);
+    return INT2NUM(ptr->batch.all_pos_0);
+  }
+
+  // all_pos_1
+  static VALUE _llama_batch_set_all_pos_one(VALUE self, VALUE all_pos_1) {
+    LLaMABatchWrapper* ptr = get_llama_batch(self);
+    ptr->batch.all_pos_1 = NUM2INT(all_pos_1);
+    return INT2NUM(ptr->batch.all_pos_1);
+  }
+
+  static VALUE _llama_batch_get_all_pos_one(VALUE self) {
+    LLaMABatchWrapper* ptr = get_llama_batch(self);
+    return INT2NUM(ptr->batch.all_pos_1);
+  }
+
+  // all_seq_id
+  static VALUE _llama_batch_set_all_seq_id(VALUE self, VALUE all_seq_id) {
+    LLaMABatchWrapper* ptr = get_llama_batch(self);
+    ptr->batch.all_seq_id = NUM2INT(all_seq_id);
+    return INT2NUM(ptr->batch.all_seq_id);
+  }
+
+  static VALUE _llama_batch_get_all_seq_id(VALUE self) {
+    LLaMABatchWrapper* ptr = get_llama_batch(self);
+    return INT2NUM(ptr->batch.all_seq_id);
+  }
+
+  // token
+  static VALUE _llama_batch_set_token(VALUE self, VALUE idx, VALUE value) {
+    LLaMABatchWrapper* ptr = get_llama_batch(self);
+    const int32_t id = NUM2INT(idx);
+    if (id < 0 || id >= ptr->batch.n_tokens) {
+      rb_raise(rb_eArgError, "idx must be in [0, n_tokens)");
+      return Qnil;
+    }
+    ptr->batch.token[id] = NUM2INT(value);
+    return INT2NUM(ptr->batch.token[id]);
+  }
+
+  static VALUE _llama_batch_get_token(VALUE self, VALUE idx) {
+    LLaMABatchWrapper* ptr = get_llama_batch(self);
+    const int32_t id = NUM2INT(idx);
+    if (id < 0 || id >= ptr->batch.n_tokens) {
+      rb_raise(rb_eArgError, "id must be in [0, n_tokens)");
+      return Qnil;
+    }
+    return INT2NUM(ptr->batch.token[id]);
+  }
+
+  // pos
+  static VALUE _llama_batch_set_pos(VALUE self, VALUE idx, VALUE value) {
+    LLaMABatchWrapper* ptr = get_llama_batch(self);
+    const int32_t id = NUM2INT(idx);
+    if (id < 0 || id >= ptr->batch.n_tokens) {
+      rb_raise(rb_eArgError, "id must be in [0, n_tokens)");
+      return Qnil;
+    }
+    ptr->batch.pos[id] = NUM2INT(value);
+    return INT2NUM(ptr->batch.pos[id]);
+  }
+
+  static VALUE _llama_batch_get_pos(VALUE self, VALUE idx) {
+    LLaMABatchWrapper* ptr = get_llama_batch(self);
+    const int32_t id = NUM2INT(idx);
+    if (id < 0 || id >= ptr->batch.n_tokens) {
+      rb_raise(rb_eArgError, "id must be in [0, n_tokens)");
+      return Qnil;
+    }
+    return INT2NUM(ptr->batch.pos[id]);
+  }
+
+  // seq_id
+  static VALUE _llama_batch_set_seq_id(VALUE self, VALUE idx, VALUE value) {
+    LLaMABatchWrapper* ptr = get_llama_batch(self);
+    const int32_t id = NUM2INT(idx);
+    if (id < 0 || id >= ptr->batch.n_tokens) {
+      rb_raise(rb_eArgError, "id must be in [0, n_tokens)");
+      return Qnil;
+    }
+    ptr->batch.seq_id[id] = NUM2INT(value);
+    return INT2NUM(ptr->batch.seq_id[id]);
+  }
+
+  static VALUE _llama_batch_get_seq_id(VALUE self, VALUE idx) {
+    LLaMABatchWrapper* ptr = get_llama_batch(self);
+    const int32_t id = NUM2INT(idx);
+    if (id < 0 || id >= ptr->batch.n_tokens) {
+      rb_raise(rb_eArgError, "id must be in [0, n_tokens)");
+      return Qnil;
+    }
+    return INT2NUM(ptr->batch.seq_id[id]);
+  }
+
+  // logits
+  static VALUE _llama_batch_set_logits(VALUE self, VALUE idx, VALUE value) {
+    LLaMABatchWrapper* ptr = get_llama_batch(self);
+    const int32_t id = NUM2INT(idx);
+    if (id < 0 || id >= ptr->batch.n_tokens) {
+      rb_raise(rb_eArgError, "id must be in [0, n_tokens)");
+      return Qnil;
+    }
+    ptr->batch.logits[id] = RTEST(value) ? true : false;
+    return ptr->batch.logits[id] ? Qtrue : Qfalse;
+  }
+
+  static VALUE _llama_batch_get_logits(VALUE self, VALUE idx) {
+    LLaMABatchWrapper* ptr = get_llama_batch(self);
+    const int32_t id = NUM2INT(idx);
+    if (id < 0 || id >= ptr->batch.n_tokens) {
+      rb_raise(rb_eArgError, "id must be in [0, n_tokens)");
+      return Qnil;
+    }
+    return ptr->batch.logits[id] ? Qtrue : Qfalse;
+  }
+};
+
+const rb_data_type_t RbLLaMABatch::llama_batch_type = {
+  "RbLLaMABatch",
+  { NULL,
+    RbLLaMABatch::llama_batch_free,
+    RbLLaMABatch::llama_batch_size },
+  NULL,
+  NULL,
+  RUBY_TYPED_FREE_IMMEDIATELY
+
+};
 
 class LLaMATokenDataWrapper {
 public:
@@ -909,12 +1142,7 @@ private:
     ID kw_table[2] = { rb_intern("model_path"), rb_intern("params") };
     VALUE kw_values[2] = { Qundef, Qundef };
     rb_scan_args(argc, argv, ":", &kw_args);
-    rb_get_kwargs(kw_args, kw_table, 0, 2, kw_values);
-
-    if (kw_values[0] == Qundef && kw_values[1] == Qundef) {
-      rb_iv_set(self, "@params", Qnil);
-      return Qnil;
-    }
+    rb_get_kwargs(kw_args, kw_table, 2, 0, kw_values);
 
     if (!RB_TYPE_P(kw_values[0], T_STRING)) {
       rb_raise(rb_eArgError, "model_path must be a string");

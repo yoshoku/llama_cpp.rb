@@ -292,6 +292,94 @@ module LLaMACpp
     def use_mlock; end
   end
 
+  # Class for batch
+  class Batch
+    # Create batch.
+    #
+    # @param n_tokens [Integer] The number of tokens.
+    # @param embd [Array<Float>] The number of embedding.
+    def initialize(n_tokens:, embd:); end
+
+    # Sets the number of tokens.
+    # @param n_tokens [Integer]
+    # @return [Integer]
+    def n_tokens=(n_tokens); end
+
+    # Returns the number of tokens.
+    # @return [Integer]
+    def n_tokens; end
+
+    # Sets the all_pos_0 of llama_batch.
+    # @param all_pos_zero [Integer]
+    # @return [Integer]
+    def all_pos_zero=(all_pos_zero); end
+
+    # Returns the all_pos_0 of llama_batch.
+    # @return [Integer]
+    def all_pos_zero; end
+
+    # Sets the all_pos_1 of llama_batch.
+    # @param all_pos_one [Integer]
+    # @return [Integer]
+    def all_pos_one=(all_pos_one); end
+
+    # Returns the all_pos_1 of llama_batch.
+    # @return [Integer]
+    def all_pos_one; end
+
+    # Sets the all_seq_id of llama_batch.
+    # @param all_seq_id [Integer]
+    # @return [Integer]
+    def all_seq_id=(all_seq_id); end
+
+    # Returns the all_seq_id of llama_batch.
+    # @return [Integer]
+    def all_seq_id; end
+
+    # Sets the token element.
+    # @param id [Integer] The id of token array.
+    # @param value [Integer] The value of token.
+    # @return [Integer]
+    def set_token(id, value); end
+
+    # Returns the token element.
+    # @param id [Integer] The id of token array.
+    # @return [Integer]
+    def get_token(id); end
+
+    # Sets the pos element.
+    # @param id [Integer] The id of pos array.
+    # @param value [Integer] The value of pos.
+    # @return [Integer]
+    def set_pos(id, value); end
+
+    # Returns the pos element.
+    # @param id [Integer] The id of pos array.
+    def get_pos(id); end
+
+    # Sets the seq_id element.
+    # @param id [Integer] The id of seq_id array.
+    # @param value [Integer] The value of seq_id.
+    # @return [Integer]
+    def set_seq_id(id, value); end
+
+    # Returns the seq_id element.
+    # @param id [Integer] The id of seq_id array.
+    # @return [Integer]
+    def get_seq_id(id); end
+
+    # Sets the logits element.
+    # @param id [Integer] The id of logits array.
+    # @param value [Boolean] The value of logits.
+    # @return [Boolean]
+    def set_logits(id, value); end
+
+    # Returns the logits element.
+    # @param id [Integer] The id of logits array.
+    # @return [Boolean]
+    def get_logits(id); end
+  end
+
   # Class for context
   class Context
     # Returns the model.
