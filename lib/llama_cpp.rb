@@ -5,9 +5,6 @@ require_relative 'llama_cpp/llama_cpp'
 
 # llama_cpp.rb provides Ruby bindings for the llama.cpp.
 module LLaMACpp
-  # Class alias to match interface of whispercpp gem.
-  Params = ContextParams
-
   module_function
 
   # Generates sentences following the given prompt for operation check.
