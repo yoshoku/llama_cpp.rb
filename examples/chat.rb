@@ -14,7 +14,6 @@ class Chat < Thor # rubocop:disable Metrics/ClassLength, Style/Documentation
   default_command :main
   desc 'main', 'Start chat'
   option :seed, type: :numeric, aliases: '-s', desc: 'random seed', default: -1
-  option :threads, type: :numeric, aliases: '-t', desc: 'number of threads', default: 2
   option :model, type: :string, aliases: '-m', desc: 'path to model file', required: true
   option :file, type: :string, aliases: '-f', desc: 'prompt file to start generation'
   option :reverse_prompt, type: :string, aliases: '-r', desc: 'halt generation at PROMPT, return control in interactive mode'
@@ -32,16 +31,17 @@ class Chat < Thor # rubocop:disable Metrics/ClassLength, Style/Documentation
   option :temp, type: :numeric, desc: 'temperature', default: 0.8
   option :n_gpu_layers, type: :numeric, desc: 'number of layers on GPU', default: 0
   def main # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
-    params = LLaMACpp::ContextParams.new
-    params.seed = options[:seed] if options[:seed] != -1
-    params.n_gpu_layers = options[:n_gpu_layers]
-    model = LLaMACpp::Model.new(model_path: options[:model], params: params)
-    context = LLaMACpp::Context.new(model: model)
+    mdl_params = LLaMACpp::ModelParams.new
+    mdl_params.n_gpu_layers = options[:n_gpu_layers]
+    model = LLaMACpp::Model.new(model_path: options[:model], params: mdl_params)
+    ctx_params = LLaMACpp::ContextParams.new
+    ctx_params.seed = options[:seed] if options[:seed] != -1
+    context = LLaMACpp::Context.new(model: model, params: ctx_params)
 
     antiprompt = options[:reverse_prompt] || 'User:'
     start_prompt = read_prompt(options[:file]) || default_prompt(antiprompt)
 
-    embd_input = context.tokenize(text: start_prompt, add_bos: true)
+    embd_input = context.model.tokenize(text: start_prompt, add_bos: true)
 
     n_ctx = context.n_ctx
     raise ArgumentError, "prompt is too long #{embd_input.size} tokens, maximum is #{n_ctx - 4}" if embd_input.size > n_ctx - 4
@@ -58,7 +58,7 @@ class Chat < Thor # rubocop:disable Metrics/ClassLength, Style/Documentation
     n_consumed = 0
     n_past = 0
     n_remain = options[:n_predict]
-    n_vocab = context.n_vocab
+    n_vocab = context.model.n_vocab
 
     while interactive
       unless embd.empty?
@@ -70,7 +70,7 @@ class Chat < Thor # rubocop:disable Metrics/ClassLength, Style/Documentation
 
         0.step(embd.size - 1, options[:batch_size]) do |i|
           n_eval = [options[:batch_size], embd.size - i].min
-          context.eval(tokens: embd[i...i + n_eval], n_past: n_past, n_threads: options[:threads])
+          context.eval(tokens: embd[i...i + n_eval], n_past: n_past)
           n_past += n_eval
         end
       end
@@ -102,7 +102,7 @@ class Chat < Thor # rubocop:disable Metrics/ClassLength, Style/Documentation
         if id == context.token_eos
           id = context.token_nl
           unless antiprompt.empty?
-            first_antiprompt = context.tokenize(text: antiprompt, add_bos: false)
+            first_antiprompt = context.model.tokenize(text: antiprompt, add_bos: false)
             embd_input.concat(first_antiprompt)
           end
         end
@@ -122,7 +122,7 @@ class Chat < Thor # rubocop:disable Metrics/ClassLength, Style/Documentation
 
       if input_echo
         output = []
-        embd.each { |token| output << context.token_to_piece(token) }
+        embd.each { |token| output << context.model.token_to_piece(token) }
         output_str = output.join
         output_str.chomp!(antiprompt) if first_input
         print(output_str)
@@ -131,7 +131,7 @@ class Chat < Thor # rubocop:disable Metrics/ClassLength, Style/Documentation
       if embd_input.size <= n_consumed
         if antiprompt.size.positive?
           last_output = []
-          last_n_tokens.each { |token| last_output << context.token_to_piece(token) }
+          last_n_tokens.each { |token| last_output << context.model.token_to_piece(token) }
           last_output_str = last_output.join
 
           search_start_pos = last_output_str.size > antiprompt.size ? last_output_str.size - antiprompt.size : 0
@@ -150,7 +150,7 @@ class Chat < Thor # rubocop:disable Metrics/ClassLength, Style/Documentation
           break interactive = false if buffer.nil?
 
           if buffer.size > 1
-            line_input = context.tokenize(text: "#{buffer}\n", add_bos: false)
+            line_input = context.model.tokenize(text: "#{buffer}\n", add_bos: false)
             embd_input.concat(line_input)
             n_remain -= line_input.size
           end

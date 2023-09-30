@@ -15,7 +15,6 @@ module LLaMACpp
   # @param context [LLaMACpp::Context] The context to use.
   # @param prompt [String] The prompt to start generation with.
   # @param n_predict [Integer] The number of tokens to predict.
-  # @param n_threads [Integer] The number of threads.
   # @param n_keep [Integer] The number of tokens to keep in the context.
   # @param n_batch [Integer] The number of tokens to process in a batch.
   # @param repeat_last_n [Integer] The number of tokens to consider for repetition penalty.
@@ -29,14 +28,14 @@ module LLaMACpp
   # @param temperature [Float] The temperature for temperature sampling.
   # @return [String]
   def generate(context, prompt, # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/ParameterLists, Metrics/PerceivedComplexity
-               n_predict: 128, n_threads: 1, n_keep: 10, n_batch: 512, repeat_last_n: 64,
+               n_predict: 128, n_keep: 10, n_batch: 512, repeat_last_n: 64,
                repeat_penalty: 1.1, frequency: 0.0, presence: 0.0, top_k: 40,
                top_p: 0.95, tfs_z: 1.0, typical_p: 1.0, temperature: 0.8)
     raise ArgumentError, 'context must be an instance of LLaMACpp::Context' unless context.is_a?(LLaMACpp::Context)
     raise ArgumentError, 'prompt must be a String' unless prompt.is_a?(String)
 
     spaced_prompt = " #{prompt}"
-    embd_input = context.tokenize(text: spaced_prompt, add_bos: true)
+    embd_input = context.model.tokenize(text: spaced_prompt, add_bos: true)
 
     n_ctx = context.n_ctx
     raise ArgumentError, "prompt is too long #{embd_input.size} tokens, maximum is #{n_ctx - 4}" if embd_input.size > n_ctx - 4
@@ -47,7 +46,7 @@ module LLaMACpp
     n_consumed = 0
     n_past = 0
     n_remain = n_predict
-    n_vocab = context.n_vocab
+    n_vocab = context.model.n_vocab
     output = []
 
     while n_remain != 0
@@ -58,7 +57,7 @@ module LLaMACpp
           embd.insert(0, last_n_tokens[(n_ctx - (n_left / 2) - embd.size)...-embd.size])
         end
 
-        context.eval(tokens: embd, n_past: n_past, n_threads: n_threads)
+        context.eval(tokens: embd, n_past: n_past)
       end
 
       n_past += embd.size
@@ -99,7 +98,7 @@ module LLaMACpp
         end
       end
 
-      embd.each { |token| output << context.token_to_piece(token) }
+      embd.each { |token| output << context.model.token_to_piece(token) }
 
       break if !embd.empty? && embd[-1] == context.token_eos
     end
