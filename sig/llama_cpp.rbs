@@ -116,7 +116,7 @@ module LLaMACpp
   class Context
     public
 
-    def initialize: (model: ::LLaMACpp::Model) -> void
+    def initialize: (model: ::LLaMACpp::Model, params: ::LLaMACpp::ContextParams) -> void
     def embeddings: () -> Array[Float]
     def text: (Integer) -> String
     def score: (Integer) -> Float

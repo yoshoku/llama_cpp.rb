@@ -297,7 +297,8 @@ module LLaMACpp
     # Create context.
     #
     # @param model [Model] The model.
-    def initialize(model:); end
+    # @param params [ContextParams] The parameters for context.
+    def initialize(model:, params:); end
 
     # Evaluates the tokens.
     #
