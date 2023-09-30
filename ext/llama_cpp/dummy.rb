@@ -597,6 +597,13 @@ module LLaMACpp
     # @return [Nil]
     def sample_temperature(candidates, temperature:); end
 
+    # Samples temeperature.
+    #
+    # @param candidates [TokenDataArray] The array of token data.
+    # @param temp [Float] The temperature.
+    # @return [Nil]
+    def sample_temp(candidates, temp:); end
+
     # Returns the token with Mirostat 1.0 algorithm.
     #
     # @param candidates [TokenDataArray] The array of token data.
