@@ -1409,6 +1409,7 @@ public:
   static void define_class(VALUE outer) {
     rb_cLLaMAContext = rb_define_class_under(outer, "Context", rb_cObject);
     rb_define_alloc_func(rb_cLLaMAContext, llama_context_alloc);
+    rb_define_attr(rb_cLLaMAContext, "model", 1, 0);
     rb_define_method(rb_cLLaMAContext, "initialize", RUBY_METHOD_FUNC(_llama_context_initialize), -1);
     rb_define_method(rb_cLLaMAContext, "eval", RUBY_METHOD_FUNC(_llama_context_eval), -1);
     rb_define_method(rb_cLLaMAContext, "eval_embd", RUBY_METHOD_FUNC(_llama_context_eval_embd), -1);

@@ -294,6 +294,10 @@ module LLaMACpp
 
   # Class for context
   class Context
+    # Returns the model.
+    # @return [Model]
+    attr_reader :model
+
     # Create context.
     #
     # @param model [Model] The model.
