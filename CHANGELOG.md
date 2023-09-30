@@ -1,3 +1,12 @@
+## [[0.6.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.5.3...v0.6.0)] - 2023-09-30
+
+**Breaking Changes**
+- Bump bundled llama.cpp from b1266 to b1292.
+  - There are many API changes, so please refer to the commits.
+
+It is becoming difficult to keep up with major changes in llama.cpp,
+and I may give up on developing this gem in the future to prioritize my own life.
+
 ## [[0.5.3](https://github.com/yoshoku/llama_cpp.rb/compare/v0.5.2...v0.5.3)] - 2023-09-23
 
 - Bump bundled llama.cpp from b1 to b1266.
