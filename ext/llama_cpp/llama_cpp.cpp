@@ -1654,6 +1654,11 @@ public:
     rb_define_method(rb_cLLaMAContext, "print_timings", RUBY_METHOD_FUNC(_llama_context_print_timings), 0);
     rb_define_method(rb_cLLaMAContext, "reset_timings", RUBY_METHOD_FUNC(_llama_context_reset_timings), 0);
     rb_define_method(rb_cLLaMAContext, "kv_cache_token_count", RUBY_METHOD_FUNC(_llama_context_kv_cache_token_count), 0);
+    rb_define_method(rb_cLLaMAContext, "kv_cache_tokens_rm", RUBY_METHOD_FUNC(_llama_context_kv_cache_tokens_rm), 2);
+    rb_define_method(rb_cLLaMAContext, "kv_cache_seq_rm", RUBY_METHOD_FUNC(_llama_context_kv_cache_seq_rm), 3);
+    rb_define_method(rb_cLLaMAContext, "kv_cache_seq_cp", RUBY_METHOD_FUNC(_llama_context_kv_cache_seq_cp), 4);
+    rb_define_method(rb_cLLaMAContext, "kv_cache_seq_keep", RUBY_METHOD_FUNC(_llama_context_kv_cache_seq_keep), 1);
+    rb_define_method(rb_cLLaMAContext, "kv_cache_seq_shift", RUBY_METHOD_FUNC(_llama_context_kv_cache_seq_shift), 4);
     rb_define_method(rb_cLLaMAContext, "set_rng_seed", RUBY_METHOD_FUNC(_llama_context_set_rng_seed), 1);
     rb_define_method(rb_cLLaMAContext, "load_session_file", RUBY_METHOD_FUNC(_llama_context_load_session_file), -1);
     rb_define_method(rb_cLLaMAContext, "save_session_file", RUBY_METHOD_FUNC(_llama_context_save_session_file), -1);
@@ -1980,6 +1985,56 @@ private:
       return Qnil;
     }
     return INT2NUM(llama_get_kv_cache_token_count(ptr->ctx));
+  }
+
+  static VALUE _llama_context_kv_cache_tokens_rm(VALUE self, VALUE c0, VALUE c1) {
+    LLaMAContextWrapper* ptr = get_llama_context(self);
+    if (ptr->ctx == NULL) {
+      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
+      return Qnil;
+    }
+    llama_kv_cache_tokens_rm(ptr->ctx, NUM2INT(c0), NUM2INT(c1));
+    return Qnil;
+  }
+
+  static VALUE _llama_context_kv_cache_seq_rm(VALUE self, VALUE seq_id, VALUE p0, VALUE p1) {
+    LLaMAContextWrapper* ptr = get_llama_context(self);
+    if (ptr->ctx == NULL) {
+      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
+      return Qnil;
+    }
+    llama_kv_cache_seq_rm(ptr->ctx, NUM2INT(seq_id), NUM2INT(p0), NUM2INT(p1));
+    return Qnil;
+  }
+
+  static VALUE _llama_context_kv_cache_seq_cp(VALUE self, VALUE seq_id_src, VALUE seq_id_dst, VALUE p0, VALUE p1) {
+    LLaMAContextWrapper* ptr = get_llama_context(self);
+    if (ptr->ctx == NULL) {
+      rb_raise(rb_eArgError, "LLaMA context is not initialized");
+      return Qnil;
+    }
+    llama_kv_cache_seq_cp(ptr->ctx, NUM2INT(seq_id_src), NUM2INT(seq_id_dst), NUM2INT(p0), NUM2INT(p1));
+    return Qnil;
+  }
+
+  static VALUE _llama_context_kv_cache_seq_keep(VALUE self, VALUE seq_id) {
+    LLaMAContextWrapper* ptr = get_llama_context(self);
+    if (ptr->ctx == NULL) {
+      rb_raise(rb_eArgError, "LLaMA context is not initialized");
+      return Qnil;
+    }
+    llama_kv_cache_seq_keep(ptr->ctx, NUM2INT(seq_id));
+    return Qnil;
+  }
+
+  static VALUE _llama_context_kv_cache_seq_shift(VALUE self, VALUE seq_id, VALUE p0, VALUE p1, VALUE delta) {
+    LLaMAContextWrapper* ptr = get_llama_context(self);
+    if (ptr->ctx == NULL) {
+      rb_raise(rb_eArgError, "LLaMA context is not initialized");
+      return Qnil;
+    }
+    llama_kv_cache_seq_shift(ptr->ctx, NUM2INT(seq_id), NUM2INT(p0), NUM2INT(p1), NUM2INT(delta));
+    return Qnil;
   }
 
   static VALUE _llama_context_set_rng_seed(VALUE self, VALUE seed_) {

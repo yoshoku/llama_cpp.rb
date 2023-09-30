@@ -468,6 +468,41 @@ module LLaMACpp
     # @return [Integer]
     def kv_cache_token_count; end
 
+    # Removes all tokens data of cells in [c0, c1).
+    #
+    # @param c0 [Integer] The start cell.
+    # @param c1 [Integer] The end cell.
+    # @return [NilClass]
+    def kv_cache_tokens_rm(c0, c1); end
+
+    # Removes all tokens that belong to the specified sequence and have positions in [p0, p1).
+    #
+    # @param seq_id [Integer] The sequence id.
+    # @param p0 [Integer] The start position.
+    # @param p1 [Integer] The end position.
+    # @return [NilClass]
+    def kv_cache_seq_rm(seq_id, p0, p1); end
+
+    # Copies all tokens that belong to the specified sequnce to another sequence.
+    #
+    # @param seq_id_src [Integer] The source sequence id.
+    # @param seq_id_dst [Integer] The destination sequence id.
+    # @param p0 [Integer] The start position.
+    # @param p1 [Integer] The end position.
+    # @return [NilClass]
+    def kv_cache_seq_cp(seq_id_src, seq_id_dst, p0, p1); end
+
+    def kv_cache_seq_keep(seq_id); end
+
+    # Adds relative position "delta" to all tokens that belong to the specified sequence and have positions in [p0, p1)
+    #
+    # @param seq_id [Integer] The sequence id.
+    # @param p0 [Integer] The start position.
+    # @param p1 [Integer] The end position.
+    # @param delta [Integer] The relative position.
+    # @return [NilClass]
+    def kv_cache_seq_shift(seq_id, p0, p1, delta); end
+
     # Sets the current rng seed.
     #
     # @param seed [Integer] The rng seed.

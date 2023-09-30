@@ -156,6 +156,11 @@ module LLaMACpp
     def print_timings: () -> void
     def reset_timings: () -> void
     def kv_cache_token_count: () -> Integer
+    def kv_cache_tokens_rm: (Integer, Integer) -> void
+    def kv_cache_seq_rm: (Integer, Integer,Integer) -> void
+    def kv_cache_seq_cp: (Integer, Integer,Integer, Integer) -> void
+    def kv_cache_seq_keep: (Integer) -> void
+    def kv_cache_seq_shift: (Integer, Integer, Ingteger, Integer) -> void
     def set_rng_seed: (Integer) -> void
     def load_session_file: (session_path: String) -> void
     def save_session_file: (session_path: String, session_tokens: Array[Integer]) -> void
