@@ -408,6 +408,12 @@ module LLaMACpp
     # @return [NilClass]
     def eval_embd(embd:, n_past:, n_tokens: nil); end
 
+    # Evaluates the tokens.
+    #
+    # @param batch [Batch] The batch.
+    # @return [NilClass]
+    def decode(batch); end
+
     # Returns the embeddings.
     #
     # @return [Array<Float>]
