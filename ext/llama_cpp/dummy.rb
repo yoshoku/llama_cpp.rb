@@ -217,7 +217,12 @@ module LLaMACpp
     def n_ctx_train; end
 
     # Returns the number of embedding.
+    # @return [Integer]
     def n_embd; end
+
+    # Returns the model's RoPE frequency scaling factor.
+    # @return [Float]
+    def rope_freq_scale_train; end
 
     # Converts token to Ruby String.
     # @param token [Integer] The token to be converted.
