@@ -1314,7 +1314,7 @@ private:
       result.resize(n_tokens);
     }
     std::string ret(result.data(), result.size());
-    return rb_str_new_cstr(ret.c_str());
+    return rb_utf8_str_new_cstr(ret.c_str());
   }
 
   static VALUE _llama_model_tokenize(int argc, VALUE* argv, VALUE self) {
@@ -1364,7 +1364,7 @@ private:
     LLaMAModelWrapper* ptr = get_llama_model(self);
     char buf[128];
     llama_model_desc(ptr->model, buf, sizeof(buf));
-    return rb_str_new_cstr(buf);
+    return rb_utf8_str_new_cstr(buf);
   }
 
   static VALUE _llama_model_get_model_size(VALUE self) {
@@ -1915,7 +1915,7 @@ private:
     }
     const llama_token token = NUM2INT(token_);
     const char* text = llama_token_get_text(ptr->ctx, token);
-    return rb_str_new_cstr(text);
+    return rb_utf8_str_new_cstr(text);
   }
 
   static VALUE _llama_context_score(VALUE self, VALUE token_) {
