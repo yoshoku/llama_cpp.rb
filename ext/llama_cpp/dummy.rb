@@ -454,6 +454,10 @@ module LLaMACpp
     # @return [Integer]
     def token_nl; end
 
+    # Returns the token id for beginning of infill prefix.
+    # @return [Integer]
+    def token_prefix; end
+
     # Returns the number of text context.
     #
     # @return [Integer]
