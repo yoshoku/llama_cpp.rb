@@ -1,3 +1,11 @@
+## [[0.7.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.6.0...v0.7.0)] - 2023-10-07
+
+- Bump bundled llama.cpp from b1292 to b1334.
+- Refactor `generate` module function.
+
+**Breaking Changes**
+- Change to return UTF-8 String on `token_to_piece` and `desc` methods in `Model` and `text` method in `Context`.
+
 ## [[0.6.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.5.3...v0.6.0)] - 2023-09-30
 
 **Breaking Changes**
