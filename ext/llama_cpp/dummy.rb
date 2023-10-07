@@ -462,6 +462,10 @@ module LLaMACpp
     # @return [Integer]
     def token_middle; end
 
+    # Returns the token id for beginning of infill suffix.
+    # @return [Integer]
+    def token_suffix; end
+
     # Returns the number of text context.
     #
     # @return [Integer]

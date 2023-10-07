@@ -151,6 +151,7 @@ module LLaMACpp
     def token_nl: () -> Integer
     def token_prefix: () -> Integer
     def token_middle: () -> Integer
+    def token_suffix: () -> Integer
     def eval: (tokens: Array[Integer], n_past: Integer, ?n_tokens: Integer) -> void
     def eval_embd: (tokens: Array[Float], n_past: Integer, ?n_tokens: Integer) -> void
     def decode: (::LLaMACpp::Batch) -> void
