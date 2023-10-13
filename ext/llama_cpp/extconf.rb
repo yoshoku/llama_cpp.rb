@@ -5,7 +5,7 @@ require 'fileutils'
 
 abort 'libstdc++ is not found.' unless have_library('stdc++')
 
-$srcs = %w[ggml.c ggml-alloc.c llama.cpp llama_cpp.cpp]
+$srcs = %w[ggml.c ggml-backend.c ggml-alloc.c llama.cpp llama_cpp.cpp]
 $srcs << 'ggml-opencl.cpp' if with_config('clblast')
 $srcs << 'ggml-mpi.c' if with_config('mpi')
 $CFLAGS << ' -w -DNDEBUG'
