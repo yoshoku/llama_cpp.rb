@@ -117,7 +117,7 @@ module LLaMACpp
   class Batch
     public
 
-    def initialize: (n_tokens: Integer, embd: Integer) -> void
+    def initialize: (n_tokens: Integer, embd: Integer, n_seq_max: Integer) -> void
     def n_tokens=: (Integer) -> Integer
     def n_tokens: () -> Integer
     def all_pos_zero=: (Integer) -> Integer

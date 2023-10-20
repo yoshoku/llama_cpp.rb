@@ -303,7 +303,8 @@ module LLaMACpp
     #
     # @param n_tokens [Integer] The number of tokens.
     # @param embd [Array<Float>] The number of embedding.
-    def initialize(n_tokens:, embd:); end
+    # @param n_seq_max [Integer] The maximum number of sequence ids.
+    def initialize(n_tokens:, embd:, n_seq_max:); end
 
     # Sets the number of tokens.
     # @param n_tokens [Integer]

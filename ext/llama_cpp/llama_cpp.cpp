@@ -74,10 +74,10 @@ private:
 
   static VALUE _llama_batch_initialize(int argc, VALUE* argv, VALUE self) {
     VALUE kw_args = Qnil;
-    ID kw_table[2] = { rb_intern("n_tokens"), rb_intern("embd") };
-    VALUE kw_values[2] = { Qundef, Qundef };
+    ID kw_table[3] = { rb_intern("n_tokens"), rb_intern("embd"), rb_intern("n_seq_max") };
+    VALUE kw_values[3] = { Qundef, Qundef, Qundef };
     rb_scan_args(argc, argv, ":", &kw_args);
-    rb_get_kwargs(kw_args, kw_table, 2, 0, kw_values);
+    rb_get_kwargs(kw_args, kw_table, 3, 0, kw_values);
 
     if (!RB_INTEGER_TYPE_P(kw_values[0])) {
       rb_raise(rb_eArgError, "n_tokens must be an integer");
@@ -87,12 +87,17 @@ private:
       rb_raise(rb_eArgError, "embd must be an integer");
       return Qnil;
     }
+    if (!RB_INTEGER_TYPE_P(kw_values[2])) {
+      rb_raise(rb_eArgError, "n_seq_max must be an integer");
+      return Qnil;
+    }
 
     const int32_t n_tokens = NUM2INT(kw_values[0]);
     const int32_t embd = NUM2INT(kw_values[1]);
+    const int32_t n_seq_max = NUM2INT(kw_values[2]);
 
     LLaMABatchWrapper* ptr = get_llama_batch(self);
-    ptr->batch = llama_batch_init(n_tokens, embd);
+    ptr->batch = llama_batch_init(n_tokens, embd, n_seq_max);
 
     return Qnil;
   }
