@@ -234,8 +234,9 @@ module LLaMACpp
     # @param text [String] The text to be tokenized.
     # @param n_max_tokens [Integer] The maximum number of tokens.
     # @param add_bos [Boolean] The flag to add the beginning of sentence token.
+    # @param special [Boolean] The flag to allow tokenizing special and/or control tokens.
     # @return [Array<Integer>]
-    def tokenize(text:, n_max_tokens:, add_bos: true); end
+    def tokenize(text:, n_max_tokens:, add_bos: false, special: false); end
 
     # Returns the model type.
     # @return [String]
