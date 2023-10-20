@@ -365,15 +365,17 @@ module LLaMACpp
     def get_pos(id); end
 
     # Sets the seq_id element.
-    # @param id [Integer] The id of seq_id array.
+    # @param i [Integer] The row id of seq_id array.
+    # @param j [Integer] The column id of seq_id array.
     # @param value [Integer] The value of seq_id.
     # @return [Integer]
-    def set_seq_id(id, value); end
+    def set_seq_id(i, j, value); end
 
     # Returns the seq_id element.
-    # @param id [Integer] The id of seq_id array.
+    # @param i [Integer] The row id of seq_id array.
+    # @param j [Integer] The column id of seq_id array.
     # @return [Integer]
-    def get_seq_id(id); end
+    def get_seq_id(i, j); end
 
     # Sets the logits element.
     # @param id [Integer] The id of logits array.

@@ -63,8 +63,8 @@ public:
     rb_define_method(rb_cLLaMABatch, "get_token", RUBY_METHOD_FUNC(_llama_batch_get_token), 1);
     rb_define_method(rb_cLLaMABatch, "set_pos", RUBY_METHOD_FUNC(_llama_batch_set_pos), 2);
     rb_define_method(rb_cLLaMABatch, "get_pos", RUBY_METHOD_FUNC(_llama_batch_get_pos), 1);
-    rb_define_method(rb_cLLaMABatch, "set_seq_id", RUBY_METHOD_FUNC(_llama_batch_set_seq_id), 2);
-    rb_define_method(rb_cLLaMABatch, "get_seq_id", RUBY_METHOD_FUNC(_llama_batch_get_seq_id), 1);
+    rb_define_method(rb_cLLaMABatch, "set_seq_id", RUBY_METHOD_FUNC(_llama_batch_set_seq_id), 3);
+    rb_define_method(rb_cLLaMABatch, "get_seq_id", RUBY_METHOD_FUNC(_llama_batch_get_seq_id), 2);
     rb_define_method(rb_cLLaMABatch, "set_logits", RUBY_METHOD_FUNC(_llama_batch_set_logits), 2);
     rb_define_method(rb_cLLaMABatch, "get_logits", RUBY_METHOD_FUNC(_llama_batch_get_logits), 1);
   }
@@ -195,25 +195,35 @@ private:
   }
 
   // seq_id
-  static VALUE _llama_batch_set_seq_id(VALUE self, VALUE idx, VALUE value) {
+  static VALUE _llama_batch_set_seq_id(VALUE self, VALUE i_, VALUE j_, VALUE value) {
     LLaMABatchWrapper* ptr = get_llama_batch(self);
-    const int32_t id = NUM2INT(idx);
-    if (id < 0 || id >= ptr->batch.n_tokens) {
-      rb_raise(rb_eArgError, "id must be in [0, n_tokens)");
+    const int32_t i = NUM2INT(i_);
+    if (i < 0 || i >= ptr->batch.n_tokens) {
+      rb_raise(rb_eArgError, "i must be in [0, n_tokens)");
       return Qnil;
     }
-    ptr->batch.seq_id[id] = NUM2INT(value);
-    return INT2NUM(ptr->batch.seq_id[id]);
+    const int32_t j = NUM2INT(j_);
+    if (j < 0 || j >= ptr->batch.n_seq_id[i]) {
+      rb_raise(rb_eArgError, "j must be in [0, n_seq_id[i])");
+      return Qnil;
+    }
+    ptr->batch.seq_id[i][j] = NUM2INT(value);
+    return INT2NUM(ptr->batch.seq_id[i][j]);
   }
 
-  static VALUE _llama_batch_get_seq_id(VALUE self, VALUE idx) {
+  static VALUE _llama_batch_get_seq_id(VALUE self, VALUE i_, VALUE j_) {
     LLaMABatchWrapper* ptr = get_llama_batch(self);
-    const int32_t id = NUM2INT(idx);
-    if (id < 0 || id >= ptr->batch.n_tokens) {
-      rb_raise(rb_eArgError, "id must be in [0, n_tokens)");
+    const int32_t i = NUM2INT(i_);
+    if (i < 0 || i >= ptr->batch.n_tokens) {
+      rb_raise(rb_eArgError, "i must be in [0, n_tokens)");
       return Qnil;
     }
-    return INT2NUM(ptr->batch.seq_id[id]);
+    const int32_t j = NUM2INT(j_);
+    if (j < 0 || j >= ptr->batch.n_seq_id[i]) {
+      rb_raise(rb_eArgError, "j must be in [0, n_seq_id[i])");
+      return Qnil;
+    }
+    return INT2NUM(ptr->batch.seq_id[i][j]);
   }
 
   // logits
