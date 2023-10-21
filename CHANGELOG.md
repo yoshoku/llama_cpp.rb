@@ -1,3 +1,11 @@
+## [[0.8.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.7.1...v0.8.0)] - 2023-10-21
+
+**Breaking Changes**
+- Bump bundled llama.cpp from b1380 to b1405
+  - Add column index argument to `set_seq_id` and `get_seq_id` methods in Batch.
+  - Add `special` keyword argument to `tokenize` method in Model.
+  - Add `n_seq_max` keyword argument to `initialize` method in Batch.
+
 ## [[0.7.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.7.0...v0.7.1)] - 2023-10-14
 
 - Bump bundled llama.cpp from b1334 to b1380.
