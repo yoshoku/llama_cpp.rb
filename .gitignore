@@ -13,4 +13,4 @@
 *.o
 *.a
 *.lock
-mkmf.log
+*.log
