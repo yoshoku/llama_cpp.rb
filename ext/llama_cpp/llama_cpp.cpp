@@ -1749,7 +1749,7 @@ public:
     rb_define_method(rb_cLLaMAContext, "set_rng_seed", RUBY_METHOD_FUNC(_llama_context_set_rng_seed), 1);
     rb_define_method(rb_cLLaMAContext, "load_session_file", RUBY_METHOD_FUNC(_llama_context_load_session_file), -1);
     rb_define_method(rb_cLLaMAContext, "save_session_file", RUBY_METHOD_FUNC(_llama_context_save_session_file), -1);
-    rb_define_method(rb_cLLaMAContext, "sample_repetition_penalty", RUBY_METHOD_FUNC(_llama_context_sample_repetition_penalty), -1);
+    rb_define_method(rb_cLLaMAContext, "sample_repetition_penalties", RUBY_METHOD_FUNC(_llama_context_sample_repetition_penalties), -1);
     rb_define_method(rb_cLLaMAContext, "sample_classifier_free_guidance", RUBY_METHOD_FUNC(_llama_context_sample_classifier_free_guidance), -1);
     rb_define_method(rb_cLLaMAContext, "sample_softmax", RUBY_METHOD_FUNC(_llama_context_sample_softmax), 1);
     rb_define_method(rb_cLLaMAContext, "sample_top_k", RUBY_METHOD_FUNC(_llama_context_sample_top_k), -1);
@@ -2190,14 +2190,14 @@ private:
     return Qnil;
   }
 
-  static VALUE _llama_context_sample_repetition_penalty(int argc, VALUE* argv, VALUE self) {
+  static VALUE _llama_context_sample_repetition_penalties(int argc, VALUE* argv, VALUE self) {
     VALUE kw_args = Qnil;
-    ID kw_table[1] = { rb_intern("penalty") };
-    VALUE kw_values[1] = { Qundef };
+    ID kw_table[3] = { rb_intern("penalty_repeat"), rb_intern("penalty_freq"), rb_intern("penalty_present") };
+    VALUE kw_values[3] = { Qundef, Qundef, Qundef };
     VALUE candidates = Qnil;
     VALUE last_n_tokens = Qnil;
     rb_scan_args(argc, argv, "2:", &candidates, &last_n_tokens, &kw_args);
-    rb_get_kwargs(kw_args, kw_table, 1, 0, kw_values);
+    rb_get_kwargs(kw_args, kw_table, 3, 0, kw_values);
 
     if (!rb_obj_is_kind_of(candidates, rb_cLLaMATokenDataArray)) {
       rb_raise(rb_eArgError, "candidates must be a TokenDataArray");
@@ -2208,7 +2208,15 @@ private:
       return Qnil;
     }
     if (!RB_FLOAT_TYPE_P(kw_values[0])) {
-      rb_raise(rb_eArgError, "penalty must be a float");
+      rb_raise(rb_eArgError, "penalty_repeat must be a float");
+      return Qnil;
+    }
+    if (!RB_FLOAT_TYPE_P(kw_values[1])) {
+      rb_raise(rb_eArgError, "penalty_freq must be a float");
+      return Qnil;
+    }
+    if (!RB_FLOAT_TYPE_P(kw_values[2])) {
+      rb_raise(rb_eArgError, "penalty_present must be a float");
       return Qnil;
     }
 
@@ -2228,9 +2236,12 @@ private:
       rb_raise(rb_eRuntimeError, "TokenDataArray is empty");
       return Qnil;
     }
-    const float penalty = NUM2DBL(kw_values[0]);
+    const float penalty_repeat = NUM2DBL(kw_values[0]);
+    const float penalty_freq = NUM2DBL(kw_values[1]);
+    const float penalty_present = NUM2DBL(kw_values[2]);
 
-    llama_sample_repetition_penalty(ctx_ptr->ctx, &(cnd_ptr->array), last_n_tokens_data.data(), last_tokens_size, penalty);
+    llama_sample_repetition_penalties(ctx_ptr->ctx, &(cnd_ptr->array), last_n_tokens_data.data(), last_tokens_size,
+        penalty_repeat, penalty_freq, penalty_present);
 
     return Qnil;
   }

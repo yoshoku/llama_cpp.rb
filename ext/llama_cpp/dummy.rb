@@ -556,9 +556,11 @@ module LLaMACpp
     #
     # @param candidates [TokenDataArray] The array of token data.
     # @param last_n_tokens [Array<Integer>] The last n tokens.
-    # @param penalty [Float] The penalty.
+    # @param penalty_repeat [Float] The penalty for repetition.
+    # @param penalty_freq [Float] The penalty for frequency.
+    # @param penalty_present [Float] The penalty for presence.
     # @return [Nil]
-    def sample_repetition_penalty(candidates, last_n_tokens, penalty:); end
+    def sample_repetition_penalties(candidates, last_n_tokens, penalty_repeat:, penalty_freq:, penalty_present:); end
 
     # Samplling with classifier-free guidance.
     #
