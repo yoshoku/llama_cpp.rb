@@ -271,6 +271,10 @@ module LLaMACpp
     # Returns the token id the beginning of sentence token.
     # @return [Integer]
     def token_bos; end
+
+    # Returns the token id the end of sentence token.
+    # @return [Integer]
+    def token_eos; end
   end
 
   # Class for model parameters.
@@ -449,10 +453,6 @@ module LLaMACpp
     #
     # @return [Array<Float>]
     def embeddings; end
-
-    # Returns the token id the end of sentence token.
-    # @return [Integer]
-    def token_eos; end
 
     # Returns the token id the new line token.
     # @return [Integer]

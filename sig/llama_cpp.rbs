@@ -86,6 +86,7 @@ module LLaMACpp
     def score: (Integer) -> Float
     def type: (Integer) -> Integer
     def token_bos: () -> Integer
+    def token_eos: () -> Integer
   end
 
   class Timings
@@ -147,7 +148,6 @@ module LLaMACpp
 
     def initialize: (model: ::LLaMACpp::Model, params: ::LLaMACpp::ContextParams) -> void
     def embeddings: () -> Array[Float]
-    def token_eos: () -> Integer
     def token_nl: () -> Integer
     def token_prefix: () -> Integer
     def token_middle: () -> Integer
