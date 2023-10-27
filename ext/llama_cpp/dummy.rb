@@ -291,6 +291,10 @@ module LLaMACpp
     # Returns the token id for beginning of infill suffix.
     # @return [Integer]
     def token_suffix; end
+
+    # Returns the token id for end of infill middle.
+    # @return [Integer]
+    def token_eot; end
   end
 
   # Class for model parameters.
@@ -469,10 +473,6 @@ module LLaMACpp
     #
     # @return [Array<Float>]
     def embeddings; end
-
-    # Returns the token id for end of infill middle.
-    # @return [Integer]
-    def token_eot; end
 
     # Returns the number of text context.
     #
