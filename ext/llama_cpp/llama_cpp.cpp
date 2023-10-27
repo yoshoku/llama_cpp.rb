@@ -1149,6 +1149,7 @@ public:
     rb_define_method(rb_cLLaMAModel, "size", RUBY_METHOD_FUNC(_llama_model_get_model_size), 0);
     rb_define_method(rb_cLLaMAModel, "n_params", RUBY_METHOD_FUNC(_llama_model_get_model_n_params), 0);
     rb_define_method(rb_cLLaMAModel, "text", RUBY_METHOD_FUNC(_llama_model_get_text), 1);
+    rb_define_method(rb_cLLaMAModel, "score", RUBY_METHOD_FUNC(_llama_model_get_score), 1);
   }
 
 private:
@@ -1403,6 +1404,13 @@ private:
     const llama_token token = NUM2INT(token_);
     const char* text = llama_token_get_text(ptr->model, token);
     return rb_utf8_str_new_cstr(text);
+  }
+
+  static VALUE _llama_model_get_score(VALUE self, VALUE token_) {
+    LLaMAModelWrapper* ptr = get_llama_model(self);
+    const llama_token token = NUM2INT(token_);
+    const float score = llama_token_get_score(ptr->model, token);
+    return DBL2NUM(score);
   }
 };
 
@@ -1678,7 +1686,6 @@ public:
     rb_define_method(rb_cLLaMAContext, "decode", RUBY_METHOD_FUNC(_llama_context_decode), 1);
     rb_define_method(rb_cLLaMAContext, "logits", RUBY_METHOD_FUNC(_llama_context_logits), 0);
     rb_define_method(rb_cLLaMAContext, "embeddings", RUBY_METHOD_FUNC(_llama_context_embeddings), 0);
-    rb_define_method(rb_cLLaMAContext, "score", RUBY_METHOD_FUNC(_llama_context_score), 1);
     rb_define_method(rb_cLLaMAContext, "type", RUBY_METHOD_FUNC(_llama_context_type), 1);
     rb_define_method(rb_cLLaMAContext, "token_bos", RUBY_METHOD_FUNC(_llama_context_token_bos), 0);
     rb_define_method(rb_cLLaMAContext, "token_eos", RUBY_METHOD_FUNC(_llama_context_token_eos), 0);
@@ -1932,17 +1939,6 @@ private:
     }
 
     return output;
-  }
-
-  static VALUE _llama_context_score(VALUE self, VALUE token_) {
-    LLaMAContextWrapper* ptr = get_llama_context(self);
-    if (ptr->ctx == NULL) {
-      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
-      return Qnil;
-    }
-    const llama_token token = NUM2INT(token_);
-    const float score = llama_token_get_score(ptr->ctx, token);
-    return DBL2NUM(score);
   }
 
   static VALUE _llama_context_type(VALUE self, VALUE token_) {

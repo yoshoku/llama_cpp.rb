@@ -255,6 +255,12 @@ module LLaMACpp
     # @param token_id [Integer]
     # @return [String]
     def text(token_id); end
+
+    # Returns the score of token.
+    #
+    # @param token_id [Integer]
+    # @return [Float]
+    def score(token_id); end
   end
 
   # Class for model parameters.
@@ -433,12 +439,6 @@ module LLaMACpp
     #
     # @return [Array<Float>]
     def embeddings; end
-
-    # Returns the score of token.
-    #
-    # @param token_id [Integer]
-    # @return [Float]
-    def score(token_id); end
 
     # Returns the type of token.
     #
