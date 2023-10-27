@@ -82,6 +82,7 @@ module LLaMACpp
     def desc: () -> String
     def size: () -> Integer
     def n_params: () -> Integer
+    def text: (Integer) -> String
   end
 
   class Timings
@@ -143,7 +144,6 @@ module LLaMACpp
 
     def initialize: (model: ::LLaMACpp::Model, params: ::LLaMACpp::ContextParams) -> void
     def embeddings: () -> Array[Float]
-    def text: (Integer) -> String
     def score: (Integer) -> Float
     def type: (Integer) -> Integer
     def token_bos: () -> Integer

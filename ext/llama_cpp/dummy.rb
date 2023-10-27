@@ -249,6 +249,12 @@ module LLaMACpp
     # Returns the number of parameters in the model
     # @return [Integer]
     def n_params; end
+
+    # Returns the text of token.
+    #
+    # @param token_id [Integer]
+    # @return [String]
+    def text(token_id); end
   end
 
   # Class for model parameters.
@@ -427,12 +433,6 @@ module LLaMACpp
     #
     # @return [Array<Float>]
     def embeddings; end
-
-    # Returns the text of token.
-    #
-    # @param token_id [Integer]
-    # @return [String]
-    def text(token_id); end
 
     # Returns the score of token.
     #
