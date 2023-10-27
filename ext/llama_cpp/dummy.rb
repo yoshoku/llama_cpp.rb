@@ -560,15 +560,6 @@ module LLaMACpp
     # @return [Nil]
     def sample_repetition_penalty(candidates, last_n_tokens, penalty:); end
 
-    # Sampling with frequency and presence penalties.
-    #
-    # @param candidates [TokenDataArray] The array of token data.
-    # @param last_n_tokens [Array<Integer>] The last n tokens.
-    # @param frequency [Float] The frequency.
-    # @param presence [Float] The presence.
-    # @return [Nil]
-    def sample_frequency_and_presence_penalties(candidates, last_n_tokens, frequency:, presence:); end
-
     # Samplling with classifier-free guidance.
     #
     # @param candidates [TokenDataArray] The array of token data.
