@@ -267,6 +267,10 @@ module LLaMACpp
     # @param token_id [Integer]
     # @return [Integer]
     def type(token_id); end
+
+    # Returns the token id the beginning of sentence token.
+    # @return [Integer]
+    def token_bos; end
   end
 
   # Class for model parameters.
@@ -445,10 +449,6 @@ module LLaMACpp
     #
     # @return [Array<Float>]
     def embeddings; end
-
-    # Returns the token id the beginning of sentence token.
-    # @return [Integer]
-    def token_bos; end
 
     # Returns the token id the end of sentence token.
     # @return [Integer]

@@ -1151,6 +1151,7 @@ public:
     rb_define_method(rb_cLLaMAModel, "text", RUBY_METHOD_FUNC(_llama_model_get_text), 1);
     rb_define_method(rb_cLLaMAModel, "score", RUBY_METHOD_FUNC(_llama_model_get_score), 1);
     rb_define_method(rb_cLLaMAModel, "type", RUBY_METHOD_FUNC(_llama_model_get_type), 1);
+    rb_define_method(rb_cLLaMAModel, "token_bos", RUBY_METHOD_FUNC(_llama_model_token_bos), 0);
   }
 
 private:
@@ -1419,6 +1420,11 @@ private:
     const llama_token token = NUM2INT(token_);
     const int type = llama_token_get_type(ptr->model, token);
     return INT2NUM(type);
+  }
+
+  static VALUE _llama_model_token_bos(VALUE self) {
+    LLaMAModelWrapper* ptr = get_llama_model(self);
+    return INT2NUM(llama_token_bos(ptr->model));
   }
 };
 
@@ -1694,7 +1700,6 @@ public:
     rb_define_method(rb_cLLaMAContext, "decode", RUBY_METHOD_FUNC(_llama_context_decode), 1);
     rb_define_method(rb_cLLaMAContext, "logits", RUBY_METHOD_FUNC(_llama_context_logits), 0);
     rb_define_method(rb_cLLaMAContext, "embeddings", RUBY_METHOD_FUNC(_llama_context_embeddings), 0);
-    rb_define_method(rb_cLLaMAContext, "token_bos", RUBY_METHOD_FUNC(_llama_context_token_bos), 0);
     rb_define_method(rb_cLLaMAContext, "token_eos", RUBY_METHOD_FUNC(_llama_context_token_eos), 0);
     rb_define_method(rb_cLLaMAContext, "token_nl", RUBY_METHOD_FUNC(_llama_context_token_nl), 0);
     rb_define_method(rb_cLLaMAContext, "token_prefix", RUBY_METHOD_FUNC(_llama_context_token_prefix), 0);
@@ -1946,15 +1951,6 @@ private:
     }
 
     return output;
-  }
-
-  static VALUE _llama_context_token_bos(VALUE self) {
-    LLaMAContextWrapper* ptr = get_llama_context(self);
-    if (ptr->ctx == NULL) {
-      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
-      return Qnil;
-    }
-    return INT2NUM(llama_token_bos(ptr->ctx));
   }
 
   static VALUE _llama_context_token_eos(VALUE self) {
