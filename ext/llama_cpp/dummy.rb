@@ -279,6 +279,10 @@ module LLaMACpp
     # Returns the token id the new line token.
     # @return [Integer]
     def token_nl; end
+
+    # Returns the token id for beginning of infill prefix.
+    # @return [Integer]
+    def token_prefix; end
   end
 
   # Class for model parameters.
@@ -457,10 +461,6 @@ module LLaMACpp
     #
     # @return [Array<Float>]
     def embeddings; end
-
-    # Returns the token id for beginning of infill prefix.
-    # @return [Integer]
-    def token_prefix; end
 
     # Returns the token id for beginning of infill middle.
     # @return [Integer]
