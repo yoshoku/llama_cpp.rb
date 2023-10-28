@@ -83,10 +83,12 @@ class Chat < Thor # rubocop:disable Metrics/ClassLength, Style/Documentation
         candidates = LLaMACpp::TokenDataArray.new(base_candidates)
 
         last_n_repeat = [last_n_tokens.size, options[:repeat_last_n], n_ctx].min
-        context.sample_repetition_penalty(candidates, last_n_tokens[-last_n_repeat..], penalty: options[:repeat_penalty])
-        context.sample_frequency_and_presence_penalties(
-          candidates, last_n_tokens[-last_n_repeat..],
-          frequency: options[:frequency_penalty], presence: options[:presence_penalty]
+        context.sample_repetition_penalties(
+          candidates,
+          last_n_tokens[-last_n_repeat..],
+          penalty_repeat: options[:repeat_penalty],
+          penalty_freq: options[:frequency_penalty],
+          penalty_present: options[:presence_penalty]
         )
 
         context.sample_top_k(candidates, k: options[:top_k])
@@ -99,8 +101,8 @@ class Chat < Thor # rubocop:disable Metrics/ClassLength, Style/Documentation
         last_n_tokens.shift
         last_n_tokens.push(id)
 
-        if id == context.token_eos
-          id = context.token_nl
+        if id == context.model.token_eos
+          id = context.model.token_nl
           unless antiprompt.empty?
             first_antiprompt = context.model.tokenize(text: antiprompt, add_bos: false)
             embd_input.concat(first_antiprompt)

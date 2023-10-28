@@ -67,9 +67,9 @@ module LLaMACpp
 
         # apply penalties
         last_n_repeat = [last_n_tokens.size, repeat_last_n, n_ctx].min
-        context.sample_repetition_penalty(candidates, last_n_tokens[-last_n_repeat..], penalty: repeat_penalty)
-        context.sample_frequency_and_presence_penalties(
-          candidates, last_n_tokens[-last_n_repeat..], frequency: frequency, presence: presence
+        context.sample_repetition_penalties(
+          candidates, last_n_tokens[-last_n_repeat..],
+          penalty_repeat: repeat_penalty, penalty_freq: frequency, penalty_present: presence
         )
 
         # temperature sampling
@@ -97,7 +97,7 @@ module LLaMACpp
 
       embd.each { |token| output << context.model.token_to_piece(token) }
 
-      break if !embd.empty? && embd[-1] == context.token_eos
+      break if !embd.empty? && embd[-1] == context.model.token_eos
     end
 
     output.join.scrub('?').strip.delete_prefix(prompt).strip
