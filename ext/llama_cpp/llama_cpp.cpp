@@ -810,6 +810,8 @@ public:
     rb_define_method(rb_cLLaMAContextParams, "yarn_beta_fast", RUBY_METHOD_FUNC(_llama_context_params_get_yarn_beta_fast), 0);
     rb_define_method(rb_cLLaMAContextParams, "yarn_beta_slow=", RUBY_METHOD_FUNC(_llama_context_params_set_yarn_beta_slow), 1);
     rb_define_method(rb_cLLaMAContextParams, "yarn_beta_slow", RUBY_METHOD_FUNC(_llama_context_params_get_yarn_beta_slow), 0);
+    rb_define_method(rb_cLLaMAContextParams, "yarn_orig_ctx=", RUBY_METHOD_FUNC(_llama_context_params_set_yarn_orig_ctx), 1);
+    rb_define_method(rb_cLLaMAContextParams, "yarn_orig_ctx", RUBY_METHOD_FUNC(_llama_context_params_get_yarn_orig_ctx), 0);
     rb_define_method(rb_cLLaMAContextParams, "mul_mat_q=", RUBY_METHOD_FUNC(_llama_context_params_set_mul_mat_q), 1);
     rb_define_method(rb_cLLaMAContextParams, "mul_mat_q", RUBY_METHOD_FUNC(_llama_context_params_get_mul_mat_q), 0);
     rb_define_method(rb_cLLaMAContextParams, "f16_kv=", RUBY_METHOD_FUNC(_llama_context_params_set_f16_kv), 1);
@@ -975,6 +977,18 @@ private:
   static VALUE _llama_context_params_get_yarn_beta_slow(VALUE self) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     return DBL2NUM(ptr->params.yarn_beta_slow);
+  }
+
+  // yarn_orig_ctx
+  static VALUE _llama_context_params_set_yarn_orig_ctx(VALUE self, VALUE yarn_orig_ctx) {
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    ptr->params.yarn_orig_ctx = NUM2UINT(yarn_orig_ctx);
+    return UINT2NUM(ptr->params.yarn_orig_ctx);
+  }
+
+  static VALUE _llama_context_params_get_yarn_orig_ctx(VALUE self) {
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    return UINT2NUM(ptr->params.yarn_orig_ctx);
   }
 
   // mul_mat_q

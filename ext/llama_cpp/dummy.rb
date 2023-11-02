@@ -772,7 +772,7 @@ module LLaMACpp
     def yarn_attn_factor; end
 
     # Sets the YaRN low correction dim.
-    # @param yarn_beta_fast[Float]
+    # @param yarn_beta_fast [Float]
     def yarn_beta_fast=(yarn_beta_fast); end
 
     # Returns the YaRN low correction dim.
@@ -780,12 +780,20 @@ module LLaMACpp
     def yarn_beta_fast; end
 
     # Sets the YaRN high correction dim.
-    # @param yarn_beta_slow[Float]
+    # @param yarn_beta_slow [Float]
     def yarn_beta_slow=(yarn_beta_slow); end
 
     # Returns the YaRN high correction dim.
     # @return [Float]
     def yarn_beta_slow; end
+
+    # Sets the YaRN original context size.
+    # @param yarn_orig_ctx [Integer]
+    def yarn_orig_ctx=(yarn_orig_ctx); end
+
+    # Returns the YaRN original context size.
+    # @return [Integer]
+    def yarn_orig_ctx; end
 
     # Sets the flag to use experimental mul_mat_q kernels.
     # @param flag [Boolean]

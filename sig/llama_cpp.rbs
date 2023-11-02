@@ -220,6 +220,8 @@ module LLaMACpp
     def yarn_beta_fast: () -> Float
     def yarn_beta_slow=: (Float) -> Float
     def yarn_beta_slow: () -> Float
+    def yarn_orig_ctx=: (Integer) -> Integer
+    def yarn_orig_ctx: () -> Integer
     def mul_mat_q: () -> bool
     def mul_mat_q=: (bool) -> bool
     def f16_kv: () -> bool
