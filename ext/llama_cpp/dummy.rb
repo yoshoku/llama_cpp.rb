@@ -771,6 +771,14 @@ module LLaMACpp
     # @return [Float]
     def yarn_attn_factor; end
 
+    # Sets the YaRN low correction dim.
+    # @param yarn_beta_fast[Float]
+    def yarn_beta_fast=(yarn_beta_fast); end
+
+    # Returns the YaRN low correction dim.
+    # @return [Float]
+    def yarn_beta_fast; end
+
     # Sets the flag to use experimental mul_mat_q kernels.
     # @param flag [Boolean]
     def mul_mat_q=(flag); end
