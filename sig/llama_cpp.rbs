@@ -181,6 +181,7 @@ module LLaMACpp
     def sample_softmax: (::LLaMACpp::TokenDataArray) -> void
     def sample_top_k: (::LLaMACpp::TokenDataArray, k: Integer, ?min_keep: Integer) -> void
     def sample_top_p: (::LLaMACpp::TokenDataArray, prob: Float, ?min_keep: Integer) -> void
+    def sample_min_p: (::LLaMACpp::TokenDataArray, prob: Float, ?min_keep: Integer) -> void
     def sample_tail_free: (::LLaMACpp::TokenDataArray, z: Float, ?min_keep: Integer) -> void
     def sample_typical: (::LLaMACpp::TokenDataArray, prob: Float, ?min_keep: Integer) -> void
     def sample_temp: (::LLaMACpp::TokenDataArray, temp: Float) -> void
