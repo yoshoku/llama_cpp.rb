@@ -731,6 +731,14 @@ module LLaMACpp
     # @return [Integer]
     def n_batch; end
 
+    # Sets the RoPE scaling type.
+    # @param scaling_type [Integer]
+    def rope_scaling_type=(scaling_type); end
+
+    # Returns the RoPE scaling type.
+    # @return [Integer]
+    def rope_scaling_type; end
+
     # Sets the RoPE base frequency.
     # @param rope_freq_base [Float]
     def rope_freq_base=(rope_freq_base); end

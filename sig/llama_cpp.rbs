@@ -206,6 +206,8 @@ module LLaMACpp
     def n_threads=: (Integer) -> Integer
     def n_threads_batch: () -> Integer
     def n_threads_batch=: (Integer) -> Integer
+    def rope_scaling_type=: (Integer) -> Integer
+    def rope_scaling_type: () -> Integer
     def rope_freq_base=: (Float) -> Float
     def rope_freq_base: () -> Float
     def rope_freq_scale=: (Float) -> Float

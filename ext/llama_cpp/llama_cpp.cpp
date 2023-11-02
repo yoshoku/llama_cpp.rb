@@ -796,6 +796,8 @@ public:
     rb_define_method(rb_cLLaMAContextParams, "n_threads", RUBY_METHOD_FUNC(_llama_context_params_get_n_threads), 0);
     rb_define_method(rb_cLLaMAContextParams, "n_threads_batch=", RUBY_METHOD_FUNC(_llama_context_params_set_n_threads_batch), 1);
     rb_define_method(rb_cLLaMAContextParams, "n_threads_batch", RUBY_METHOD_FUNC(_llama_context_params_get_n_threads_batch), 0);
+    rb_define_method(rb_cLLaMAContextParams, "rope_scaling_type=", RUBY_METHOD_FUNC(_llama_context_params_set_rope_scaling_type), 1);
+    rb_define_method(rb_cLLaMAContextParams, "rope_scaling_type", RUBY_METHOD_FUNC(_llama_context_params_get_rope_scaling_type), 0);
     rb_define_method(rb_cLLaMAContextParams, "rope_freq_base=", RUBY_METHOD_FUNC(_llama_context_params_set_rope_freq_base), 1);
     rb_define_method(rb_cLLaMAContextParams, "rope_freq_base", RUBY_METHOD_FUNC(_llama_context_params_get_rope_freq_base), 0);
     rb_define_method(rb_cLLaMAContextParams, "rope_freq_scale=", RUBY_METHOD_FUNC(_llama_context_params_set_rope_freq_scale), 1);
@@ -881,6 +883,18 @@ private:
   static VALUE _llama_context_params_get_n_threads_batch(VALUE self) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     return INT2NUM(ptr->params.n_threads_batch);
+  }
+
+  // rope_scaling_type
+  static VALUE _llama_context_params_set_rope_scaling_type(VALUE self, VALUE scaling_type) {
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    ptr->params.rope_scaling_type = NUM2INT(scaling_type);
+    return INT2NUM(ptr->params.rope_scaling_type);
+  }
+
+  static VALUE _llama_context_params_get_rope_scaling_type(VALUE self) {
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    return INT2NUM(ptr->params.rope_scaling_type);
   }
 
   // rope_freq_base
