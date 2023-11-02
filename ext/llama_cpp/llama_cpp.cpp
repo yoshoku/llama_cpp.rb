@@ -2881,6 +2881,12 @@ extern "C" void Init_llama_cpp(void) {
   rb_define_const(rb_mLLaMACpp, "LLAMA_GRETYPE_CHAR_RNG_UPPER", INT2NUM(LLAMA_GRETYPE_CHAR_RNG_UPPER));
   rb_define_const(rb_mLLaMACpp, "LLAMA_GRETYPE_CHAR_ALT", INT2NUM(LLAMA_GRETYPE_CHAR_ALT));
 
+  rb_define_const(rb_mLLaMACpp, "LLAMA_ROPE_SCALING_UNSPECIFIED", INT2NUM(LLAMA_ROPE_SCALING_UNSPECIFIED));
+  rb_define_const(rb_mLLaMACpp, "LLAMA_ROPE_SCALING_NONE", INT2NUM(LLAMA_ROPE_SCALING_NONE));
+  rb_define_const(rb_mLLaMACpp, "LLAMA_ROPE_SCALING_LINEAR", INT2NUM(LLAMA_ROPE_SCALING_LINEAR));
+  rb_define_const(rb_mLLaMACpp, "LLAMA_ROPE_SCALING_YARN", INT2NUM(LLAMA_ROPE_SCALING_YARN));
+  rb_define_const(rb_mLLaMACpp, "LLAMA_ROPE_SCALING_MAX_VALUE", INT2NUM(LLAMA_ROPE_SCALING_MAX_VALUE));
+
   std::stringstream ss_magic;
   ss_magic << std::showbase << std::hex << LLAMA_FILE_MAGIC_GGSN;
   rb_define_const(rb_mLLaMACpp, "LLAMA_FILE_MAGIC_GGSN", rb_str_new2(ss_magic.str().c_str()));

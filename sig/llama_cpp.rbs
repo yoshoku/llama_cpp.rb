@@ -31,6 +31,12 @@ module LLaMACpp
   LLAMA_GRETYPE_CHAR_RNG_UPPER: Integer
   LLAMA_GRETYPE_CHAR_ALT: Integer
 
+  LLAMA_ROPE_SCALING_UNSPECIFIED: Integer
+  LLAMA_ROPE_SCALING_NONE: Integer
+  LLAMA_ROPE_SCALING_LINEAR: Integer
+  LLAMA_ROPE_SCALING_YARN: Integer
+  LLAMA_ROPE_SCALING_MAX_VALUE: Integer
+
   def self?.backend_init: (?numa: bool) -> void
   def self?.backend_free: () -> void
   def self?.model_quantize: (input_path: String, output_path: String, params: ModelQuantizeParams) -> void
@@ -166,7 +172,7 @@ module LLaMACpp
     def kv_cache_seq_rm: (Integer, Integer,Integer) -> void
     def kv_cache_seq_cp: (Integer, Integer,Integer, Integer) -> void
     def kv_cache_seq_keep: (Integer) -> void
-    def kv_cache_seq_shift: (Integer, Integer, Ingteger, Integer) -> void
+    def kv_cache_seq_shift: (Integer, Integer, Integer, Integer) -> void
     def set_rng_seed: (Integer) -> void
     def load_session_file: (session_path: String) -> void
     def save_session_file: (session_path: String, session_tokens: Array[Integer]) -> void
