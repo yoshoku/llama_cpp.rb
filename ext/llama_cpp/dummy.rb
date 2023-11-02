@@ -499,12 +499,10 @@ module LLaMACpp
     # @return [Integer]
     def kv_cache_token_count; end
 
-    # Removes all tokens data of cells in [c0, c1).
+    # Clear the KV cache.
     #
-    # @param c0 [Integer] The start cell.
-    # @param c1 [Integer] The end cell.
     # @return [NilClass]
-    def kv_cache_tokens_rm(c0, c1); end
+    def kv_cache_clear(); end
 
     # Removes all tokens that belong to the specified sequence and have positions in [p0, p1).
     #

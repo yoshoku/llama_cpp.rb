@@ -162,7 +162,7 @@ module LLaMACpp
     def print_timings: () -> void
     def reset_timings: () -> void
     def kv_cache_token_count: () -> Integer
-    def kv_cache_tokens_rm: (Integer, Integer) -> void
+    def kv_cache_clear: () -> void
     def kv_cache_seq_rm: (Integer, Integer,Integer) -> void
     def kv_cache_seq_cp: (Integer, Integer,Integer, Integer) -> void
     def kv_cache_seq_keep: (Integer) -> void
