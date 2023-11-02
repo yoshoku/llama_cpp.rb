@@ -1,3 +1,12 @@
+## [[0.9.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.9.0...v0.9.1)] - 2023-11-03
+
+- Bump bundled llama.cpp from b1429 to b1472
+  - Rename `kv_cahe_tokens_rm` method to `kv_cahce_clear` in Context.
+  - Add `sample_min_p method` to Context.
+  - Add `rope_scaling_type`, `rope_freq_base`, `rope_freq_scale`, `yarn_ext_factor`, `yarn_attn_factor`, `yarn_beta_fast`, `yarn_beta_slow`, and `yarn_orig_ctx` to ContextParams.
+  - Add `pure` to ModelQuantizeParams.
+  - Add contstants for RoPE scaling type.
+
 ## [[0.9.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.8.0...v0.9.0)] - 2023-10-28
 
 - Fix missing object file for ggml-backend when building with metal and cublas options.
