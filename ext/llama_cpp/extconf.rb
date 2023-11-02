@@ -5,7 +5,7 @@ require 'fileutils'
 
 abort 'libstdc++ is not found.' unless have_library('stdc++')
 
-$srcs = %w[ggml.c ggml-backend.c ggml-alloc.c llama.cpp llama_cpp.cpp]
+$srcs = %w[ggml.c ggml-backend.c ggml-alloc.c ggml-quants.c llama.cpp llama_cpp.cpp]
 $srcs << 'ggml-opencl.cpp' if with_config('clblast')
 $srcs << 'ggml-mpi.c' if with_config('mpi')
 $CFLAGS << ' -w -DNDEBUG'
@@ -16,12 +16,6 @@ $VPATH << '$(srcdir)/src'
 if RUBY_PLATFORM.match?(/darwin|linux|bsd/) && try_compile('#include <stdio.h>', '-pthread')
   $CFLAGS << ' -pthread'
   $CXXFLAGS << ' -pthread'
-end
-
-unless with_config('no_k_quants')
-  $CFLAGS << ' -DGGML_USE_K_QUANTS'
-  $CXXFLAGS << ' -DGGML_USE_K_QUANTS'
-  $srcs << 'k_quants.c'
 end
 
 if with_config('qkk_64')
@@ -53,16 +47,14 @@ if with_config('metal')
   $CFLAGS << ' -DGGML_USE_METAL'
   $CXXFLAGS << ' -DGGML_USE_METAL'
   $LDFLAGS << ' -framework Foundation -framework Metal -framework MetalKit'
-  $objs = %w[ggml.o ggml-backend.o ggml-alloc.o ggml-metal.o llama.o llama_cpp.o]
-  $objs << 'k_quants.o' unless with_config('no_k_quants')
+  $objs = %w[ggml.o ggml-backend.o ggml-alloc.o ggml-quants.o ggml-metal.o llama.o llama_cpp.o]
 end
 
 if with_config('cublas')
   $CFLAGS << ' -DGGML_USE_CUBLAS -I/usr/local/cuda/include'
   $CXXFLAGS << ' -DGGML_USE_CUBLAS -I/usr/local/cuda/include'
   $LDFLAGS << ' -lcublas -lculibos -lcudart -lcublasLt -lpthread -ldl -lrt -L/usr/local/cuda/lib64'
-  $objs = %w[ggml.o ggml-backend.o ggml-alloc.o ggml-cuda.o llama.o llama_cpp.o]
-  $objs << 'k_quants.o' unless with_config('no_k_quants')
+  $objs = %w[ggml.o ggml-backend.o ggml-alloc.o ggml-quants.o ggml-cuda.o llama.o llama_cpp.o]
 end
 
 if with_config('clblast')
