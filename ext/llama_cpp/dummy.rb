@@ -797,10 +797,12 @@ module LLaMACpp
 
     # Sets the flag to use experimental mul_mat_q kernels.
     # @param flag [Boolean]
+    # @deprecated always true
     def mul_mat_q=(flag); end
 
     # Returns the flag to use experimental mul_mat_q kernels.
     # @return [Boolean]
+    # @deprecated always true
     def mul_mat_q; end
 
     # Sets the flag for using fp16 for KV cache.
