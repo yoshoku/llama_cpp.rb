@@ -214,6 +214,8 @@ module LLaMACpp
     def rope_freq_scale: () -> Float
     def yarn_ext_factor=: (Float) -> Float
     def yarn_ext_factor: () -> Float
+    def yarn_attn_factor=: (Float) -> Float
+    def yarn_attn_factor: () -> Float
     def mul_mat_q: () -> bool
     def mul_mat_q=: (bool) -> bool
     def f16_kv: () -> bool

@@ -763,6 +763,14 @@ module LLaMACpp
     # @return [Float]
     def yarn_ext_factor; end
 
+    # Sets the YaRN magnitude scaling factor.
+    # @param yarn_attn_factor [Float]
+    def yarn_attn_factor=(yarn_attn_factor); end
+
+    # Returns the YaRN magnitude scaling factor.
+    # @return [Float]
+    def yarn_attn_factor; end
+
     # Sets the flag to use experimental mul_mat_q kernels.
     # @param flag [Boolean]
     def mul_mat_q=(flag); end
