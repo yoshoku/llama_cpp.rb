@@ -755,6 +755,14 @@ module LLaMACpp
     # @return [Float]
     def rope_freq_scale; end
 
+    # Sets the YaRN extrapolation mix factor.
+    # @param yarn_ext_factor [Float]
+    def yarn_ext_factor=(yarn_ext_factor); end
+
+    # Returns the YaRN extrapolation mix factor.
+    # @return [Float]
+    def yarn_ext_factor; end
+
     # Sets the flag to use experimental mul_mat_q kernels.
     # @param flag [Boolean]
     def mul_mat_q=(flag); end

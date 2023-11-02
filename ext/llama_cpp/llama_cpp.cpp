@@ -802,6 +802,8 @@ public:
     rb_define_method(rb_cLLaMAContextParams, "rope_freq_base", RUBY_METHOD_FUNC(_llama_context_params_get_rope_freq_base), 0);
     rb_define_method(rb_cLLaMAContextParams, "rope_freq_scale=", RUBY_METHOD_FUNC(_llama_context_params_set_rope_freq_scale), 1);
     rb_define_method(rb_cLLaMAContextParams, "rope_freq_scale", RUBY_METHOD_FUNC(_llama_context_params_get_rope_freq_scale), 0);
+    rb_define_method(rb_cLLaMAContextParams, "yarn_ext_factor=", RUBY_METHOD_FUNC(_llama_context_params_set_yarn_ext_factor), 1);
+    rb_define_method(rb_cLLaMAContextParams, "yarn_ext_factor", RUBY_METHOD_FUNC(_llama_context_params_get_yarn_ext_factor), 0);
     rb_define_method(rb_cLLaMAContextParams, "mul_mat_q=", RUBY_METHOD_FUNC(_llama_context_params_set_mul_mat_q), 1);
     rb_define_method(rb_cLLaMAContextParams, "mul_mat_q", RUBY_METHOD_FUNC(_llama_context_params_get_mul_mat_q), 0);
     rb_define_method(rb_cLLaMAContextParams, "f16_kv=", RUBY_METHOD_FUNC(_llama_context_params_set_f16_kv), 1);
@@ -919,6 +921,18 @@ private:
   static VALUE _llama_context_params_get_rope_freq_scale(VALUE self) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     return DBL2NUM(ptr->params.rope_freq_scale);
+  }
+
+  // yarn_ext_factor
+  static VALUE _llama_context_params_set_yarn_ext_factor(VALUE self, VALUE yarn_ext_factor) {
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    ptr->params.yarn_ext_factor = NUM2DBL(yarn_ext_factor);
+    return DBL2NUM(ptr->params.yarn_ext_factor);
+  }
+
+  static VALUE _llama_context_params_get_yarn_ext_factor(VALUE self) {
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    return DBL2NUM(ptr->params.yarn_ext_factor);
   }
 
   // mul_mat_q
