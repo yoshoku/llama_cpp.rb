@@ -871,6 +871,14 @@ module LLaMACpp
     # Returns the flag to only copy tensors.
     # @return [Boolean]
     def only_copy; end
+
+    # Sets the flag to disable k-quant mixtures and quantize all tensors to the same type.
+    # @param flag [Boolean]
+    def prue=(flag); end
+
+    # Returns the flag to disable k-quant mixtures and quantize all tensors to the same type.
+    # @return [Boolean]
+    def pure; end
   end
 
   # Class for grammar element.

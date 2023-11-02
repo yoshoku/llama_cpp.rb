@@ -245,6 +245,8 @@ module LLaMACpp
     def quantize_output_tensor=: (bool) -> bool
     def only_copy: () -> bool
     def only_copy=: (bool) -> bool
+    def pure: () -> bool
+    def pure=: (bool) -> bool
   end
 
   class Params = ContextParams
