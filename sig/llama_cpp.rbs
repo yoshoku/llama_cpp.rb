@@ -95,6 +95,7 @@ module LLaMACpp
     def token_eos: () -> Integer
     def token_nl: () -> Integer
     def add_bos_token?: () -> bool
+    def add_eos_token?: () -> bool
     def token_prefix: () -> Integer
     def token_middle: () -> Integer
     def token_suffix: () -> Integer

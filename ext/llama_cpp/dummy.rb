@@ -284,6 +284,10 @@ module LLaMACpp
     # @return [Boolean]
     def add_bos_token?; end
 
+    # Returns the flag to add the end of sentence token.
+    # @return [Boolean]
+    def add_eos_token?; end
+
     # Returns the token id for beginning of infill prefix.
     # @return [Integer]
     def token_prefix; end

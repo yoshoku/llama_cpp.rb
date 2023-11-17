@@ -1253,6 +1253,7 @@ public:
     rb_define_method(rb_cLLaMAModel, "token_eos", RUBY_METHOD_FUNC(_llama_model_token_eos), 0);
     rb_define_method(rb_cLLaMAModel, "token_nl", RUBY_METHOD_FUNC(_llama_model_token_nl), 0);
     rb_define_method(rb_cLLaMAModel, "add_bos_token?", RUBY_METHOD_FUNC(_llama_model_add_bos_token), 0);
+    rb_define_method(rb_cLLaMAModel, "add_eos_token?", RUBY_METHOD_FUNC(_llama_model_add_eos_token), 0);
     rb_define_method(rb_cLLaMAModel, "token_prefix", RUBY_METHOD_FUNC(_llama_model_token_prefix), 0);
     rb_define_method(rb_cLLaMAModel, "token_middle", RUBY_METHOD_FUNC(_llama_model_token_middle), 0);
     rb_define_method(rb_cLLaMAModel, "token_suffix", RUBY_METHOD_FUNC(_llama_model_token_suffix), 0);
@@ -1545,6 +1546,11 @@ private:
   static VALUE _llama_model_add_bos_token(VALUE self) {
     LLaMAModelWrapper* ptr = get_llama_model(self);
     return llama_add_bos_token(ptr->model) ? Qtrue : Qfalse;
+  }
+
+  static VALUE _llama_model_add_eos_token(VALUE self) {
+    LLaMAModelWrapper* ptr = get_llama_model(self);
+    return llama_add_eos_token(ptr->model) ? Qtrue : Qfalse;
   }
 
   static VALUE _llama_model_token_prefix(VALUE self) {
