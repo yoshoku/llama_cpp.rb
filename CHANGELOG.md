@@ -1,3 +1,9 @@
+## [[0.9.3](https://github.com/yoshoku/llama_cpp.rb/compare/v0.9.2...v0.9.3)] - 2023-11-18
+
+- Bump bundled llama.cpp from b1500 to b1523.
+  - Add `add_bos_token?` method to Model.
+  - Add `add_eos_token?` method to Model.
+
 ## [[0.9.2](https://github.com/yoshoku/llama_cpp.rb/compare/v0.9.1...v0.9.2)] - 2023-11-11
 
 - Bump bundled llama.cpp from b1472 to b1500.
@@ -6,7 +12,7 @@
 
 - Bump bundled llama.cpp from b1429 to b1472
   - Rename `kv_cahe_tokens_rm` method to `kv_cahce_clear` in Context.
-  - Add `sample_min_p method` to Context.
+  - Add `sample_min_p` method to Context.
   - Add `rope_scaling_type`, `rope_freq_base`, `rope_freq_scale`, `yarn_ext_factor`, `yarn_attn_factor`, `yarn_beta_fast`, `yarn_beta_slow`, and `yarn_orig_ctx` to ContextParams.
   - Add `pure` to ModelQuantizeParams.
   - Add contstants for RoPE scaling type.
