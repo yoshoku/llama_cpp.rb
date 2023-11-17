@@ -280,6 +280,10 @@ module LLaMACpp
     # @return [Integer]
     def token_nl; end
 
+    # Returns the flag to add the beginning of sentence token.
+    # @return [Boolean]
+    def add_bos_token?; end
+
     # Returns the token id for beginning of infill prefix.
     # @return [Integer]
     def token_prefix; end
