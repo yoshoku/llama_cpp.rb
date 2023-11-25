@@ -1,3 +1,7 @@
+## [[0.9.4](https://github.com/yoshoku/llama_cpp.rb/compare/v0.9.3...v0.9.4)] - 2023-11-25
+
+- Bump bundled llama.cpp from b1523 to b1555.
+
 ## [[0.9.3](https://github.com/yoshoku/llama_cpp.rb/compare/v0.9.2...v0.9.3)] - 2023-11-18
 
 - Bump bundled llama.cpp from b1500 to b1523.
