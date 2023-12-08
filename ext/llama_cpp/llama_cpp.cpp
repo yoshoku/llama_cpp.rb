@@ -814,8 +814,6 @@ public:
     rb_define_method(rb_cLLaMAContextParams, "yarn_orig_ctx", RUBY_METHOD_FUNC(_llama_context_params_get_yarn_orig_ctx), 0);
     rb_define_method(rb_cLLaMAContextParams, "mul_mat_q=", RUBY_METHOD_FUNC(_llama_context_params_set_mul_mat_q), 1);
     rb_define_method(rb_cLLaMAContextParams, "mul_mat_q", RUBY_METHOD_FUNC(_llama_context_params_get_mul_mat_q), 0);
-    rb_define_method(rb_cLLaMAContextParams, "f16_kv=", RUBY_METHOD_FUNC(_llama_context_params_set_f16_kv), 1);
-    rb_define_method(rb_cLLaMAContextParams, "f16_kv", RUBY_METHOD_FUNC(_llama_context_params_get_f16_kv), 0);
     rb_define_method(rb_cLLaMAContextParams, "logits_all=", RUBY_METHOD_FUNC(_llama_context_params_set_logits_all), 1);
     rb_define_method(rb_cLLaMAContextParams, "logits_all", RUBY_METHOD_FUNC(_llama_context_params_get_logits_all), 0);
     rb_define_method(rb_cLLaMAContextParams, "embedding=", RUBY_METHOD_FUNC(_llama_context_params_set_embedding), 1);
@@ -1001,18 +999,6 @@ private:
   static VALUE _llama_context_params_get_mul_mat_q(VALUE self) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     return ptr->params.mul_mat_q ? Qtrue : Qfalse;
-  }
-
-  // f16_kv
-  static VALUE _llama_context_params_set_f16_kv(VALUE self, VALUE f16_kv) {
-    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
-    ptr->params.f16_kv = RTEST(f16_kv) ? true : false;
-    return ptr->params.f16_kv ? Qtrue : Qfalse;
-  }
-
-  static VALUE _llama_context_params_get_f16_kv(VALUE self) {
-    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
-    return ptr->params.f16_kv ? Qtrue : Qfalse;
   }
 
   // logits_all
