@@ -818,6 +818,8 @@ public:
     rb_define_method(rb_cLLaMAContextParams, "logits_all", RUBY_METHOD_FUNC(_llama_context_params_get_logits_all), 0);
     rb_define_method(rb_cLLaMAContextParams, "embedding=", RUBY_METHOD_FUNC(_llama_context_params_set_embedding), 1);
     rb_define_method(rb_cLLaMAContextParams, "embedding", RUBY_METHOD_FUNC(_llama_context_params_get_embedding), 0);
+    rb_define_method(rb_cLLaMAContextParams, "offload_kqv=", RUBY_METHOD_FUNC(_llama_context_params_set_offload_kqv), 1);
+    rb_define_method(rb_cLLaMAContextParams, "offload_kqv", RUBY_METHOD_FUNC(_llama_context_params_get_offload_kqv), 0);
   }
 
 private:
@@ -1023,6 +1025,18 @@ private:
   static VALUE _llama_context_params_get_embedding(VALUE self) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     return ptr->params.embedding ? Qtrue : Qfalse;
+  }
+
+  // offload_kqv
+  static VALUE _llama_context_params_set_offload_kqv(VALUE self, VALUE offload_kqv) {
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    ptr->params.offload_kqv = RTEST(offload_kqv) ? true : false;
+    return ptr->params.offload_kqv ? Qtrue : Qfalse;
+  }
+
+  static VALUE _llama_context_params_get_offload_kqv(VALUE self) {
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    return ptr->params.offload_kqv ? Qtrue : Qfalse;
   }
 };
 
