@@ -187,6 +187,10 @@ module LLaMACpp
 
   # Class for model
   class Model
+    # Returns the model.
+    # @return [ModelParams]
+    attr_reader :params
+
     # Create model.
     #
     # @param model_path [String] The path to the model file.

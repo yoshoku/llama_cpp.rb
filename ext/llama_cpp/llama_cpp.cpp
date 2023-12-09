@@ -1333,6 +1333,7 @@ public:
   static void define_class(VALUE outer) {
     rb_cLLaMAModel = rb_define_class_under(outer, "Model", rb_cObject);
     rb_define_alloc_func(rb_cLLaMAModel, llama_model_alloc);
+    rb_define_attr(rb_cLLaMAModel, "params", 1, 0);
     rb_define_method(rb_cLLaMAModel, "initialize", RUBY_METHOD_FUNC(_llama_model_initialize), -1);
     rb_define_method(rb_cLLaMAModel, "empty?", RUBY_METHOD_FUNC(_llama_model_empty), 0);
     rb_define_method(rb_cLLaMAModel, "free", RUBY_METHOD_FUNC(_llama_model_free), 0);

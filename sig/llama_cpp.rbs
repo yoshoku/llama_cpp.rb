@@ -256,6 +256,8 @@ module LLaMACpp
   class ModelQuantizeParams
     public
 
+    attr_reader params: ::LLaMACpp::ModelParams
+
     def n_thread: () -> Integer
     def n_thread=: (Integer) -> Integer
     def ftype: () -> Integer
