@@ -314,6 +314,29 @@ module LLaMACpp
     def token_eot; end
   end
 
+  # Class for model KV override.
+  class ModelKVOverride
+    # Returns the key.
+    # @return [String]
+    def key; end
+
+    # Returns the tag.
+    # @return [Integer]
+    def tag; end
+
+    # Returns the int value.
+    # @return [Integer]
+    def int_value; end
+
+    # Returns the float value.
+    # @return [Float]
+    def float_value; end
+
+    # Returns the bool value.
+    # @return [Boolean]
+    def bool_value; end
+  end
+
   # Class for model parameters.
   class ModelParams
     # Sets the number of layers to stor in VRAM.
@@ -730,7 +753,7 @@ module LLaMACpp
     def n_eval; end
   end
 
-  # Class for parameters
+  # Class for parameters of context.
   class ContextParams
     # Sets the random seed.
     # @param seed [Integer]

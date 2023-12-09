@@ -120,6 +120,16 @@ module LLaMACpp
     def n_eval: () -> Integer
   end
 
+  class ModelKVOverride
+    public
+
+    def key: () -> String
+    def tag: () -> Integer
+    def int_value: () -> Integer
+    def float_value: () -> Float
+    def bool_value: () -> bool
+  end
+
   class ModelParams
     public
 

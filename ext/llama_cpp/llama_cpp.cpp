@@ -3,6 +3,7 @@
 VALUE rb_mLLaMACpp;
 VALUE rb_cLLaMABatch;
 VALUE rb_cLLaMAModel;
+VALUE rb_cLLaMAModelKVOverride;
 VALUE rb_cLLaMAModelParams;
 VALUE rb_cLLaMATimings;
 VALUE rb_cLLaMAContext;
@@ -607,6 +608,78 @@ const rb_data_type_t RbLLaMATimings::llama_timings_type = {
   { NULL,
     RbLLaMATimings::llama_timings_free,
     RbLLaMATimings::llama_timings_size },
+  NULL,
+  NULL,
+  RUBY_TYPED_FREE_IMMEDIATELY
+};
+
+class RbLLaMAModelKVOverride {
+public:
+  static VALUE llama_model_kv_override_alloc(VALUE self) {
+    llama_model_kv_override* ptr = (llama_model_kv_override*)ruby_xmalloc(sizeof(llama_model_kv_override));
+    new (ptr) llama_model_kv_override();
+    return TypedData_Wrap_Struct(self, &llama_model_kv_override_type, ptr);
+  }
+
+  static void llama_model_kv_override_free(void* ptr) {
+    ((llama_model_kv_override*)ptr)->~llama_model_kv_override();
+    ruby_xfree(ptr);
+  }
+
+  static size_t llama_model_kv_override_size(const void* ptr) {
+    return sizeof(*((llama_model_kv_override*)ptr));
+  }
+
+  static llama_model_kv_override* get_llama_model_kv_override(VALUE self) {
+    llama_model_kv_override* ptr;
+    TypedData_Get_Struct(self, llama_model_kv_override, &llama_model_kv_override_type, ptr);
+    return ptr;
+  }
+
+  static void define_class(VALUE outer) {
+    rb_cLLaMAModelKVOverride = rb_define_class_under(outer, "ModelKVOverride", rb_cObject);
+    rb_define_alloc_func(rb_cLLaMAModelKVOverride, llama_model_kv_override_alloc);
+    rb_define_method(rb_cLLaMAModelKVOverride, "key", RUBY_METHOD_FUNC(_llama_model_kv_override_get_key), 0);
+    rb_define_method(rb_cLLaMAModelKVOverride, "tag", RUBY_METHOD_FUNC(_llama_model_kv_override_get_tag), 0);
+    rb_define_method(rb_cLLaMAModelKVOverride, "int_value", RUBY_METHOD_FUNC(_llama_model_kv_override_get_int_value), 0);
+    rb_define_method(rb_cLLaMAModelKVOverride, "float_value", RUBY_METHOD_FUNC(_llama_model_kv_override_get_float_value), 0);
+    rb_define_method(rb_cLLaMAModelKVOverride, "bool_value", RUBY_METHOD_FUNC(_llama_model_kv_override_get_bool_value), 0);
+  }
+
+  static const rb_data_type_t llama_model_kv_override_type;
+
+private:
+  static VALUE _llama_model_kv_override_get_key(VALUE self) {
+    llama_model_kv_override* ptr = get_llama_model_kv_override(self);
+    return rb_utf8_str_new_cstr(ptr->key);
+  }
+
+  static VALUE _llama_model_kv_override_get_tag(VALUE self) {
+    llama_model_kv_override* ptr = get_llama_model_kv_override(self);
+    return INT2NUM(ptr->tag);
+  }
+
+  static VALUE _llama_model_kv_override_get_int_value(VALUE self) {
+    llama_model_kv_override* ptr = get_llama_model_kv_override(self);
+    return INT2NUM(ptr->int_value);
+  }
+
+  static VALUE _llama_model_kv_override_get_float_value(VALUE self) {
+    llama_model_kv_override* ptr = get_llama_model_kv_override(self);
+    return DBL2NUM(ptr->float_value);
+  }
+
+  static VALUE _llama_model_kv_override_get_bool_value(VALUE self) {
+    llama_model_kv_override* ptr = get_llama_model_kv_override(self);
+    return ptr->bool_value ? Qtrue : Qfalse;
+  }
+};
+
+const rb_data_type_t RbLLaMAModelKVOverride::llama_model_kv_override_type = {
+  "RbLLaMAModelKVOverride",
+  { NULL,
+    RbLLaMAModelKVOverride::llama_model_kv_override_free,
+    RbLLaMAModelKVOverride::llama_model_kv_override_size },
   NULL,
   NULL,
   RUBY_TYPED_FREE_IMMEDIATELY
@@ -3001,6 +3074,7 @@ extern "C" void Init_llama_cpp(void) {
   RbLLaMATokenData::define_class(rb_mLLaMACpp);
   RbLLaMATokenDataArray::define_class(rb_mLLaMACpp);
   RbLLaMAModel::define_class(rb_mLLaMACpp);
+  RbLLaMAModelKVOverride::define_class(rb_mLLaMACpp);
   RbLLaMAModelParams::define_class(rb_mLLaMACpp);
   RbLLaMATimings::define_class(rb_mLLaMACpp);
   RbLLaMAContext::define_class(rb_mLLaMACpp);
