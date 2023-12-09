@@ -812,6 +812,10 @@ public:
     rb_define_method(rb_cLLaMAContextParams, "yarn_beta_slow", RUBY_METHOD_FUNC(_llama_context_params_get_yarn_beta_slow), 0);
     rb_define_method(rb_cLLaMAContextParams, "yarn_orig_ctx=", RUBY_METHOD_FUNC(_llama_context_params_set_yarn_orig_ctx), 1);
     rb_define_method(rb_cLLaMAContextParams, "yarn_orig_ctx", RUBY_METHOD_FUNC(_llama_context_params_get_yarn_orig_ctx), 0);
+    rb_define_method(rb_cLLaMAContextParams, "type_k=", RUBY_METHOD_FUNC(_llama_context_params_set_type_k), 1);
+    rb_define_method(rb_cLLaMAContextParams, "type_k", RUBY_METHOD_FUNC(_llama_context_params_get_type_k), 0);
+    rb_define_method(rb_cLLaMAContextParams, "type_v=", RUBY_METHOD_FUNC(_llama_context_params_set_type_v), 1);
+    rb_define_method(rb_cLLaMAContextParams, "type_v", RUBY_METHOD_FUNC(_llama_context_params_get_type_v), 0);
     rb_define_method(rb_cLLaMAContextParams, "mul_mat_q=", RUBY_METHOD_FUNC(_llama_context_params_set_mul_mat_q), 1);
     rb_define_method(rb_cLLaMAContextParams, "mul_mat_q", RUBY_METHOD_FUNC(_llama_context_params_get_mul_mat_q), 0);
     rb_define_method(rb_cLLaMAContextParams, "logits_all=", RUBY_METHOD_FUNC(_llama_context_params_set_logits_all), 1);
@@ -989,6 +993,30 @@ private:
   static VALUE _llama_context_params_get_yarn_orig_ctx(VALUE self) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     return UINT2NUM(ptr->params.yarn_orig_ctx);
+  }
+
+  // type_k
+  static VALUE _llama_context_params_set_type_k(VALUE self, VALUE type_k) {
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    ptr->params.type_k = static_cast<enum ggml_type>(NUM2INT(type_k));
+    return INT2NUM(ptr->params.type_k);
+  }
+
+  static VALUE _llama_context_params_get_type_k(VALUE self) {
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    return INT2NUM(ptr->params.type_k);
+  }
+
+  // type_v
+  static VALUE _llama_context_params_set_type_v(VALUE self, VALUE type_v) {
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    ptr->params.type_v = static_cast<enum ggml_type>(NUM2INT(type_v));
+    return INT2NUM(ptr->params.type_v);
+  }
+
+  static VALUE _llama_context_params_get_type_v(VALUE self) {
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    return INT2NUM(ptr->params.type_v);
   }
 
   // mul_mat_q
@@ -2352,7 +2380,7 @@ private:
     const float penalty_present = NUM2DBL(kw_values[2]);
 
     llama_sample_repetition_penalties(ctx_ptr->ctx, &(cnd_ptr->array), last_n_tokens_data.data(), last_tokens_size,
-        penalty_repeat, penalty_freq, penalty_present);
+                                      penalty_repeat, penalty_freq, penalty_present);
 
     return Qnil;
   }
