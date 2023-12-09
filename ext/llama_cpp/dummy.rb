@@ -8,7 +8,7 @@ module LLaMACpp
   LLAMA_SESSION_MAGIC = '0x6767736e'
 
   # LLaMA session version.
-  LLAMA_SESSION_VERSION = '2'
+  LLAMA_SESSION_VERSION = '3'
 
   # LLaMA default random seed.
   LLAMA_DEFALUT_SEED = '0xFFFFFFFF'
@@ -66,6 +66,15 @@ module LLaMACpp
 
   # LLaMA model file type.
   LLAMA_FTYPE_MOSTLY_Q6_K = 18
+
+  # LLaMA KV override type.
+  LLAMA_KV_OVERRIDE_INT = 0
+
+  # LLaMA KV override type.
+  LLAMA_KV_OVERRIDE_FLOAT = 1
+
+  # LLaMA KV override type.
+  LLAMA_KV_OVERRIDE_BOOL = 2
 
   # GrammarElement type: end of rule definition.
   LLAMA_GRETYPE_END = 0
@@ -811,6 +820,22 @@ module LLaMACpp
     # @return [Integer]
     def yarn_orig_ctx; end
 
+    # Sets the data type for K cache.
+    # @param type_k [Integer]
+    def type_k=(type_k); end
+
+    # Returns the data type for K cache.
+    # @return [Integer]
+    def type_k; end
+
+    # Sets the data type for V cache.
+    # @param type_v [Integer]
+    def type_v=(type_v); end
+
+    # Returns the data type for V cache.
+    # @return [Integer]
+    def type_v; end
+
     # Sets the flag to use experimental mul_mat_q kernels.
     # @param flag [Boolean]
     # @deprecated always true
@@ -820,14 +845,6 @@ module LLaMACpp
     # @return [Boolean]
     # @deprecated always true
     def mul_mat_q; end
-
-    # Sets the flag for using fp16 for KV cache.
-    # @param flag [Boolean]
-    def f16_kev=(flag); end
-
-    # Returns the flag for using fp16 for KV cache.
-    # @return [Boolean]
-    def f16_kev; end
 
     # Sets the flag to compute all logits.
     # @param flag [Boolean]
@@ -844,6 +861,14 @@ module LLaMACpp
     # Returns the flag for embedding mode only.
     # @return [Boolean]
     def embedding; end
+
+    # Sets the flag whether to offload the KQV ops.
+    # @param flag [Boolean]
+    def offload_kqv=(flag); end
+
+    # Returns the flag whether to offload the KQV ops.
+    # @return [Boolean]
+    def oofload_kwv; end
   end
 
   # Class for quantization parameters
