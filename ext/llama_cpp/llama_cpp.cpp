@@ -3023,6 +3023,10 @@ extern "C" void Init_llama_cpp(void) {
 
   rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_GUESSED", INT2NUM(LLAMA_FTYPE_GUESSED));
 
+  rb_define_const(rb_mLLaMACpp, "LLAMA_KV_OVERRIDE_INT", INT2NUM(LLAMA_KV_OVERRIDE_INT));
+  rb_define_const(rb_mLLaMACpp, "LLAMA_KV_OVERRIDE_FLOAT", INT2NUM(LLAMA_KV_OVERRIDE_FLOAT));
+  rb_define_const(rb_mLLaMACpp, "LLAMA_KV_OVERRIDE_BOOL", INT2NUM(LLAMA_KV_OVERRIDE_BOOL));
+
   rb_define_const(rb_mLLaMACpp, "LLAMA_GRETYPE_END", INT2NUM(LLAMA_GRETYPE_END));
   rb_define_const(rb_mLLaMACpp, "LLAMA_GRETYPE_ALT", INT2NUM(LLAMA_GRETYPE_ALT));
   rb_define_const(rb_mLLaMACpp, "LLAMA_GRETYPE_RULE_REF", INT2NUM(LLAMA_GRETYPE_RULE_REF));
