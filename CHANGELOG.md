@@ -1,3 +1,13 @@
+## [[0.10.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.9.5...v0.10.0)] - 2023-12-09
+
+- Bump bundled llama.cpp from b1593 to b1620.
+  - Add `ModelKVOverride` class.
+  - Add `offload_kqv`, `type_k`, and `type_v` to ContextParams.
+  - Add kv overwrite type constants.
+
+**Breaking Changes**
+- Remove `f16_kv` from ContextParams.
+
 ## [[0.9.5](https://github.com/yoshoku/llama_cpp.rb/compare/v0.9.4...v0.9.5)] - 2023-12-02
 
 - Bump bundled llama.cpp from b1555 to b1593.
