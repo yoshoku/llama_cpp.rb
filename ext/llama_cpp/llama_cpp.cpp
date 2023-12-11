@@ -3072,6 +3072,7 @@ static VALUE rb_llama_max_devices(VALUE self) {
 extern "C" void Init_llama_cpp(void) {
   rb_mLLaMACpp = rb_define_module("LLaMACpp");
 
+  RbLLaMABatch::define_class(rb_mLLaMACpp);
   RbLLaMATokenData::define_class(rb_mLLaMACpp);
   RbLLaMATokenDataArray::define_class(rb_mLLaMACpp);
   RbLLaMAModel::define_class(rb_mLLaMACpp);
