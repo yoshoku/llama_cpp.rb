@@ -1,3 +1,9 @@
+## [[0.10.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.10.0...v0.10.1)] - 2023-12-16
+
+- Bump bundled llama.cpp from b1620 to b1641.
+- Add attribute reader for `params` to `Model`.
+- Add `Batch` class, this class was not published because the author forgot to write `rb_define_class`.
+
 ## [[0.10.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.9.5...v0.10.0)] - 2023-12-09
 
 - Bump bundled llama.cpp from b1593 to b1620.
