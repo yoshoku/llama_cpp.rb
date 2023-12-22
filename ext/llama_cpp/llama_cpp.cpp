@@ -2201,7 +2201,7 @@ private:
       rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
       return Qnil;
     }
-    return INT2NUM(llama_n_ctx(ptr->ctx));
+    return UINT2NUM(llama_n_ctx(ptr->ctx));
   }
 
   static VALUE _llama_context_get_timings(VALUE self) {
