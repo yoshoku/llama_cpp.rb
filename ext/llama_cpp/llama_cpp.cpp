@@ -1949,6 +1949,7 @@ public:
     rb_define_method(rb_cLLaMAContext, "logits", RUBY_METHOD_FUNC(_llama_context_logits), 0);
     rb_define_method(rb_cLLaMAContext, "embeddings", RUBY_METHOD_FUNC(_llama_context_embeddings), 0);
     rb_define_method(rb_cLLaMAContext, "n_ctx", RUBY_METHOD_FUNC(_llama_context_n_ctx), 0);
+    rb_define_method(rb_cLLaMAContext, "n_batch", RUBY_METHOD_FUNC(_llama_context_n_batch), 0);
     rb_define_method(rb_cLLaMAContext, "timings", RUBY_METHOD_FUNC(_llama_context_get_timings), 0);
     rb_define_method(rb_cLLaMAContext, "print_timings", RUBY_METHOD_FUNC(_llama_context_print_timings), 0);
     rb_define_method(rb_cLLaMAContext, "reset_timings", RUBY_METHOD_FUNC(_llama_context_reset_timings), 0);
@@ -2202,6 +2203,15 @@ private:
       return Qnil;
     }
     return UINT2NUM(llama_n_ctx(ptr->ctx));
+  }
+
+  static VALUE _llama_context_n_batch(VALUE self) {
+    LLaMAContextWrapper* ptr = get_llama_context(self);
+    if (ptr->ctx == NULL) {
+      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
+      return Qnil;
+    }
+    return UINT2NUM(llama_n_batch(ptr->ctx));
   }
 
   static VALUE _llama_context_get_timings(VALUE self) {
