@@ -1,3 +1,9 @@
+## [[0.10.2](https://github.com/yoshoku/llama_cpp.rb/compare/v0.10.1...v0.10.2)] - 2023-12-23
+
+- Bump bundled llama.cpp from b1641 to b1686.
+  - Add `LLAMA_FILE_MAGIC_GGLA` constant.
+  - Add `n_batch` method to `Context`.
+
 ## [[0.10.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.10.0...v0.10.1)] - 2023-12-16
 
 - Bump bundled llama.cpp from b1620 to b1641.
