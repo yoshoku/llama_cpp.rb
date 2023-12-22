@@ -3146,6 +3146,11 @@ extern "C" void Init_llama_cpp(void) {
   rb_define_const(rb_mLLaMACpp, "LLAMA_ROPE_SCALING_MAX_VALUE", INT2NUM(LLAMA_ROPE_SCALING_MAX_VALUE));
 
   std::stringstream ss_magic;
+  ss_magic << std::showbase << std::hex << LLAMA_FILE_MAGIC_GGLA;
+  rb_define_const(rb_mLLaMACpp, "LLAMA_FILE_MAGIC_GGLA", rb_str_new2(ss_magic.str().c_str()));
+
+  ss_magic.str("");
+  ss_magic.clear(std::stringstream::goodbit);
   ss_magic << std::showbase << std::hex << LLAMA_FILE_MAGIC_GGSN;
   rb_define_const(rb_mLLaMACpp, "LLAMA_FILE_MAGIC_GGSN", rb_str_new2(ss_magic.str().c_str()));
 
