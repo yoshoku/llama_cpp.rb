@@ -180,6 +180,7 @@ module LLaMACpp
     def decode: (::LLaMACpp::Batch) -> void
     def logits: () -> Array[Float]
     def n_ctx: () -> Integer
+    def n_batch: () -> Integer
     def timings: () -> ::LLaMACpp::Timings
     def print_timings: () -> void
     def reset_timings: () -> void
