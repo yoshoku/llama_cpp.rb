@@ -523,6 +523,11 @@ module LLaMACpp
     # @return [Integer]
     def n_ctx; end
 
+    # Returns the number of batch.
+    #
+    # @return [Integer]
+    def n_batch; end
+
     # Returns the timing information
     #
     # @return [Timings]
