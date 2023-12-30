@@ -1,3 +1,8 @@
+## [[0.10.3](https://github.com/yoshoku/llama_cpp.rb/compare/v0.10.2...v0.10.3)] - 2023-12-29
+
+- Bump bundled llama.cpp from b1686 to b1710.
+- Add document comment and type declaration of `n_batch` method in `Context`.
+
 ## [[0.10.2](https://github.com/yoshoku/llama_cpp.rb/compare/v0.10.1...v0.10.2)] - 2023-12-23
 
 - Bump bundled llama.cpp from b1641 to b1686.
