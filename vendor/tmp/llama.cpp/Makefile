@@ -581,9 +581,10 @@ libllama.so: llama.o ggml.o $(OBJS)
 
 lib: llama.o ggml.o $(OBJS)
 	$(CXX) $(CXXFLAGS) -shared -fPIC -o libllama$(DSO_EXT) $^ $(LDFLAGS)
+	ar rcs libllama.a $^
 
 clean:
-	rm -vrf *.o tests/*.o *.so *.dll *.dylib benchmark-matmult common/build-info.cpp *.dot $(COV_TARGETS) $(BUILD_TARGETS) $(TEST_TARGETS)
+	rm -vrf *.o tests/*.o *.so *.dll *.dylib *.a benchmark-matmult common/build-info.cpp *.dot $(COV_TARGETS) $(BUILD_TARGETS) $(TEST_TARGETS)
 
 #
 # Examples
