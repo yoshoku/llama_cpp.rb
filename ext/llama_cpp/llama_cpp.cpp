@@ -157,8 +157,8 @@ private:
   static VALUE _llama_batch_set_token(VALUE self, VALUE idx, VALUE value) {
     LLaMABatchWrapper* ptr = get_llama_batch(self);
     const int32_t id = NUM2INT(idx);
-    if (id < 0 || id >= ptr->batch.n_tokens) {
-      rb_raise(rb_eArgError, "idx must be in [0, n_tokens)");
+    if (id < 0) {
+      rb_raise(rb_eArgError, "id must be greater or equal to 0");
       return Qnil;
     }
     ptr->batch.token[id] = NUM2INT(value);
@@ -168,8 +168,8 @@ private:
   static VALUE _llama_batch_get_token(VALUE self, VALUE idx) {
     LLaMABatchWrapper* ptr = get_llama_batch(self);
     const int32_t id = NUM2INT(idx);
-    if (id < 0 || id >= ptr->batch.n_tokens) {
-      rb_raise(rb_eArgError, "id must be in [0, n_tokens)");
+    if (id < 0) {
+      rb_raise(rb_eArgError, "id must be greater or equal to 0");
       return Qnil;
     }
     return INT2NUM(ptr->batch.token[id]);
@@ -179,8 +179,8 @@ private:
   static VALUE _llama_batch_set_pos(VALUE self, VALUE idx, VALUE value) {
     LLaMABatchWrapper* ptr = get_llama_batch(self);
     const int32_t id = NUM2INT(idx);
-    if (id < 0 || id >= ptr->batch.n_tokens) {
-      rb_raise(rb_eArgError, "id must be in [0, n_tokens)");
+    if (id < 0) {
+      rb_raise(rb_eArgError, "id must be greater or equal to 0");
       return Qnil;
     }
     ptr->batch.pos[id] = NUM2INT(value);
@@ -190,8 +190,8 @@ private:
   static VALUE _llama_batch_get_pos(VALUE self, VALUE idx) {
     LLaMABatchWrapper* ptr = get_llama_batch(self);
     const int32_t id = NUM2INT(idx);
-    if (id < 0 || id >= ptr->batch.n_tokens) {
-      rb_raise(rb_eArgError, "id must be in [0, n_tokens)");
+    if (id < 0) {
+      rb_raise(rb_eArgError, "id must be greater or equal to 0");
       return Qnil;
     }
     return INT2NUM(ptr->batch.pos[id]);
@@ -201,8 +201,8 @@ private:
   static VALUE _llama_batch_set_n_seq_id(VALUE self, VALUE idx, VALUE value) {
     LLaMABatchWrapper* ptr = get_llama_batch(self);
     const int32_t id = NUM2INT(idx);
-    if (id < 0 || id >= ptr->batch.n_tokens) {
-      rb_raise(rb_eArgError, "id must be in [0, n_tokens)");
+    if (id < 0) {
+      rb_raise(rb_eArgError, "id must be greater or equal to 0");
       return Qnil;
     }
     ptr->batch.n_seq_id[id] = NUM2INT(value);
@@ -212,8 +212,8 @@ private:
   static VALUE _llama_batch_get_n_seq_id(VALUE self, VALUE idx) {
     LLaMABatchWrapper* ptr = get_llama_batch(self);
     const int32_t id = NUM2INT(idx);
-    if (id < 0 || id >= ptr->batch.n_tokens) {
-      rb_raise(rb_eArgError, "id must be in [0, n_tokens)");
+    if (id < 0) {
+      rb_raise(rb_eArgError, "id must be greater or equal to 0");
       return Qnil;
     }
     return INT2NUM(ptr->batch.n_seq_id[id]);
@@ -223,13 +223,13 @@ private:
   static VALUE _llama_batch_set_seq_id(VALUE self, VALUE i_, VALUE j_, VALUE value) {
     LLaMABatchWrapper* ptr = get_llama_batch(self);
     const int32_t i = NUM2INT(i_);
-    if (i < 0 || i >= ptr->batch.n_tokens) {
-      rb_raise(rb_eArgError, "i must be in [0, n_tokens)");
+    if (i < 0) {
+      rb_raise(rb_eArgError, "i must be greater or equal to 0");
       return Qnil;
     }
     const int32_t j = NUM2INT(j_);
-    if (j < 0 || j >= ptr->batch.n_seq_id[i]) {
-      rb_raise(rb_eArgError, "j must be in [0, n_seq_id[i])");
+    if (j < 0) {
+      rb_raise(rb_eArgError, "j must be greater or equal to 0");
       return Qnil;
     }
     ptr->batch.seq_id[i][j] = NUM2INT(value);
@@ -239,13 +239,13 @@ private:
   static VALUE _llama_batch_get_seq_id(VALUE self, VALUE i_, VALUE j_) {
     LLaMABatchWrapper* ptr = get_llama_batch(self);
     const int32_t i = NUM2INT(i_);
-    if (i < 0 || i >= ptr->batch.n_tokens) {
-      rb_raise(rb_eArgError, "i must be in [0, n_tokens)");
+    if (i < 0) {
+      rb_raise(rb_eArgError, "i must be greater or equal to 0");
       return Qnil;
     }
     const int32_t j = NUM2INT(j_);
-    if (j < 0 || j >= ptr->batch.n_seq_id[i]) {
-      rb_raise(rb_eArgError, "j must be in [0, n_seq_id[i])");
+    if (j < 0) {
+      rb_raise(rb_eArgError, "j must be greater or equal to 0");
       return Qnil;
     }
     return INT2NUM(ptr->batch.seq_id[i][j]);
@@ -255,8 +255,8 @@ private:
   static VALUE _llama_batch_set_logits(VALUE self, VALUE idx, VALUE value) {
     LLaMABatchWrapper* ptr = get_llama_batch(self);
     const int32_t id = NUM2INT(idx);
-    if (id < 0 || id >= ptr->batch.n_tokens) {
-      rb_raise(rb_eArgError, "id must be in [0, n_tokens)");
+    if (id < 0) {
+      rb_raise(rb_eArgError, "id must be greater or equal to 0");
       return Qnil;
     }
     ptr->batch.logits[id] = RTEST(value) ? true : false;
@@ -266,8 +266,8 @@ private:
   static VALUE _llama_batch_get_logits(VALUE self, VALUE idx) {
     LLaMABatchWrapper* ptr = get_llama_batch(self);
     const int32_t id = NUM2INT(idx);
-    if (id < 0 || id >= ptr->batch.n_tokens) {
-      rb_raise(rb_eArgError, "id must be in [0, n_tokens)");
+    if (id < 0) {
+      rb_raise(rb_eArgError, "id must be greater or equal to 0");
       return Qnil;
     }
     return ptr->batch.logits[id] ? Qtrue : Qfalse;
