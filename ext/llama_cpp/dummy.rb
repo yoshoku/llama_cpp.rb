@@ -454,6 +454,15 @@ module LLaMACpp
     # @param id [Integer] The id of pos array.
     def get_pos(id); end
 
+    # Sets the number of seq_id elements.
+    # @param id [Integer] The id of n_seq_id array.
+    # @param value [Integer] The value of n_seq_id.
+    def set_n_seq_id(id, value); end
+
+    # Returns the number of seq_id elements.
+    # @return [Integer]
+    def get_n_seq_id; end
+
     # Sets the seq_id element.
     # @param i [Integer] The row id of seq_id array.
     # @param j [Integer] The column id of seq_id array.

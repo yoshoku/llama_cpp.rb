@@ -162,6 +162,8 @@ module LLaMACpp
     def get_token: (Integer) -> Integer
     def set_pos: (Integer, Integer) -> Integer
     def get_pos: (Integer) -> Integer
+    def set_n_seq_id: (Integer, Integer) -> Integer
+    def get_n_seq_id: (Integer) -> Integer
     def set_seq_id: (Integer, Integer, Integer) -> Integer
     def get_seq_id: (Integer, Integer) -> Integer
     def set_logit: (Integer, bool) -> bool
