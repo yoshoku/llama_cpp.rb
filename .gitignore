@@ -10,6 +10,8 @@
 /lib/llama_cpp/ggml-metal.metal
 *.bundle
 *.so
+*.dylib
+*.dll
 *.o
 *.a
 *.lock
