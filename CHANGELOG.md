@@ -1,3 +1,12 @@
+## [[0.11.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.10.3...v0.11.0)] - 2024-01-07
+
+- Add `set_n_seq_id` and `get_n_seq_id` methods to `Batch`.
+
+**Breaking Changes**
+- Change to build shared and static libraries of llama.cpp using its Makefile.
+- Change keyword arguments of `Batch` constructor.
+- Remove upper limit check for index value in `Batch` methods.
+
 ## [[0.10.4](https://github.com/yoshoku/llama_cpp.rb/compare/v0.10.3...v0.10.4)] - 2024-01-06
 
 - Bump bundled llama.cpp from b1710 to b1768.
