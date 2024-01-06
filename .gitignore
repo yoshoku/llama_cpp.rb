@@ -7,7 +7,7 @@
 /spec/reports/
 /tmp/
 /node_modules/
-/lib/llama_cpp/ggml-metal.metal
+/vendor/lib/ggml-metal.metal
 /vendor/include/*.h
 *.bundle
 *.so
