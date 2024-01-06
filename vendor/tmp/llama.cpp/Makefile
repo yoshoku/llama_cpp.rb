@@ -229,10 +229,12 @@ ifneq ($(_WIN32),1)
 endif
 
 # Dynamic Shared Object extension
-ifneq ($(_WIN32),1)
-	DSO_EXT := .so
-else
+ifeq ($(_WIN32),1)
 	DSO_EXT := .dll
+else ifeq ($(UNAME_S),Darwin)
+	DSO_EXT := .dylib
+else
+	DSO_EXT := .so
 endif
 
 # Windows Sockets 2 (Winsock) for network-capable apps
@@ -577,8 +579,11 @@ train.o: common/train.cpp common/train.h
 libllama.so: llama.o ggml.o $(OBJS)
 	$(CXX) $(CXXFLAGS) -shared -fPIC -o $@ $^ $(LDFLAGS)
 
+lib: llama.o ggml.o $(OBJS)
+	$(CXX) $(CXXFLAGS) -shared -fPIC -o libllama$(DSO_EXT) $^ $(LDFLAGS)
+
 clean:
-	rm -vrf *.o tests/*.o *.so *.dll benchmark-matmult common/build-info.cpp *.dot $(COV_TARGETS) $(BUILD_TARGETS) $(TEST_TARGETS)
+	rm -vrf *.o tests/*.o *.so *.dll *.dylib benchmark-matmult common/build-info.cpp *.dot $(COV_TARGETS) $(BUILD_TARGETS) $(TEST_TARGETS)
 
 #
 # Examples
