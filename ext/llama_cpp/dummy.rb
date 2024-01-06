@@ -593,7 +593,7 @@ module LLaMACpp
     # Sets the current rng seed.
     #
     # @param seed [Integer] The rng seed.
-    def set_rng_seed(seed); end # rubocop:disable Naming/AccessorMethodName
+    def set_rng_seed(seed); end
 
     # Loads session file.
     #

@@ -42,6 +42,9 @@ Metrics/MethodLength:
 Naming/MethodParameterName:
   Enabled: false
 
+Naming/AccessorMethodName:
+  Enabled: false
+
 Style/GlobalVars:
   Exclude:
     - 'ext/**/*'
