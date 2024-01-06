@@ -26,10 +26,13 @@ Gem::Specification.new do |spec|
     end
     `git ls-files -z`.split("\x0")
                      .reject { |f| f.match(%r{\A(?:(?:bin|doc|test|spec|node_modules|pkg|tmp|\.git|\.github|\.husky)/)}) }
-                     .select { |f| f.match(/\.(?:rb|rbs|h|hpp|c|cpp|cu|m|metal|md|txt)$/) }
+                     .select { |f| f.match(/\.(?:rb|rbs|h|hpp|c|cpp|cu|m|metal|mk|md|txt)$/) }
   end
   spec.files.delete('ext/llama_cpp/dummy.rb')
-  spec.files.append('ext/llama_cpp/src/LICENSE')
+  spec.files.append('vendor/tmp/llama.cpp/LICENSE')
+  spec.files.append('vendor/tmp/llama.cpp/Makefile')
+  spec.files.append('vendor/lib/.gitkeep')
+  spec.files.append('vendor/include/.gitkeep')
 
   spec.bindir = 'exe'
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
