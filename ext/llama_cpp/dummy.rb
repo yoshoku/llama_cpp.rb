@@ -392,10 +392,10 @@ module LLaMACpp
   class Batch
     # Create batch.
     #
-    # @param n_tokens [Integer] The number of tokens.
-    # @param embd [Array<Float>] The number of embedding.
-    # @param n_seq_max [Integer] The maximum number of sequence ids.
-    def initialize(n_tokens:, embd:, n_seq_max:); end
+    # @param max_n_token [Integer] The maximum number of tokens.
+    # @param n_embd [Array<Float>] The number of embedding.
+    # @param max_n_seq [Integer] The maximum number of sequence ids.
+    def initialize(max_n_token:, n_embd:, max_n_seq:); end
 
     # Sets the number of tokens.
     # @param n_tokens [Integer]

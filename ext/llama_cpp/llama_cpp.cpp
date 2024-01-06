@@ -77,30 +77,30 @@ private:
 
   static VALUE _llama_batch_initialize(int argc, VALUE* argv, VALUE self) {
     VALUE kw_args = Qnil;
-    ID kw_table[3] = { rb_intern("n_tokens"), rb_intern("embd"), rb_intern("n_seq_max") };
+    ID kw_table[3] = { rb_intern("max_n_token"), rb_intern("n_embd"), rb_intern("max_n_seq") };
     VALUE kw_values[3] = { Qundef, Qundef, Qundef };
     rb_scan_args(argc, argv, ":", &kw_args);
     rb_get_kwargs(kw_args, kw_table, 3, 0, kw_values);
 
     if (!RB_INTEGER_TYPE_P(kw_values[0])) {
-      rb_raise(rb_eArgError, "n_tokens must be an integer");
+      rb_raise(rb_eArgError, "max_n_token must be an integer");
       return Qnil;
     }
     if (!RB_INTEGER_TYPE_P(kw_values[1])) {
-      rb_raise(rb_eArgError, "embd must be an integer");
+      rb_raise(rb_eArgError, "n_embd must be an integer");
       return Qnil;
     }
     if (!RB_INTEGER_TYPE_P(kw_values[2])) {
-      rb_raise(rb_eArgError, "n_seq_max must be an integer");
+      rb_raise(rb_eArgError, "max_n_seq must be an integer");
       return Qnil;
     }
 
-    const int32_t n_tokens = NUM2INT(kw_values[0]);
-    const int32_t embd = NUM2INT(kw_values[1]);
-    const int32_t n_seq_max = NUM2INT(kw_values[2]);
+    const int32_t max_n_token = NUM2INT(kw_values[0]);
+    const int32_t n_embd = NUM2INT(kw_values[1]);
+    const int32_t max_n_seq = NUM2INT(kw_values[2]);
 
     LLaMABatchWrapper* ptr = get_llama_batch(self);
-    ptr->batch = llama_batch_init(n_tokens, embd, n_seq_max);
+    ptr->batch = llama_batch_init(max_n_token, n_embd, max_n_seq);
 
     return Qnil;
   }
