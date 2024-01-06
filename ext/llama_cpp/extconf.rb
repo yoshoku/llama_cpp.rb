@@ -2,119 +2,44 @@
 
 require 'mkmf'
 require 'fileutils'
+require 'open3'
 
-abort 'libstdc++ is not found.' unless have_library('stdc++')
+VENDOR_DIR = File.expand_path("#{__dir__}/../../vendor")
+VENDOR_LIB_DIR = "#{VENDOR_DIR}/lib"
+VENDOR_INC_DIR = "#{VENDOR_DIR}/include"
+LLAMA_CPP_DIR = "#{VENDOR_DIR}/tmp/llama.cpp"
 
-$srcs = %w[ggml.c ggml-backend.c ggml-alloc.c ggml-quants.c llama.cpp llama_cpp.cpp]
-$srcs << 'ggml-opencl.cpp' if with_config('clblast')
-$srcs << 'ggml-mpi.c' if with_config('mpi')
-$CFLAGS << ' -w -DNDEBUG'
-$CXXFLAGS << ' -std=c++11 -DNDEBUG'
-$INCFLAGS << ' -I$(srcdir)/src'
-$VPATH << '$(srcdir)/src'
+make_envs = +''
+make_envs << ' LLAMA_DEBUG=1' if with_config('debug')
+make_envs << ' LLAMA_QKK_64=1' if with_config('qkk-64')
+make_envs << ' LLAMA_NO_ACCELERATE=1' if with_config('no-accelerate')
+make_envs << ' LLAMA_OPENBLAS=1' if with_config('openblas')
+make_envs << ' LLAMA_BLIS=1' if with_config('blis')
+make_envs << ' LLAMA_CUBLAS=1' if with_config('cublas')
+make_envs << ' LLAMA_CLBLAST=1' if with_config('clblast')
+make_envs << ' LLAMA_HIPBLAS=1' if with_config('hipblas')
+make_envs << ' LLAMA_MPI=1' if with_config('mpi')
 
-if RUBY_PLATFORM.match?(/darwin|linux|bsd/) && try_compile('#include <stdio.h>', '-pthread')
-  $CFLAGS << ' -pthread'
-  $CXXFLAGS << ' -pthread'
+Dir.chdir(LLAMA_CPP_DIR) do
+  _mkstdout, _mkstderr, mkstatus = Open3.capture3("make lib #{make_envs}".strip)
+  abort('Failed to build llama.cpp.') unless mkstatus.success?
+
+  FileUtils.cp(Dir.glob('libllama.*'), VENDOR_LIB_DIR)
+  FileUtils.cp(Dir.glob('*.h'), "#{VENDOR_DIR}/include/")
 end
 
-if with_config('qkk_64')
-  $CFLAGS << ' -DGGML_QKK_64'
-  $CXXFLAGS << ' -DGGML_QKK_64'
-end
-
-if with_config('openblas')
-  abort 'libopenblas is not found.' unless have_library('openblas')
-  abort 'cblas.h is not found.' unless have_header('cblas.h')
-
-  $CFLAGS << ' -DGGML_USE_OPENBLAS'
-end
-
-if with_config('blis')
-  abort 'libblis is not found.' unless have_library('blis')
-  abort 'cblas.h is not found.' unless have_header('cblas.h')
-
-  $CFLAGS << ' -DGGML_USE_OPENBLAS'
-end
-
-if with_config('accelerate')
-  abort 'Accelerate framework is not found.' unless have_framework('Accelerate')
-
-  $CFLAGS << ' -DGGML_USE_ACCELERATE'
-end
-
-if with_config('metal')
-  $CFLAGS << ' -DGGML_USE_METAL'
-  $CXXFLAGS << ' -DGGML_USE_METAL'
-  $LDFLAGS << ' -framework Foundation -framework Metal -framework MetalKit'
-  $objs = %w[ggml.o ggml-backend.o ggml-alloc.o ggml-quants.o ggml-metal.o llama.o llama_cpp.o]
-end
-
-if with_config('cublas')
-  $CFLAGS << ' -DGGML_USE_CUBLAS -I/usr/local/cuda/include'
-  $CXXFLAGS << ' -DGGML_USE_CUBLAS -I/usr/local/cuda/include'
-  $LDFLAGS << ' -lcublas -lculibos -lcudart -lcublasLt -lpthread -ldl -lrt -L/usr/local/cuda/lib64'
-  $objs = %w[ggml.o ggml-backend.o ggml-alloc.o ggml-quants.o ggml-cuda.o llama.o llama_cpp.o]
-end
-
-if with_config('clblast')
-  abort 'libclblast is not found.' unless have_library('clblast')
-
-  $CFLAGS << ' -DGGML_USE_CLBLAST'
-  $CXXFLAGS << ' -DGGML_USE_CLBLAST'
-  if RUBY_PLATFORM.match?(/darwin/)
-    $LDFLAGS << ' -framework OpenCL'
-  else
-    abort 'libOpenCL is not found.' unless have_library('OpenCL')
+if RUBY_PLATFORM.match?(/darwin/)
+  Dir.chdir(VENDOR_LIB_DIR) do
+    _mkstdout, _mkstderr, mkstatus = Open3.capture3("install_name_tool -id #{VENDOR_LIB_DIR}/libllama.dylib libllama.dylib")
+    abort('Failed to set installation path for libllama.dylib.') unless mkstatus.success?
+    FileUtils.cp("#{LLAMA_CPP_DIR}/ggml-metal.metal", File.expand_path("#{__dir__}/../../lib/llama_cpp/"))
   end
 end
 
-if with_config('mpi')
-  abort 'libmpi is not found.' unless have_library('mpi')
-  abort 'mpi.h is not found.' unless have_header('mpi.h')
+abort('libstdc++ is not found.') unless have_library('stdc++')
+abort('libllama is not found.') unless find_library('llama', nil, VENDOR_LIB_DIR)
+abort('llama.h is not found.') unless find_header('llama.h', nil, VENDOR_INC_DIR)
 
-  $CFLAGS << ' -DGGML_USE_MPI -Wno-cast-qual'
-  $CXXFLAGS << ' -DGGML_USE_MPI -Wno-cast-qual'
-end
-
-# @!visibility private
-UNAME_M = RbConfig::CONFIG['build_cpu'] || RbConfig::CONFIG['host_cpu'] || RbConfig::CONFIG['target_cpu']
-
-# rubocop:disable Layout/LineLength
-if UNAME_M.match?(/x86_64|i686/) && try_compile('#include <stdio.h>', '-march=native -mtune=native')
-  $CFLAGS << ' -march=native -mtune=native'
-  $CXXFLAGS << ' -march=native -mtune=native'
-elsif UNAME_M.match?(/aarch64/) && try_compile('#include <stdio.h>', '-mcpu=native')
-  $CFLAGS << ' -mcpu=native'
-  $CXXFLAGS << ' -mcpu=native'
-elsif UNAME_M.match?(/armv6/) && try_compile('#include <stdio.h>', '-mfpu=neon-fp-armv8 -mfp16-format=ieee -mno-unaligned-access')
-  $CFLAGS << ' -mfpu=neon-fp-armv8 -mfp16-format=ieee -mno-unaligned-access'
-  $CXXFLAGS << ' -mfpu=neon-fp-armv8 -mfp16-format=ieee -mno-unaligned-access'
-elsif UNAME_M.match?(/armv7/) && try_compile('#include <stdio.h>', '-mfpu=neon-fp-armv8 -mfp16-format=ieee -mno-unaligned-access -funsafe-math-optimizations')
-  $CFLAGS << ' -mfpu=neon-fp-armv8 -mfp16-format=ieee -mno-unaligned-access -funsafe-math-optimizations'
-  $CXXFLAGS << ' -mfpu=neon-fp-armv8 -mfp16-format=ieee -mno-unaligned-access -funsafe-math-optimizations'
-elsif UNAME_M.match?(/armv8/) && try_compile('#include <stdio.h>', '-mfp16-format=ieee -mno-unaligned-access')
-  $CFLAGS << ' -mfp16-format=ieee -mno-unaligned-access'
-  $CXXFLAGS << ' -mfp16-format=ieee -mno-unaligned-access'
-end
-# rubocop:enable Layout/LineLength
+$CXXFLAGS << ' -std=c++11'
 
 create_makefile('llama_cpp/llama_cpp')
-
-if with_config('cublas')
-  File.open('Makefile', 'a') do |f|
-    f.puts 'ggml-cuda.o: ggml-cuda.cu ggml-cuda.h'
-    f.puts "\tnvcc -shared -Xcompiler -fPIC -arch=native -c -o $@ $<"
-  end
-end
-
-if with_config('metal')
-  File.open('Makefile', 'a') do |f|
-    f.puts 'ggml-metal.o: ggml-metal.m ggml-metal.h'
-    f.puts "\t$(CC) $(CFLAGS) -c $< -o $@"
-  end
-
-  metal_path = File.expand_path("#{__dir__}/src/ggml-metal.metal")
-  dest_path = File.expand_path("#{__dir__}/../../lib/llama_cpp/")
-  FileUtils.cp(metal_path, dest_path)
-end
