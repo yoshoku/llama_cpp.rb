@@ -2162,6 +2162,8 @@ private:
       rb_raise(rb_eRuntimeError, "Failed to decode");
       return Qnil;
     }
+    rb_iv_set(self, "@n_tokens", INT2NUM(batch_ptr->batch.n_tokens));
+    rb_iv_set(self, "@has_evaluated", Qtrue);
     return Qnil;
   }
 
