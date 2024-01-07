@@ -522,6 +522,11 @@ module LLaMACpp
     # @return [NilClass]
     def decode(batch); end
 
+    # Retunrs the logits.
+    #
+    # @return [Array<Float>]
+    def logits(); end
+
     # Returns the embeddings.
     #
     # @return [Array<Float>]
