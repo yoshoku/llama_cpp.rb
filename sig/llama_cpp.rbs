@@ -149,6 +149,7 @@ module LLaMACpp
   class Batch
     public
 
+    def self.get_one: (tokens: Array[Integer], n_tokens: Integer, pos_zero: Integer, seq_id: Integer) -> ::LLaMACpp::Batch
     def initialize: (max_n_token: Integer, n_embd: Integer, max_n_seq: Integer) -> void
     def n_tokens=: (Integer) -> Integer
     def n_tokens: () -> Integer

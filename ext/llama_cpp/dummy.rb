@@ -390,6 +390,14 @@ module LLaMACpp
 
   # Class for batch
   class Batch
+    # Create one batch.
+    #
+    # @param tokens [Array<Integer>] The tokens.
+    # @param n_tokens [Integer] The number of tokens.
+    # @param pos_zero [Integer] The position of zero.
+    # @param seq_id [Integer] The sequence id.
+    def self.get_one(tokens:, n_tokens:, pos_zero:, seq_id:); end
+
     # Create batch.
     #
     # @param max_n_token [Integer] The maximum number of tokens.

@@ -51,6 +51,7 @@ public:
   static void define_class(VALUE outer) {
     rb_cLLaMABatch = rb_define_class_under(outer, "Batch", rb_cObject);
     rb_define_alloc_func(rb_cLLaMABatch, llama_batch_alloc);
+    rb_define_singleton_method(rb_cLLaMABatch, "get_one", RUBY_METHOD_FUNC(_llama_batch_get_one), -1);
     rb_define_method(rb_cLLaMABatch, "initialize", RUBY_METHOD_FUNC(_llama_batch_initialize), -1);
     rb_define_method(rb_cLLaMABatch, "n_tokens=", RUBY_METHOD_FUNC(_llama_batch_set_n_tokens), 1);
     rb_define_method(rb_cLLaMABatch, "n_tokens", RUBY_METHOD_FUNC(_llama_batch_get_n_tokens), 0);
@@ -74,6 +75,47 @@ public:
 
 private:
   static const rb_data_type_t llama_batch_type;
+
+  static VALUE _llama_batch_get_one(int argc, VALUE* argv, VALUE klass) {
+    VALUE kw_args = Qnil;
+    ID kw_table[4] = { rb_intern("tokens"), rb_intern("n_tokens"), rb_intern("pos_zero"), rb_intern("seq_id") };
+    VALUE kw_values[4] = { Qundef, Qundef, Qundef, Qundef };
+    rb_scan_args(argc, argv, ":", &kw_args);
+    rb_get_kwargs(kw_args, kw_table, 4, 0, kw_values);
+
+    if (!RB_TYPE_P(kw_values[0], T_ARRAY)) {
+      rb_raise(rb_eArgError, "tokens must be an array");
+      return Qnil;
+    }
+    if (!RB_INTEGER_TYPE_P(kw_values[1])) {
+      rb_raise(rb_eArgError, "n_tokens must be an integer");
+      return Qnil;
+    }
+    if (!RB_INTEGER_TYPE_P(kw_values[2])) {
+      rb_raise(rb_eArgError, "pos_zero must be an integer");
+      return Qnil;
+    }
+    if (!RB_INTEGER_TYPE_P(kw_values[3])) {
+      rb_raise(rb_eArgError, "seq_id must be an integer");
+      return Qnil;
+    }
+
+    const size_t sz_array = RARRAY_LEN(kw_values[0]);
+    const int32_t n_tokens = NUM2INT(kw_values[1]);
+    const llama_pos pos_zero = NUM2INT(kw_values[2]);
+    const llama_seq_id seq_id = NUM2INT(kw_values[3]);
+
+    LLaMABatchWrapper* ptr = (LLaMABatchWrapper*)ruby_xmalloc(sizeof(LLaMABatchWrapper));
+    new (ptr) LLaMABatchWrapper();
+    ptr->batch = llama_batch_get_one(nullptr, n_tokens, pos_zero, seq_id);
+    ptr->batch.token = (llama_token*)malloc(sizeof(llama_token) * sz_array);
+    for (size_t i = 0; i < sz_array; i++) {
+      VALUE el = rb_ary_entry(kw_values[0], i);
+      ptr->batch.token[i] = NUM2INT(el);
+    }
+
+    return TypedData_Wrap_Struct(klass, &llama_batch_type, ptr);
+  }
 
   static VALUE _llama_batch_initialize(int argc, VALUE* argv, VALUE self) {
     VALUE kw_args = Qnil;
