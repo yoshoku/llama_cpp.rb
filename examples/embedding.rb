@@ -28,7 +28,7 @@ class Embedding < Thor # rubocop:disable Style/Documentation
 
     return unless embd_input.size.positive?
 
-    context.eval(tokens: embd_input, n_past: 0)
+    context.decode(LLaMACpp::Batch.get_one(tokens: embd_input, n_tokens: embd_input.size, pos_zero: 0, seq_id: 0))
 
     context.embeddings.each { |val| print("#{val} ") }
     print("\n")

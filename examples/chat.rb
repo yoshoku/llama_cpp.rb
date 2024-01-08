@@ -70,7 +70,7 @@ class Chat < Thor # rubocop:disable Metrics/ClassLength, Style/Documentation
 
         0.step(embd.size - 1, options[:batch_size]) do |i|
           n_eval = [options[:batch_size], embd.size - i].min
-          context.eval(tokens: embd[i...i + n_eval], n_past: n_past)
+          context.decode(LLaMACpp::Batch.get_one(tokens: embd[i...(i + n_eval)], n_tokens: n_eval, pos_zero: n_past, seq_id: 0))
           n_past += n_eval
         end
       end
@@ -95,7 +95,7 @@ class Chat < Thor # rubocop:disable Metrics/ClassLength, Style/Documentation
         context.sample_tail_free(candidates, z: options[:tfs_z])
         context.sample_typical(candidates, prob: options[:typical_p])
         context.sample_top_p(candidates, prob: options[:top_p])
-        context.sample_temperature(candidates, temperature: options[:temp])
+        context.sample_temp(candidates, temp: options[:temp])
         id = context.sample_token(candidates)
 
         last_n_tokens.shift
