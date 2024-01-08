@@ -54,7 +54,7 @@ module LLaMACpp
           embd.insert(0, last_n_tokens[(n_ctx - (n_left / 2) - embd.size)...-embd.size])
         end
 
-        context.eval(tokens: embd, n_past: n_past)
+        context.decode(LLaMACpp::Batch.get_one(tokens: embd, n_tokens: embd.size, pos_zero: n_past, seq_id: 0))
       end
 
       n_past += embd.size
@@ -77,7 +77,7 @@ module LLaMACpp
         context.sample_tail_free(candidates, z: tfs_z)
         context.sample_typical(candidates, prob: typical_p)
         context.sample_top_p(candidates, prob: top_p)
-        context.sample_temperature(candidates, temperature: temperature)
+        context.sample_temp(candidates, temp: temperature)
         id = context.sample_token(candidates)
 
         last_n_tokens.shift
