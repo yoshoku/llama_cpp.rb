@@ -108,6 +108,7 @@ private:
     LLaMABatchWrapper* ptr = (LLaMABatchWrapper*)ruby_xmalloc(sizeof(LLaMABatchWrapper));
     new (ptr) LLaMABatchWrapper();
     ptr->batch = llama_batch_get_one(nullptr, n_tokens, pos_zero, seq_id);
+
     ptr->batch.token = (llama_token*)malloc(sizeof(llama_token) * sz_array);
     for (size_t i = 0; i < sz_array; i++) {
       VALUE el = rb_ary_entry(kw_values[0], i);
@@ -2096,6 +2097,8 @@ private:
     rb_scan_args(argc, argv, ":", &kw_args);
     rb_get_kwargs(kw_args, kw_table, 2, 2, kw_values);
 
+    rb_warn("eval is deprecated. Use decode instead.");
+
     if (!RB_TYPE_P(kw_values[0], T_ARRAY)) {
       rb_raise(rb_eArgError, "tokens must be an Array");
       return Qnil;
@@ -2145,6 +2148,8 @@ private:
     VALUE kw_values[3] = { Qundef, Qundef, Qundef };
     rb_scan_args(argc, argv, ":", &kw_args);
     rb_get_kwargs(kw_args, kw_table, 2, 2, kw_values);
+
+    rb_warn("eval_embd is deprecated. Use decode instead.");
 
     if (!RB_TYPE_P(kw_values[0], T_ARRAY)) {
       rb_raise(rb_eArgError, "tokens must be an Array");
@@ -2835,6 +2840,8 @@ private:
     VALUE candidates = Qnil;
     rb_scan_args(argc, argv, "1:", &candidates, &kw_args);
     rb_get_kwargs(kw_args, kw_table, 1, 0, kw_values);
+
+    rb_warn("sample_temperature is deprecated. Use sample_temp instead.");
 
     if (!rb_obj_is_kind_of(candidates, rb_cLLaMATokenDataArray)) {
       rb_raise(rb_eArgError, "1st argument must be a TokenDataArray");
