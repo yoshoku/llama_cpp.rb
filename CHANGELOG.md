@@ -1,3 +1,9 @@
+## [[0.11.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.11.0...v0.11.1)] - 2024-01-08
+
+- Fix to set the values of `@n_tokens` and `@has_evaluated` instance variables in `decode` method of `Context`.
+- Add document for `logits` method in `Context`.
+- Add example script for simple text completion: examples/simple.rb
+
 ## [[0.11.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.10.3...v0.11.0)] - 2024-01-07
 
 - Add `set_n_seq_id` and `get_n_seq_id` methods to `Batch`.
