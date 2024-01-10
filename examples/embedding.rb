@@ -7,6 +7,7 @@
 
 require 'llama_cpp'
 require 'thor'
+require 'etc'
 
 class Embedding < Thor # rubocop:disable Style/Documentation
   default_command :main
@@ -15,6 +16,7 @@ class Embedding < Thor # rubocop:disable Style/Documentation
   option :model, type: :string, aliases: '-m', desc: 'path to model file', required: true
   option :prompt, type: :string, aliases: '-p', desc: 'prompt to generate embedding', required: true
   option :n_gpu_layers, type: :numeric, desc: 'number of layers on GPU', default: 0
+  option :n_threads, type: :numeric, desc: 'number of threads', default: Etc.nprocessors
   def main # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     mdl_params = LLaMACpp::ModelParams.new
     mdl_params.n_gpu_layers = options[:n_gpu_layers]
@@ -22,6 +24,8 @@ class Embedding < Thor # rubocop:disable Style/Documentation
     ctx_params = LLaMACpp::ContextParams.new
     ctx_params.embedding = true
     ctx_params.seed = options[:seed] if options[:seed] != -1
+    ctx_params.n_threads = options[:n_threads]
+    ctx_params.n_threads_batch = options[:n_threads]
     context = LLaMACpp::Context.new(model: model, params: ctx_params)
 
     embd_input = context.model.tokenize(text: options[:prompt], add_bos: true)

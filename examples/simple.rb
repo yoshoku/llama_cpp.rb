@@ -7,12 +7,14 @@
 
 require 'llama_cpp'
 require 'thor'
+require 'etc'
 
 class Simple < Thor # rubocop:disable Style/Documentation
   default_command :main
   desc 'main', 'Simple completion'
   option :model, type: :string, aliases: '-m', desc: 'path to model file', required: true
   option :prompt, type: :string, aliases: '-p', desc: 'prompt to start with', default: 'Hello my name is'
+  option :n_threads, type: :numeric, desc: 'number of threads', default: Etc.nprocessors
   def main # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     n_len = 32
     model_params = LLaMACpp::ModelParams.new
@@ -21,7 +23,8 @@ class Simple < Thor # rubocop:disable Style/Documentation
     context_params.seed = 1234
     context_params.n_ctx = 2048
     context_params.logits_all = true
-    context_params.n_threads = 4
+    context_params.n_threads = options[:n_threads]
+    context_params.n_threads_batch = options[:n_threads]
     context = LLaMACpp::Context.new(model: model, params: context_params)
 
     tokens_list = context.model.tokenize(text: options[:prompt], add_bos: true)

@@ -9,6 +9,7 @@
 require 'llama_cpp'
 require 'thor'
 require 'readline'
+require 'etc'
 
 class Chat < Thor # rubocop:disable Metrics/ClassLength, Style/Documentation
   default_command :main
@@ -30,12 +31,15 @@ class Chat < Thor # rubocop:disable Metrics/ClassLength, Style/Documentation
   option :typical_p, type: :numeric, desc: 'locally typical sampling, parameter p', default: 1.0
   option :temp, type: :numeric, desc: 'temperature', default: 0.8
   option :n_gpu_layers, type: :numeric, desc: 'number of layers on GPU', default: 0
+  option :n_threads, type: :numeric, desc: 'number of threads', default: Etc.nprocessors
   def main # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
     mdl_params = LLaMACpp::ModelParams.new
     mdl_params.n_gpu_layers = options[:n_gpu_layers]
     model = LLaMACpp::Model.new(model_path: options[:model], params: mdl_params)
     ctx_params = LLaMACpp::ContextParams.new
     ctx_params.seed = options[:seed] if options[:seed] != -1
+    ctx_params.n_threads = options[:n_threads]
+    ctx_params.n_threads_batch = options[:n_threads]
     context = LLaMACpp::Context.new(model: model, params: ctx_params)
 
     antiprompt = options[:reverse_prompt] || 'User:'
