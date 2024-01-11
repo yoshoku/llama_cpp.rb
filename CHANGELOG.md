@@ -1,3 +1,12 @@
+## [[0.12.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.11.1...v0.12.0)] - 2024-01-11
+
+- Add `get_one` singleton method to `Batch`.
+
+**Breaking Changes**
+
+- Add deprecation warning to `eval`, `eval_embd`, and `sample_temperature` methods on `Context`.
+- Change to avoid using deprecated methods on `generate` method and example scripts.
+
 ## [[0.11.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.11.0...v0.11.1)] - 2024-01-08
 
 - Fix to set the values of `@n_tokens` and `@has_evaluated` instance variables in `decode` method of `Context`.
