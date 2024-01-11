@@ -22,14 +22,14 @@ If bundler is not being used to manage dependencies, install the gem by executin
 $ gem install llama_cpp
 ```
 
-There are several installation options for improving execution performance:
+There are several installation options:
 
 ```sh
 # use OpenBLAS
 $ gem install llama_cpp -- --with-openblas
 
-# use Metal on macOS
-$ gem install llama_cpp -- --with-metal
+# use CUDA
+$ gem install llama_cpp -- --with-cuda
 ```
 
 Those options are defined in [extconf.rb](https://github.com/yoshoku/llama_cpp.rb/blob/main/ext/llama_cpp/extconf.rb) by with_config method.
