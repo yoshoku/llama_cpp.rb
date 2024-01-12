@@ -1,3 +1,9 @@
+## [[0.12.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.12.0...v0.12.1)] - 2024-01-13
+
+- Bump bundled llama.cpp from b1768 to b1833.
+  - Add model file type constants.
+  - Add `kv_cache_seq_div` method to `Context`.
+
 ## [[0.12.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.11.1...v0.12.0)] - 2024-01-11
 
 - Add `get_one` singleton method to `Batch`.
