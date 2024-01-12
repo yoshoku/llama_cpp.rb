@@ -67,6 +67,15 @@ module LLaMACpp
   # LLaMA model file type.
   LLAMA_FTYPE_MOSTLY_Q6_K = 18
 
+  # LLaMA model file type.
+  LLAMA_FTYPE_MOSTLY_IQ2_XXS = 19
+
+  # LLaMA model file type.
+  LLAMA_FTYPE_MOSTLY_IQ2_XS = 20
+
+  # LLaMA model file type.
+  LLAMA_FTYPE_MOSTLY_Q2_K_S = 21
+
   # LLaMA KV override type.
   LLAMA_KV_OVERRIDE_INT = 0
 
