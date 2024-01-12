@@ -612,6 +612,15 @@ module LLaMACpp
     # @return [NilClass]
     def kv_cache_seq_shift(seq_id, p0, p1, delta); end
 
+    # Integer division of the positions by factor of `d > 1`
+    #
+    # @param seq_id [Integer] The sequence id.
+    # @param p0 [Integer] The start position.
+    # @param p1 [Integer] The end position.
+    # @param d [Integer] The factor.
+    # @return [NilClass]
+    def kv_cache_seq_div(seq_id, p0, p1, d); end
+
     # Sets the current rng seed.
     #
     # @param seed [Integer] The rng seed.
