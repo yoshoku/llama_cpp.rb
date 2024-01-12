@@ -523,6 +523,7 @@ module LLaMACpp
     # @param n_past [Integer] The number of past tokens.
     # @param n_tokens [Integer] The number of tokens to be evaluated.
     # @return [NilClass]
+    # @deprecated Use decode instead.
     def eval(tokens:, n_past:, n_tokens: nil); end
 
     # Evaluates the embedding.
@@ -531,6 +532,7 @@ module LLaMACpp
     # @param n_past [Integer] The number of past tokens.
     # @param n_tokens [Integer] The number of tokens to be evaluated.
     # @return [NilClass]
+    # @deprecated Use decode instead.
     def eval_embd(embd:, n_past:, n_tokens: nil); end
 
     # Evaluates the tokens.
@@ -708,6 +710,7 @@ module LLaMACpp
     # @param candidates [TokenDataArray] The array of token data.
     # @param temperature [Float] The temperature.
     # @return [Nil]
+    # @deprecated Use sample_temp instead.
     def sample_temperature(candidates, temperature:); end
 
     # Samples temeperature.
