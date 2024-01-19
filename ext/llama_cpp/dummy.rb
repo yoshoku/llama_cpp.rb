@@ -8,7 +8,7 @@ module LLaMACpp
   LLAMA_SESSION_MAGIC = '0x6767736e'
 
   # LLaMA session version.
-  LLAMA_SESSION_VERSION = '3'
+  LLAMA_SESSION_VERSION = '4'
 
   # LLaMA default random seed.
   LLAMA_DEFALUT_SEED = '0xFFFFFFFF'
