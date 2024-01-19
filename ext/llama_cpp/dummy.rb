@@ -668,6 +668,13 @@ module LLaMACpp
     # @return [Nil]
     def sample_repetition_penalties(candidates, last_n_tokens, penalty_repeat:, penalty_freq:, penalty_present:); end
 
+    # Apply classifier-free guidance to the logits.
+    #
+    # @param logits [Array<Float>] The logits extracted from the original generation context.
+    # @param logits_guidance [Array<Float>] The logits extracted from the separate context from the same model.
+    # @param scale [Float] The guidance strength.
+    def sample_apply_guidance(logits:, logits_guidance:, scale:); end
+
     # Samplling with classifier-free guidance.
     #
     # @param candidates [TokenDataArray] The array of token data.

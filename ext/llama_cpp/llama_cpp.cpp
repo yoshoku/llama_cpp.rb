@@ -2045,6 +2045,7 @@ public:
     rb_define_method(rb_cLLaMAContext, "load_session_file", RUBY_METHOD_FUNC(_llama_context_load_session_file), -1);
     rb_define_method(rb_cLLaMAContext, "save_session_file", RUBY_METHOD_FUNC(_llama_context_save_session_file), -1);
     rb_define_method(rb_cLLaMAContext, "sample_repetition_penalties", RUBY_METHOD_FUNC(_llama_context_sample_repetition_penalties), -1);
+    rb_define_method(rb_cLLaMAContext, "sample_apply_guidance", RUBY_METHOD_FUNC(_llama_context_sample_apply_guidance), -1);
     rb_define_method(rb_cLLaMAContext, "sample_classifier_free_guidance", RUBY_METHOD_FUNC(_llama_context_sample_classifier_free_guidance), -1);
     rb_define_method(rb_cLLaMAContext, "sample_softmax", RUBY_METHOD_FUNC(_llama_context_sample_softmax), 1);
     rb_define_method(rb_cLLaMAContext, "sample_top_k", RUBY_METHOD_FUNC(_llama_context_sample_top_k), -1);
@@ -2563,6 +2564,51 @@ private:
 
     llama_sample_repetition_penalties(ctx_ptr->ctx, &(cnd_ptr->array), last_n_tokens_data.data(), last_tokens_size,
                                       penalty_repeat, penalty_freq, penalty_present);
+
+    return Qnil;
+  }
+
+  static VALUE _llama_context_sample_apply_guidance(int argc, VALUE* argv, VALUE self) {
+    VALUE kw_args = Qnil;
+    ID kw_table[3] = { rb_intern("logits"), rb_intern("logits_guidance"), rb_intern("scale") };
+    VALUE kw_values[3] = { Qundef, Qundef, Qundef };
+    rb_scan_args(argc, argv, ":", &kw_args);
+    rb_get_kwargs(kw_args, kw_table, 0, 3, kw_values);
+
+    if (!RB_TYPE_P(kw_values[0], T_ARRAY)) {
+      rb_raise(rb_eArgError, "logits must be an Array");
+      return Qnil;
+    }
+    if (!RB_TYPE_P(kw_values[1], T_ARRAY)) {
+      rb_raise(rb_eArgError, "logits_guidance must be an Array");
+      return Qnil;
+    }
+    if (!RB_FLOAT_TYPE_P(kw_values[2])) {
+      rb_raise(rb_eArgError, "scale must be a float");
+      return Qnil;
+    }
+
+    const size_t sz_logits = RARRAY_LEN(kw_values[0]);
+    std::vector<float> logits(sz_logits);
+    for (size_t i = 0; i < sz_logits; i++) {
+      logits[i] = NUM2DBL(rb_ary_entry(kw_values[0], i));
+    }
+
+    const size_t sz_logits_guidance = RARRAY_LEN(kw_values[1]);
+    std::vector<float> logits_guidance(sz_logits_guidance);
+    for (size_t i = 0; i < sz_logits_guidance; i++) {
+      logits_guidance[i] = NUM2DBL(rb_ary_entry(kw_values[1], i));
+    }
+
+    const float scale = NUM2DBL(kw_values[2]);
+
+    LLaMAContextWrapper* ctx_ptr = get_llama_context(self);
+    if (ctx_ptr->ctx == NULL) {
+      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
+      return Qnil;
+    }
+
+    llama_sample_apply_guidance(ctx_ptr->ctx, logits.data(), logits_guidance.data(), scale);
 
     return Qnil;
   }

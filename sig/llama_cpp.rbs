@@ -207,6 +207,7 @@ module LLaMACpp
     def load_session_file: (session_path: String) -> void
     def save_session_file: (session_path: String, session_tokens: Array[Integer]) -> void
     def sample_repetition_penalties: (::LLaMACpp::TokenDataArray, Array[Integer], penalty_repeat: Float, penalty_freq: Float, penalty_present: Float) -> void
+    def sample_apply_guidance: (logits: Array[Float], logits_guidance: Array[Float], scale: Float) -> void
     def sample_classifier_free_guidance: (::LLaMACpp::TokenDataArray, guidance: ::LLaMACpp::Context, scale: Float) -> void
     def sample_softmax: (::LLaMACpp::TokenDataArray) -> void
     def sample_top_k: (::LLaMACpp::TokenDataArray, k: Integer, ?min_keep: Integer) -> void
