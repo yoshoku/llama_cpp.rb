@@ -106,6 +106,15 @@ module LLaMACpp
   # GrammarElement type: modifies a preceding LLAMA_GRETYPE_CHAR or LLAMA_GRETYPE_CHAR_RNG_UPPER to add an alternate char to match ([ab], [a-zA]).
   LLAMA_GRETYPE_CHAR_ALT = 6
 
+  # LLaMA split mode: single GPU.
+  LLAMA_SPLIT_NONE = 0
+
+  # LLaMA split mode: split layers and KV across GPUs.
+  LLAMA_SPLIT_LAYER = 1
+
+  # LLaMA split mode: split rows across GPUs.
+  LLAMA_SPLIT_ROW = 2
+
   module_function
 
   # Initializes the backend.
