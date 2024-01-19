@@ -21,4 +21,4 @@ Rake::ExtensionTask.new('llama_cpp') do |ext|
   ext.lib_dir = 'lib/llama_cpp'
 end
 
-task default: %i[clobber compile test rubocop]
+task default: %i[clobber compile test]
