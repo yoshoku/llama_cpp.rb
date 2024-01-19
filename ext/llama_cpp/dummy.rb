@@ -369,6 +369,14 @@ module LLaMACpp
     # @return [Integer]
     def n_gpu_layers; end
 
+    # Sets the split mode.
+    # @param split_mode [Integer]
+    def split_mode=(split_mode); end
+
+    # Return the split mode.
+    # @return [Integer]
+    def split_mode; end
+
     # Sets the GPU that is used.
     # @param main_gpu [Integer]
     def main_gpu=(main_gpu); end

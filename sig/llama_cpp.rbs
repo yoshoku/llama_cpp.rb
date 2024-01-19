@@ -142,6 +142,8 @@ module LLaMACpp
 
     def n_gpu_layers: () -> Integer
     def n_gpu_layers=: (Integer) -> Integer
+    def split_mode: () -> Integer
+    def split_mode=: (Integer) -> Integer
     def main_gpu: () -> Integer
     def main_gpu=: (Integer) -> Integer
     def tensor_split: () -> Array[Float]

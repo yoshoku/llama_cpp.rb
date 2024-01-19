@@ -789,6 +789,8 @@ public:
     rb_define_alloc_func(rb_cLLaMAModelParams, llama_model_params_alloc);
     rb_define_method(rb_cLLaMAModelParams, "n_gpu_layers=", RUBY_METHOD_FUNC(_llama_model_params_set_n_gpu_layers), 1);
     rb_define_method(rb_cLLaMAModelParams, "n_gpu_layers", RUBY_METHOD_FUNC(_llama_model_params_get_n_gpu_layers), 0);
+    rb_define_method(rb_cLLaMAModelParams, "split_mode=", RUBY_METHOD_FUNC(_llama_model_params_set_split_mode), 1);
+    rb_define_method(rb_cLLaMAModelParams, "split_mode", RUBY_METHOD_FUNC(_llama_model_params_get_split_mode), 0);
     rb_define_method(rb_cLLaMAModelParams, "main_gpu=", RUBY_METHOD_FUNC(_llama_model_params_set_main_gpu), 1);
     rb_define_method(rb_cLLaMAModelParams, "main_gpu", RUBY_METHOD_FUNC(_llama_model_params_get_main_gpu), 0);
     rb_define_method(rb_cLLaMAModelParams, "tensor_split", RUBY_METHOD_FUNC(_llama_model_params_get_tensor_split), 0);
@@ -813,6 +815,18 @@ private:
   static VALUE _llama_model_params_get_n_gpu_layers(VALUE self) {
     LLaMAModelParamsWrapper* ptr = get_llama_model_params(self);
     return INT2NUM(ptr->params.n_gpu_layers);
+  }
+
+  // split_mode
+  static VALUE _llama_model_params_set_split_mode(VALUE self, VALUE split_mode) {
+    LLaMAModelParamsWrapper* ptr = get_llama_model_params(self);
+    ptr->params.split_mode = static_cast<enum llama_split_mode>(NUM2INT(split_mode));
+    return INT2NUM(ptr->params.split_mode);
+  }
+
+  static VALUE _llama_model_params_get_split_mode(VALUE self) {
+    LLaMAModelParamsWrapper* ptr = get_llama_model_params(self);
+    return INT2NUM(ptr->params.split_mode);
   }
 
   // main_gpu
