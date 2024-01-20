@@ -1,3 +1,11 @@
+## [[0.12.2](https://github.com/yoshoku/llama_cpp.rb/compare/v0.12.1...v0.12.2)] - 2024-01-20
+
+- Bump bundled llama.cpp from b1833 to b1892.
+  - Change `LLAMA_SESSION_VERSION` value from 3 to 4.
+  - Add constants for split mode: `LLAMA_SPLIT_NONE`, `LLAMA_SPLIT_LAYER`, and `LLAMA_SPLIT_ROW`
+  - Add `split_mode` accessor to ModelParams.
+  - Add `sample_apply_guidance` method to Context.
+
 ## [[0.12.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.12.0...v0.12.1)] - 2024-01-13
 
 - Bump bundled llama.cpp from b1768 to b1833.
