@@ -740,6 +740,15 @@ module LLaMACpp
     # @deprecated Use sample_temp instead.
     def sample_temperature(candidates, temperature:); end
 
+    # Samples dynamic temeperature.
+    #
+    # @param candidates [TokenDataArray] The array of token data.
+    # @param min_temp [Float] The minimum temperature.
+    # @param max_temp [Float] The maximum temperature.
+    # @param exponent_val [Float] The exponent value.
+    # @return [Nil]
+    def sample_entropy(candidates, min_temp:, max_temp:, exponent_val:); end
+
     # Samples temeperature.
     #
     # @param candidates [TokenDataArray] The array of token data.

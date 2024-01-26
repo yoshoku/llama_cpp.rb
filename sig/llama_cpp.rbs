@@ -217,6 +217,7 @@ module LLaMACpp
     def sample_tail_free: (::LLaMACpp::TokenDataArray, z: Float, ?min_keep: Integer) -> void
     def sample_typical: (::LLaMACpp::TokenDataArray, prob: Float, ?min_keep: Integer) -> void
     def sample_temp: (::LLaMACpp::TokenDataArray, temp: Float) -> void
+    def sample_entropy: (::LLaMACpp::TokenDataArray, min_temp: Float, max_temp: Float, exponent_val: Float) -> void
     def sample_temperature: (::LLaMACpp::TokenDataArray, temperature: Float) -> void
     def sample_token_mirostat: (::LLaMACpp::TokenDataArray, tau: Float, eta: Float, m: Integer, mu: Float) -> [Integer, Float]
     def sample_token_mirostat_v2: (::LLaMACpp::TokenDataArray, tau: Float, eta: Float, mu: Float) -> [Integer, Float]

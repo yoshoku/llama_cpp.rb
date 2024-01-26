@@ -2054,6 +2054,7 @@ public:
     rb_define_method(rb_cLLaMAContext, "sample_tail_free", RUBY_METHOD_FUNC(_llama_context_sample_tail_free), -1);
     rb_define_method(rb_cLLaMAContext, "sample_typical", RUBY_METHOD_FUNC(_llama_context_sample_typical), -1);
     rb_define_method(rb_cLLaMAContext, "sample_temp", RUBY_METHOD_FUNC(_llama_context_sample_temp), -1);
+    rb_define_method(rb_cLLaMAContext, "sample_entropy", RUBY_METHOD_FUNC(_llama_context_sample_entropy), -1);
     rb_define_method(rb_cLLaMAContext, "sample_temperature", RUBY_METHOD_FUNC(_llama_context_sample_temperature), -1);
     rb_define_method(rb_cLLaMAContext, "sample_token_mirostat", RUBY_METHOD_FUNC(_llama_context_sample_token_mirostat), -1);
     rb_define_method(rb_cLLaMAContext, "sample_token_mirostat_v2", RUBY_METHOD_FUNC(_llama_context_sample_token_mirostat_v2), -1);
@@ -2900,6 +2901,50 @@ private:
     const float temp = NUM2DBL(kw_values[0]);
 
     llama_sample_temp(ctx_ptr->ctx, &(cnd_ptr->array), temp);
+
+    return Qnil;
+  }
+
+  static VALUE _llama_context_sample_entropy(int argc, VALUE* argv, VALUE self) {
+    VALUE kw_args = Qnil;
+    ID kw_table[3] = { rb_intern("min_temp"), rb_intern("max_temp"), rb_intern("exponent_val") };
+    VALUE kw_values[3] = { Qundef, Qundef, Qundef };
+    VALUE candidates = Qnil;
+    rb_scan_args(argc, argv, "1:", &candidates, &kw_args);
+    rb_get_kwargs(kw_args, kw_table, 3, 0, kw_values);
+
+    if (!rb_obj_is_kind_of(candidates, rb_cLLaMATokenDataArray)) {
+      rb_raise(rb_eArgError, "1st argument must be a TokenDataArray");
+      return Qnil;
+    }
+    if (!RB_FLOAT_TYPE_P(kw_values[0])) {
+      rb_raise(rb_eArgError, "min_temp must be a float");
+      return Qnil;
+    }
+    if (!RB_FLOAT_TYPE_P(kw_values[1])) {
+      rb_raise(rb_eArgError, "max_temp must be a float");
+      return Qnil;
+    }
+    if (!RB_FLOAT_TYPE_P(kw_values[2])) {
+      rb_raise(rb_eArgError, "exponent_val must be a float");
+      return Qnil;
+    }
+
+    LLaMAContextWrapper* ctx_ptr = get_llama_context(self);
+    if (ctx_ptr->ctx == NULL) {
+      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
+      return Qnil;
+    }
+    LLaMATokenDataArrayWrapper* cnd_ptr = RbLLaMATokenDataArray::get_llama_token_data_array(candidates);
+    if (cnd_ptr->array.data == nullptr) {
+      rb_raise(rb_eRuntimeError, "TokenDataArray is empty");
+      return Qnil;
+    }
+    const float min_temp = NUM2DBL(kw_values[0]);
+    const float max_temp = NUM2DBL(kw_values[1]);
+    const float exponent_val = NUM2DBL(kw_values[2]);
+
+    llama_sample_entropy(ctx_ptr->ctx, &(cnd_ptr->array), min_temp, max_temp, exponent_val);
 
     return Qnil;
   }
