@@ -13,6 +13,14 @@ require 'rubocop/rake_task'
 
 RuboCop::RakeTask.new
 
+require 'rake/clean'
+
+CLOBBER.include(
+  'vendor/include/*.h',
+  'vendor/lib/*.a', 'vendor/lib/*.metal',
+  'vendor/lib/*.so', 'vendor/lib/*.dylib', 'vendor/lib/*.dll'
+)
+
 require 'rake/extensiontask'
 
 task build: :compile # rubocop:disable Rake/Desc
