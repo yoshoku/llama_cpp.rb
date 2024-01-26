@@ -238,21 +238,19 @@ static void * ggml_metal_host_malloc(size_t n) {
 static struct ggml_metal_context * ggml_metal_init(int n_cb) {
     GGML_METAL_LOG_INFO("%s: allocating\n", __func__);
 
-    id<MTLDevice> device;
-    NSString * s;
-
-#if TARGET_OS_OSX
+#if TARGET_OS_OSX && !GGML_METAL_NDEBUG
     // Show all the Metal device instances in the system
     NSArray * devices = MTLCopyAllDevices();
-    for (device in devices) {
-        s = [device name];
+    for (id<MTLDevice> device in devices) {
+        NSString * s = [device name];
         GGML_METAL_LOG_INFO("%s: found device: %s\n", __func__, [s UTF8String]);
     }
+    [devices release]; // since it was created by a *Copy* C method
 #endif
 
     // Pick and show default Metal device
-    device = MTLCreateSystemDefaultDevice();
-    s = [device name];
+    id<MTLDevice> device = MTLCreateSystemDefaultDevice();
+    NSString * s = [device name];
     GGML_METAL_LOG_INFO("%s: picking default device: %s\n", __func__, [s UTF8String]);
 
     // Configure context
@@ -279,6 +277,10 @@ static struct ggml_metal_context * ggml_metal_init(int n_cb) {
             NSURL * libURL = [NSURL fileURLWithPath:libPath];
             GGML_METAL_LOG_INFO("%s: loading '%s'\n", __func__, [libPath UTF8String]);
             ctx->library = [ctx->device newLibraryWithURL:libURL error:&error];
+            if (error) {
+                GGML_METAL_LOG_ERROR("%s: error: %s\n", __func__, [[error description] UTF8String]);
+                return NULL;
+            }
         } else {
             GGML_METAL_LOG_INFO("%s: default.metallib not found, loading from source\n", __func__);
 
@@ -303,27 +305,25 @@ static struct ggml_metal_context * ggml_metal_init(int n_cb) {
                 return NULL;
             }
 
-            // dictionary of preprocessor macros
-            NSMutableDictionary * prep = [NSMutableDictionary dictionary];
+            @autoreleasepool {
+                // dictionary of preprocessor macros
+                NSMutableDictionary * prep = [NSMutableDictionary dictionary];
 
 #ifdef GGML_QKK_64
-            prep[@"QK_K"] = @(64);
+                prep[@"QK_K"] = @(64);
 #endif
 
-            MTLCompileOptions* options = [MTLCompileOptions new];
-            options.preprocessorMacros = prep;
+                MTLCompileOptions* options = [MTLCompileOptions new];
+                options.preprocessorMacros = prep;
 
-            //[options setFastMathEnabled:false];
+                //[options setFastMathEnabled:false];
 
-            ctx->library = [ctx->device newLibraryWithSource:src options:options error:&error];
-
-            [options release];
-            [prep release];
-        }
-
-        if (error) {
-            GGML_METAL_LOG_ERROR("%s: error: %s\n", __func__, [[error description] UTF8String]);
-            return NULL;
+                ctx->library = [ctx->device newLibraryWithSource:src options:options error:&error];
+                if (error) {
+                    GGML_METAL_LOG_ERROR("%s: error: %s\n", __func__, [[error description] UTF8String]);
+                    return NULL;
+                }
+            }
         }
     }
 
@@ -671,7 +671,8 @@ static bool ggml_metal_supports_op(const struct ggml_metal_context * ctx, const 
             return true;
         case GGML_OP_MUL_MAT:
         case GGML_OP_MUL_MAT_ID:
-            return ctx->support_simdgroup_reduction;
+            return ctx->support_simdgroup_reduction &&
+                (op->src[0]->type != GGML_TYPE_F32 || op->src[1]->type == GGML_TYPE_F32);
         case GGML_OP_CPY:
         case GGML_OP_DUP:
         case GGML_OP_CONT:
@@ -713,7 +714,6 @@ static bool ggml_metal_supports_op(const struct ggml_metal_context * ctx, const 
 static bool ggml_metal_graph_compute(
         struct ggml_metal_context * ctx,
                struct ggml_cgraph * gf) {
-    @autoreleasepool {
 
     MTLComputePassDescriptor * edesc = MTLComputePassDescriptor.computePassDescriptor;
     edesc.dispatchType = MTLDispatchTypeSerial;
@@ -2236,10 +2236,7 @@ static bool ggml_metal_graph_compute(
 #endif
         }
 
-        if (encoder != nil) {
-            [encoder endEncoding];
-            encoder = nil;
-        }
+        [encoder endEncoding];
 
         [command_buffer commit];
     });
@@ -2259,7 +2256,6 @@ static bool ggml_metal_graph_compute(
     }
 
     return true;
-    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
