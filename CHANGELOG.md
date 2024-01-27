@@ -1,3 +1,9 @@
+## [[0.12.3](https://github.com/yoshoku/llama_cpp.rb/compare/v0.12.2...v0.12.3)] - 2024-01-27
+
+- Bump bundled llama.cpp from b1892 to b1971.
+  - Add constant for file type: `LLAMA_FTYPE_MOSTLY_Q3_K_XS`.
+  - Add `sample_entropy` method to Context.
+
 ## [[0.12.2](https://github.com/yoshoku/llama_cpp.rb/compare/v0.12.1...v0.12.2)] - 2024-01-20
 
 - Bump bundled llama.cpp from b1833 to b1892.
