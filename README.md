@@ -28,8 +28,8 @@ There are several installation options:
 # use OpenBLAS
 $ gem install llama_cpp -- --with-openblas
 
-# use CUDA
-$ gem install llama_cpp -- --with-cuda
+# use cuBLAS
+$ gem install llama_cpp -- --with-cublas
 ```
 
 Those options are defined in [extconf.rb](https://github.com/yoshoku/llama_cpp.rb/blob/main/ext/llama_cpp/extconf.rb) by with_config method.
