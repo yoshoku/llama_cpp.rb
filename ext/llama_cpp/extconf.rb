@@ -19,6 +19,7 @@ make_envs << ' LLAMA_CUBLAS=1' if with_config('cublas')
 make_envs << ' LLAMA_CLBLAST=1' if with_config('clblast')
 make_envs << ' LLAMA_HIPBLAS=1' if with_config('hipblas')
 make_envs << ' LLAMA_MPI=1' if with_config('mpi')
+make_envs << ' LLAMA_VULKAN=1' if with_config('vulkan')
 
 Dir.chdir(LLAMA_CPP_DIR) do
   _mkstdout, _mkstderr, mkstatus = Open3.capture3("make lib #{make_envs}".strip)
