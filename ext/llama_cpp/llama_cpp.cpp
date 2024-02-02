@@ -3267,7 +3267,7 @@ static VALUE rb_llama_mlock_supported(VALUE self) {
 }
 
 static VALUE rb_llama_max_devices(VALUE self) {
-  return INT2NUM(llama_max_devices());
+  return SIZET2NUM(llama_max_devices());
 }
 
 extern "C" void Init_llama_cpp(void) {
