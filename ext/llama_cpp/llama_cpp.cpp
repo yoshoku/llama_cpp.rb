@@ -3259,10 +3259,12 @@ static VALUE rb_llama_time_us(VALUE self) {
 }
 
 static VALUE rb_llama_mmap_supported(VALUE self) {
+  rb_warn("mmap_supported? is deprecated. Use supports_mmap? instead.");
   return llama_mmap_supported() ? Qtrue : Qfalse;
 }
 
 static VALUE rb_llama_mlock_supported(VALUE self) {
+  rb_warn("mlock_supported? is deprecated. Use supports_mlock? instead.");
   return llama_mlock_supported() ? Qtrue : Qfalse;
 }
 

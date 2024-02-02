@@ -140,10 +140,12 @@ module LLaMACpp
   def time_us; end
 
   # Returns the flag for supporting mmap.
+  # @deprecated Use supports_mmap? instead.
   # @return [Boolean]
   def mmap_supported?; end
 
   # Returns the flag for supporting mlock.
+  # @deprecated Use supports_mlock? instead.
   # @return [Boolean]
   def mlock_supported?; end
 
