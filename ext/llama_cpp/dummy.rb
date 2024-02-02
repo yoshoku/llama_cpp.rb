@@ -154,6 +154,10 @@ module LLaMACpp
   # Returns the flag for supporting mmap.
   # @return [Boolean]
   def supports_mmap?; end
+
+  # Returns the flag for supporting mlock.
+  # @return [Boolean]
+  def supports_mlock?; end
 end
 
 # llama_cpp.rb provides Ruby bindings for the llama.cpp.
