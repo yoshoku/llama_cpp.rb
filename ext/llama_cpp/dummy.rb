@@ -150,6 +150,10 @@ module LLaMACpp
   # Returns the maximum number of devices.
   # @return [Integer]
   def max_devices; end
+
+  # Returns the flag for supporting mmap.
+  # @return [Boolean]
+  def supports_mmap?; end
 end
 
 # llama_cpp.rb provides Ruby bindings for the llama.cpp.

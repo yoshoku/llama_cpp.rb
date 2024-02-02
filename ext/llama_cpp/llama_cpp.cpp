@@ -3270,6 +3270,10 @@ static VALUE rb_llama_max_devices(VALUE self) {
   return SIZET2NUM(llama_max_devices());
 }
 
+static VALUE rb_llama_supports_mmap(VALUE self) {
+  return llama_supports_mmap() ? Qtrue : Qfalse;
+}
+
 extern "C" void Init_llama_cpp(void) {
   rb_mLLaMACpp = rb_define_module("LLaMACpp");
 
@@ -3294,6 +3298,7 @@ extern "C" void Init_llama_cpp(void) {
   rb_define_module_function(rb_mLLaMACpp, "mmap_supported?", rb_llama_mmap_supported, 0);
   rb_define_module_function(rb_mLLaMACpp, "mlock_supported?", rb_llama_mlock_supported, 0);
   rb_define_module_function(rb_mLLaMACpp, "max_devices", rb_llama_max_devices, 0);
+  rb_define_module_function(rb_mLLaMACpp, "supports_mmap?", rb_llama_supports_mmap, 0);
 
   rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_TYPE_SPM", INT2NUM(LLAMA_VOCAB_TYPE_SPM));
   rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_TYPE_BPE", INT2NUM(LLAMA_VOCAB_TYPE_BPE));
