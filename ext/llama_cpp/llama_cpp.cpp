@@ -3278,6 +3278,10 @@ static VALUE rb_llama_supports_mlock(VALUE self) {
   return llama_supports_mlock() ? Qtrue : Qfalse;
 }
 
+static VALUE rb_llama_supports_gpu_offload(VALUE self) {
+  return llama_supports_gpu_offload() ? Qtrue : Qfalse;
+}
+
 extern "C" void Init_llama_cpp(void) {
   rb_mLLaMACpp = rb_define_module("LLaMACpp");
 
@@ -3304,6 +3308,7 @@ extern "C" void Init_llama_cpp(void) {
   rb_define_module_function(rb_mLLaMACpp, "max_devices", rb_llama_max_devices, 0);
   rb_define_module_function(rb_mLLaMACpp, "supports_mmap?", rb_llama_supports_mmap, 0);
   rb_define_module_function(rb_mLLaMACpp, "supports_mlock?", rb_llama_supports_mlock, 0);
+  rb_define_module_function(rb_mLLaMACpp, "supports_gpu_offload?", rb_llama_supports_gpu_offload, 0);
 
   rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_TYPE_SPM", INT2NUM(LLAMA_VOCAB_TYPE_SPM));
   rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_TYPE_BPE", INT2NUM(LLAMA_VOCAB_TYPE_BPE));

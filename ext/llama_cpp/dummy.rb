@@ -158,6 +158,10 @@ module LLaMACpp
   # Returns the flag for supporting mlock.
   # @return [Boolean]
   def supports_mlock?; end
+
+  # Returns the flag for supporting GPU offload.
+  # @return [Boolean]
+  def supports_gpu_offload?; end
 end
 
 # llama_cpp.rb provides Ruby bindings for the llama.cpp.
