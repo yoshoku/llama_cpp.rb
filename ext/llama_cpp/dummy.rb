@@ -13,9 +13,6 @@ module LLaMACpp
   # LLaMA default random seed.
   LLAMA_DEFALUT_SEED = '0xFFFFFFFF'
 
-  # LLaMA cuda max devices.
-  LLAMA_MAX_DEVICES = 1
-
   # LLaMA model file type.
   LLAMA_FTYPE_ALL_F32 = 0
 

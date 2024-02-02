@@ -843,15 +843,15 @@ private:
 
   // tensor_split
   static VALUE _llama_model_params_get_tensor_split(VALUE self) {
-    if (LLAMA_MAX_DEVICES < 1) {
+    if (llama_max_devices() < 1) {
       return rb_ary_new();
     }
-    VALUE ret = rb_ary_new2(LLAMA_MAX_DEVICES);
+    VALUE ret = rb_ary_new2(llama_max_devices());
     LLaMAModelParamsWrapper* ptr = get_llama_model_params(self);
     if (ptr->params.tensor_split == nullptr) {
       return rb_ary_new();
     }
-    for (size_t i = 0; i < LLAMA_MAX_DEVICES; i++) {
+    for (size_t i = 0; i < llama_max_devices(); i++) {
       rb_ary_store(ret, i, DBL2NUM(ptr->params.tensor_split[i]));
     }
     return ret;
@@ -3294,8 +3294,6 @@ extern "C" void Init_llama_cpp(void) {
   rb_define_module_function(rb_mLLaMACpp, "mmap_supported?", rb_llama_mmap_supported, 0);
   rb_define_module_function(rb_mLLaMACpp, "mlock_supported?", rb_llama_mlock_supported, 0);
   rb_define_module_function(rb_mLLaMACpp, "max_devices", rb_llama_max_devices, 0);
-
-  rb_define_const(rb_mLLaMACpp, "LLAMA_MAX_DEVICES", INT2NUM(LLAMA_MAX_DEVICES));
 
   rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_TYPE_SPM", INT2NUM(LLAMA_VOCAB_TYPE_SPM));
   rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_TYPE_BPE", INT2NUM(LLAMA_VOCAB_TYPE_BPE));
