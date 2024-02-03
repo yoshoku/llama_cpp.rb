@@ -1,3 +1,12 @@
+## [[0.12.4](https://github.com/yoshoku/llama_cpp.rb/compare/v0.12.3...v0.12.4)] - 2024-02-03
+
+- Bump bundled llama.cpp from b1971 to b2047.
+  - Add constant for file type: `LLAMA_FTYPE_MOSTLY_IQ3_XXS`.
+  - Add `supports_mmap?`, `supports_mlock?`, and `supports_gpu_offload?` module functions to `LLaMACpp`.
+  - Add `--with-vulkan` configuration option.
+  - Deprecate `mmap_supported?` and `mlock_supported?` module functions in `LLaMACpp`.
+  - Remove `LLAMA_MAX_DEVICES` constant.
+
 ## [[0.12.3](https://github.com/yoshoku/llama_cpp.rb/compare/v0.12.2...v0.12.3)] - 2024-01-27
 
 - Bump bundled llama.cpp from b1892 to b1971.
