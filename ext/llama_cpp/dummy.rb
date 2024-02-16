@@ -585,6 +585,11 @@ module LLaMACpp
     # @return [Array<Float>]
     def embeddings; end
 
+    # Returns the embeddings for i-th sequence.
+    #
+    # @return [Array<Float>]
+    def embeddings_ith(i); end
+
     # Returns the number of text context.
     #
     # @return [Integer]
