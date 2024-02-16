@@ -978,6 +978,8 @@ public:
     rb_define_method(rb_cLLaMAContextParams, "embedding", RUBY_METHOD_FUNC(_llama_context_params_get_embedding), 0);
     rb_define_method(rb_cLLaMAContextParams, "offload_kqv=", RUBY_METHOD_FUNC(_llama_context_params_set_offload_kqv), 1);
     rb_define_method(rb_cLLaMAContextParams, "offload_kqv", RUBY_METHOD_FUNC(_llama_context_params_get_offload_kqv), 0);
+    rb_define_method(rb_cLLaMAContextParams, "do_pooling=", RUBY_METHOD_FUNC(_llama_context_params_set_do_pooling), 1);
+    rb_define_method(rb_cLLaMAContextParams, "do_pooling", RUBY_METHOD_FUNC(_llama_context_params_get_do_pooling), 0);
   }
 
 private:
@@ -1219,6 +1221,18 @@ private:
   static VALUE _llama_context_params_get_offload_kqv(VALUE self) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     return ptr->params.offload_kqv ? Qtrue : Qfalse;
+  }
+
+  // do_pooling
+  static VALUE _llama_context_params_set_do_pooling(VALUE self, VALUE do_pooling) {
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    ptr->params.do_pooling = RTEST(do_pooling) ? true : false;
+    return ptr->params.do_pooling ? Qtrue : Qfalse;
+  }
+
+  static VALUE _llama_context_params_get_do_pooling(VALUE self) {
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    return ptr->params.do_pooling ? Qtrue : Qfalse;
   }
 };
 
