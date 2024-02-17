@@ -1,3 +1,10 @@
+## [[0.12.6](https://github.com/yoshoku/llama_cpp.rb/compare/v0.12.5...v0.12.6)] - 2024-02-17
+
+- Bump bundled llama.cpp from b2106 to b2143.
+  - Add constant: `LLAMA_VOCAB_TYPE_WPM`.
+  - Add `do_pooling` accessors to ContextParams.
+  - Add `embeddings_ith` method to Context.
+
 ## [[0.12.5](https://github.com/yoshoku/llama_cpp.rb/compare/v0.12.4...v0.12.5)] - 2024-02-09
 
 - Bump bundled llama.cpp from b2047 to b2106.
