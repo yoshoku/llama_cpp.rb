@@ -3255,6 +3255,17 @@ static VALUE rb_llama_llama_backend_free(VALUE self) {
   return Qnil;
 }
 
+static VALUE rb_llama_llama_numa_init(VALUE self, VALUE strategy) {
+  if (!RB_INTEGER_TYPE_P(strategy)) {
+    rb_raise(rb_eArgError, "strategy must be an integer");
+    return Qnil;
+  }
+
+  llama_numa_init(static_cast<enum ggml_numa_strategy>(NUM2INT(strategy)));
+
+  return Qnil;
+}
+
 static VALUE rb_llama_model_quantize(int argc, VALUE* argv, VALUE self) {
   VALUE kw_args = Qnil;
   ID kw_table[3] = { rb_intern("input_path"), rb_intern("output_path"), rb_intern("params") };
@@ -3340,6 +3351,7 @@ extern "C" void Init_llama_cpp(void) {
 
   rb_define_module_function(rb_mLLaMACpp, "backend_init", rb_llama_llama_backend_init, 0);
   rb_define_module_function(rb_mLLaMACpp, "backend_free", rb_llama_llama_backend_free, 0);
+  rb_define_module_function(rb_mLLaMACpp, "numa_init", rb_llama_llama_numa_init, 1);
   rb_define_module_function(rb_mLLaMACpp, "model_quantize", rb_llama_model_quantize, -1);
   rb_define_module_function(rb_mLLaMACpp, "print_system_info", rb_llama_print_system_info, 0);
   rb_define_module_function(rb_mLLaMACpp, "time_us", rb_llama_time_us, 0);

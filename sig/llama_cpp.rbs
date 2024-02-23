@@ -54,6 +54,7 @@ module LLaMACpp
 
   def self?.backend_init: () -> void
   def self?.backend_free: () -> void
+  def self?.numa_init: (Integer) -> void
   def self?.model_quantize: (input_path: String, output_path: String, params: ModelQuantizeParams) -> void
   def self?.generate: (::LLaMACpp::Context, String,
     ?n_predict: Integer, ?n_threads: Integer, ?n_keep: Integer, ?n_batch: Integer,

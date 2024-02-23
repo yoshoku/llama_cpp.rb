@@ -126,6 +126,11 @@ module LLaMACpp
   # Finalizes the backend, currently only used for MPI.
   def backend_free; end
 
+  # Initializes NUMA.
+  #
+  # @param strategy [Integer] The NUMA strategy.
+  def numa_init(strategy); end
+
   # Quantizes the model.
   #
   # @param input_path [String] The path to the input model file.
