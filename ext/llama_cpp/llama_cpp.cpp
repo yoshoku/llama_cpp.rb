@@ -3419,6 +3419,10 @@ extern "C" void Init_llama_cpp(void) {
   rb_define_const(rb_mLLaMACpp, "LLAMA_ROPE_SCALING_YARN", INT2NUM(LLAMA_ROPE_SCALING_YARN));
   rb_define_const(rb_mLLaMACpp, "LLAMA_ROPE_SCALING_MAX_VALUE", INT2NUM(LLAMA_ROPE_SCALING_MAX_VALUE));
 
+  rb_define_const(rb_mLLaMACpp, "LLAMA_POOLING_NONE", INT2NUM(LLAMA_POOLING_NONE));
+  rb_define_const(rb_mLLaMACpp, "LLAMA_POOLING_MEAN", INT2NUM(LLAMA_POOLING_MEAN));
+  rb_define_const(rb_mLLaMACpp, "LLAMA_POOLING_CLS", INT2NUM(LLAMA_POOLING_CLS));
+
   rb_define_const(rb_mLLaMACpp, "LLAMA_SPLIT_NONE", INT2NUM(LLAMA_SPLIT_NONE));
   rb_define_const(rb_mLLaMACpp, "LLAMA_SPLIT_LAYER", INT2NUM(LLAMA_SPLIT_LAYER));
   rb_define_const(rb_mLLaMACpp, "LLAMA_SPLIT_ROW", INT2NUM(LLAMA_SPLIT_ROW));
