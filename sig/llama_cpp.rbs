@@ -52,7 +52,7 @@ module LLaMACpp
   LLAMA_SPLIT_LAYER: Integer
   LLAMA_SPLIT_ROW: Integer
 
-  def self?.backend_init: (?numa: bool) -> void
+  def self?.backend_init: () -> void
   def self?.backend_free: () -> void
   def self?.model_quantize: (input_path: String, output_path: String, params: ModelQuantizeParams) -> void
   def self?.generate: (::LLaMACpp::Context, String,

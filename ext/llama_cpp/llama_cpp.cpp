@@ -3243,15 +3243,8 @@ const rb_data_type_t RbLLaMAContext::llama_context_type = {
 
 // module functions
 
-static VALUE rb_llama_llama_backend_init(int argc, VALUE* argv, VALUE self) {
-  VALUE kw_args = Qnil;
-  ID kw_table[1] = { rb_intern("numa") };
-  VALUE kw_values[1] = { Qundef };
-  rb_scan_args(argc, argv, ":", &kw_args);
-  rb_get_kwargs(kw_args, kw_table, 0, 1, kw_values);
-
-  const bool numa = kw_values[0] == Qundef ? false : (RTEST(kw_values[0]) ? true : false);
-  llama_backend_init(numa);
+static VALUE rb_llama_llama_backend_init(VALUE self) {
+  llama_backend_init();
 
   return Qnil;
 }
@@ -3345,7 +3338,7 @@ extern "C" void Init_llama_cpp(void) {
   RbLLaMAGrammarElement::define_class(rb_mLLaMACpp);
   RbLLaMAGrammar::define_class(rb_mLLaMACpp);
 
-  rb_define_module_function(rb_mLLaMACpp, "backend_init", rb_llama_llama_backend_init, -1);
+  rb_define_module_function(rb_mLLaMACpp, "backend_init", rb_llama_llama_backend_init, 0);
   rb_define_module_function(rb_mLLaMACpp, "backend_free", rb_llama_llama_backend_free, 0);
   rb_define_module_function(rb_mLLaMACpp, "model_quantize", rb_llama_model_quantize, -1);
   rb_define_module_function(rb_mLLaMACpp, "print_system_info", rb_llama_print_system_info, 0);
