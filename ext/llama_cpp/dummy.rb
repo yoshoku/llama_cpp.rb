@@ -79,6 +79,9 @@ module LLaMACpp
   # LLaMA model file type.
   LLAMA_FTYPE_MOSTLY_IQ3_XXS = 23
 
+  # LLaMA model file type.
+  LLAMA_FTYPE_MOSTLY_IQ1_S = 24
+
   # LLaMA KV override type.
   LLAMA_KV_OVERRIDE_INT = 0
 
