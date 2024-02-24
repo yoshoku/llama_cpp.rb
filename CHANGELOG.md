@@ -1,3 +1,13 @@
+## [[0.12.7](https://github.com/yoshoku/llama_cpp.rb/compare/v0.12.6...v0.12.7)] - 2024-02-24
+
+- Bump bundled llama.cpp from b2106 to b2143.
+  - Add constants for file type: `LLAMA_FTYPE_MOSTLY_IQ1_S` and `LLAMA_FTYPE_MOSTLY_IQ4_NL`.
+  - Add constants for pooling type: `LLAMA_POOLING_NONE`, `LLAMA_POOLING_MEAN`, and `LLAMA_POOLING_CLS`.
+  - Add `numa_init` module function to `LLaMACpp`.
+  - Remove unnecessary argument from `backend_init`.
+
+Implementation of llama_chat_apply_template binding has been postponed for the time being.
+
 ## [[0.12.6](https://github.com/yoshoku/llama_cpp.rb/compare/v0.12.5...v0.12.6)] - 2024-02-17
 
 - Bump bundled llama.cpp from b2106 to b2143.
