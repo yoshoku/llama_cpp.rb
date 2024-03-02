@@ -271,6 +271,14 @@ module LLaMACpp
     # @param params [ModelParams] The parameters for context.
     def load(model_path:, params:); end
 
+    # Returns the vocabulary type.
+    # @return [Integer]
+    def vocab_type; end
+
+    # Returns the RoPE type.
+    # @return [Integer]
+    def rope_type; end
+
     # Returns the number of vocabulary.
     # @return [Integer]
     def n_vocab; end

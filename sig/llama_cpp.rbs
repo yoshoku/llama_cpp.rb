@@ -101,6 +101,8 @@ module LLaMACpp
     def empty?: () -> bool
     def free: () -> void
     def load: (model_path: String, params: ::LLaMACpp::ModelParams) -> void
+    def vocab_type: () -> Integer
+    def rope_type: () -> Integer
     def n_vocab: () -> Integer
     def n_ctx_train: () -> Integer
     def n_embd: () -> Integer

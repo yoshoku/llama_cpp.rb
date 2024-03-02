@@ -1433,6 +1433,8 @@ public:
     rb_define_method(rb_cLLaMAModel, "empty?", RUBY_METHOD_FUNC(_llama_model_empty), 0);
     rb_define_method(rb_cLLaMAModel, "free", RUBY_METHOD_FUNC(_llama_model_free), 0);
     rb_define_method(rb_cLLaMAModel, "load", RUBY_METHOD_FUNC(_llama_model_load), -1);
+    rb_define_method(rb_cLLaMAModel, "vocab_type", RUBY_METHOD_FUNC(_llama_model_get_model_vocab_type), 0);
+    rb_define_method(rb_cLLaMAModel, "rope_type", RUBY_METHOD_FUNC(_llama_model_get_model_rope_type), 0);
     rb_define_method(rb_cLLaMAModel, "n_vocab", RUBY_METHOD_FUNC(_llama_model_get_model_n_vocab), 0);
     rb_define_method(rb_cLLaMAModel, "n_ctx_train", RUBY_METHOD_FUNC(_llama_model_get_model_n_ctx_train), 0);
     rb_define_method(rb_cLLaMAModel, "n_embd", RUBY_METHOD_FUNC(_llama_model_get_model_n_embd), 0);
@@ -1556,6 +1558,16 @@ private:
 
     RB_GC_GUARD(filename);
     return Qnil;
+  }
+
+  static VALUE _llama_model_get_model_vocab_type(VALUE self) {
+    LLaMAModelWrapper* ptr = get_llama_model(self);
+    return INT2NUM(llama_vocab_type(ptr->model));
+  }
+
+  static VALUE _llama_model_get_model_rope_type(VALUE self) {
+    LLaMAModelWrapper* ptr = get_llama_model(self);
+    return INT2NUM(llama_rope_type(ptr->model));
   }
 
   static VALUE _llama_model_get_model_n_vocab(VALUE self) {
