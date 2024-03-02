@@ -678,6 +678,11 @@ module LLaMACpp
     # @return [NilClass]
     def kv_cache_defrag(); end
 
+    # Apply the KV cache updates.
+    #
+    # @return [NilClass]
+    def kv_cache_update(); end
+
     # Sets the current rng seed.
     #
     # @param seed [Integer] The rng seed.
