@@ -648,7 +648,7 @@ module LLaMACpp
     # @param p1 [Integer] The end position.
     # @param delta [Integer] The relative position.
     # @return [NilClass]
-    def kv_cache_seq_shift(seq_id, p0, p1, delta); end
+    def kv_cache_seq_add(seq_id, p0, p1, delta); end
 
     # Integer division of the positions by factor of `d > 1`
     #

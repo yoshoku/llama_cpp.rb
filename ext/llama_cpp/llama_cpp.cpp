@@ -2000,7 +2000,7 @@ public:
     rb_define_method(rb_cLLaMAContext, "kv_cache_seq_rm", RUBY_METHOD_FUNC(_llama_context_kv_cache_seq_rm), 3);
     rb_define_method(rb_cLLaMAContext, "kv_cache_seq_cp", RUBY_METHOD_FUNC(_llama_context_kv_cache_seq_cp), 4);
     rb_define_method(rb_cLLaMAContext, "kv_cache_seq_keep", RUBY_METHOD_FUNC(_llama_context_kv_cache_seq_keep), 1);
-    rb_define_method(rb_cLLaMAContext, "kv_cache_seq_shift", RUBY_METHOD_FUNC(_llama_context_kv_cache_seq_shift), 4);
+    rb_define_method(rb_cLLaMAContext, "kv_cache_seq_add", RUBY_METHOD_FUNC(_llama_context_kv_cache_seq_add), 4);
     rb_define_method(rb_cLLaMAContext, "kv_cache_seq_div", RUBY_METHOD_FUNC(_llama_context_kv_cache_seq_div), 4);
     rb_define_method(rb_cLLaMAContext, "set_rng_seed", RUBY_METHOD_FUNC(_llama_context_set_rng_seed), 1);
     rb_define_method(rb_cLLaMAContext, "load_session_file", RUBY_METHOD_FUNC(_llama_context_load_session_file), -1);
@@ -2270,13 +2270,13 @@ private:
     return Qnil;
   }
 
-  static VALUE _llama_context_kv_cache_seq_shift(VALUE self, VALUE seq_id, VALUE p0, VALUE p1, VALUE delta) {
+  static VALUE _llama_context_kv_cache_seq_add(VALUE self, VALUE seq_id, VALUE p0, VALUE p1, VALUE delta) {
     LLaMAContextWrapper* ptr = get_llama_context(self);
     if (ptr->ctx == NULL) {
       rb_raise(rb_eArgError, "LLaMA context is not initialized");
       return Qnil;
     }
-    llama_kv_cache_seq_shift(ptr->ctx, NUM2INT(seq_id), NUM2INT(p0), NUM2INT(p1), NUM2INT(delta));
+    llama_kv_cache_seq_add(ptr->ctx, NUM2INT(seq_id), NUM2INT(p0), NUM2INT(p1), NUM2INT(delta));
     return Qnil;
   }
 
