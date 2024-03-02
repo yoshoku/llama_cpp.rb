@@ -74,7 +74,7 @@ module LLaMACpp
   LLAMA_FTYPE_MOSTLY_Q2_K_S = 21
 
   # LLaMA model file type.
-  LLAMA_FTYPE_MOSTLY_Q3_K_XS = 22
+  LLAMA_FTYPE_MOSTLY_IQ3_XS = 22
 
   # LLaMA model file type.
   LLAMA_FTYPE_MOSTLY_IQ3_XXS = 23
@@ -86,13 +86,13 @@ module LLaMACpp
   LLAMA_FTYPE_MOSTLY_IQ4_NL = 25
 
   # LLaMA KV override type.
-  LLAMA_KV_OVERRIDE_INT = 0
+  LLAMA_KV_OVERRIDE_TYPE_INT = 0
 
   # LLaMA KV override type.
-  LLAMA_KV_OVERRIDE_FLOAT = 1
+  LLAMA_KV_OVERRIDE_TYPE_FLOAT = 1
 
   # LLaMA KV override type.
-  LLAMA_KV_OVERRIDE_BOOL = 2
+  LLAMA_KV_OVERRIDE_TYPE_BOOL = 2
 
   # GrammarElement type: end of rule definition.
   LLAMA_GRETYPE_END = 0
@@ -115,23 +115,38 @@ module LLaMACpp
   # GrammarElement type: modifies a preceding LLAMA_GRETYPE_CHAR or LLAMA_GRETYPE_CHAR_RNG_UPPER to add an alternate char to match ([ab], [a-zA]).
   LLAMA_GRETYPE_CHAR_ALT = 6
 
-  # LLaMA pooling type.
-  LLAMA_POOLING_NONE = 0
+  # RoPE scaling type.
+  LLAMA_ROPE_SCALING_TYPE_UNSPECIFIED = -1
+
+  # RoPE scaling type.
+  LLAMA_ROPE_SCALING_TYPE_NONE = 0
+
+  # RoPE scaling type.
+  LLAMA_ROPE_SCALING_TYPE_LINEAR = 1
+
+  # RoPE scaling type.
+  LLAMA_ROPE_SCALING_TYPE_YARN = 2
+
+  # RoPE scaling type.
+  LLAMA_ROPE_SCALING_TYPE_MAX_VALUE = LLAMA_ROPE_SCALING_TYPE_YARN
 
   # LLaMA pooling type.
-  LLAMA_POOLING_MEAN = 1
+  LLAMA_POOLING_TYPE_NONE = 0
 
   # LLaMA pooling type.
-  LLAMA_POOLING_CLS = 2
+  LLAMA_POOLING_TYPE_MEAN = 1
+
+  # LLaMA pooling type.
+  LLAMA_POOLING_TYPE_CLS = 2
 
   # LLaMA split mode: single GPU.
-  LLAMA_SPLIT_NONE = 0
+  LLAMA_SPLIT_MODE_NONE = 0
 
   # LLaMA split mode: split layers and KV across GPUs.
-  LLAMA_SPLIT_LAYER = 1
+  LLAMA_SPLIT_MODE_LAYER = 1
 
   # LLaMA split mode: split rows across GPUs.
-  LLAMA_SPLIT_ROW = 2
+  LLAMA_SPLIT_MODE_ROW = 2
 
   module_function
 
