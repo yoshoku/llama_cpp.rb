@@ -2029,6 +2029,7 @@ public:
     rb_define_method(rb_cLLaMAContext, "kv_cache_seq_add", RUBY_METHOD_FUNC(_llama_context_kv_cache_seq_add), 4);
     rb_define_method(rb_cLLaMAContext, "kv_cache_seq_div", RUBY_METHOD_FUNC(_llama_context_kv_cache_seq_div), 4);
     rb_define_method(rb_cLLaMAContext, "kv_cache_seq_pos_max", RUBY_METHOD_FUNC(_llama_context_kv_cache_seq_pos_max), 1);
+    rb_define_method(rb_cLLaMAContext, "kv_cache_kv_cache_defrag", RUBY_METHOD_FUNC(_llama_context_kv_cache_defrag), 0);
     rb_define_method(rb_cLLaMAContext, "set_rng_seed", RUBY_METHOD_FUNC(_llama_context_set_rng_seed), 1);
     rb_define_method(rb_cLLaMAContext, "load_session_file", RUBY_METHOD_FUNC(_llama_context_load_session_file), -1);
     rb_define_method(rb_cLLaMAContext, "save_session_file", RUBY_METHOD_FUNC(_llama_context_save_session_file), -1);
@@ -2324,6 +2325,16 @@ private:
       return Qnil;
     }
     return INT2NUM(llama_kv_cache_seq_pos_max(ptr->ctx, NUM2INT(seq_id)));
+  }
+
+  static VALUE _llama_context_kv_cache_defrag(VALUE self) {
+    LLaMAContextWrapper* ptr = get_llama_context(self);
+    if (ptr->ctx == NULL) {
+      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
+      return Qnil;
+    }
+    llama_kv_cache_defrag(ptr->ctx);
+    return Qnil;
   }
 
   static VALUE _llama_context_set_rng_seed(VALUE self, VALUE seed_) {

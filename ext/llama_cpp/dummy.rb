@@ -673,6 +673,11 @@ module LLaMACpp
     # @return [Integer]
     def kv_cache_seq_pos_max(seq_id); end
 
+    # Defragment the KV cache.
+    #
+    # @return [NilClass]
+    def kv_cache_defrag(); end
+
     # Sets the current rng seed.
     #
     # @param seed [Integer] The rng seed.

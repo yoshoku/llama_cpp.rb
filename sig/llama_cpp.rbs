@@ -216,6 +216,7 @@ module LLaMACpp
     def kv_cache_seq_add: (Integer, Integer, Integer, Integer) -> void
     def kv_cache_seq_div: (Integer, Integer, Integer, Integer) -> void
     def kv_cache_seq_pos_max: (Integer) -> Integer
+    def kv_cache_defrag: () -> void
     def set_rng_seed: (Integer) -> void
     def load_session_file: (session_path: String) -> void
     def save_session_file: (session_path: String, session_tokens: Array[Integer]) -> void
