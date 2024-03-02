@@ -263,6 +263,8 @@ module LLaMACpp
     def yarn_beta_slow: () -> Float
     def yarn_orig_ctx=: (Integer) -> Integer
     def yarn_orig_ctx: () -> Integer
+    def defrag_thold=: (Float) -> Float
+    def defrag_thold: () -> Float
     def type_k=: (Integer) -> Integer
     def type_k: () -> Integer
     def type_v=: (Integer) -> Integer

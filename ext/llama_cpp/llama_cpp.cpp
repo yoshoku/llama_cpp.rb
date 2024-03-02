@@ -966,6 +966,8 @@ public:
     rb_define_method(rb_cLLaMAContextParams, "yarn_beta_slow", RUBY_METHOD_FUNC(_llama_context_params_get_yarn_beta_slow), 0);
     rb_define_method(rb_cLLaMAContextParams, "yarn_orig_ctx=", RUBY_METHOD_FUNC(_llama_context_params_set_yarn_orig_ctx), 1);
     rb_define_method(rb_cLLaMAContextParams, "yarn_orig_ctx", RUBY_METHOD_FUNC(_llama_context_params_get_yarn_orig_ctx), 0);
+    rb_define_method(rb_cLLaMAContextParams, "defrag_thold=", RUBY_METHOD_FUNC(_llama_context_params_set_defrag_thold), 1);
+    rb_define_method(rb_cLLaMAContextParams, "defrag_thold", RUBY_METHOD_FUNC(_llama_context_params_get_defrag_thold), 0);
     rb_define_method(rb_cLLaMAContextParams, "type_k=", RUBY_METHOD_FUNC(_llama_context_params_set_type_k), 1);
     rb_define_method(rb_cLLaMAContextParams, "type_k", RUBY_METHOD_FUNC(_llama_context_params_get_type_k), 0);
     rb_define_method(rb_cLLaMAContextParams, "type_v=", RUBY_METHOD_FUNC(_llama_context_params_set_type_v), 1);
@@ -1142,6 +1144,18 @@ private:
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     ptr->params.yarn_orig_ctx = NUM2UINT(yarn_orig_ctx);
     return UINT2NUM(ptr->params.yarn_orig_ctx);
+  }
+
+  // defrag_thold
+  static VALUE _llama_context_params_set_defrag_thold(VALUE self, VALUE defrag_thold) {
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    ptr->params.defrag_thold = NUM2DBL(defrag_thold);
+    return DBL2NUM(ptr->params.defrag_thold);
+  }
+
+  static VALUE _llama_context_params_get_defrag_thold(VALUE self) {
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    return DBL2NUM(ptr->params.defrag_thold);
   }
 
   static VALUE _llama_context_params_get_yarn_orig_ctx(VALUE self) {

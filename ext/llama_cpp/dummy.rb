@@ -931,6 +931,14 @@ module LLaMACpp
     # @return [Integer]
     def yarn_orig_ctx; end
 
+    # Sets the defragment the KV cache.
+    # @param defrag_thold [Float]
+    def defrag_thold=(defrag_thold); end
+
+    # Returns defragment the KV cache.
+    # @return [Float]
+    def defrag_thold; end
+
     # Sets the data type for K cache.
     # @param type_k [Integer]
     def type_k=(type_k); end
