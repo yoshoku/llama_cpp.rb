@@ -667,6 +667,12 @@ module LLaMACpp
     # @return [NilClass]
     def kv_cache_seq_div(seq_id, p0, p1, d); end
 
+    # Returns the maximum position present in the KV cache for the specified sequence
+    #
+    # @param seq_id [Integer] The sequence id.
+    # @return [Integer]
+    def kv_cache_seq_pos_max(seq_id); end
+
     # Sets the current rng seed.
     #
     # @param seed [Integer] The rng seed.
