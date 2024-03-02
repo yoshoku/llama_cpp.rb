@@ -68,8 +68,6 @@ module LLaMACpp
     ?top_k: Integer, ?top_p: Float, ?tfs_z: Float, ?typical_p: Float, ?temperature: Float) -> String
   def self?.print_system_info: () -> void
   def self?.time_us: () -> Integer
-  def self?.mmap_supported?: () -> bool
-  def self?.mlock_supported?: () -> bool
   def self?.max_devices: () -> Integer
   def self?.supports_mmap?: () -> bool
   def self?.supports_mlock?: () -> bool
@@ -103,7 +101,6 @@ module LLaMACpp
     def empty?: () -> bool
     def free: () -> void
     def load: (model_path: String, params: ::LLaMACpp::ModelParams) -> void
-    def apply_lora_from_file: (lora_path: String, ?scale: Float, ?base_model_path: String, ?n_threads: Integer) -> void
     def n_vocab: () -> Integer
     def n_ctx_train: () -> Integer
     def n_embd: () -> Integer
@@ -202,8 +199,6 @@ module LLaMACpp
     def initialize: (model: ::LLaMACpp::Model, params: ::LLaMACpp::ContextParams) -> void
     def embeddings: () -> Array[Float]
     def embeddings_ith: (Integer) -> Array[Float]
-    def eval: (tokens: Array[Integer], n_past: Integer, ?n_tokens: Integer) -> void
-    def eval_embd: (tokens: Array[Float], n_past: Integer, ?n_tokens: Integer) -> void
     def decode: (::LLaMACpp::Batch) -> void
     def logits: () -> Array[Float]
     def n_ctx: () -> Integer
@@ -223,7 +218,6 @@ module LLaMACpp
     def save_session_file: (session_path: String, session_tokens: Array[Integer]) -> void
     def sample_repetition_penalties: (::LLaMACpp::TokenDataArray, Array[Integer], penalty_repeat: Float, penalty_freq: Float, penalty_present: Float) -> void
     def sample_apply_guidance: (logits: Array[Float], logits_guidance: Array[Float], scale: Float) -> void
-    def sample_classifier_free_guidance: (::LLaMACpp::TokenDataArray, guidance: ::LLaMACpp::Context, scale: Float) -> void
     def sample_softmax: (::LLaMACpp::TokenDataArray) -> void
     def sample_top_k: (::LLaMACpp::TokenDataArray, k: Integer, ?min_keep: Integer) -> void
     def sample_top_p: (::LLaMACpp::TokenDataArray, prob: Float, ?min_keep: Integer) -> void
@@ -232,7 +226,6 @@ module LLaMACpp
     def sample_typical: (::LLaMACpp::TokenDataArray, prob: Float, ?min_keep: Integer) -> void
     def sample_temp: (::LLaMACpp::TokenDataArray, temp: Float) -> void
     def sample_entropy: (::LLaMACpp::TokenDataArray, min_temp: Float, max_temp: Float, exponent_val: Float) -> void
-    def sample_temperature: (::LLaMACpp::TokenDataArray, temperature: Float) -> void
     def sample_token_mirostat: (::LLaMACpp::TokenDataArray, tau: Float, eta: Float, m: Integer, mu: Float) -> [Integer, Float]
     def sample_token_mirostat_v2: (::LLaMACpp::TokenDataArray, tau: Float, eta: Float, mu: Float) -> [Integer, Float]
     def sample_token_greedy: (::LLaMACpp::TokenDataArray) -> Integer
@@ -274,8 +267,6 @@ module LLaMACpp
     def type_k: () -> Integer
     def type_v=: (Integer) -> Integer
     def type_v: () -> Integer
-    def mul_mat_q: () -> bool
-    def mul_mat_q=: (bool) -> bool
     def logits_all: () -> bool
     def logits_all=: (bool) -> bool
     def embedding: () -> bool

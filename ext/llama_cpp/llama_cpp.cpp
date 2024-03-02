@@ -970,8 +970,6 @@ public:
     rb_define_method(rb_cLLaMAContextParams, "type_k", RUBY_METHOD_FUNC(_llama_context_params_get_type_k), 0);
     rb_define_method(rb_cLLaMAContextParams, "type_v=", RUBY_METHOD_FUNC(_llama_context_params_set_type_v), 1);
     rb_define_method(rb_cLLaMAContextParams, "type_v", RUBY_METHOD_FUNC(_llama_context_params_get_type_v), 0);
-    rb_define_method(rb_cLLaMAContextParams, "mul_mat_q=", RUBY_METHOD_FUNC(_llama_context_params_set_mul_mat_q), 1);
-    rb_define_method(rb_cLLaMAContextParams, "mul_mat_q", RUBY_METHOD_FUNC(_llama_context_params_get_mul_mat_q), 0);
     rb_define_method(rb_cLLaMAContextParams, "logits_all=", RUBY_METHOD_FUNC(_llama_context_params_set_logits_all), 1);
     rb_define_method(rb_cLLaMAContextParams, "logits_all", RUBY_METHOD_FUNC(_llama_context_params_get_logits_all), 0);
     rb_define_method(rb_cLLaMAContextParams, "embedding=", RUBY_METHOD_FUNC(_llama_context_params_set_embedding), 1);
@@ -1173,18 +1171,6 @@ private:
   static VALUE _llama_context_params_get_type_v(VALUE self) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     return INT2NUM(ptr->params.type_v);
-  }
-
-  // mul_mat_q
-  static VALUE _llama_context_params_set_mul_mat_q(VALUE self, VALUE mul_mat_q) {
-    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
-    ptr->params.mul_mat_q = RTEST(mul_mat_q) ? true : false;
-    return ptr->params.mul_mat_q ? Qtrue : Qfalse;
-  }
-
-  static VALUE _llama_context_params_get_mul_mat_q(VALUE self) {
-    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
-    return ptr->params.mul_mat_q ? Qtrue : Qfalse;
   }
 
   // logits_all
@@ -1433,7 +1419,6 @@ public:
     rb_define_method(rb_cLLaMAModel, "empty?", RUBY_METHOD_FUNC(_llama_model_empty), 0);
     rb_define_method(rb_cLLaMAModel, "free", RUBY_METHOD_FUNC(_llama_model_free), 0);
     rb_define_method(rb_cLLaMAModel, "load", RUBY_METHOD_FUNC(_llama_model_load), -1);
-    rb_define_method(rb_cLLaMAModel, "apply_lora_from_file", RUBY_METHOD_FUNC(_llama_model_apply_lora_from_file), -1);
     rb_define_method(rb_cLLaMAModel, "n_vocab", RUBY_METHOD_FUNC(_llama_model_get_model_n_vocab), 0);
     rb_define_method(rb_cLLaMAModel, "n_ctx_train", RUBY_METHOD_FUNC(_llama_model_get_model_n_ctx_train), 0);
     rb_define_method(rb_cLLaMAModel, "n_embd", RUBY_METHOD_FUNC(_llama_model_get_model_n_embd), 0);
@@ -1556,43 +1541,6 @@ private:
     rb_iv_set(self, "@params", kw_values[1]);
 
     RB_GC_GUARD(filename);
-    return Qnil;
-  }
-
-  static VALUE _llama_model_apply_lora_from_file(int argc, VALUE* argv, VALUE self) {
-    VALUE kw_args = Qnil;
-    ID kw_table[4] = { rb_intern("lora_path"), rb_intern("base_model_path"), rb_intern("n_threads"), rb_intern("scale") };
-    VALUE kw_values[4] = { Qundef, Qundef, Qundef, Qundef };
-    rb_scan_args(argc, argv, ":", &kw_args);
-    rb_get_kwargs(kw_args, kw_table, 1, 3, kw_values);
-
-    if (!RB_TYPE_P(kw_values[0], T_STRING)) {
-      rb_raise(rb_eArgError, "lora_path must be a string");
-      return Qnil;
-    }
-    if (kw_values[1] != Qundef && !RB_TYPE_P(kw_values[1], T_STRING)) {
-      rb_raise(rb_eArgError, "base_model_path must be a string");
-      return Qnil;
-    }
-    if (kw_values[2] != Qundef && !RB_INTEGER_TYPE_P(kw_values[2])) {
-      rb_raise(rb_eArgError, "n_threads must be an integer");
-      return Qnil;
-    }
-    if (kw_values[3] != Qundef && !RB_FLOAT_TYPE_P(kw_values[3])) {
-      rb_raise(rb_eArgError, "scale must be a float");
-      return Qnil;
-    }
-
-    const char* lora_path = StringValueCStr(kw_values[0]);
-    const char* base_model_path = kw_values[1] == Qundef ? NULL : StringValueCStr(kw_values[1]);
-    const int n_threads = kw_values[2] == Qundef ? 1 : NUM2INT(kw_values[2]);
-    const float scale = kw_values[3] == Qundef ? 1.0 : NUM2DBL(kw_values[3]);
-
-    LLaMAModelWrapper* ptr = get_llama_model(self);
-    if (llama_model_apply_lora_from_file(ptr->model, lora_path, scale, base_model_path, n_threads) != 0) {
-      rb_raise(rb_eRuntimeError, "Failed to apply LoRA");
-      return Qnil;
-    }
     return Qnil;
   }
 
@@ -2038,8 +1986,6 @@ public:
     rb_define_alloc_func(rb_cLLaMAContext, llama_context_alloc);
     rb_define_attr(rb_cLLaMAContext, "model", 1, 0);
     rb_define_method(rb_cLLaMAContext, "initialize", RUBY_METHOD_FUNC(_llama_context_initialize), -1);
-    rb_define_method(rb_cLLaMAContext, "eval", RUBY_METHOD_FUNC(_llama_context_eval), -1);
-    rb_define_method(rb_cLLaMAContext, "eval_embd", RUBY_METHOD_FUNC(_llama_context_eval_embd), -1);
     rb_define_method(rb_cLLaMAContext, "decode", RUBY_METHOD_FUNC(_llama_context_decode), 1);
     rb_define_method(rb_cLLaMAContext, "logits", RUBY_METHOD_FUNC(_llama_context_logits), 0);
     rb_define_method(rb_cLLaMAContext, "embeddings", RUBY_METHOD_FUNC(_llama_context_embeddings), 0);
@@ -2061,7 +2007,6 @@ public:
     rb_define_method(rb_cLLaMAContext, "save_session_file", RUBY_METHOD_FUNC(_llama_context_save_session_file), -1);
     rb_define_method(rb_cLLaMAContext, "sample_repetition_penalties", RUBY_METHOD_FUNC(_llama_context_sample_repetition_penalties), -1);
     rb_define_method(rb_cLLaMAContext, "sample_apply_guidance", RUBY_METHOD_FUNC(_llama_context_sample_apply_guidance), -1);
-    rb_define_method(rb_cLLaMAContext, "sample_classifier_free_guidance", RUBY_METHOD_FUNC(_llama_context_sample_classifier_free_guidance), -1);
     rb_define_method(rb_cLLaMAContext, "sample_softmax", RUBY_METHOD_FUNC(_llama_context_sample_softmax), 1);
     rb_define_method(rb_cLLaMAContext, "sample_top_k", RUBY_METHOD_FUNC(_llama_context_sample_top_k), -1);
     rb_define_method(rb_cLLaMAContext, "sample_top_p", RUBY_METHOD_FUNC(_llama_context_sample_top_p), -1);
@@ -2070,7 +2015,6 @@ public:
     rb_define_method(rb_cLLaMAContext, "sample_typical", RUBY_METHOD_FUNC(_llama_context_sample_typical), -1);
     rb_define_method(rb_cLLaMAContext, "sample_temp", RUBY_METHOD_FUNC(_llama_context_sample_temp), -1);
     rb_define_method(rb_cLLaMAContext, "sample_entropy", RUBY_METHOD_FUNC(_llama_context_sample_entropy), -1);
-    rb_define_method(rb_cLLaMAContext, "sample_temperature", RUBY_METHOD_FUNC(_llama_context_sample_temperature), -1);
     rb_define_method(rb_cLLaMAContext, "sample_token_mirostat", RUBY_METHOD_FUNC(_llama_context_sample_token_mirostat), -1);
     rb_define_method(rb_cLLaMAContext, "sample_token_mirostat_v2", RUBY_METHOD_FUNC(_llama_context_sample_token_mirostat_v2), -1);
     rb_define_method(rb_cLLaMAContext, "sample_token_greedy", RUBY_METHOD_FUNC(_llama_context_sample_token_greedy), 1);
@@ -2118,110 +2062,6 @@ private:
     rb_iv_set(self, "@model", model);
     rb_iv_set(self, "@params", params);
     rb_iv_set(self, "@has_evaluated", Qfalse);
-
-    return Qnil;
-  }
-
-  static VALUE _llama_context_eval(int argc, VALUE* argv, VALUE self) {
-    VALUE kw_args = Qnil;
-    ID kw_table[3] = { rb_intern("tokens"), rb_intern("n_past"), rb_intern("n_tokens") };
-    VALUE kw_values[3] = { Qundef, Qundef, Qundef };
-    rb_scan_args(argc, argv, ":", &kw_args);
-    rb_get_kwargs(kw_args, kw_table, 2, 2, kw_values);
-
-    rb_warn("eval is deprecated. Use decode instead.");
-
-    if (!RB_TYPE_P(kw_values[0], T_ARRAY)) {
-      rb_raise(rb_eArgError, "tokens must be an Array");
-      return Qnil;
-    }
-    if (!RB_INTEGER_TYPE_P(kw_values[1])) {
-      rb_raise(rb_eArgError, "n_past must be an integer");
-      return Qnil;
-    }
-    if (kw_values[2] != Qundef && !RB_INTEGER_TYPE_P(kw_values[2])) {
-      rb_raise(rb_eArgError, "n_tokens must be an integer");
-      return Qnil;
-    }
-
-    const size_t tokens_len = RARRAY_LEN(kw_values[0]);
-    std::vector<llama_token> embd(tokens_len);
-    for (size_t i = 0; i < tokens_len; i++) {
-      VALUE token = rb_ary_entry(kw_values[0], i);
-      if (!RB_INTEGER_TYPE_P(token)) {
-        rb_raise(rb_eArgError, "tokens must be an array of integers");
-        return Qnil;
-      }
-      embd[i] = NUM2INT(token);
-    }
-
-    const int n_tokens = kw_values[2] == Qundef ? (int)tokens_len : NUM2INT(kw_values[2]);
-    const int n_past = NUM2INT(kw_values[1]);
-
-    LLaMAContextWrapper* ptr = get_llama_context(self);
-    if (ptr->ctx == NULL) {
-      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
-      return Qnil;
-    }
-    if (llama_eval(ptr->ctx, embd.data(), n_tokens, n_past) != 0) {
-      rb_raise(rb_eRuntimeError, "Failed to evaluate");
-      return Qnil;
-    }
-
-    rb_iv_set(self, "@n_tokens", INT2NUM(n_tokens));
-    rb_iv_set(self, "@has_evaluated", Qtrue);
-
-    return Qnil;
-  }
-
-  static VALUE _llama_context_eval_embd(int argc, VALUE* argv, VALUE self) {
-    VALUE kw_args = Qnil;
-    ID kw_table[3] = { rb_intern("embd"), rb_intern("n_past"), rb_intern("n_tokens") };
-    VALUE kw_values[3] = { Qundef, Qundef, Qundef };
-    rb_scan_args(argc, argv, ":", &kw_args);
-    rb_get_kwargs(kw_args, kw_table, 2, 2, kw_values);
-
-    rb_warn("eval_embd is deprecated. Use decode instead.");
-
-    if (!RB_TYPE_P(kw_values[0], T_ARRAY)) {
-      rb_raise(rb_eArgError, "tokens must be an Array");
-      return Qnil;
-    }
-    if (!RB_INTEGER_TYPE_P(kw_values[1])) {
-      rb_raise(rb_eArgError, "n_past must be an integer");
-      return Qnil;
-    }
-    if (kw_values[2] != Qundef && !RB_INTEGER_TYPE_P(kw_values[2])) {
-      rb_raise(rb_eArgError, "n_tokens must be an integer");
-      return Qnil;
-    }
-
-    const size_t tokens_len = RARRAY_LEN(kw_values[0]);
-    std::vector<float> embd(tokens_len);
-    for (size_t i = 0; i < tokens_len; i++) {
-      VALUE el = rb_ary_entry(kw_values[0], i);
-      if (!RB_FLOAT_TYPE_P(el)) {
-        rb_raise(rb_eArgError, "embd must be an array of floats");
-        return Qnil;
-      }
-      embd[i] = NUM2DBL(el);
-    }
-
-    const int n_tokens = kw_values[2] == Qundef ? (int)tokens_len : NUM2INT(kw_values[2]);
-    const int n_past = NUM2INT(kw_values[1]);
-
-    LLaMAContextWrapper* ptr = get_llama_context(self);
-    if (ptr->ctx == NULL) {
-      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
-      return Qnil;
-    }
-    if (llama_eval_embd(ptr->ctx, embd.data(), n_tokens, n_past) != 0) {
-      rb_raise(rb_eRuntimeError, "Failed to evaluate");
-      return Qnil;
-    }
-
-    rb_iv_set(self, "@n_tokens", INT2NUM(n_tokens));
-    rb_iv_set(self, "@has_evaluated", Qtrue);
 
     return Qnil;
   }
@@ -2659,46 +2499,6 @@ private:
     return Qnil;
   }
 
-  static VALUE _llama_context_sample_classifier_free_guidance(int argc, VALUE* argv, VALUE self) {
-    VALUE kw_args = Qnil;
-    ID kw_table[2] = { rb_intern("guidance"), rb_intern("scale") };
-    VALUE kw_values[2] = { Qundef, Qundef };
-    VALUE candidates = Qnil;
-    rb_scan_args(argc, argv, "1:", &candidates, &kw_args);
-    rb_get_kwargs(kw_args, kw_table, 2, 0, kw_values);
-
-    if (!rb_obj_is_kind_of(kw_values[0], rb_cLLaMAContext)) {
-      rb_raise(rb_eArgError, "guidance must be a Context");
-      return Qnil;
-    }
-    if (!RB_FLOAT_TYPE_P(kw_values[1])) {
-      rb_raise(rb_eArgError, "scale must be a float");
-      return Qnil;
-    }
-
-    LLaMAContextWrapper* ctx_ptr = get_llama_context(self);
-    if (ctx_ptr->ctx == NULL) {
-      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
-      return Qnil;
-    }
-    LLaMATokenDataArrayWrapper* cnd_ptr = RbLLaMATokenDataArray::get_llama_token_data_array(candidates);
-    if (cnd_ptr->array.data == nullptr) {
-      rb_raise(rb_eRuntimeError, "TokenDataArray is empty");
-      return Qnil;
-    }
-
-    LLaMAContextWrapper* guidance_ptr = get_llama_context(kw_values[0]);
-    if (guidance_ptr->ctx == NULL) {
-      rb_raise(rb_eRuntimeError, "guidance context is not initialized");
-      return Qnil;
-    }
-    const float scale = NUM2DBL(kw_values[1]);
-
-    llama_sample_classifier_free_guidance(ctx_ptr->ctx, &(cnd_ptr->array), guidance_ptr->ctx, scale);
-
-    return Qnil;
-  }
-
   static VALUE _llama_context_sample_softmax(VALUE self, VALUE candidates) {
     if (!rb_obj_is_kind_of(candidates, rb_cLLaMATokenDataArray)) {
       rb_raise(rb_eArgError, "argument must be a TokenDataArray");
@@ -2994,42 +2794,6 @@ private:
     return Qnil;
   }
 
-  static VALUE _llama_context_sample_temperature(int argc, VALUE* argv, VALUE self) {
-    VALUE kw_args = Qnil;
-    ID kw_table[1] = { rb_intern("temperature") };
-    VALUE kw_values[1] = { Qundef };
-    VALUE candidates = Qnil;
-    rb_scan_args(argc, argv, "1:", &candidates, &kw_args);
-    rb_get_kwargs(kw_args, kw_table, 1, 0, kw_values);
-
-    rb_warn("sample_temperature is deprecated. Use sample_temp instead.");
-
-    if (!rb_obj_is_kind_of(candidates, rb_cLLaMATokenDataArray)) {
-      rb_raise(rb_eArgError, "1st argument must be a TokenDataArray");
-      return Qnil;
-    }
-    if (!RB_FLOAT_TYPE_P(kw_values[0])) {
-      rb_raise(rb_eArgError, "temperature must be a float");
-      return Qnil;
-    }
-
-    LLaMAContextWrapper* ctx_ptr = get_llama_context(self);
-    if (ctx_ptr->ctx == NULL) {
-      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
-      return Qnil;
-    }
-    LLaMATokenDataArrayWrapper* cnd_ptr = RbLLaMATokenDataArray::get_llama_token_data_array(candidates);
-    if (cnd_ptr->array.data == nullptr) {
-      rb_raise(rb_eRuntimeError, "TokenDataArray is empty");
-      return Qnil;
-    }
-    const float temperature = NUM2DBL(kw_values[0]);
-
-    llama_sample_temperature(ctx_ptr->ctx, &(cnd_ptr->array), temperature);
-
-    return Qnil;
-  }
-
   static VALUE _llama_context_sample_token_mirostat(int argc, VALUE* argv, VALUE self) {
     VALUE kw_args = Qnil;
     ID kw_table[4] = { rb_intern("tau"), rb_intern("eta"), rb_intern("m"), rb_intern("mu") };
@@ -3307,16 +3071,6 @@ static VALUE rb_llama_time_us(VALUE self) {
   return LONG2NUM(llama_time_us());
 }
 
-static VALUE rb_llama_mmap_supported(VALUE self) {
-  rb_warn("mmap_supported? is deprecated. Use supports_mmap? instead.");
-  return llama_mmap_supported() ? Qtrue : Qfalse;
-}
-
-static VALUE rb_llama_mlock_supported(VALUE self) {
-  rb_warn("mlock_supported? is deprecated. Use supports_mlock? instead.");
-  return llama_mlock_supported() ? Qtrue : Qfalse;
-}
-
 static VALUE rb_llama_max_devices(VALUE self) {
   return SIZET2NUM(llama_max_devices());
 }
@@ -3355,8 +3109,6 @@ extern "C" void Init_llama_cpp(void) {
   rb_define_module_function(rb_mLLaMACpp, "model_quantize", rb_llama_model_quantize, -1);
   rb_define_module_function(rb_mLLaMACpp, "print_system_info", rb_llama_print_system_info, 0);
   rb_define_module_function(rb_mLLaMACpp, "time_us", rb_llama_time_us, 0);
-  rb_define_module_function(rb_mLLaMACpp, "mmap_supported?", rb_llama_mmap_supported, 0);
-  rb_define_module_function(rb_mLLaMACpp, "mlock_supported?", rb_llama_mlock_supported, 0);
   rb_define_module_function(rb_mLLaMACpp, "max_devices", rb_llama_max_devices, 0);
   rb_define_module_function(rb_mLLaMACpp, "supports_mmap?", rb_llama_supports_mmap, 0);
   rb_define_module_function(rb_mLLaMACpp, "supports_mlock?", rb_llama_supports_mlock, 0);

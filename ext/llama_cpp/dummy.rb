@@ -160,16 +160,6 @@ module LLaMACpp
   # @return [Integer]
   def time_us; end
 
-  # Returns the flag for supporting mmap.
-  # @deprecated Use supports_mmap? instead.
-  # @return [Boolean]
-  def mmap_supported?; end
-
-  # Returns the flag for supporting mlock.
-  # @deprecated Use supports_mlock? instead.
-  # @return [Boolean]
-  def mlock_supported?; end
-
   # Returns the maximum number of devices.
   # @return [Integer]
   def max_devices; end
@@ -265,14 +255,6 @@ module LLaMACpp
     # @param model_path [String] The path to the model file.
     # @param params [ModelParams] The parameters for context.
     def load(model_path:, params:); end
-
-    # Applies LLoRa from file.
-    #
-    # @param lora_path [String] The path to the LoRA file.
-    # @param scale [Float] The scale.
-    # @param base_model_path [String] The path to the base model file.
-    # @param n_threads [Integer] The number of threads.
-    def apply_lora_from_file(lora_path:, scale: 1.0, base_model_path: nil, n_threads: 1); end
 
     # Returns the number of vocabulary.
     # @return [Integer]
@@ -571,24 +553,6 @@ module LLaMACpp
 
     # Evaluates the tokens.
     #
-    # @param tokens [Array<Integer>] The tokens to be evaluated.
-    # @param n_past [Integer] The number of past tokens.
-    # @param n_tokens [Integer] The number of tokens to be evaluated.
-    # @return [NilClass]
-    # @deprecated Use decode instead.
-    def eval(tokens:, n_past:, n_tokens: nil); end
-
-    # Evaluates the embedding.
-    #
-    # @param embd [Array<Float>] The embedding to be evaluated.
-    # @param n_past [Integer] The number of past tokens.
-    # @param n_tokens [Integer] The number of tokens to be evaluated.
-    # @return [NilClass]
-    # @deprecated Use decode instead.
-    def eval_embd(embd:, n_past:, n_tokens: nil); end
-
-    # Evaluates the tokens.
-    #
     # @param batch [Batch] The batch.
     # @return [NilClass]
     def decode(batch); end
@@ -715,14 +679,6 @@ module LLaMACpp
     # @param scale [Float] The guidance strength.
     def sample_apply_guidance(logits:, logits_guidance:, scale:); end
 
-    # Samplling with classifier-free guidance.
-    #
-    # @param candidates [TokenDataArray] The array of token data.
-    # @param guidance [Context] The separate context from the same model.
-    # @param scale [Float] The guidance strength.
-    # @return [Nil]
-    def sample_classifier_free_guidance(candidates, guidance:, scale:); end
-
     # Sorts candates by their probablities with logits.
     #
     # @param candidates [TokenDataArray] The array of token data.
@@ -768,14 +724,6 @@ module LLaMACpp
     # @param min_keep [Integer] The minimum number of tokens to keep.
     # @return [Nil]
     def sample_typical(candidates, prob:, min_keep: 1); end
-
-    # Samples temeperature.
-    #
-    # @param candidates [TokenDataArray] The array of token data.
-    # @param temperature [Float] The temperature.
-    # @return [Nil]
-    # @deprecated Use sample_temp instead.
-    def sample_temperature(candidates, temperature:); end
 
     # Samples dynamic temeperature.
     #
@@ -983,16 +931,6 @@ module LLaMACpp
     # Returns the data type for V cache.
     # @return [Integer]
     def type_v; end
-
-    # Sets the flag to use experimental mul_mat_q kernels.
-    # @param flag [Boolean]
-    # @deprecated always true
-    def mul_mat_q=(flag); end
-
-    # Returns the flag to use experimental mul_mat_q kernels.
-    # @return [Boolean]
-    # @deprecated always true
-    def mul_mat_q; end
 
     # Sets the flag to compute all logits.
     # @param flag [Boolean]
