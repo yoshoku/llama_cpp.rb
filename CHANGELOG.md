@@ -1,3 +1,14 @@
+## [[0.13.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.12.7...v0.13.0)] - 2024-03-02
+
+- Bump bundled llama.cpp from b2143 to b2303.
+  - Remove deprecated methods:
+    - `map_supported?`, `mlock_supported?`, `apply_lora_from_file`, `eval`, `eval_embd`, `sample_classifier_free_guidance`, `sample_temperature`, and `mul_mat_q`.
+  - Rename some constants.
+  - Rename `kv_cache_seq_shift` method to `kv_cache_seq_add`.
+  - Add `defrag_thold` accessor to `ContextParams`.
+  - Add `vocab_type` and `rope_type` methods to `Model`.
+  - Add `kv_cache_seq_pos_max`, `kv_cache_defrag`, and `kv_cache_update` methods to `Context`.
+
 ## [[0.12.7](https://github.com/yoshoku/llama_cpp.rb/compare/v0.12.6...v0.12.7)] - 2024-02-24
 
 - Bump bundled llama.cpp from b2106 to b2143.
