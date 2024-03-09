@@ -1058,7 +1058,7 @@ private:
   // rope_scaling_type
   static VALUE _llama_context_params_set_rope_scaling_type(VALUE self, VALUE scaling_type) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
-    ptr->params.rope_scaling_type = NUM2INT(scaling_type);
+    ptr->params.rope_scaling_type = static_cast<enum llama_rope_scaling_type>(NUM2INT(scaling_type));
     return INT2NUM(ptr->params.rope_scaling_type);
   }
 
