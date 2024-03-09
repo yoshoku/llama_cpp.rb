@@ -131,6 +131,9 @@ module LLaMACpp
   LLAMA_ROPE_SCALING_TYPE_MAX_VALUE = LLAMA_ROPE_SCALING_TYPE_YARN
 
   # LLaMA pooling type.
+  LLAMA_POOLING_TYPE_UNSPECIFIED = -1
+
+  # LLaMA pooling type.
   LLAMA_POOLING_TYPE_NONE = 0
 
   # LLaMA pooling type.
