@@ -276,8 +276,8 @@ module LLaMACpp
     def type_v: () -> Integer
     def logits_all: () -> bool
     def logits_all=: (bool) -> bool
-    def embedding: () -> bool
-    def embedding=: (bool) -> bool
+    def embeddings: () -> bool
+    def embeddings=: (bool) -> bool
     def offload_kqv: () -> bool
     def offload_kqv=: (bool) -> bool
     def do_pooling: () -> bool

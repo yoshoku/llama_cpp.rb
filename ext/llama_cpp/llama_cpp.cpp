@@ -974,8 +974,8 @@ public:
     rb_define_method(rb_cLLaMAContextParams, "type_v", RUBY_METHOD_FUNC(_llama_context_params_get_type_v), 0);
     rb_define_method(rb_cLLaMAContextParams, "logits_all=", RUBY_METHOD_FUNC(_llama_context_params_set_logits_all), 1);
     rb_define_method(rb_cLLaMAContextParams, "logits_all", RUBY_METHOD_FUNC(_llama_context_params_get_logits_all), 0);
-    rb_define_method(rb_cLLaMAContextParams, "embedding=", RUBY_METHOD_FUNC(_llama_context_params_set_embedding), 1);
-    rb_define_method(rb_cLLaMAContextParams, "embedding", RUBY_METHOD_FUNC(_llama_context_params_get_embedding), 0);
+    rb_define_method(rb_cLLaMAContextParams, "embeddings=", RUBY_METHOD_FUNC(_llama_context_params_set_embeddings), 1);
+    rb_define_method(rb_cLLaMAContextParams, "embeddings", RUBY_METHOD_FUNC(_llama_context_params_get_embeddings), 0);
     rb_define_method(rb_cLLaMAContextParams, "offload_kqv=", RUBY_METHOD_FUNC(_llama_context_params_set_offload_kqv), 1);
     rb_define_method(rb_cLLaMAContextParams, "offload_kqv", RUBY_METHOD_FUNC(_llama_context_params_get_offload_kqv), 0);
     rb_define_method(rb_cLLaMAContextParams, "do_pooling=", RUBY_METHOD_FUNC(_llama_context_params_set_do_pooling), 1);
@@ -1199,16 +1199,16 @@ private:
     return ptr->params.logits_all ? Qtrue : Qfalse;
   }
 
-  // embedding
-  static VALUE _llama_context_params_set_embedding(VALUE self, VALUE embedding) {
+  // embeddings
+  static VALUE _llama_context_params_set_embeddings(VALUE self, VALUE embeddings) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
-    ptr->params.embedding = RTEST(embedding) ? true : false;
-    return ptr->params.embedding ? Qtrue : Qfalse;
+    ptr->params.embeddings = RTEST(embeddings) ? true : false;
+    return ptr->params.embeddings ? Qtrue : Qfalse;
   }
 
-  static VALUE _llama_context_params_get_embedding(VALUE self) {
+  static VALUE _llama_context_params_get_embeddings(VALUE self) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
-    return ptr->params.embedding ? Qtrue : Qfalse;
+    return ptr->params.embeddings ? Qtrue : Qfalse;
   }
 
   // offload_kqv
@@ -2151,7 +2151,7 @@ private:
     LLaMAModelWrapper* model_ptr = RbLLaMAModel::get_llama_model(model);
     VALUE params = rb_iv_get(self, "@params");
     LLaMAContextParamsWrapper* prms_ptr = RbLLaMAContextParams::get_llama_context_params(params);
-    if (!prms_ptr->params.embedding) {
+    if (!prms_ptr->params.embeddings) {
       rb_raise(rb_eRuntimeError, "embedding parameter is false");
       return Qnil;
     }
@@ -2182,7 +2182,7 @@ private:
     }
     VALUE params = rb_iv_get(self, "@params");
     LLaMAContextParamsWrapper* prms_ptr = RbLLaMAContextParams::get_llama_context_params(params);
-    if (!prms_ptr->params.embedding) {
+    if (!prms_ptr->params.embeddings) {
       rb_raise(rb_eRuntimeError, "embedding parameter is false");
       return Qnil;
     }

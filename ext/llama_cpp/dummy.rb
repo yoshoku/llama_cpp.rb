@@ -987,13 +987,13 @@ module LLaMACpp
     # @return [Boolean]
     def logits_all; end
 
-    # Sets the flag for embedding mode only.
+    # Sets the flag for embeddings mode only.
     # @param flag [Boolean]
-    def embedding=(flag); end
+    def embeddings=(flag); end
 
-    # Returns the flag for embedding mode only.
+    # Returns the flag for embeddings mode only.
     # @return [Boolean]
-    def embedding; end
+    def embeddings; end
 
     # Sets the flag whether to offload the KQV ops.
     # @param flag [Boolean]
