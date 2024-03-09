@@ -1,4 +1,17 @@
+## [[0.14.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.13.0...v0.14.0)] - 2024-03-09
+
+**Breaking Changes**
+
+- Bump bundled llama.cpp from b2303 to b2361.
+  - Rename embedding accessor to `embeddings` in `ContextParams`.
+  - Remove `do_pooling` accessor from `ContextParams`.
+  - Add `pooling_type` accessor to `ContextParams`.
+  - Fix the size of array returned by `embedding` method in `Context` from `n_embd` to `n_tokens * n_embd`.
+  - Add `embeddings_seq` method to `Context`.
+
 ## [[0.13.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.12.7...v0.13.0)] - 2024-03-02
+
+**Breaking Changes**
 
 - Bump bundled llama.cpp from b2143 to b2303.
   - Remove deprecated methods:
