@@ -202,6 +202,7 @@ module LLaMACpp
     def initialize: (model: ::LLaMACpp::Model, params: ::LLaMACpp::ContextParams) -> void
     def embeddings: () -> Array[Float]
     def embeddings_ith: (Integer) -> Array[Float]
+    def embeddings_seq: (Integer) -> Array[Float]
     def decode: (::LLaMACpp::Batch) -> void
     def logits: () -> Array[Float]
     def n_ctx: () -> Integer

@@ -599,6 +599,12 @@ module LLaMACpp
     # @return [Array<Float>] shape: (n_embd)
     def embeddings_ith(i); end
 
+    # Returns the embeddings for a sequence id.
+    #
+    # @param seq_id [Integer] The sequence id.
+    # @return [Array<Float>] shape: (n_embd)
+    def embeddings_seq(seq_id); end
+
     # Returns the number of text context.
     #
     # @return [Integer]

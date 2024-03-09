@@ -2016,6 +2016,7 @@ public:
     rb_define_method(rb_cLLaMAContext, "logits", RUBY_METHOD_FUNC(_llama_context_logits), 0);
     rb_define_method(rb_cLLaMAContext, "embeddings", RUBY_METHOD_FUNC(_llama_context_embeddings), 0);
     rb_define_method(rb_cLLaMAContext, "embeddings_ith", RUBY_METHOD_FUNC(_llama_context_embeddings_ith), 1);
+    rb_define_method(rb_cLLaMAContext, "embeddings_seq", RUBY_METHOD_FUNC(_llama_context_embeddings_seq), 1);
     rb_define_method(rb_cLLaMAContext, "n_ctx", RUBY_METHOD_FUNC(_llama_context_n_ctx), 0);
     rb_define_method(rb_cLLaMAContext, "n_batch", RUBY_METHOD_FUNC(_llama_context_n_batch), 0);
     rb_define_method(rb_cLLaMAContext, "timings", RUBY_METHOD_FUNC(_llama_context_get_timings), 0);
@@ -2194,6 +2195,36 @@ private:
 
     VALUE output = rb_ary_new();
     const float* embd = llama_get_embeddings_ith(ptr->ctx, NUM2INT(ith));
+    for (int i = 0; i < n_embd; i++) {
+      rb_ary_push(output, DBL2NUM((double)(embd[i])));
+    }
+
+    return output;
+  }
+
+  static VALUE _llama_context_embeddings_seq(VALUE self, VALUE seq_id) {
+    if (!RB_INTEGER_TYPE_P(seq_id)) {
+      rb_raise(rb_eArgError, "seq_id must be an integer");
+      return Qnil;
+    }
+    LLaMAContextWrapper* ptr = get_llama_context(self);
+    if (ptr->ctx == NULL) {
+      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
+      return Qnil;
+    }
+    VALUE params = rb_iv_get(self, "@params");
+    LLaMAContextParamsWrapper* prms_ptr = RbLLaMAContextParams::get_llama_context_params(params);
+    if (!prms_ptr->params.embeddings) {
+      rb_raise(rb_eRuntimeError, "embedding parameter is false");
+      return Qnil;
+    }
+
+    VALUE model = rb_iv_get(self, "@model");
+    LLaMAModelWrapper* model_ptr = RbLLaMAModel::get_llama_model(model);
+    const int n_embd = llama_n_embd(model_ptr->model);
+
+    VALUE output = rb_ary_new();
+    const float* embd = llama_get_embeddings_seq(ptr->ctx, NUM2INT(seq_id));
     for (int i = 0; i < n_embd; i++) {
       rb_ary_push(output, DBL2NUM((double)(embd[i])));
     }
