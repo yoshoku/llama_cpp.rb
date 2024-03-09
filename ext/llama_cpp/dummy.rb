@@ -1010,14 +1010,6 @@ module LLaMACpp
     # Returns the flag whether to offload the KQV ops.
     # @return [Boolean]
     def oofload_kwv; end
-
-    # Sets the flag whether to pool (sum) embedding results by sequence id.
-    # @param flag [Boolean]
-    def do_pooling=(flag); end
-
-    # Returns the flag whether to pool (sum) embedding results by sequence id.
-    # @return [Boolean]
-    def do_pooling; end
   end
 
   # Class for quantization parameters

@@ -282,8 +282,6 @@ module LLaMACpp
     def embeddings=: (bool) -> bool
     def offload_kqv: () -> bool
     def offload_kqv=: (bool) -> bool
-    def do_pooling: () -> bool
-    def do_pooling=: (bool) -> bool
   end
 
   class ModelQuantizeParams
