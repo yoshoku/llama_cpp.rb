@@ -590,12 +590,13 @@ module LLaMACpp
 
     # Returns the embeddings.
     #
-    # @return [Array<Float>]
+    # @return [Array<Float>] shape: (n_tokens * n_embd)
     def embeddings; end
 
-    # Returns the embeddings for i-th sequence.
+    # Returns the embeddings for i-th token.
     #
-    # @return [Array<Float>]
+    # @param i [Integer] The token id.
+    # @return [Array<Float>] shape: (n_embd)
     def embeddings_ith(i); end
 
     # Returns the number of text context.

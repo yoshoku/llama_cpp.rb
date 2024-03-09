@@ -2160,10 +2160,11 @@ private:
       return Qnil;
     }
 
+    const int n_tokens = NUM2INT(rb_iv_get(self, "@n_tokens"));
     const int n_embd = llama_n_embd(model_ptr->model);
     const float* embd = llama_get_embeddings(ptr->ctx);
     VALUE output = rb_ary_new();
-    for (int i = 0; i < n_embd; i++) {
+    for (int i = 0; i < n_tokens * n_embd; i++) {
       rb_ary_push(output, DBL2NUM((double)(embd[i])));
     }
 
