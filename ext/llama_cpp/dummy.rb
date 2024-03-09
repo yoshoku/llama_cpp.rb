@@ -899,6 +899,14 @@ module LLaMACpp
     # @return [Integer]
     def rope_scaling_type; end
 
+    # Sets the pooling type.
+    # @param pooling_type [Integer]
+    def pooling_type=(pooling_type); end
+
+    # Returns the pooling type.
+    # @return [Integer]
+    def pooling_type; end
+
     # Sets the RoPE base frequency.
     # @param rope_freq_base [Float]
     def rope_freq_base=(rope_freq_base); end
