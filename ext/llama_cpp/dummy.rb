@@ -13,6 +13,18 @@ module LLaMACpp
   # LLaMA default random seed.
   LLAMA_DEFALUT_SEED = '0xFFFFFFFF'
 
+  # LLaMA vocabulary type.
+  LLAMA_VOCAB_TYPE_NONE = 0
+
+  # LLaMA vocabulary type.
+  LLAMA_VOCAB_TYPE_SPM = 1
+
+  # LLaMA vocabulary type.
+  LLAMA_VOCAB_TYPE_BPE = 2
+
+  # LLaMA vocabulary type.
+  LLAMA_VOCAB_TYPE_WPM = 3
+
   # LLaMA model file type.
   LLAMA_FTYPE_ALL_F32 = 0
 
