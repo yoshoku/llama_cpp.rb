@@ -948,6 +948,8 @@ public:
     rb_define_method(rb_cLLaMAContextParams, "n_batch", RUBY_METHOD_FUNC(_llama_context_params_get_n_batch), 0);
     rb_define_method(rb_cLLaMAContextParams, "n_ubatch=", RUBY_METHOD_FUNC(_llama_context_params_set_n_ubatch), 1);
     rb_define_method(rb_cLLaMAContextParams, "n_ubatch", RUBY_METHOD_FUNC(_llama_context_params_get_n_ubatch), 0);
+    rb_define_method(rb_cLLaMAContextParams, "n_seq_max=", RUBY_METHOD_FUNC(_llama_context_params_set_n_seq_max), 1);
+    rb_define_method(rb_cLLaMAContextParams, "n_seq_max", RUBY_METHOD_FUNC(_llama_context_params_get_n_seq_max), 0);
     rb_define_method(rb_cLLaMAContextParams, "n_threads=", RUBY_METHOD_FUNC(_llama_context_params_set_n_threads), 1);
     rb_define_method(rb_cLLaMAContextParams, "n_threads", RUBY_METHOD_FUNC(_llama_context_params_get_n_threads), 0);
     rb_define_method(rb_cLLaMAContextParams, "n_threads_batch=", RUBY_METHOD_FUNC(_llama_context_params_set_n_threads_batch), 1);
@@ -1043,6 +1045,18 @@ private:
   static VALUE _llama_context_params_get_n_ubatch(VALUE self) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     return INT2NUM(ptr->params.n_ubatch);
+  }
+
+  // n_seq_max
+  static VALUE _llama_context_params_set_n_seq_max(VALUE self, VALUE n_seq_max) {
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    ptr->params.n_seq_max = NUM2INT(n_seq_max);
+    return INT2NUM(ptr->params.n_seq_max);
+  }
+
+  static VALUE _llama_context_params_get_n_seq_max(VALUE self) {
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    return INT2NUM(ptr->params.n_seq_max);
   }
 
   // n_threads

@@ -925,6 +925,16 @@ module LLaMACpp
     # @return [Integer]
     def n_ubatch; end
 
+    # Sets the max number of sequences.
+    #
+    # @param n_seq_max [Integer]
+    def n_seq_max=(n_seq_max); end
+
+    # Returns the max number of sequences.
+    #
+    # @return [Integer]
+    def n_seq_max; end
+
     # Sets the RoPE scaling type.
     # @param scaling_type [Integer]
     def rope_scaling_type=(scaling_type); end

@@ -253,6 +253,8 @@ module LLaMACpp
     def n_batch=: (Integer) -> Integer
     def n_ubatch: () -> Integer
     def n_ubatch=: (Integer) -> Integer
+    def n_seq_max: () -> Integer
+    def n_seq_max=: (Integer) -> Integer
     def n_threads: () -> Integer
     def n_threads=: (Integer) -> Integer
     def n_threads_batch: () -> Integer
