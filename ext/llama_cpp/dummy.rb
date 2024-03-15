@@ -723,7 +723,13 @@ module LLaMACpp
     # Sets whether to use causal attention.
     #
     # @param causal_attn [Boolean] The flag to use causal attention.
+    # @return [NilClass]
     def set_causal_attn(causal_attn); end
+
+    # Wait until all computations are finished.
+    #
+    # @return [NilClass]
+    def synchronize(); end
 
     # Loads session file.
     #
