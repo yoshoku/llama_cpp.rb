@@ -627,6 +627,16 @@ module LLaMACpp
     # @return [Integer]
     def n_batch; end
 
+    # Returns the physical maximum batch size.
+    #
+    # @return [Integer]
+    def n_ubatch; end
+
+    # Returns the max number of sequences.
+    #
+    # @return [Integer]
+    def n_seq_max; end
+
     # Returns the timing information
     #
     # @return [Timings]

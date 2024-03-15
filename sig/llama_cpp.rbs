@@ -208,6 +208,8 @@ module LLaMACpp
     def logits: () -> Array[Float]
     def n_ctx: () -> Integer
     def n_batch: () -> Integer
+    def n_ubatch: () -> Integer
+    def n_seq_max: () -> Integer
     def timings: () -> ::LLaMACpp::Timings
     def print_timings: () -> void
     def reset_timings: () -> void
