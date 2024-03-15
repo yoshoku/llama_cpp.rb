@@ -946,6 +946,8 @@ public:
     rb_define_method(rb_cLLaMAContextParams, "n_ctx", RUBY_METHOD_FUNC(_llama_context_params_get_n_ctx), 0);
     rb_define_method(rb_cLLaMAContextParams, "n_batch=", RUBY_METHOD_FUNC(_llama_context_params_set_n_batch), 1);
     rb_define_method(rb_cLLaMAContextParams, "n_batch", RUBY_METHOD_FUNC(_llama_context_params_get_n_batch), 0);
+    rb_define_method(rb_cLLaMAContextParams, "n_ubatch=", RUBY_METHOD_FUNC(_llama_context_params_set_n_ubatch), 1);
+    rb_define_method(rb_cLLaMAContextParams, "n_ubatch", RUBY_METHOD_FUNC(_llama_context_params_get_n_ubatch), 0);
     rb_define_method(rb_cLLaMAContextParams, "n_threads=", RUBY_METHOD_FUNC(_llama_context_params_set_n_threads), 1);
     rb_define_method(rb_cLLaMAContextParams, "n_threads", RUBY_METHOD_FUNC(_llama_context_params_get_n_threads), 0);
     rb_define_method(rb_cLLaMAContextParams, "n_threads_batch=", RUBY_METHOD_FUNC(_llama_context_params_set_n_threads_batch), 1);
@@ -1029,6 +1031,18 @@ private:
   static VALUE _llama_context_params_get_n_batch(VALUE self) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     return INT2NUM(ptr->params.n_batch);
+  }
+
+  // n_ubatch
+  static VALUE _llama_context_params_set_n_ubatch(VALUE self, VALUE n_ubatch) {
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    ptr->params.n_ubatch = NUM2INT(n_ubatch);
+    return INT2NUM(ptr->params.n_ubatch);
+  }
+
+  static VALUE _llama_context_params_get_n_ubatch(VALUE self) {
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    return INT2NUM(ptr->params.n_ubatch);
   }
 
   // n_threads

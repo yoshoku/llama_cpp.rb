@@ -905,13 +905,25 @@ module LLaMACpp
     # @return [Integer]
     def n_ctx; end
 
-    # Sets the batch size of prompt processing.
+    # Sets the logical maximum batch size.
+    #
     # @param n_batch [Integer]
     def n_batch=(n_batch); end
 
-    # Returns the batch size of prompt processing.
+    # Returns the logical maximum batch size.
+    #
     # @return [Integer]
     def n_batch; end
+
+    # Sets the physical maximum batch size.
+    #
+    # @param n_ubatch [Integer]
+    def n_ubatch=(n_ubatch); end
+
+    # Returns the physical maximum batch size.
+    #
+    # @return [Integer]
+    def n_ubatch; end
 
     # Sets the RoPE scaling type.
     # @param scaling_type [Integer]
