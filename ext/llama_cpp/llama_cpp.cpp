@@ -2063,6 +2063,7 @@ public:
     rb_define_method(rb_cLLaMAContext, "kv_cache_kv_cache_defrag", RUBY_METHOD_FUNC(_llama_context_kv_cache_defrag), 0);
     rb_define_method(rb_cLLaMAContext, "kv_cache_kv_cache_update", RUBY_METHOD_FUNC(_llama_context_kv_cache_update), 0);
     rb_define_method(rb_cLLaMAContext, "set_rng_seed", RUBY_METHOD_FUNC(_llama_context_set_rng_seed), 1);
+    rb_define_method(rb_cLLaMAContext, "set_causal_attn", RUBY_METHOD_FUNC(_llama_context_set_causal_attn), 1);
     rb_define_method(rb_cLLaMAContext, "load_session_file", RUBY_METHOD_FUNC(_llama_context_load_session_file), -1);
     rb_define_method(rb_cLLaMAContext, "save_session_file", RUBY_METHOD_FUNC(_llama_context_save_session_file), -1);
     rb_define_method(rb_cLLaMAContext, "sample_repetition_penalties", RUBY_METHOD_FUNC(_llama_context_sample_repetition_penalties), -1);
@@ -2440,6 +2441,16 @@ private:
     }
     const uint32_t seed = NUM2INT(seed_);
     llama_set_rng_seed(ptr->ctx, seed);
+    return Qnil;
+  }
+
+  static VALUE _llama_context_set_causal_attn(VALUE self, VALUE causal_attn) {
+    LLaMAContextWrapper* ptr = get_llama_context(self);
+    if (ptr->ctx == NULL) {
+      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
+      return Qnil;
+    }
+    llama_set_causal_attn(ptr->ctx, RTEST(causal_attn) ? true : false);
     return Qnil;
   }
 

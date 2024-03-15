@@ -720,6 +720,11 @@ module LLaMACpp
     # @param seed [Integer] The rng seed.
     def set_rng_seed(seed); end
 
+    # Sets whether to use causal attention.
+    #
+    # @param causal_attn [Boolean] The flag to use causal attention.
+    def set_causal_attn(causal_attn); end
+
     # Loads session file.
     #
     # @param session_path [String] The path to the session file.

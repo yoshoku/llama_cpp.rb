@@ -224,6 +224,7 @@ module LLaMACpp
     def kv_cache_defrag: () -> void
     def kv_cache_update: () -> void
     def set_rng_seed: (Integer) -> void
+    def set_causal_attn: (bool) -> void
     def load_session_file: (session_path: String) -> void
     def save_session_file: (session_path: String, session_tokens: Array[Integer]) -> void
     def sample_repetition_penalties: (::LLaMACpp::TokenDataArray, Array[Integer], penalty_repeat: Float, penalty_freq: Float, penalty_present: Float) -> void
