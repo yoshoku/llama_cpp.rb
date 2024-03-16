@@ -1,3 +1,7 @@
+## [[0.14.2](https://github.com/yoshoku/llama_cpp.rb/compare/v0.14.1...v0.14.2)] - 2024-03-16
+
+- Fix to use metal embed library on macOS.
+
 ## [[0.14.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.14.0...v0.14.1)] - 2024-03-16
 
 - Bump llama.cpp from b2361 to b2435.
