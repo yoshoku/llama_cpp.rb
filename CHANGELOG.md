@@ -1,3 +1,10 @@
+## [[0.14.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.14.0...v0.14.1)] - 2024-03-16
+
+- Bump llama.cpp from b2361 to b2435.
+  - Add constants for vocaburary type: `LLAMA_VOCAB_TYPE_NONE`.
+  - Add `n_ubatch` and `n_seq_max` accessors to `ContextParams`.
+  - Add `n_ubatch`, `n_seq_max`, `set_causal_attn`, and `synchronize` methods to `Context`.
+
 ## [[0.14.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.13.0...v0.14.0)] - 2024-03-09
 
 **Breaking Changes**
