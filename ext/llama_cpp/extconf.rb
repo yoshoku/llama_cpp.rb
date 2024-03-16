@@ -21,6 +21,8 @@ make_envs << ' LLAMA_HIPBLAS=1' if with_config('hipblas')
 make_envs << ' LLAMA_MPI=1' if with_config('mpi')
 make_envs << ' LLAMA_VULKAN=1' if with_config('vulkan')
 
+make_envs << ' LLAMA_METAL_EMBED_LIBRARY=1' if RUBY_PLATFORM.match?(/darwin/)
+
 Dir.chdir(LLAMA_CPP_DIR) do
   _mkstdout, _mkstderr, mkstatus = Open3.capture3("make lib #{make_envs}".strip)
   abort('Failed to build llama.cpp.') unless mkstatus.success?
@@ -33,8 +35,8 @@ if RUBY_PLATFORM.match?(/darwin/)
   Dir.chdir(VENDOR_LIB_DIR) do
     _mkstdout, _mkstderr, mkstatus = Open3.capture3("install_name_tool -id #{VENDOR_LIB_DIR}/libllama.dylib libllama.dylib")
     abort('Failed to set installation path for libllama.dylib.') unless mkstatus.success?
-    FileUtils.cp("#{LLAMA_CPP_DIR}/ggml-metal.metal", VENDOR_LIB_DIR)
   end
+  FileUtils.cp("#{LLAMA_CPP_DIR}/ggml-metal-embed.metal", VENDOR_LIB_DIR)
 end
 
 abort('libstdc++ is not found.') unless have_library('stdc++')

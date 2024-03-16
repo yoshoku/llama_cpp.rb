@@ -8,6 +8,8 @@
 /tmp/
 /node_modules/
 /vendor/lib/ggml-metal.metal
+/vendor/lib/ggml-metal-embed.metal
+/vendor/tmp/llama.cpp/ggml-metal-embed.metal
 /vendor/include/*.h
 *.bundle
 *.so
