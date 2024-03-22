@@ -1,3 +1,9 @@
+## [[0.14.3](https://github.com/yoshoku/llama_cpp.rb/compare/v0.14.2...v0.14.3)] - 2024-03-23
+
+- Bump llama.cpp from b2435 to b2496.
+  - Add `n_layer` method to `Model`.
+  - Add `apply_control_vector` method to `Context`.
+
 ## [[0.14.2](https://github.com/yoshoku/llama_cpp.rb/compare/v0.14.1...v0.14.2)] - 2024-03-16
 
 - Fix to use metal embed library on macOS.
