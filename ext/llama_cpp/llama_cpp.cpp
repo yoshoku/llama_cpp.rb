@@ -2089,6 +2089,7 @@ public:
     rb_define_method(rb_cLLaMAContext, "sample_token", RUBY_METHOD_FUNC(_llama_context_sample_token), 1);
     rb_define_method(rb_cLLaMAContext, "sample_grammar", RUBY_METHOD_FUNC(_llama_context_sample_grammar), -1);
     rb_define_method(rb_cLLaMAContext, "grammar_accept_token", RUBY_METHOD_FUNC(_llama_context_grammar_accept_token), -1);
+    rb_define_method(rb_cLLaMAContext, "apply_control_vector", RUBY_METHOD_FUNC(_llama_context_apply_control_vector), -1);
   }
 
 private:
@@ -3156,6 +3157,59 @@ private:
     llama_token token = NUM2INT(kw_values[1]);
 
     llama_grammar_accept_token(ctx_ptr->ctx, grm_ptr->grammar, token);
+
+    return Qnil;
+  }
+
+  static VALUE _llama_context_apply_control_vector(int argc, VALUE* argv, VALUE self) {
+    VALUE kw_args = Qnil;
+    ID kw_table[4] = { rb_intern("data"), rb_intern("n_embd"), rb_intern("il_start"), rb_intern("il_end") };
+    VALUE kw_values[4] = { Qundef, Qundef, Qundef, Qundef };
+    rb_scan_args(argc, argv, ":", &kw_args);
+    rb_get_kwargs(kw_args, kw_table, 4, 0, kw_values);
+
+    if (!RB_TYPE_P(kw_values[0], T_ARRAY) && !NIL_P(kw_values[0])) {
+      rb_raise(rb_eArgError, "data must be an Array or nil");
+      return Qnil;
+    }
+    if (!RB_INTEGER_TYPE_P(kw_values[1])) {
+      rb_raise(rb_eArgError, "n_embd must be an Integer");
+      return Qnil;
+    }
+    if (!RB_INTEGER_TYPE_P(kw_values[2])) {
+      rb_raise(rb_eArgError, "il_start must be an Integer");
+      return Qnil;
+    }
+    if (!RB_INTEGER_TYPE_P(kw_values[3])) {
+      rb_raise(rb_eArgError, "il_end must be an Integer");
+      return Qnil;
+    }
+
+    LLaMAContextWrapper* ctx_ptr = get_llama_context(self);
+    if (ctx_ptr->ctx == NULL) {
+      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
+      return Qnil;
+    }
+
+    std::vector<float> data(RARRAY_LEN(kw_values[0]));
+    for (size_t i = 0; i < data.size(); i++) {
+      data[i] = NUM2DBL(rb_ary_entry(kw_values[0], i));
+    }
+    const int32_t n_embd = NUM2INT(kw_values[1]);
+    const int32_t il_start = NUM2INT(kw_values[2]);
+    const int32_t il_end = NUM2INT(kw_values[3]);
+
+    int32_t err = 0;
+    if (NIL_P(kw_values[0])) {
+      err = llama_control_vector_apply(ctx_ptr->ctx, NULL, 0, n_embd, il_start, il_end);
+    } else {
+      err = llama_control_vector_apply(ctx_ptr->ctx, data.data(), data.size(), n_embd, il_start, il_end);
+    }
+
+    if (err) {
+      rb_raise(rb_eRuntimeError, "Failed to apply control vector");
+      return Qnil;
+    }
 
     return Qnil;
   }

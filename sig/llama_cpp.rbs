@@ -245,6 +245,7 @@ module LLaMACpp
     def sample_token: (::LLaMACpp::TokenDataArray) -> Integer
     def sample_grammar: (::LLaMACpp::TokenDataArray, grammar: ::LLaMACpp::Grammar) -> void
     def grammar_accept_token: (grammar: ::LLaMACpp::Grammar, token: Integer) -> void
+    def apply_control_vector: (data: Array[Float], n_embd: Integer, il_start: Integer, il_end: Integer) -> void
   end
 
   class ContextParams

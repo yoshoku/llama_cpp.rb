@@ -599,7 +599,7 @@ module LLaMACpp
     # @return [NilClass]
     def decode(batch); end
 
-    # Retunrs the logits.
+    # Returns the logits.
     #
     # @return [Array<Float>]
     def logits(); end
