@@ -108,6 +108,7 @@ module LLaMACpp
     def n_vocab: () -> Integer
     def n_ctx_train: () -> Integer
     def n_embd: () -> Integer
+    def n_layer: () -> Integer
     def rope_freq_scale_train: () -> Float
     def token_to_piece: (Integer) -> String
     def tokenize: (text: String, ?n_max_tokens: Integer, ?add_bos: bool, ?special: bool) -> Array[Integer]

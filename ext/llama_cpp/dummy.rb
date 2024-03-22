@@ -306,6 +306,10 @@ module LLaMACpp
     # @return [Integer]
     def n_embd; end
 
+    # Returns the number of layers.
+    # @return [Integer]
+    def n_layer; end
+
     # Returns the model's RoPE frequency scaling factor.
     # @return [Float]
     def rope_freq_scale_train; end
