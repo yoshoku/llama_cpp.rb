@@ -8,7 +8,7 @@ module LLaMACpp
   LLAMA_SESSION_MAGIC = '0x6767736e'
 
   # LLaMA session version.
-  LLAMA_SESSION_VERSION = '4'
+  LLAMA_SESSION_VERSION = '5'
 
   # LLaMA default random seed.
   LLAMA_DEFALUT_SEED = '0xFFFFFFFF'
@@ -96,6 +96,24 @@ module LLaMACpp
 
   # LLaMA model file type.
   LLAMA_FTYPE_MOSTLY_IQ4_NL = 25
+
+  # LLaMA model file type.
+  LLAMA_FTYPE_MOSTLY_IQ3_S = 26
+
+  # LLaMA model file type.
+  LLAMA_FTYPE_MOSTLY_IQ3_M = 27
+
+  # LLaMA model file type.
+  LLAMA_FTYPE_MOSTLY_IQ2_S = 28
+
+  # LLaMA model file type.
+  LLAMA_FTYPE_MOSTLY_IQ2_M = 29
+
+  # LLaMA model file type.
+  LLAMA_FTYPE_MOSTLY_IQ4_XS = 30
+
+  # LLaMA model file type.
+  LLAMA_FTYPE_MOSTLY_IQ1_M = 31
 
   # LLaMA KV override type.
   LLAMA_KV_OVERRIDE_TYPE_INT = 0
