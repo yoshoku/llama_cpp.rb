@@ -1,9 +1,10 @@
-## [[0.14.4](https://github.com/yoshoku/llama_cpp.rb/compare/v0.14.3...v0.14.4)] - 2024-03-30
+## [[0.14.4](https://github.com/yoshoku/llama_cpp.rb/compare/v0.14.3...v0.14.4)] - 2024-04-06
 
 - Bump llama.cpp from b2496 to b2573.
   - Add file type constants.
+- Bump llama.cpp from b2573 to b2608.
 
-Implementation of llama_split_path and llama_split_prefix binding has been skipped.
+Implementation of llama_split_path, llama_split_prefix binding, llama_grammar_accept, and decode_utf8 has been skipped.
 
 ## [[0.14.3](https://github.com/yoshoku/llama_cpp.rb/compare/v0.14.2...v0.14.3)] - 2024-03-23
 
