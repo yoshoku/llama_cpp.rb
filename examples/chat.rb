@@ -127,8 +127,7 @@ class Chat < Thor # rubocop:disable Metrics/ClassLength, Style/Documentation
       end
 
       if input_echo
-        output = []
-        embd.each { |token| output << context.model.token_to_piece(token) }
+        output = embd.map { |token| context.model.token_to_piece(token) }
         output_str = output.join
         output_str.chomp!(antiprompt) if first_input
         print(output_str)
@@ -136,8 +135,7 @@ class Chat < Thor # rubocop:disable Metrics/ClassLength, Style/Documentation
 
       if embd_input.size <= n_consumed
         if antiprompt.size.positive?
-          last_output = []
-          last_n_tokens.each { |token| last_output << context.model.token_to_piece(token) }
+          last_output = last_n_tokens.map { |token| context.model.token_to_piece(token) }
           last_output_str = last_output.join
 
           search_start_pos = last_output_str.size > antiprompt.size ? last_output_str.size - antiprompt.size : 0
