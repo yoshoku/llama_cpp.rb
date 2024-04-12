@@ -37,6 +37,7 @@ if RUBY_PLATFORM.match?(/darwin/)
     abort('Failed to set installation path for libllama.dylib.') unless mkstatus.success?
   end
   FileUtils.cp("#{LLAMA_CPP_DIR}/ggml-metal-embed.metal", VENDOR_LIB_DIR)
+  FileUtils.cp("#{LLAMA_CPP_DIR}/ggml-metal.metal", VENDOR_LIB_DIR)
 end
 
 abort('libstdc++ is not found.') unless have_library('stdc++')
