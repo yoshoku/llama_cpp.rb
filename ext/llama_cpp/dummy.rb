@@ -4,11 +4,26 @@
 
 # llama_cpp.rb provides Ruby bindings for the llama.cpp.
 module LLaMACpp
+  # LLaMA file magic.
+  LLAMA_FILE_MAGIC_GGLA = '0x67676c61u'
+
+  # LLaMA file magic.
+  LLAMA_FILE_MAGIC_GGSN = '0x6767736eu'
+
+  # LLaMA file magic.
+  LLAMA_FILE_MAGIC_GGSQ = '0x67677371u'
+
   # LLaMA session magic.
   LLAMA_SESSION_MAGIC = '0x6767736e'
 
+  # LLaMA state seq magic.
+  LLAMA_STATE_SEQ_MAGIC = '0x67677371u'
+
   # LLaMA session version.
   LLAMA_SESSION_VERSION = '5'
+
+  # LLaMA state seq version.
+  LLAMA_STATE_SEQ_VERSION = '1'
 
   # LLaMA default random seed.
   LLAMA_DEFALUT_SEED = '0xFFFFFFFF'

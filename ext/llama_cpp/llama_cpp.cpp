@@ -3416,8 +3416,18 @@ extern "C" void Init_llama_cpp(void) {
 
   ss_magic.str("");
   ss_magic.clear(std::stringstream::goodbit);
+  ss_magic << std::showbase << std::hex << LLAMA_FILE_MAGIC_GGSQ;
+  rb_define_const(rb_mLLaMACpp, "LLAMA_FILE_MAGIC_GGSQ", rb_str_new2(ss_magic.str().c_str()));
+
+  ss_magic.str("");
+  ss_magic.clear(std::stringstream::goodbit);
   ss_magic << std::showbase << std::hex << LLAMA_SESSION_MAGIC;
   rb_define_const(rb_mLLaMACpp, "LLAMA_SESSION_MAGIC", rb_str_new2(ss_magic.str().c_str()));
+
+  ss_magic.str("");
+  ss_magic.clear(std::stringstream::goodbit);
+  ss_magic << std::showbase << std::hex << LLAMA_STATE_SEQ_MAGIC;
+  rb_define_const(rb_mLLaMACpp, "LLAMA_STATE_SEQ_MAGIC", rb_str_new2(ss_magic.str().c_str()));
 
   ss_magic.str("");
   ss_magic.clear(std::stringstream::goodbit);
@@ -3425,4 +3435,5 @@ extern "C" void Init_llama_cpp(void) {
   rb_define_const(rb_mLLaMACpp, "LLAMA_DEFAULT_SEED", rb_str_new2(ss_magic.str().c_str()));
 
   rb_define_const(rb_mLLaMACpp, "LLAMA_SESSION_VERSION", rb_str_new2(std::to_string(LLAMA_SESSION_VERSION).c_str()));
+  rb_define_const(rb_mLLaMACpp, "LLAMA_STATE_SEQ_VERSION", rb_str_new2(std::to_string(LLAMA_STATE_SEQ_VERSION).c_str()));
 }
