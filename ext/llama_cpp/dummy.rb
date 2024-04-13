@@ -399,6 +399,14 @@ module LLaMACpp
     # @return [Integer]
     def token_eos; end
 
+    # Returns the token id the classification token.
+    # @return [Integer]
+    def token_cls; end
+
+    # Returns the token id the sentence separator token.
+    # @return [Integer]
+    def token_sep; end
+
     # Returns the token id the new line token.
     # @return [Integer]
     def token_nl; end

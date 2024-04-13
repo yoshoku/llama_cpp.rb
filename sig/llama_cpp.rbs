@@ -132,6 +132,8 @@ module LLaMACpp
     def type: (Integer) -> Integer
     def token_bos: () -> Integer
     def token_eos: () -> Integer
+    def token_cls: () -> Integer
+    def token_sep: () -> Integer
     def token_nl: () -> Integer
     def add_bos_token?: () -> bool
     def add_eos_token?: () -> bool

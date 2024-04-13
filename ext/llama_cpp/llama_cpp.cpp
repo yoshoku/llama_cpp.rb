@@ -1478,6 +1478,8 @@ public:
     rb_define_method(rb_cLLaMAModel, "type", RUBY_METHOD_FUNC(_llama_model_get_type), 1);
     rb_define_method(rb_cLLaMAModel, "token_bos", RUBY_METHOD_FUNC(_llama_model_token_bos), 0);
     rb_define_method(rb_cLLaMAModel, "token_eos", RUBY_METHOD_FUNC(_llama_model_token_eos), 0);
+    rb_define_method(rb_cLLaMAModel, "token_cls", RUBY_METHOD_FUNC(_llama_model_token_cls), 0);
+    rb_define_method(rb_cLLaMAModel, "token_sep", RUBY_METHOD_FUNC(_llama_model_token_sep), 0);
     rb_define_method(rb_cLLaMAModel, "token_nl", RUBY_METHOD_FUNC(_llama_model_token_nl), 0);
     rb_define_method(rb_cLLaMAModel, "add_bos_token?", RUBY_METHOD_FUNC(_llama_model_add_bos_token), 0);
     rb_define_method(rb_cLLaMAModel, "add_eos_token?", RUBY_METHOD_FUNC(_llama_model_add_eos_token), 0);
@@ -1741,6 +1743,16 @@ private:
   static VALUE _llama_model_token_eos(VALUE self) {
     LLaMAModelWrapper* ptr = get_llama_model(self);
     return INT2NUM(llama_token_eos(ptr->model));
+  }
+
+  static VALUE _llama_model_token_cls(VALUE self) {
+    LLaMAModelWrapper* ptr = get_llama_model(self);
+    return INT2NUM(llama_token_cls(ptr->model));
+  }
+
+  static VALUE _llama_model_token_sep(VALUE self) {
+    LLaMAModelWrapper* ptr = get_llama_model(self);
+    return INT2NUM(llama_token_sep(ptr->model));
   }
 
   static VALUE _llama_model_token_nl(VALUE self) {
