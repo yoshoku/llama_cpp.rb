@@ -1,10 +1,18 @@
+## [[0.14.5](https://github.com/yoshoku/llama_cpp.rb/compare/v0.14.4...v0.14.5)] - 2024-04-13
+
+- Bump llama.cpp from b2608 to b2658.
+  - Add magic number constants.
+  - Add `token_cls` and `token_sep` methods to `Model`.
+
+Implementation bindings for llama_state_get_size, llama_state_get_data, llama_state_set_data, llama_state_load_file, llama_state_save_file, llama_state_seq_get_size, llama_state_seq_get_data, llama_state_seq_set_data, llama_state_seq_save_file, and llama_state_seq_load_file has been skipped.
+
 ## [[0.14.4](https://github.com/yoshoku/llama_cpp.rb/compare/v0.14.3...v0.14.4)] - 2024-04-06
 
 - Bump llama.cpp from b2496 to b2573.
   - Add file type constants.
 - Bump llama.cpp from b2573 to b2608.
 
-Implementation of llama_split_path, llama_split_prefix binding, llama_grammar_accept, and decode_utf8 has been skipped.
+Implementation bindings for llama_split_path, llama_split_prefix binding, llama_grammar_accept, and decode_utf8 has been skipped.
 
 ## [[0.14.3](https://github.com/yoshoku/llama_cpp.rb/compare/v0.14.2...v0.14.3)] - 2024-03-23
 
