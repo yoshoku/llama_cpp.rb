@@ -1634,10 +1634,10 @@ private:
     const llama_token token = NUM2INT(token_);
     LLaMAModelWrapper* ptr = get_llama_model(self);
     std::vector<char> result(8, 0);
-    const int n_tokens = llama_token_to_piece(ptr->model, token, result.data(), result.size());
+    const int n_tokens = llama_token_to_piece(ptr->model, token, result.data(), result.size(), false);
     if (n_tokens < 0) {
       result.resize(-n_tokens);
-      const int check = llama_token_to_piece(ptr->model, token, result.data(), result.size());
+      const int check = llama_token_to_piece(ptr->model, token, result.data(), result.size(), false);
       if (check != -n_tokens) {
         rb_raise(rb_eRuntimeError, "failed to convert");
         return Qnil;
