@@ -1321,6 +1321,8 @@ public:
     rb_define_method(rb_cLLaMAModelQuantizeParams, "only_copy", RUBY_METHOD_FUNC(_llama_model_quantize_params_get_only_copy), 0);
     rb_define_method(rb_cLLaMAModelQuantizeParams, "pure=", RUBY_METHOD_FUNC(_llama_model_quantize_params_set_pure), 1);
     rb_define_method(rb_cLLaMAModelQuantizeParams, "pure", RUBY_METHOD_FUNC(_llama_model_quantize_params_get_pure), 0);
+    rb_define_method(rb_cLLaMAModelQuantizeParams, "keep_split=", RUBY_METHOD_FUNC(_llama_model_quantize_params_set_keep_split), 1);
+    rb_define_method(rb_cLLaMAModelQuantizeParams, "keep_split", RUBY_METHOD_FUNC(_llama_model_quantize_params_get_keep_split), 0);
   }
 
 private:
@@ -1404,6 +1406,18 @@ private:
   static VALUE _llama_model_quantize_params_get_pure(VALUE self) {
     LLaMAModelQuantizeParamsWrapper* ptr = get_llama_model_quantize_params(self);
     return ptr->params.pure ? Qtrue : Qfalse;
+  }
+
+  // keep_split
+  static VALUE _llama_model_quantize_params_set_keep_split(VALUE self, VALUE keep_split) {
+    LLaMAModelQuantizeParamsWrapper* ptr = get_llama_model_quantize_params(self);
+    ptr->params.keep_split = RTEST(keep_split) ? true : false;
+    return ptr->params.keep_split ? Qtrue : Qfalse;
+  }
+
+  static VALUE _llama_model_quantize_params_get_keep_split(VALUE self) {
+    LLaMAModelQuantizeParamsWrapper* ptr = get_llama_model_quantize_params(self);
+    return ptr->params.keep_split ? Qtrue : Qfalse;
   }
 };
 

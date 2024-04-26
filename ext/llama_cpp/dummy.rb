@@ -1171,6 +1171,14 @@ module LLaMACpp
     # Returns the flag to disable k-quant mixtures and quantize all tensors to the same type.
     # @return [Boolean]
     def pure; end
+
+    # Sets the flag to quantize to the same number of shards.
+    # @param [Boolean]
+    def keep_split=(flag); end
+
+    # Returns the flag to quantize to the same number of shards.
+    # @return [Boolean]
+    def keep_split; end
   end
 
   # Class for grammar element.

@@ -328,6 +328,8 @@ module LLaMACpp
     def only_copy=: (bool) -> bool
     def pure: () -> bool
     def pure=: (bool) -> bool
+    def keep_split: () -> bool
+    def keep_split=: (bool) -> bool
   end
 
   class Params = ContextParams
