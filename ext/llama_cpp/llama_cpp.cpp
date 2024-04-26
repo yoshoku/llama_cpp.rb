@@ -2116,6 +2116,7 @@ public:
     rb_define_method(rb_cLLaMAContext, "sample_grammar", RUBY_METHOD_FUNC(_llama_context_sample_grammar), -1);
     rb_define_method(rb_cLLaMAContext, "grammar_accept_token", RUBY_METHOD_FUNC(_llama_context_grammar_accept_token), -1);
     rb_define_method(rb_cLLaMAContext, "apply_control_vector", RUBY_METHOD_FUNC(_llama_context_apply_control_vector), -1);
+    rb_define_method(rb_cLLaMAContext, "pooling_type", RUBY_METHOD_FUNC(_llama_context_pooling_type), 0);
   }
 
 private:
@@ -3238,6 +3239,15 @@ private:
     }
 
     return Qnil;
+  }
+
+  static VALUE _llama_context_pooling_type(VALUE self) {
+    LLaMAContextWrapper* ptr = get_llama_context(self);
+    if (ptr->ctx == NULL) {
+      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
+      return Qnil;
+    }
+    return INT2NUM(static_cast<int>(llama_pooling_type(ptr->ctx)));
   }
 };
 

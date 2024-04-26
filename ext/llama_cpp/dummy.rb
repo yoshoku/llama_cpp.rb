@@ -912,6 +912,11 @@ module LLaMACpp
     # @param token [Integer] The token.
     # @return [Nil]
     def grammar_accept_token(grammar:, token:); end
+
+    # Returns the pooling type.
+    #
+    # @return [Integer]
+    def pooling_type(); end
   end
 
   # Class for timings
