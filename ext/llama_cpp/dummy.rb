@@ -434,6 +434,12 @@ module LLaMACpp
     # Returns the token id for end of infill middle.
     # @return [Integer]
     def token_eot; end
+
+    # Returns whether the token is end-of-generation.
+    #
+    # @param token [Integer] The token id.
+    # @return [Boolean]
+    def token_is_eog?(token); end
   end
 
   # Class for model KV override.

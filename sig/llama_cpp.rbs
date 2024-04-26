@@ -141,6 +141,7 @@ module LLaMACpp
     def token_middle: () -> Integer
     def token_suffix: () -> Integer
     def token_eot: () -> Integer
+    def token_is_eog?: (Integer) -> bool
   end
 
   class Timings
