@@ -1,3 +1,12 @@
+## [[0.14.7](https://github.com/yoshoku/llama_cpp.rb/compare/v0.14.6...v0.14.7)] - 2024-04-27
+
+- Bump llama.cpp from b2698 to b2740.
+  - Add `keep_split` accessor to `ModelQuantizeParams`.
+  - Add `pooling_type` method to `Context`.
+  - Add `token_is_eog?` method to `Model`.
+
+Implementation binding for llama_sample_token_with_rng has been skipped.
+
 ## [[0.14.6](https://github.com/yoshoku/llama_cpp.rb/compare/v0.14.5...v0.14.6)] - 2024-04-20
 
 - Bump llama.cpp from b2658 to b2698.
