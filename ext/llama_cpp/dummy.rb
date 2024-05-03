@@ -20,7 +20,7 @@ module LLaMACpp
   LLAMA_STATE_SEQ_MAGIC = '0x67677371u'
 
   # LLaMA session version.
-  LLAMA_SESSION_VERSION = '5'
+  LLAMA_SESSION_VERSION = '6'
 
   # LLaMA state seq version.
   LLAMA_STATE_SEQ_VERSION = '1'
@@ -53,7 +53,7 @@ module LLaMACpp
   LLAMA_VOCAB_PRE_TYPE_DEEPSEEK_CODER = 3
 
   # LLaMA vocabulary pre-tokenization type.
-  LLAMA_VOCAB_PRE_TYPE_FALCON  = 4
+  LLAMA_VOCAB_PRE_TYPE_FALCON = 4
 
   # LLaMA vocabulary pre-tokenization type.
   LLAMA_VOCAB_PRE_TYPE_MPT = 5
