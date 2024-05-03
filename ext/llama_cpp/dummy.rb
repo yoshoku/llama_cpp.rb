@@ -525,6 +525,14 @@ module LLaMACpp
     # Returns the flag to force system to keep model in memory.
     # @return [Boolean]
     def use_mlock; end
+
+    # Sets the flag to validate model tensor data.
+    # @param flag [Boolean]
+    def check_tensors=(flag); end
+
+    # Returns the flag to validate model tensor data.
+    # @return [Boolean]
+    def check_tensors; end
   end
 
   # Class for batch

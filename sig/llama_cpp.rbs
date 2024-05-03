@@ -186,6 +186,8 @@ module LLaMACpp
     def use_mmap=: (bool) -> bool
     def use_mlock: () -> bool
     def use_mlock=: (bool) -> bool
+    def check_tensors: () -> bool
+    def check_tensors=: (bool) -> bool
   end
 
   class Batch

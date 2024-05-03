@@ -806,6 +806,8 @@ public:
     rb_define_method(rb_cLLaMAModelParams, "use_mmap", RUBY_METHOD_FUNC(_llama_model_params_get_use_mmap), 0);
     rb_define_method(rb_cLLaMAModelParams, "use_mlock=", RUBY_METHOD_FUNC(_llama_model_params_set_use_mlock), 1);
     rb_define_method(rb_cLLaMAModelParams, "use_mlock", RUBY_METHOD_FUNC(_llama_model_params_get_use_mlock), 0);
+    rb_define_method(rb_cLLaMAModelParams, "check_tensors=", RUBY_METHOD_FUNC(_llama_model_params_set_check_tensors), 1);
+    rb_define_method(rb_cLLaMAModelParams, "check_tensors", RUBY_METHOD_FUNC(_llama_model_params_get_check_tensors), 0);
   }
 
 private:
@@ -897,6 +899,18 @@ private:
   static VALUE _llama_model_params_get_use_mlock(VALUE self) {
     LLaMAModelParamsWrapper* ptr = get_llama_model_params(self);
     return ptr->params.use_mlock ? Qtrue : Qfalse;
+  }
+
+  // check_tensors
+  static VALUE _llama_model_params_set_check_tensors(VALUE self, VALUE check_tensors) {
+    LLaMAModelParamsWrapper* ptr = get_llama_model_params(self);
+    ptr->params.check_tensors = RTEST(check_tensors) ? true : false;
+    return ptr->params.check_tensors ? Qtrue : Qfalse;
+  }
+
+  static VALUE _llama_model_params_get_check_tensors(VALUE self) {
+    LLaMAModelParamsWrapper* ptr = get_llama_model_params(self);
+    return ptr->params.check_tensors ? Qtrue : Qfalse;
   }
 };
 
