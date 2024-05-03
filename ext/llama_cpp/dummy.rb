@@ -139,6 +139,9 @@ module LLaMACpp
   # LLaMA KV override type.
   LLAMA_KV_OVERRIDE_TYPE_BOOL = 2
 
+  # LLaMA KV override type.
+  LLAMA_KV_OVERRIDE_TYPE_STR = 3
+
   # GrammarElement type: end of rule definition.
   LLAMA_GRETYPE_END = 0
 
