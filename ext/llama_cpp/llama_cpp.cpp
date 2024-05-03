@@ -708,9 +708,10 @@ public:
     rb_define_alloc_func(rb_cLLaMAModelKVOverride, llama_model_kv_override_alloc);
     rb_define_method(rb_cLLaMAModelKVOverride, "key", RUBY_METHOD_FUNC(_llama_model_kv_override_get_key), 0);
     rb_define_method(rb_cLLaMAModelKVOverride, "tag", RUBY_METHOD_FUNC(_llama_model_kv_override_get_tag), 0);
-    rb_define_method(rb_cLLaMAModelKVOverride, "int_value", RUBY_METHOD_FUNC(_llama_model_kv_override_get_int_value), 0);
-    rb_define_method(rb_cLLaMAModelKVOverride, "float_value", RUBY_METHOD_FUNC(_llama_model_kv_override_get_float_value), 0);
-    rb_define_method(rb_cLLaMAModelKVOverride, "bool_value", RUBY_METHOD_FUNC(_llama_model_kv_override_get_bool_value), 0);
+    rb_define_method(rb_cLLaMAModelKVOverride, "val_i64", RUBY_METHOD_FUNC(_llama_model_kv_override_get_val_i64), 0);
+    rb_define_method(rb_cLLaMAModelKVOverride, "val_f64", RUBY_METHOD_FUNC(_llama_model_kv_override_get_val_f64), 0);
+    rb_define_method(rb_cLLaMAModelKVOverride, "val_bool", RUBY_METHOD_FUNC(_llama_model_kv_override_get_val_bool), 0);
+    rb_define_method(rb_cLLaMAModelKVOverride, "val_str", RUBY_METHOD_FUNC(_llama_model_kv_override_get_val_str), 0);
   }
 
   static const rb_data_type_t llama_model_kv_override_type;
@@ -726,19 +727,24 @@ private:
     return INT2NUM(ptr->tag);
   }
 
-  static VALUE _llama_model_kv_override_get_int_value(VALUE self) {
+  static VALUE _llama_model_kv_override_get_val_i64(VALUE self) {
     llama_model_kv_override* ptr = get_llama_model_kv_override(self);
-    return INT2NUM(ptr->int_value);
+    return INT2NUM(ptr->val_i64);
   }
 
-  static VALUE _llama_model_kv_override_get_float_value(VALUE self) {
+  static VALUE _llama_model_kv_override_get_val_f64(VALUE self) {
     llama_model_kv_override* ptr = get_llama_model_kv_override(self);
-    return DBL2NUM(ptr->float_value);
+    return DBL2NUM(ptr->val_f64);
   }
 
-  static VALUE _llama_model_kv_override_get_bool_value(VALUE self) {
+  static VALUE _llama_model_kv_override_get_val_bool(VALUE self) {
     llama_model_kv_override* ptr = get_llama_model_kv_override(self);
-    return ptr->bool_value ? Qtrue : Qfalse;
+    return ptr->val_bool ? Qtrue : Qfalse;
+  }
+
+  static VALUE _llama_model_kv_override_get_val_str(VALUE self) {
+    llama_model_kv_override* ptr = get_llama_model_kv_override(self);
+    return rb_utf8_str_new_cstr(ptr->val_str);
   }
 };
 

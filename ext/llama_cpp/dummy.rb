@@ -454,15 +454,19 @@ module LLaMACpp
 
     # Returns the int value.
     # @return [Integer]
-    def int_value; end
+    def val_i64; end
 
     # Returns the float value.
     # @return [Float]
-    def float_value; end
+    def val_f64; end
 
     # Returns the bool value.
     # @return [Boolean]
-    def bool_value; end
+    def val_bool; end
+
+    # Returns the string value.
+    # @return [String]
+    def val_str; end
   end
 
   # Class for model parameters.

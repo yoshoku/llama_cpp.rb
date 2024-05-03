@@ -163,9 +163,10 @@ module LLaMACpp
 
     def key: () -> String
     def tag: () -> Integer
-    def int_value: () -> Integer
-    def float_value: () -> Float
-    def bool_value: () -> bool
+    def val_i64: () -> Integer
+    def val_f64: () -> Float
+    def val_bool: () -> bool
+    def val_str: () -> String
   end
 
   class ModelParams
