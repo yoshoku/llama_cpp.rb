@@ -1,3 +1,16 @@
+## [[0.15.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.14.7...v0.15.0)] - 2024-05-03
+
+- Add new build flag for using CUDA ([#18](https://github.com/yoshoku/llama_cpp.rb/pull/18)).
+- Bump llama.cpp from b2740 to b2781.
+  - Change `LLAMA_SESSION_VERSION` value from 5 to 6.
+  - Add contants for pre-tokenization types.
+  - Add `flash_attn` accessor to `ContextParams`.
+  - Add `heck_tensors` accessor to `ModelParams`.
+  - Add LLAMA_KV_OVERRIDE_TYPE_STR constant.
+
+**Breaking Change**
+- Change method names in `ModelKVOverride`.
+
 ## [[0.14.7](https://github.com/yoshoku/llama_cpp.rb/compare/v0.14.6...v0.14.7)] - 2024-04-27
 
 - Bump llama.cpp from b2698 to b2740.
