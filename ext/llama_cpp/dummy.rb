@@ -40,6 +40,30 @@ module LLaMACpp
   # LLaMA vocabulary type.
   LLAMA_VOCAB_TYPE_WPM = 3
 
+  # LLaMA vocabulary pre-tokenization type.
+  LLAMA_VOCAB_PRE_TYPE_DEFAULT = 0
+
+  # LLaMA vocabulary pre-tokenization type.
+  LLAMA_VOCAB_PRE_TYPE_LLAMA3 = 1
+
+  # LLaMA vocabulary pre-tokenization type.
+  LLAMA_VOCAB_PRE_TYPE_DEEPSEEK_LLM = 2
+
+  # LLaMA vocabulary pre-tokenization type.
+  LLAMA_VOCAB_PRE_TYPE_DEEPSEEK_CODER = 3
+
+  # LLaMA vocabulary pre-tokenization type.
+  LLAMA_VOCAB_PRE_TYPE_FALCON  = 4
+
+  # LLaMA vocabulary pre-tokenization type.
+  LLAMA_VOCAB_PRE_TYPE_MPT = 5
+
+  # LLaMA vocabulary pre-tokenization type.
+  LLAMA_VOCAB_PRE_TYPE_STARCODER = 6
+
+  # LLaMA vocabulary pre-tokenization type.
+  LLAMA_VOCAB_PRE_TYPE_GPT2 = 7
+
   # LLaMA model file type.
   LLAMA_FTYPE_ALL_F32 = 0
 
