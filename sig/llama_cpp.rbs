@@ -315,6 +315,8 @@ module LLaMACpp
     def embeddings=: (bool) -> bool
     def offload_kqv: () -> bool
     def offload_kqv=: (bool) -> bool
+    def flash_attn: () -> bool
+    def flash_attn=: (bool) -> bool
   end
 
   class ModelQuantizeParams

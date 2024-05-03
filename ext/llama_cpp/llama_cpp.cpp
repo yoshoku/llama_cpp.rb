@@ -1004,6 +1004,8 @@ public:
     rb_define_method(rb_cLLaMAContextParams, "embeddings", RUBY_METHOD_FUNC(_llama_context_params_get_embeddings), 0);
     rb_define_method(rb_cLLaMAContextParams, "offload_kqv=", RUBY_METHOD_FUNC(_llama_context_params_set_offload_kqv), 1);
     rb_define_method(rb_cLLaMAContextParams, "offload_kqv", RUBY_METHOD_FUNC(_llama_context_params_get_offload_kqv), 0);
+    rb_define_method(rb_cLLaMAContextParams, "flash_attn=", RUBY_METHOD_FUNC(_llama_context_params_set_flash_attn), 1);
+    rb_define_method(rb_cLLaMAContextParams, "flash_attn", RUBY_METHOD_FUNC(_llama_context_params_get_flash_attn), 0);
   }
 
 private:
@@ -1281,6 +1283,18 @@ private:
   static VALUE _llama_context_params_get_offload_kqv(VALUE self) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     return ptr->params.offload_kqv ? Qtrue : Qfalse;
+  }
+
+  // flash_attn
+  static VALUE _llama_context_params_set_flash_attn(VALUE self, VALUE flash_attn) {
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    ptr->params.flash_attn = RTEST(flash_attn) ? true : false;
+    return ptr->params.flash_attn ? Qtrue : Qfalse;
+  }
+
+  static VALUE _llama_context_params_get_flash_attn(VALUE self) {
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    return ptr->params.flash_attn ? Qtrue : Qfalse;
   }
 };
 

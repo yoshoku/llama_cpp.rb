@@ -1145,7 +1145,15 @@ module LLaMACpp
 
     # Returns the flag whether to offload the KQV ops.
     # @return [Boolean]
-    def oofload_kwv; end
+    def offload_kwv; end
+
+    # Sets the flag whether to use flash attention.
+    # @param flag [Boolean]
+    def flash_attn=(flag); end
+
+    # Returns the flag whether to use flash attention.
+    # @return [Boolean]
+    def flash_attn; end
   end
 
   # Class for quantization parameters
