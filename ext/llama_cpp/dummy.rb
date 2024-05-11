@@ -64,6 +64,21 @@ module LLaMACpp
   # LLaMA vocabulary pre-tokenization type.
   LLAMA_VOCAB_PRE_TYPE_GPT2 = 7
 
+  # LLaMA vocabulary pre-tokenization type.
+  LLAMA_VOCAB_PRE_TYPE_REFACT = 8
+
+  # LLaMA vocabulary pre-tokenization type.
+  LLAMA_VOCAB_PRE_TYPE_COMMAND_R = 9
+
+  # LLaMA vocabulary pre-tokenization type.
+  LLAMA_VOCAB_PRE_TYPE_QWEN2 = 10
+
+  # LLaMA vocabulary pre-tokenization type.
+  LLAMA_VOCAB_PRE_TYPE_OLMO = 11
+
+  # LLaMA vocabulary pre-tokenization type.
+  LLAMA_VOCAB_PRE_TYPE_DBRX = 12
+
   # LLaMA model file type.
   LLAMA_FTYPE_ALL_F32 = 0
 
