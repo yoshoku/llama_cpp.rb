@@ -1,3 +1,9 @@
+## [[0.15.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.15.0...v0.15.1)] - 2024-05-11
+
+- Bump llama.cpp from b2781 to b2839.
+  - Add constants for pre-tokenization types.
+  - Add constant for model file type.
+
 ## [[0.15.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.14.7...v0.15.0)] - 2024-05-03
 
 - Add new build flag for using CUDA ([#18](https://github.com/yoshoku/llama_cpp.rb/pull/18)).
