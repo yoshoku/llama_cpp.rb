@@ -1,3 +1,9 @@
+## [[0.15.2](https://github.com/yoshoku/llama_cpp.rb/compare/v0.15.1...v0.15.2)] - 2024-05-18
+
+- Bump llama.cpp from b2839 to b2917.
+
+Implementation binding for rpc_servers in llama_model_params has been skipped.
+
 ## [[0.15.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.15.0...v0.15.1)] - 2024-05-11
 
 - Bump llama.cpp from b2781 to b2839.
