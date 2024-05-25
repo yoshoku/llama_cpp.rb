@@ -71,13 +71,16 @@ module LLaMACpp
   LLAMA_VOCAB_PRE_TYPE_COMMAND_R = 9
 
   # LLaMA vocabulary pre-tokenization type.
-  LLAMA_VOCAB_PRE_TYPE_QWEN2 = 10
+  LLAMA_VOCAB_PRE_TYPE_STABLELM2 = 10
 
   # LLaMA vocabulary pre-tokenization type.
-  LLAMA_VOCAB_PRE_TYPE_OLMO = 11
+  LLAMA_VOCAB_PRE_TYPE_QWEN2 = 11
 
   # LLaMA vocabulary pre-tokenization type.
-  LLAMA_VOCAB_PRE_TYPE_DBRX = 12
+  LLAMA_VOCAB_PRE_TYPE_OLMO = 12
+
+  # LLaMA vocabulary pre-tokenization type.
+  LLAMA_VOCAB_PRE_TYPE_DBRX = 13
 
   # LLaMA model file type.
   LLAMA_FTYPE_ALL_F32 = 0
