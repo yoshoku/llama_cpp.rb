@@ -748,6 +748,11 @@ module LLaMACpp
     # @return [Integer]
     def n_seq_max; end
 
+    # Returns the number of threads.
+    #
+    # @return [Integer]
+    def n_threads; end
+
     # Returns the timing information
     #
     # @return [Timings]
