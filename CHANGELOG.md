@@ -1,3 +1,11 @@
+## [[0.15.3](https://github.com/yoshoku/llama_cpp.rb/compare/v0.15.2...v0.15.3)] - 2024-05-25
+
+- Bump llama.cpp from b2917 to b2988.
+  - Add constants for pre-tokenization types.
+  - Add `n_threads` method to `Context`.
+  - Add `n_threads_batch` method to `Context`.
+- Add `set_n_threads` method to `Context`.
+
 ## [[0.15.2](https://github.com/yoshoku/llama_cpp.rb/compare/v0.15.1...v0.15.2)] - 2024-05-18
 
 - Bump llama.cpp from b2839 to b2917.
