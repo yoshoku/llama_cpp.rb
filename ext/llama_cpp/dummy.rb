@@ -753,6 +753,11 @@ module LLaMACpp
     # @return [Integer]
     def n_threads; end
 
+    # Returns the number of threads for batch processing.
+    #
+    # @return [Integer]
+    def n_threads_batch; end
+
     # Returns the timing information
     #
     # @return [Timings]
