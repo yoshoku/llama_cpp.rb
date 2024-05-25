@@ -1269,7 +1269,7 @@ module LLaMACpp
     def pure; end
 
     # Sets the flag to quantize to the same number of shards.
-    # @param [Boolean]
+    # @param flag [Boolean]
     def keep_split=(flag); end
 
     # Returns the flag to quantize to the same number of shards.
