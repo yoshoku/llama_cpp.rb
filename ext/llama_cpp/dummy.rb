@@ -728,6 +728,13 @@ module LLaMACpp
     # @return [Array<Float>] shape: (n_embd)
     def embeddings_seq(seq_id); end
 
+    # Sets the number of threads used for decoding.
+    #
+    # @param n_threads [Integer] The number of threads.
+    # @param n_threads_batch [Integer] The number of threads for batch processing.
+    # @return [NilClass]
+    def set_n_threads(n_threads:, n_threads_batch:); end
+
     # Returns the number of text context.
     #
     # @return [Integer]

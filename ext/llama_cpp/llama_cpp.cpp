@@ -2122,6 +2122,7 @@ public:
     rb_define_method(rb_cLLaMAContext, "embeddings", RUBY_METHOD_FUNC(_llama_context_embeddings), 0);
     rb_define_method(rb_cLLaMAContext, "embeddings_ith", RUBY_METHOD_FUNC(_llama_context_embeddings_ith), 1);
     rb_define_method(rb_cLLaMAContext, "embeddings_seq", RUBY_METHOD_FUNC(_llama_context_embeddings_seq), 1);
+    rb_define_method(rb_cLLaMAContext, "set_n_threads", RUBY_METHOD_FUNC(_llama_context_set_n_threads), -1);
     rb_define_method(rb_cLLaMAContext, "n_ctx", RUBY_METHOD_FUNC(_llama_context_n_ctx), 0);
     rb_define_method(rb_cLLaMAContext, "n_batch", RUBY_METHOD_FUNC(_llama_context_n_batch), 0);
     rb_define_method(rb_cLLaMAContext, "n_ubatch", RUBY_METHOD_FUNC(_llama_context_n_ubatch), 0);
@@ -2343,6 +2344,33 @@ private:
     }
 
     return output;
+  }
+
+  static VALUE _llama_context_set_n_threads(int argc, VALUE* argv, VALUE self) {
+    VALUE kw_args = Qnil;
+    ID kw_table[2] = { rb_intern("n_threads"), rb_intern("n_threads_batch") };
+    VALUE kw_values[2] = { Qundef, Qundef };
+    rb_scan_args(argc, argv, ":", &kw_args);
+    rb_get_kwargs(kw_args, kw_table, 2, 0, kw_values);
+
+    VALUE n_threads = kw_values[0];
+    if (!RB_INTEGER_TYPE_P(n_threads)) {
+      rb_raise(rb_eArgError, "n_threads must be an integer");
+      return Qnil;
+    }
+    VALUE n_threads_batch = kw_values[1];
+    if (!RB_INTEGER_TYPE_P(n_threads_batch)) {
+      rb_raise(rb_eArgError, "n_threads_batch must be an integer");
+      return Qnil;
+    }
+
+    LLaMAContextWrapper* ptr = get_llama_context(self);
+    if (ptr->ctx == NULL) {
+      rb_raise(rb_eArgError, "LLaMA context is not initialized");
+      return Qnil;
+    }
+    llama_set_n_threads(ptr->ctx, NUM2UINT(n_threads), NUM2UINT(n_threads_batch));
+    return Qnil;
   }
 
   static VALUE _llama_context_n_ctx(VALUE self) {
