@@ -443,6 +443,9 @@ endif # JETSON_EOL_MODULE_DETECT
 ifdef LLAMA_DEBUG
 	MK_NVCCFLAGS += -lineinfo
 endif # LLAMA_DEBUG
+ifdef LLAMA_CUDA_DEBUG
+	MK_NVCCFLAGS += --device-debug
+endif # LLAMA_CUDA_DEBUG
 ifdef LLAMA_CUDA_NVCC
 	NVCC = $(CCACHE) $(LLAMA_CUDA_NVCC)
 else
@@ -749,7 +752,7 @@ lib: llama.o ggml.o $(OBJS)
 	ar rcs libllama.a $^
 
 clean:
-	rm -vrf *.o tests/*.o *.so *.a *.dll benchmark-matmult lookup-create lookup-merge lookup-stats common/build-info.cpp *.dot $(COV_TARGETS) $(BUILD_TARGETS) $(TEST_TARGETS)
+	rm -vrf *.o tests/*.o *.so *.a *.dll *.dylib benchmark-matmult lookup-create lookup-merge lookup-stats common/build-info.cpp *.dot $(COV_TARGETS) $(BUILD_TARGETS) $(TEST_TARGETS)
 	rm -vrf ggml-cuda/*.o
 
 #
