@@ -1,3 +1,9 @@
+## [[0.15.4](https://github.com/yoshoku/llama_cpp.rb/compare/v0.15.3...v0.15.4)] - 2024-06-01
+
+- Bump llama.cpp from b2988 to b3056.
+  - Add LLAMA_VOCAB_PRE_TYPE_SMAUG constant.
+  - Add `token_is_control?` method to `Model`.
+
 ## [[0.15.3](https://github.com/yoshoku/llama_cpp.rb/compare/v0.15.2...v0.15.3)] - 2024-05-25
 
 - Bump llama.cpp from b2917 to b2988.
