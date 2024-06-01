@@ -160,6 +160,7 @@ module LLaMACpp
     def token_suffix: () -> Integer
     def token_eot: () -> Integer
     def token_is_eog?: (Integer) -> bool
+    def token_is_control?: (Integer) -> bool
   end
 
   class Timings

@@ -1536,6 +1536,7 @@ public:
     rb_define_method(rb_cLLaMAModel, "token_suffix", RUBY_METHOD_FUNC(_llama_model_token_suffix), 0);
     rb_define_method(rb_cLLaMAModel, "token_eot", RUBY_METHOD_FUNC(_llama_model_token_eot), 0);
     rb_define_method(rb_cLLaMAModel, "token_is_eog?", RUBY_METHOD_FUNC(_llama_model_token_is_eog), 1);
+    rb_define_method(rb_cLLaMAModel, "token_is_control?", RUBY_METHOD_FUNC(_llama_model_token_is_control), 1);
   }
 
 private:
@@ -1847,6 +1848,16 @@ private:
     const llama_token token = NUM2INT(token_);
     LLaMAModelWrapper* ptr = get_llama_model(self);
     return llama_token_is_eog(ptr->model, token) ? Qtrue : Qfalse;
+  }
+
+  static VALUE _llama_model_token_is_control(VALUE self, VALUE token_) {
+    if (!RB_INTEGER_TYPE_P(token_)) {
+      rb_raise(rb_eArgError, "token must be an integer");
+      return Qnil;
+    }
+    const llama_token token = NUM2INT(token_);
+    LLaMAModelWrapper* ptr = get_llama_model(self);
+    return llama_token_is_control(ptr->model, token) ? Qtrue : Qfalse;
   }
 };
 

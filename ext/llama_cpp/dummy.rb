@@ -491,6 +491,12 @@ module LLaMACpp
     # @param token [Integer] The token id.
     # @return [Boolean]
     def token_is_eog?(token); end
+
+    # Returns whether the token is control or render-able token.
+    #
+    # @param token [Integer] The token id.
+    # @return [Boolean]
+    def token_is_control?(token); end
   end
 
   # Class for model KV override.
