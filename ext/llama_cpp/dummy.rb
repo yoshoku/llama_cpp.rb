@@ -82,6 +82,9 @@ module LLaMACpp
   # LLaMA vocabulary pre-tokenization type.
   LLAMA_VOCAB_PRE_TYPE_DBRX = 13
 
+  # LLaMA vocabulary pre-tokenization type.
+  LLAMA_VOCAB_PRE_TYPE_SMAUG = 14
+
   # LLaMA model file type.
   LLAMA_FTYPE_ALL_F32 = 0
 
