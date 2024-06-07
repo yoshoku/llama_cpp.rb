@@ -2702,10 +2702,8 @@ GGML_CALL static enum ggml_status ggml_backend_cuda_graph_compute(ggml_backend_t
 
         if (cuda_graph_update_required) {
             // Extract nodes from graph
-            if (cuda_ctx->cuda_graph->num_nodes == 0) {
-                // First call with null argument gets number of nodes in graph
-                CUDA_CHECK(cudaGraphGetNodes(cuda_ctx->cuda_graph->graph, nullptr, &cuda_ctx->cuda_graph->num_nodes));
-            }
+            // First call with null argument gets number of nodes in graph
+            CUDA_CHECK(cudaGraphGetNodes(cuda_ctx->cuda_graph->graph, nullptr, &cuda_ctx->cuda_graph->num_nodes));
             // Subsequent call with non-null argument gets nodes
             cuda_ctx->cuda_graph->nodes.resize(cuda_ctx->cuda_graph->num_nodes);
             cuda_ctx->cuda_graph->params.resize(cuda_ctx->cuda_graph->num_nodes);
@@ -2905,10 +2903,14 @@ GGML_CALL static bool ggml_backend_cuda_supports_op(ggml_backend_t backend, cons
 #if defined(GGML_USE_HIPBLAS) && defined(__HIP_PLATFORM_AMD__)
             return op->src[0]->ne[0] == 64 || op->src[0]->ne[0] == 128;
 #else
-            if (op->src[0]->ne[0] == 64 || op->src[0]->ne[0] == 128) {
+            if (op->src[0]->ne[0] == 128) {
                 return true;
             }
-            return ggml_cuda_info().devices[cuda_ctx->device].cc >= CC_VOLTA;
+            if (op->src[0]->ne[0] ==  64 && op->src[1]->type == GGML_TYPE_F16) {
+                return true;
+            }
+            return ggml_cuda_info().devices[cuda_ctx->device].cc >= CC_VOLTA &&
+                op->src[1]->type == GGML_TYPE_F16 && op->src[2]->type == GGML_TYPE_F16;
 #endif // defined(GGML_USE_HIPBLAS) && defined(__HIP_PLATFORM_AMD__)
         default:
             return false;
