@@ -1523,7 +1523,7 @@ public:
     rb_define_method(rb_cLLaMAModel, "n_params", RUBY_METHOD_FUNC(_llama_model_get_model_n_params), 0);
     rb_define_method(rb_cLLaMAModel, "text", RUBY_METHOD_FUNC(_llama_model_get_text), 1);
     rb_define_method(rb_cLLaMAModel, "score", RUBY_METHOD_FUNC(_llama_model_get_score), 1);
-    rb_define_method(rb_cLLaMAModel, "type", RUBY_METHOD_FUNC(_llama_model_get_type), 1);
+    rb_define_method(rb_cLLaMAModel, "token_attr", RUBY_METHOD_FUNC(_llama_model_get_token_attr), 1);
     rb_define_method(rb_cLLaMAModel, "token_bos", RUBY_METHOD_FUNC(_llama_model_token_bos), 0);
     rb_define_method(rb_cLLaMAModel, "token_eos", RUBY_METHOD_FUNC(_llama_model_token_eos), 0);
     rb_define_method(rb_cLLaMAModel, "token_cls", RUBY_METHOD_FUNC(_llama_model_token_cls), 0);
@@ -1778,10 +1778,10 @@ private:
     return DBL2NUM(score);
   }
 
-  static VALUE _llama_model_get_type(VALUE self, VALUE token_) {
+  static VALUE _llama_model_get_token_attr(VALUE self, VALUE token_) {
     LLaMAModelWrapper* ptr = get_llama_model(self);
     const llama_token token = NUM2INT(token_);
-    const int type = llama_token_get_type(ptr->model, token);
+    const llama_token_attr type = llama_token_get_attr(ptr->model, token);
     return INT2NUM(type);
   }
 

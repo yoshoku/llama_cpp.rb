@@ -3,7 +3,7 @@
 # The following code is dummy for document generation.
 
 # llama_cpp.rb provides Ruby bindings for the llama.cpp.
-module LLaMACpp
+module LLaMACpp # rubocop:disable Metrics/ModuleLength
   # LLaMA file magic.
   LLAMA_FILE_MAGIC_GGLA = '0x67676c61u'
 
@@ -469,11 +469,11 @@ module LLaMACpp
     # @return [Float]
     def score(token_id); end
 
-    # Returns the type of token.
+    # Returns the attribute of token.
     #
     # @param token_id [Integer]
     # @return [Integer]
-    def type(token_id); end
+    def token_attr(token_id); end
 
     # Returns the token id the beginning of sentence token.
     # @return [Integer]

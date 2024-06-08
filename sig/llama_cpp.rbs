@@ -159,7 +159,7 @@ module LLaMACpp
     def n_params: () -> Integer
     def text: (Integer) -> String
     def score: (Integer) -> Float
-    def type: (Integer) -> Integer
+    def token_attr: (Integer) -> Integer
     def token_bos: () -> Integer
     def token_eos: () -> Integer
     def token_cls: () -> Integer
