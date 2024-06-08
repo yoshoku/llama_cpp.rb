@@ -85,6 +85,39 @@ module LLaMACpp
   # LLaMA vocabulary pre-tokenization type.
   LLAMA_VOCAB_PRE_TYPE_SMAUG = 14
 
+  # LLaMA token attribute type.
+  LLAMA_TOKEN_ATTR_UNDEFINED = 0
+
+  # LLaMA token attribute type.
+  LLAMA_TOKEN_ATTR_UNKNOWN = 1
+
+  # LLaMA token attribute type.
+  LLAMA_TOKEN_ATTR_UNUSED = 2
+
+  # LLaMA token attribute type.
+  LLAMA_TOKEN_ATTR_NORMAL = 4
+
+  # LLaMA token attribute type.
+  LLAMA_TOKEN_ATTR_CONTROL = 8
+
+  # LLaMA token attribute type.
+  LLAMA_TOKEN_ATTR_USER_DEFINED = 16
+
+  # LLaMA token attribute type.
+  LLAMA_TOKEN_ATTR_BYTE = 32
+
+  # LLaMA token attribute type.
+  LLAMA_TOKEN_ATTR_NORMALIZED = 64
+
+  # LLaMA token attribute type.
+  LLAMA_TOKEN_ATTR_LSTRIP = 128
+
+  # LLaMA token attribute type.
+  LLAMA_TOKEN_ATTR_RSTRIP = 256
+
+  # LLaMA token attribute type.
+  LLAMA_TOKEN_ATTR_SINGLE_WORD = 512
+
   # LLaMA model file type.
   LLAMA_FTYPE_ALL_F32 = 0
 
