@@ -20,6 +20,7 @@ make_envs << ' LLAMA_CUDA=1' if with_config('cuda')
 make_envs << ' LLAMA_HIPBLAS=1' if with_config('hipblas')
 make_envs << ' LLAMA_MPI=1' if with_config('mpi')
 make_envs << ' LLAMA_VULKAN=1' if with_config('vulkan')
+make_envs << ' LLAMA_NO_OPENMP=1' if with_config('no-openmp')
 
 make_envs << ' LLAMA_METAL_EMBED_LIBRARY=1' if RUBY_PLATFORM.match?(/darwin/)
 
