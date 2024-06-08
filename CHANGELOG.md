@@ -1,3 +1,13 @@
+## [[0.16.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.15.4...v0.16.0)] - 2024-06-08
+
+**Breaking Changes**
+
+- Bump llama.cpp from b3056 to b3091.
+  - Rename `type` method to `token_attr` in `Model`.
+  - Add constants for token attribute types.
+  - Remove `--with-clblast` and `--with-mpi` config options.
+  - Add `--with-no-openmp` config option.
+
 ## [[0.15.4](https://github.com/yoshoku/llama_cpp.rb/compare/v0.15.3...v0.15.4)] - 2024-06-01
 
 - Bump llama.cpp from b2988 to b3056.
