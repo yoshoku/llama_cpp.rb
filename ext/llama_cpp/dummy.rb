@@ -85,6 +85,9 @@ module LLaMACpp # rubocop:disable Metrics/ModuleLength
   # LLaMA vocabulary pre-tokenization type.
   LLAMA_VOCAB_PRE_TYPE_SMAUG = 14
 
+  # LLaMA vocabulary pre-tokenization type.
+  LLAMA_VOCAB_PRE_TYPE_PORO = 15
+
   # LLaMA token attribute type.
   LLAMA_TOKEN_ATTR_UNDEFINED = 0
 
