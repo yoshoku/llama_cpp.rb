@@ -14,6 +14,7 @@ make_envs << ' LLAMA_DEBUG=1' if with_config('debug')
 make_envs << ' LLAMA_QKK_64=1' if with_config('qkk-64')
 make_envs << ' LLAMA_NO_ACCELERATE=1' if with_config('no-accelerate')
 make_envs << ' LLAMA_OPENBLAS=1' if with_config('openblas')
+make_envs << ' LLAMA_OPENBLAS64=1' if with_config('openblas64')
 make_envs << ' LLAMA_BLIS=1' if with_config('blis')
 make_envs << ' LLAMA_CUBLAS=1' if with_config('cublas') # Deprecated, use --with-cuda instead
 make_envs << ' LLAMA_CUDA=1' if with_config('cuda')
