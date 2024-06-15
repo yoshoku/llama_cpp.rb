@@ -1,3 +1,9 @@
+## [[0.16.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.16.0...v0.16.1)] - 2024-06-15
+
+- Bump llama.cpp from b3091 to b3151.
+  - Add `--with-openblas641` and `--with-no-llamafile` config options.
+  - Add `LLAMA_VOCAB_PRE_TYPE_PORO` and `LLAMA_GRETYPE_CHAR_ANY` constants.
+
 ## [[0.16.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.15.4...v0.16.0)] - 2024-06-08
 
 **Breaking Changes**
