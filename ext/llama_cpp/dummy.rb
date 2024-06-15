@@ -247,6 +247,9 @@ module LLaMACpp # rubocop:disable Metrics/ModuleLength
   # GrammarElement type: modifies a preceding LLAMA_GRETYPE_CHAR or LLAMA_GRETYPE_CHAR_RNG_UPPER to add an alternate char to match ([ab], [a-zA]).
   LLAMA_GRETYPE_CHAR_ALT = 6
 
+  # GrammarElement type: any character (.)
+  LLAMA_GRETYPE_CHAR_ANY = 7
+
   # RoPE scaling type.
   LLAMA_ROPE_SCALING_TYPE_UNSPECIFIED = -1
 
