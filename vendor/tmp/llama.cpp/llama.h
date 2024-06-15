@@ -86,6 +86,7 @@ extern "C" {
         LLAMA_VOCAB_PRE_TYPE_OLMO           = 12,
         LLAMA_VOCAB_PRE_TYPE_DBRX           = 13,
         LLAMA_VOCAB_PRE_TYPE_SMAUG          = 14,
+        LLAMA_VOCAB_PRE_TYPE_PORO           = 15,
     };
 
     // note: these values should be synchronized with ggml_rope
@@ -365,6 +366,9 @@ extern "C" {
         // modifies a preceding LLAMA_GRETYPE_CHAR or
         // LLAMA_GRETYPE_CHAR_RNG_UPPER to add an alternate char to match ([ab], [a-zA])
         LLAMA_GRETYPE_CHAR_ALT       = 6,
+
+        // any character (.)
+        LLAMA_GRETYPE_CHAR_ANY       = 7,
     };
 
     typedef struct llama_grammar_element {

@@ -9108,6 +9108,7 @@ static void soft_max_f32(const float * x, const float * mask, float * dst, const
     // find the sum of exps in the block
     tmp = warp_reduce_sum(tmp, item_ct1);
     if (block_size > WARP_SIZE) {
+        item_ct1.barrier(sycl::access::fence_space::local_space);
         if (warp_id == 0) {
             buf[lane_id] = 0.f;
         }
@@ -13088,10 +13089,12 @@ void *ggml_sycl_host_malloc(size_t size) try {
         return nullptr;
     }
 
+    ggml_sycl_set_device(g_main_device);
+    dpct::queue_ptr main_stream = g_syclStreams[g_main_device][0];
+
     void * ptr = nullptr;
-    //allow to use dpct::get_in_order_queue() for host malloc
     dpct::err0 err = CHECK_TRY_ERROR(
-        ptr = (void *)sycl::malloc_host(size, dpct::get_in_order_queue()));
+        ptr = (void *)sycl::malloc_host(size, *main_stream));
 
     if (err != 0) {
         // clear the error
@@ -13112,8 +13115,9 @@ catch (sycl::exception const &exc) {
 }
 
 void ggml_sycl_host_free(void *ptr) try {
-    //allow to use dpct::get_in_order_queue() for host malloc
-    SYCL_CHECK(CHECK_TRY_ERROR(sycl::free(ptr, dpct::get_in_order_queue())));
+    ggml_sycl_set_device(g_main_device);
+    dpct::queue_ptr main_stream = g_syclStreams[g_main_device][0];
+    SYCL_CHECK(CHECK_TRY_ERROR(sycl::free(ptr, *main_stream)));
 }
 catch (sycl::exception const &exc) {
   std::cerr << exc.what() << "Exception caught at file:" << __FILE__
@@ -16571,22 +16575,12 @@ GGML_CALL static size_t ggml_backend_sycl_buffer_type_get_alloc_size(ggml_backen
     UNUSED(buft);
 }
 
-GGML_CALL static bool ggml_backend_sycl_buffer_type_supports_backend(ggml_backend_buffer_type_t buft, ggml_backend_t backend) {
-    if (!ggml_backend_is_sycl(backend)) {
-        return false;
-    }
-    ggml_backend_sycl_buffer_type_context * buft_ctx = (ggml_backend_sycl_buffer_type_context *)buft->context;
-    ggml_backend_sycl_context * sycl_ctx = (ggml_backend_sycl_context *)backend->context;
-    return buft_ctx->device == sycl_ctx->device;
-}
-
 static ggml_backend_buffer_type_i ggml_backend_sycl_buffer_type_interface = {
     /* .get_name         = */ ggml_backend_sycl_buffer_type_name,
     /* .alloc_buffer     = */ ggml_backend_sycl_buffer_type_alloc_buffer,
     /* .get_alignment    = */ ggml_backend_sycl_buffer_type_get_alignment,
     /* .get_max_size     = */ ggml_backend_sycl_buffer_type_get_max_size,
     /* .get_alloc_size   = */ ggml_backend_sycl_buffer_type_get_alloc_size,
-    /* .supports_backend = */ ggml_backend_sycl_buffer_type_supports_backend,
     /* .is_host          = */ nullptr,
 };
 
@@ -16938,12 +16932,6 @@ GGML_CALL static size_t ggml_backend_sycl_split_buffer_type_get_alloc_size(ggml_
     return total_size;
 }
 
-GGML_CALL static bool ggml_backend_sycl_split_buffer_type_supports_backend(ggml_backend_buffer_type_t buft, ggml_backend_t backend) {
-    return ggml_backend_is_sycl(backend);
-
-    UNUSED(buft);
-}
-
 GGML_CALL static bool ggml_backend_sycl_split_buffer_type_is_host(ggml_backend_buffer_type_t buft) {
     return false;
 
@@ -16956,7 +16944,6 @@ static ggml_backend_buffer_type_i ggml_backend_sycl_split_buffer_type_interface 
     /* .get_alignment    = */ ggml_backend_sycl_split_buffer_type_get_alignment,
     /* .get_max_size     = */ NULL, // defaults to SIZE_MAX
     /* .get_alloc_size   = */ ggml_backend_sycl_split_buffer_type_get_alloc_size,
-    /* .supports_backend = */ ggml_backend_sycl_split_buffer_type_supports_backend,
     /* .is_host          = */ ggml_backend_sycl_split_buffer_type_is_host,
 };
 
@@ -17042,7 +17029,6 @@ ggml_backend_buffer_type_t ggml_backend_sycl_host_buffer_type() {
             /* .get_alignment    = */ ggml_backend_cpu_buffer_type()->iface.get_alignment,
             /* .get_max_size     = */ NULL, // TODO: return device.maxBufferLength
             /* .get_alloc_size   = */ ggml_backend_cpu_buffer_type()->iface.get_alloc_size,
-            /* .supports_backend = */ ggml_backend_cpu_buffer_type()->iface.supports_backend,
             /* .is_host          = */ ggml_backend_cpu_buffer_type()->iface.is_host,
         },
         /* .context  = */ nullptr,
@@ -17186,7 +17172,7 @@ GGML_CALL static bool ggml_backend_sycl_supports_op(ggml_backend_t backend, cons
                 case GGML_UNARY_OP_HARDSWISH:
                 case GGML_UNARY_OP_GELU_QUICK:
                 case GGML_UNARY_OP_TANH:
-                    return true;
+                    return ggml_is_contiguous(op->src[0]);
                 default:
                     return false;
             }
@@ -17307,6 +17293,14 @@ GGML_CALL static bool ggml_backend_sycl_offload_op(ggml_backend_t backend, const
     GGML_UNUSED(backend);
 }
 
+GGML_CALL static bool ggml_backend_sycl_supports_buft(ggml_backend_t backend, ggml_backend_buffer_type_t buft) {
+    if (buft->iface.get_name != ggml_backend_sycl_buffer_type_name) {
+        return false;
+    }
+    ggml_backend_sycl_buffer_type_context * buft_ctx = (ggml_backend_sycl_buffer_type_context *)buft->context;
+    ggml_backend_sycl_context * sycl_ctx = (ggml_backend_sycl_context *)backend->context;
+    return buft_ctx->device == sycl_ctx->device;
+}
 
 static ggml_backend_i ggml_backend_sycl_interface = {
     /* .get_name                = */ ggml_backend_sycl_name,
@@ -17318,9 +17312,11 @@ static ggml_backend_i ggml_backend_sycl_interface = {
     /* .synchronize             = */ ggml_backend_sycl_synchronize,
     /* .graph_plan_create       = */ NULL,
     /* .graph_plan_free         = */ NULL,
+    /* .graph_plan_update       = */ NULL,
     /* .graph_plan_compute      = */ NULL,
     /* .graph_compute           = */ ggml_backend_sycl_graph_compute,
     /* .supports_op             = */ ggml_backend_sycl_supports_op,
+    /* .supports_buft           = */ ggml_backend_sycl_supports_buft,
     /* .offload_op              = */ ggml_backend_sycl_offload_op,
     /* .event_new               = */ NULL,
     /* .event_free              = */ NULL,
