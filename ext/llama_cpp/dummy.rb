@@ -277,6 +277,9 @@ module LLaMACpp # rubocop:disable Metrics/ModuleLength
   # LLaMA pooling type.
   LLAMA_POOLING_TYPE_CLS = 2
 
+  # LLaMA pooling type.
+  LLAMA_POOLING_TYPE_LAST = 3
+
   # LLaMA split mode: single GPU.
   LLAMA_SPLIT_MODE_NONE = 0
 
