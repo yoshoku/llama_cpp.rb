@@ -38,6 +38,7 @@ BUILD_TARGETS = \
 	llama-tokenize \
 	llama-train-text-from-scratch \
 	llama-vdot \
+	llama-cvector-generator \
 	tests/test-c.o
 
 # Binaries only useful for tests
@@ -508,7 +509,7 @@ ifdef LLAMA_CUDA
 		CUDA_PATH ?= /usr/local/cuda
 	endif
 	MK_CPPFLAGS  += -DGGML_USE_CUDA -I$(CUDA_PATH)/include -I$(CUDA_PATH)/targets/$(UNAME_M)-linux/include -DGGML_CUDA_USE_GRAPHS
-	MK_LDFLAGS   += -lcuda -lcublas -lculibos -lcudart -lcublasLt -lpthread -ldl -lrt -L$(CUDA_PATH)/lib64 -L/usr/lib64 -L$(CUDA_PATH)/targets/$(UNAME_M)-linux/lib -L/usr/lib/wsl/lib
+	MK_LDFLAGS   += -lcuda -lcublas -lculibos -lcudart -lcublasLt -lpthread -ldl -lrt -L$(CUDA_PATH)/lib64 -L/usr/lib64 -L$(CUDA_PATH)/targets/$(UNAME_M)-linux/lib -L$(CUDA_PATH)/lib64/stubs -L/usr/lib/wsl/lib
 	OBJS         += ggml-cuda.o
 	OBJS         += $(patsubst %.cu,%.o,$(wildcard ggml-cuda/*.cu))
 	OBJS         += $(OBJS_CUDA_TEMP_INST)
@@ -607,6 +608,10 @@ endif
 
 ifdef LLAMA_VULKAN_DEBUG
 	MK_CPPFLAGS  += -DGGML_VULKAN_DEBUG
+endif
+
+ifdef LLAMA_VULKAN_MEMORY_DEBUG
+	MK_CPPFLAGS  += -DGGML_VULKAN_MEMORY_DEBUG
 endif
 
 ifdef LLAMA_VULKAN_VALIDATE
@@ -827,7 +832,6 @@ libllama.so: llama.o ggml.o $(OBJS)
 libllama.a: llama.o ggml.o $(OBJS) $(COMMON_DEPS)
 	ar rcs libllama.a llama.o ggml.o $(OBJS) $(COMMON_DEPS)
 
-
 lib: llama.o ggml.o $(OBJS)
 	$(CXX) $(CXXFLAGS) -shared -fPIC -o libllama$(DSO_EXT) $^ $(LDFLAGS)
 	ar rcs libllama.a $^
@@ -925,6 +929,10 @@ llama-gguf-split: examples/gguf-split/gguf-split.cpp ggml.o llama.o $(COMMON_DEP
 	$(CXX) $(CXXFLAGS) $(filter-out %.h $<,$^) $(call GET_OBJ_FILE, $<) -o $@ $(LDFLAGS)
 
 llama-eval-callback: examples/eval-callback/eval-callback.cpp ggml.o llama.o $(COMMON_DEPS) $(OBJS)
+	$(CXX) $(CXXFLAGS) -c $< -o $(call GET_OBJ_FILE, $<)
+	$(CXX) $(CXXFLAGS) $(filter-out %.h $<,$^) $(call GET_OBJ_FILE, $<) -o $@ $(LDFLAGS)
+
+llama-cvector-generator: examples/cvector-generator/cvector-generator.cpp ggml.o llama.o $(COMMON_DEPS) $(OBJS)
 	$(CXX) $(CXXFLAGS) -c $< -o $(call GET_OBJ_FILE, $<)
 	$(CXX) $(CXXFLAGS) $(filter-out %.h $<,$^) $(call GET_OBJ_FILE, $<) -o $@ $(LDFLAGS)
 
