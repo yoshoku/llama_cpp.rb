@@ -1,3 +1,10 @@
+## [[0.16.2](https://github.com/yoshoku/llama_cpp.rb/compare/v0.16.1...v0.16.2)] - 2024-06-22
+
+- Bump llama.cpp from b3151 to b3197.
+  - Add `LLAMA_POOLING_TYPE_LAST` constant.
+  - Add `--with-vulkan-memory-debug` config option.
+  - Add `set_embeddings` method to `Context`.
+
 ## [[0.16.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.16.0...v0.16.1)] - 2024-06-15
 
 - Bump llama.cpp from b3091 to b3151.
