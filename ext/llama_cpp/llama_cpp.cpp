@@ -2133,6 +2133,7 @@ public:
     rb_define_method(rb_cLLaMAContext, "embeddings", RUBY_METHOD_FUNC(_llama_context_embeddings), 0);
     rb_define_method(rb_cLLaMAContext, "embeddings_ith", RUBY_METHOD_FUNC(_llama_context_embeddings_ith), 1);
     rb_define_method(rb_cLLaMAContext, "embeddings_seq", RUBY_METHOD_FUNC(_llama_context_embeddings_seq), 1);
+    rb_define_method(rb_cLLaMAContext, "set_embeddings", RUBY_METHOD_FUNC(_llama_context_set_embeddings), 1);
     rb_define_method(rb_cLLaMAContext, "set_n_threads", RUBY_METHOD_FUNC(_llama_context_set_n_threads), -1);
     rb_define_method(rb_cLLaMAContext, "n_ctx", RUBY_METHOD_FUNC(_llama_context_n_ctx), 0);
     rb_define_method(rb_cLLaMAContext, "n_batch", RUBY_METHOD_FUNC(_llama_context_n_batch), 0);
@@ -2355,6 +2356,16 @@ private:
     }
 
     return output;
+  }
+
+  static VALUE _llama_context_set_embeddings(VALUE self, VALUE embs) {
+    LLaMAContextWrapper* ptr = get_llama_context(self);
+    if (ptr->ctx == NULL) {
+      rb_raise(rb_eArgError, "LLaMA context is not initialized");
+      return Qnil;
+    }
+    llama_set_embeddings(ptr->ctx, RTEST(embs) ? true : false);
+    return Qnil;
   }
 
   static VALUE _llama_context_set_n_threads(int argc, VALUE* argv, VALUE self) {

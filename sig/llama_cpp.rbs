@@ -259,6 +259,7 @@ module LLaMACpp
     def embeddings_seq: (Integer) -> Array[Float]
     def decode: (::LLaMACpp::Batch) -> void
     def logits: () -> Array[Float]
+    def set_embeddings: (bool) -> void
     def set_n_threads: (n_threads: Integer, n_threads_batch: Integer) -> void
     def n_ctx: () -> Integer
     def n_batch: () -> Integer

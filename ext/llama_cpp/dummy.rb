@@ -779,6 +779,12 @@ module LLaMACpp
     # @return [Array<Float>] shape: (n_embd)
     def embeddings_seq(seq_id); end
 
+    # Sets whether the model is in embeddings model or not.
+    #
+    # @param embd [Boolean] The flag to return embeddings.
+    # @return [NilClass]
+    def set_embeddings(embd); end
+
     # Sets the number of threads used for decoding.
     #
     # @param n_threads [Integer] The number of threads.
