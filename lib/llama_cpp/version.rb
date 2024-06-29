@@ -5,6 +5,6 @@ module LLaMACpp
   # The version of llama_cpp.rb you install.
   VERSION = '0.16.2'
 
-  # The version of llama.cpp bundled with llama_cpp.rb.
-  LLAMA_CPP_VERSION = 'b3197'
+  # The supported version of llama.cpp.
+  LLAMA_CPP_VERSION = 'b3265'
 end
