@@ -1,3 +1,21 @@
+## [[0.17.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.16.2...v0.17.0)] - 2024-06-29
+
+**Breaking Changes**
+
+I stopped including the llama.cpp source code in the gem,
+as it became difficult to keep up with changes in the llama.cpp file structure.
+You need to install the llama.cpp library separately.
+If you are using homebrew on macOS, the following command will install the library:
+
+```sh
+$ brew install llama.cpp
+$ gem install llama_cpp -- --with-opt-dir=/opt/homebrew
+```
+
+- Change supported llama.cpp version to b3265
+ - Add `LLAMA_VOCAB_TYPE_UGM` and `LLAMA_VOCAB_PRE_TYPE_VIKING` constants.
+ - Add `token_pad` method to `Model`.
+
 ## [[0.16.2](https://github.com/yoshoku/llama_cpp.rb/compare/v0.16.1...v0.16.2)] - 2024-06-22
 
 - Bump llama.cpp from b3151 to b3197.
