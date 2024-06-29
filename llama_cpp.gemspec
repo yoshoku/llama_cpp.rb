@@ -29,10 +29,6 @@ Gem::Specification.new do |spec|
                      .select { |f| f.match(/\.(?:rb|rbs|h|hpp|c|cpp|cu|m|metal|mk|md|txt)$/) }
   end
   spec.files.delete('ext/llama_cpp/dummy.rb')
-  spec.files.append('vendor/tmp/llama.cpp/LICENSE')
-  spec.files.append('vendor/tmp/llama.cpp/Makefile')
-  spec.files.append('vendor/lib/.gitkeep')
-  spec.files.append('vendor/include/.gitkeep')
 
   spec.bindir = 'exe'
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
