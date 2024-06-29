@@ -10,29 +10,24 @@ This gem is still under development and may undergo many changes in the future.
 
 ## Installation
 
+Install the llama.cpp. If you use homebrew, install it by executing:
+
+```sh
+$ brew install llama.cpp
+```
+
 Install the gem and add to the application's Gemfile by executing:
 
 ```sh
+$ bundle config --local build.llama_cpp "--with-opt-dir=/opt/homebrew/"
 $ bundle add llama_cpp
 ```
 
 If bundler is not being used to manage dependencies, install the gem by executing:
 
 ```sh
-$ gem install llama_cpp
+$ gem install llama_cpp -- --with-opt-dir=/opt/homebrew
 ```
-
-There are several installation options:
-
-```sh
-# use OpenBLAS
-$ gem install llama_cpp -- --with-openblas
-
-# use CUDA
-$ gem install llama_cpp -- --with-cuda
-```
-
-Those options are defined in [extconf.rb](https://github.com/yoshoku/llama_cpp.rb/blob/main/ext/llama_cpp/extconf.rb) by with_config method.
 
 ## Usage
 
