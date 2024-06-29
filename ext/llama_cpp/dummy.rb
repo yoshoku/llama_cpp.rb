@@ -510,6 +510,10 @@ module LLaMACpp
     # @return [Integer]
     def token_nl; end
 
+    # Returns the token id the padding token.
+    # @return [Integer]
+    def token_pad; end
+
     # Returns the flag to add the beginning of sentence token.
     # @return [Boolean]
     def add_bos_token?; end

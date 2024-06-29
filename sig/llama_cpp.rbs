@@ -170,6 +170,7 @@ module LLaMACpp
     def token_cls: () -> Integer
     def token_sep: () -> Integer
     def token_nl: () -> Integer
+    def token_pad: () -> Integer
     def add_bos_token?: () -> bool
     def add_eos_token?: () -> bool
     def token_prefix: () -> Integer
