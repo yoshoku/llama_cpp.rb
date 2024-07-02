@@ -32,7 +32,7 @@ $ gem install llama_cpp -- --with-opt-dir=/opt/homebrew
 ## Usage
 
 Prepare the quantized model by refering to [the usage section on the llama.cpp README](https://github.com/ggerganov/llama.cpp#usage).
-For example, preparing the quatization model based on [open_llama_7b](https://huggingface.co/openlm-research/open_llama_7b) is as follows:
+For example, you could prepare the quatization model based on [open_llama_7b](https://huggingface.co/openlm-research/open_llama_7b) or more useful in the context of Ruby might be a smaller model such as [tiny_llama_1b](https://huggingface.co/TinyLlama/TinyLlama-1.1B-Chat-v1.0):
 
 ```sh
 $ cd ~/
@@ -42,11 +42,11 @@ $ git clone https://github.com/ggerganov/llama.cpp.git
 $ cd llama.cpp
 $ python3 -m pip install -r requirements.txt
 $ cd models
-$ git clone https://huggingface.co/openlm-research/open_llama_7b
+$ git clone https://huggingface.co/TinyLlama/TinyLlama-1.1B-Chat-v1.0
 $ cd ../
-$ python3 convert.py models/open_llama_7b
+$ python3 convert-hf-to-gguf.py models/TinyLlama-1.1B-Chat-v1.0
 $ make
-$ ./quantize ./models/open_llama_7b/ggml-model-f16.gguf ./models/open_llama_7b/ggml-model-q4_0.bin q4_0
+$ ./llama-quantize ./models/TinyLlama-1.1B-Chat-v1.0/ggml-model-f16.gguf ./models/TinyLlama-1.1B-Chat-v1.0/ggml-model-q4_0.bin q4_0
 ```
 
 An example of Ruby code that generates sentences with the quantization model is as follows:
@@ -55,7 +55,7 @@ An example of Ruby code that generates sentences with the quantization model is 
 require 'llama_cpp'
 
 model_params = LLaMACpp::ModelParams.new
-model = LLaMACpp::Model.new(model_path: '/home/user/llama.cpp/models/open_llama_7b/ggml-model-q4_0.bin', params: model_params)
+model = LLaMACpp::Model.new(model_path: '/home/user/llama.cpp/models/TinyLlama-1.1B-Chat-v1.0/ggml-model-q4_0.bin', params: model_params)
 
 context_params = LLaMACpp::ContextParams.new
 context_params.seed = 42
