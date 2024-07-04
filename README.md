@@ -32,7 +32,10 @@ $ gem install llama_cpp -- --with-opt-dir=/opt/homebrew
 ## Usage
 
 Prepare the quantized model by refering to [the usage section on the llama.cpp README](https://github.com/ggerganov/llama.cpp#usage).
-For example, preparing the quatization model based on [open_llama_7b](https://huggingface.co/openlm-research/open_llama_7b) is as follows:
+For example, you could prepare the quatization model based on
+[open_llama_7b](https://huggingface.co/openlm-research/open_llama_7b)
+or more useful in the context of Ruby might be a smaller model such as
+[tiny_llama_1b](https://huggingface.co/TinyLlama/TinyLlama-1.1B-Chat-v1.0):
 
 ```sh
 $ cd ~/
@@ -44,9 +47,9 @@ $ python3 -m pip install -r requirements.txt
 $ cd models
 $ git clone https://huggingface.co/openlm-research/open_llama_7b
 $ cd ../
-$ python3 convert.py models/open_llama_7b
+$ python3 convert-hf-to-gguf.py models/open_llama_7b
 $ make
-$ ./quantize ./models/open_llama_7b/ggml-model-f16.gguf ./models/open_llama_7b/ggml-model-q4_0.bin q4_0
+$ ./llama-quantize ./models/open_llama_7b/ggml-model-f16.gguf ./models/open_llama_7b/ggml-model-q4_0.bin q4_0
 ```
 
 An example of Ruby code that generates sentences with the quantization model is as follows:
