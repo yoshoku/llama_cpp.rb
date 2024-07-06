@@ -1,3 +1,9 @@
+## [[0.17.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.17.0...v0.17.1)] - 2024-07-06
+
+- Update usage section on README.
+- Change supported llama.cpp version to b3291.
+  - Add `LLAMA_VOCAB_PRE_TYPE_JAIS` constant.
+
 ## [[0.17.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.16.2...v0.17.0)] - 2024-06-29
 
 **Breaking Changes**
@@ -12,7 +18,7 @@ $ brew install llama.cpp
 $ gem install llama_cpp -- --with-opt-dir=/opt/homebrew
 ```
 
-- Change supported llama.cpp version to b3265
+- Change supported llama.cpp version to b3265.
  - Add `LLAMA_VOCAB_TYPE_UGM` and `LLAMA_VOCAB_PRE_TYPE_VIKING` constants.
  - Add `token_pad` method to `Model`.
 
