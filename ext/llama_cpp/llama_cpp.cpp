@@ -2175,6 +2175,7 @@ public:
     rb_define_alloc_func(rb_cLLaMAContext, llama_context_alloc);
     rb_define_attr(rb_cLLaMAContext, "model", 1, 0);
     rb_define_method(rb_cLLaMAContext, "initialize", RUBY_METHOD_FUNC(_llama_context_initialize), -1);
+    rb_define_method(rb_cLLaMAContext, "encode", RUBY_METHOD_FUNC(_llama_context_encode), 1);
     rb_define_method(rb_cLLaMAContext, "decode", RUBY_METHOD_FUNC(_llama_context_decode), 1);
     rb_define_method(rb_cLLaMAContext, "logits", RUBY_METHOD_FUNC(_llama_context_logits), 0);
     rb_define_method(rb_cLLaMAContext, "embeddings", RUBY_METHOD_FUNC(_llama_context_embeddings), 0);
@@ -2266,6 +2267,24 @@ private:
     rb_iv_set(self, "@params", params);
     rb_iv_set(self, "@has_evaluated", Qfalse);
 
+    return Qnil;
+  }
+
+  static VALUE _llama_context_encode(VALUE self, VALUE batch) {
+    LLaMAContextWrapper* ptr = get_llama_context(self);
+    if (ptr->ctx == NULL) {
+      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
+      return Qnil;
+    }
+    if (!rb_obj_is_kind_of(batch, rb_cLLaMABatch)) {
+      rb_raise(rb_eArgError, "batch must be a Batch");
+      return Qnil;
+    }
+    LLaMABatchWrapper* batch_ptr = RbLLaMABatch::get_llama_batch(batch);
+    if (llama_encode(ptr->ctx, batch_ptr->batch) < 0) {
+      rb_raise(rb_eRuntimeError, "Failed to encode");
+      return Qnil;
+    }
     return Qnil;
   }
 

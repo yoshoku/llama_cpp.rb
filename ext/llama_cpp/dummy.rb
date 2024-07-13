@@ -789,6 +789,12 @@ module LLaMACpp
     # @param params [ContextParams] The parameters for context.
     def initialize(model:, params:); end
 
+    # Processes a batch of tokens with the ecoder part of the encoder-decoder model.
+    #
+    # @param batch [Batch] The batch.
+    # @return [NilClass]
+    def encode(batch); end
+
     # Evaluates the tokens.
     #
     # @param batch [Batch] The batch.
