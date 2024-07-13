@@ -569,6 +569,10 @@ module LLaMACpp
     # @param token [Integer] The token id.
     # @return [Boolean]
     def token_is_control?(token); end
+
+    # Returns whether the model contains an encoder.
+    # @return [Boolean]
+    def has_encoder?; end
   end
 
   # Class for model KV override.
