@@ -572,7 +572,7 @@ module LLaMACpp
 
     # Returns whether the model contains an encoder.
     # @return [Boolean]
-    def has_encoder?; end
+    def has_encoder?; end # rubocop:disable Naming/PredicateName
 
     # Returns the token id that must be provided to the decoder to start generating output sequence for encoder-decoder model.
     # @return [Integer]
