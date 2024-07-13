@@ -187,6 +187,7 @@ module LLaMACpp
     def token_is_eog?: (Integer) -> bool
     def token_is_control?: (Integer) -> bool
     def has_encoder?: () -> bool
+    def decoder_start_token: () -> Integer
   end
 
   class Timings

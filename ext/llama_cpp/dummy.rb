@@ -573,6 +573,10 @@ module LLaMACpp
     # Returns whether the model contains an encoder.
     # @return [Boolean]
     def has_encoder?; end
+
+    # Returns the token id that must be provided to the decoder to start generating output sequence for encoder-decoder model.
+    # @return [Integer]
+    def decoder_start_token; end
   end
 
   # Class for model KV override.
