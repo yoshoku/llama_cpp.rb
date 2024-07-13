@@ -978,6 +978,8 @@ public:
     rb_define_method(rb_cLLaMAContextParams, "rope_scaling_type", RUBY_METHOD_FUNC(_llama_context_params_get_rope_scaling_type), 0);
     rb_define_method(rb_cLLaMAContextParams, "pooling_type=", RUBY_METHOD_FUNC(_llama_context_params_set_pooling_type), 1);
     rb_define_method(rb_cLLaMAContextParams, "pooling_type", RUBY_METHOD_FUNC(_llama_context_params_get_pooling_type), 0);
+    rb_define_method(rb_cLLaMAContextParams, "attention_type=", RUBY_METHOD_FUNC(_llama_context_params_set_attention_type), 1);
+    rb_define_method(rb_cLLaMAContextParams, "attention_type", RUBY_METHOD_FUNC(_llama_context_params_get_attention_type), 0);
     rb_define_method(rb_cLLaMAContextParams, "rope_freq_base=", RUBY_METHOD_FUNC(_llama_context_params_set_rope_freq_base), 1);
     rb_define_method(rb_cLLaMAContextParams, "rope_freq_base", RUBY_METHOD_FUNC(_llama_context_params_get_rope_freq_base), 0);
     rb_define_method(rb_cLLaMAContextParams, "rope_freq_scale=", RUBY_METHOD_FUNC(_llama_context_params_set_rope_freq_scale), 1);
@@ -1127,6 +1129,18 @@ private:
   static VALUE _llama_context_params_get_pooling_type(VALUE self) {
     LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
     return INT2NUM(ptr->params.pooling_type);
+  }
+
+  // attention_type
+  static VALUE _llama_context_params_set_attention_type(VALUE self, VALUE scaling_type) {
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    ptr->params.attention_type = static_cast<enum llama_attention_type>(NUM2INT(scaling_type));
+    return INT2NUM(ptr->params.attention_type);
+  }
+
+  static VALUE _llama_context_params_get_attention_type(VALUE self) {
+    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
+    return INT2NUM(ptr->params.attention_type);
   }
 
   // rope_freq_base

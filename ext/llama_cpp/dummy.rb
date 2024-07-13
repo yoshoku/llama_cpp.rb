@@ -1190,6 +1190,14 @@ module LLaMACpp
     # @return [Integer]
     def pooling_type; end
 
+    # Sets the attention type.
+    # @param attention_type [Integer]
+    def attention_type=(attention_type); end
+
+    # Returns the attention type.
+    # @return [Integer]
+    def attention_type; end
+
     # Sets the RoPE base frequency.
     # @param rope_freq_base [Float]
     def rope_freq_base=(rope_freq_base); end
