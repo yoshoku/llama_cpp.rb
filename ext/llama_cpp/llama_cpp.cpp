@@ -1554,6 +1554,7 @@ public:
     rb_define_method(rb_cLLaMAModel, "token_is_control?", RUBY_METHOD_FUNC(_llama_model_token_is_control), 1);
     rb_define_method(rb_cLLaMAModel, "has_encoder?", RUBY_METHOD_FUNC(_llama_model_has_encoder), 0);
     rb_define_method(rb_cLLaMAModel, "decoder_start_token", RUBY_METHOD_FUNC(_llama_model_decoder_start_token), 0);
+    rb_define_method(rb_cLLaMAModel, "detokenize", RUBY_METHOD_FUNC(_llama_model_detokenize), -1);
   }
 
 private:
@@ -1905,6 +1906,48 @@ private:
   static VALUE _llama_model_decoder_start_token(VALUE self) {
     LLaMAModelWrapper* ptr = get_llama_model(self);
     return INT2NUM(llama_model_decoder_start_token(ptr->model));
+  }
+
+  static VALUE _llama_model_detokenize(int argc, VALUE* argv, VALUE self) {
+    VALUE kw_args = Qnil;
+    ID kw_table[2] = { rb_intern("remove_special"), rb_intern("unparse_special") };
+    VALUE kw_values[2] = { Qundef, Qundef };
+    VALUE tokens_ = Qnil;
+    rb_scan_args(argc, argv, "1:", &tokens_, &kw_args);
+    rb_get_kwargs(kw_args, kw_table, 0, 2, kw_values);
+
+    if (!RB_TYPE_P(tokens_, T_ARRAY)) {
+      rb_raise(rb_eArgError, "tokens must be an array");
+      return Qnil;
+    }
+
+    const int32_t n_tokens = RARRAY_LEN(tokens_);
+    llama_token* tokens = ALLOCA_N(llama_token, n_tokens);
+    for (int32_t i = 0; i < n_tokens; i++) {
+      tokens[i] = NUM2INT(rb_ary_entry(tokens_, i));
+    }
+
+    std::string text;
+    text.resize(std::max(text.capacity(), static_cast<unsigned long>(n_tokens)));
+    const int32_t text_len_max = text.size();
+
+    bool remove_special = kw_values[0] != Qundef ? RTEST(kw_values[0]) : false;
+    bool unparse_special = kw_values[1] != Qundef ? RTEST(kw_values[1]) : false;
+
+    LLaMAModelWrapper* ptr = get_llama_model(self);
+    std::string result;
+    int32_t n_chars = llama_detokenize(ptr->model, tokens, n_tokens, &text[0], text_len_max, remove_special, unparse_special);
+    if (n_chars < 0) {
+      text.resize(-n_chars);
+      n_chars = llama_detokenize(ptr->model, tokens, n_tokens, &text[0], text_len_max, remove_special, unparse_special);
+      if (n_chars <= text.size()) {
+        rb_raise(rb_eRuntimeError, "Failed to detokenize");
+        return Qnil;
+      }
+    }
+
+    text.resize(n_chars);
+    return rb_utf8_str_new_cstr(text.c_str());
   }
 };
 

@@ -577,6 +577,14 @@ module LLaMACpp
     # Returns the token id that must be provided to the decoder to start generating output sequence for encoder-decoder model.
     # @return [Integer]
     def decoder_start_token; end
+
+    # Returns the text that is converted from the given tokens.
+    #
+    # @param tokens [Array<Integer>] The tokens.
+    # @param remove_special [Boolean] The flag whether to allow removing BOS and EOS tokens.
+    # @param unparse_special [Boolean] The flag whether to render special tokens in the output.
+    # @return [String]
+    def detokenize(tokens, remove_special: false, unparse_special: false); end
   end
 
   # Class for model KV override.

@@ -188,6 +188,7 @@ module LLaMACpp
     def token_is_control?: (Integer) -> bool
     def has_encoder?: () -> bool
     def decoder_start_token: () -> Integer
+    def detokenize: (Array[Integer], ?remove_special: bool, ?unparse_special: bool) -> String
   end
 
   class Timings
