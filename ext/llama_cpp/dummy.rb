@@ -466,8 +466,10 @@ module LLaMACpp
 
     # Converts token to Ruby String.
     # @param token [Integer] The token to be converted.
+    # @param lstrip [Integer] The number allows the user to skip up to 'lstrip' leading spaces before copying.
+    # @param special [Boolean] The flag whether to allow rendering special tokens in the output.
     # @return [String]
-    def token_to_piece(token); end
+    def token_to_piece(token, lstrip: 0, special: false); end
 
     # Returns the logits.
     #

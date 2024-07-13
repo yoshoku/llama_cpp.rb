@@ -1530,7 +1530,7 @@ public:
     rb_define_method(rb_cLLaMAModel, "n_embd", RUBY_METHOD_FUNC(_llama_model_get_model_n_embd), 0);
     rb_define_method(rb_cLLaMAModel, "n_layer", RUBY_METHOD_FUNC(_llama_model_get_model_n_layer), 0);
     rb_define_method(rb_cLLaMAModel, "rope_freq_scale_train", RUBY_METHOD_FUNC(_llama_model_rope_freq_scale_train), 0);
-    rb_define_method(rb_cLLaMAModel, "token_to_piece", RUBY_METHOD_FUNC(_llama_model_token_to_piece), 1);
+    rb_define_method(rb_cLLaMAModel, "token_to_piece", RUBY_METHOD_FUNC(_llama_model_token_to_piece), -1);
     rb_define_method(rb_cLLaMAModel, "tokenize", RUBY_METHOD_FUNC(_llama_model_tokenize), -1);
     rb_define_method(rb_cLLaMAModel, "desc", RUBY_METHOD_FUNC(_llama_model_get_model_desc), 0);
     rb_define_method(rb_cLLaMAModel, "size", RUBY_METHOD_FUNC(_llama_model_get_model_size), 0);
@@ -1691,18 +1691,33 @@ private:
     return DBL2NUM(llama_rope_freq_scale_train(ptr->model));
   }
 
-  static VALUE _llama_model_token_to_piece(VALUE self, VALUE token_) {
+  static VALUE _llama_model_token_to_piece(int argc, VALUE* argv, VALUE self) {
+    VALUE kw_args = Qnil;
+    ID kw_table[2] = { rb_intern("lstrip"), rb_intern("special") };
+    VALUE kw_values[2] = { Qundef, Qundef };
+    VALUE token_ = Qnil;
+    rb_scan_args(argc, argv, "1:", &token_, &kw_args);
+    rb_get_kwargs(kw_args, kw_table, 0, 2, kw_values);
+
     if (!RB_INTEGER_TYPE_P(token_)) {
       rb_raise(rb_eArgError, "token must be an integer");
       return Qnil;
     }
+    if (kw_values[0] != Qundef && !RB_INTEGER_TYPE_P(kw_values[0])) {
+      rb_raise(rb_eArgError, "lstrip must be an integer");
+      return Qnil;
+    }
+
     const llama_token token = NUM2INT(token_);
+    const int32_t lstrip = kw_values[0] != Qundef ? NUM2INT(kw_values[0]) : 0;
+    const bool special = kw_values[1] != Qundef ? RTEST(kw_values[1]) : false;
+
     LLaMAModelWrapper* ptr = get_llama_model(self);
     std::vector<char> result(8, 0);
-    const int n_tokens = llama_token_to_piece(ptr->model, token, result.data(), result.size(), false);
+    const int n_tokens = llama_token_to_piece(ptr->model, token, result.data(), result.size(), lstrip, special);
     if (n_tokens < 0) {
       result.resize(-n_tokens);
-      const int check = llama_token_to_piece(ptr->model, token, result.data(), result.size(), false);
+      const int check = llama_token_to_piece(ptr->model, token, result.data(), result.size(), lstrip, special);
       if (check != -n_tokens) {
         rb_raise(rb_eRuntimeError, "failed to convert");
         return Qnil;
@@ -2788,7 +2803,7 @@ private:
     ID kw_table[3] = { rb_intern("logits"), rb_intern("logits_guidance"), rb_intern("scale") };
     VALUE kw_values[3] = { Qundef, Qundef, Qundef };
     rb_scan_args(argc, argv, ":", &kw_args);
-    rb_get_kwargs(kw_args, kw_table, 0, 3, kw_values);
+    rb_get_kwargs(kw_args, kw_table, 3, 0, kw_values);
 
     if (!RB_TYPE_P(kw_values[0], T_ARRAY)) {
       rb_raise(rb_eArgError, "logits must be an Array");
