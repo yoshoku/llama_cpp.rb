@@ -1,3 +1,13 @@
+## [[0.17.2](https://github.com/yoshoku/llama_cpp.rb/compare/v0.17.1...v0.17.2)] - 2024-07-14
+
+- Change supported llama.cpp version to b3358.
+  - Add vocabulary pre-tokenization type constants.
+  - Add attention type constants.
+  - Add `attention_type` accessor to `ContextParams`.
+  - Add `lstrip` and `special` keyword arguments to `token_to_piece` method in `Model`.
+  - Add `has_encoder?`, `decoder_start_token`, and `detokenize` methods to `Model`.
+  - Add `encode` method to `Context`.
+
 ## [[0.17.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.17.0...v0.17.1)] - 2024-07-06
 
 - Update usage section on README.
