@@ -1,3 +1,11 @@
+## [[0.17.3](https://github.com/yoshoku/llama_cpp.rb/compare/v0.17.2...v0.17.3)] - 2024-07-21
+
+- Change supported llama.cpp version to b3405.
+  - Remove `LLAMA_FTYPE_MOSTLY_Q4_1_SOME_F16` constant.
+  - Add model file type constans: `LLAMA_FTYPE_MOSTLY_Q4_0_4_4`, `LLAMA_FTYPE_MOSTLY_Q4_0_4_8`, and `LLAMA_FTYPE_MOSTLY_Q4_0_8_8`.
+
+Implementation bindings for llama_lora_adapter_init, llama_lora_adapter_set, llama_lora_adapter_remove, and llama_lora_adapter_free has been skipped.
+
 ## [[0.17.2](https://github.com/yoshoku/llama_cpp.rb/compare/v0.17.1...v0.17.2)] - 2024-07-14
 
 - Change supported llama.cpp version to b3358.
