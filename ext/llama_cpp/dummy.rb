@@ -226,6 +226,18 @@ module LLaMACpp # rubocop:disable Metrics/ModuleLength
   # LLaMA model file type.
   LLAMA_FTYPE_MOSTLY_BF16 = 32
 
+  # LLaMA model file type.
+  LLAMA_FTYPE_MOSTLY_Q4_0_4_4 = 33
+
+  # LLaMA model file type.
+  LLAMA_FTYPE_MOSTLY_Q4_0_4_8 = 34
+
+  # LLaMA model file type.
+  LLAMA_FTYPE_MOSTLY_Q4_0_8_8 = 35
+
+  # LLaMA model file type (not specified in the model file).
+  LLAMA_FTYPE_GUESSED = 1024
+
   # LLaMA KV override type.
   LLAMA_KV_OVERRIDE_TYPE_INT = 0
 
