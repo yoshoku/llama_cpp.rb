@@ -20,7 +20,7 @@ module LLaMACpp # rubocop:disable Metrics/ModuleLength
   LLAMA_STATE_SEQ_MAGIC = '0x67677371u'
 
   # LLaMA session version.
-  LLAMA_SESSION_VERSION = '6'
+  LLAMA_SESSION_VERSION = '7'
 
   # LLaMA state seq version.
   LLAMA_STATE_SEQ_VERSION = '1'
