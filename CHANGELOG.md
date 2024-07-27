@@ -1,3 +1,9 @@
+## [[0.17.4](https://github.com/yoshoku/llama_cpp.rb/compare/v0.17.3...v0.17.4)] - 2024-07-27
+
+- Change supported llama.cpp version to b3436.
+  - Add `LLAMA_VOCAB_PRE_TYPE_TEKKEN` constant.
+  - Change `LLAMA_SESSION_VERSION` value from 6 to 7.
+
 ## [[0.17.3](https://github.com/yoshoku/llama_cpp.rb/compare/v0.17.2...v0.17.3)] - 2024-07-21
 
 - Change supported llama.cpp version to b3405.
