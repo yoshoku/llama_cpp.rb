@@ -3378,7 +3378,7 @@ private:
     }
     LLaMAGrammarWrapper* grm_ptr = RbLLaMAGrammar::get_llama_grammar(kw_values[0]);
 
-    llama_sample_grammar(ctx_ptr->ctx, &(cnd_ptr->array), grm_ptr->grammar);
+    llama_grammar_sample(grm_ptr->grammar, ctx_ptr->ctx, &(cnd_ptr->array));
 
     return Qnil;
   }
@@ -3407,7 +3407,7 @@ private:
     LLaMAGrammarWrapper* grm_ptr = RbLLaMAGrammar::get_llama_grammar(kw_values[0]);
     llama_token token = NUM2INT(kw_values[1]);
 
-    llama_grammar_accept_token(ctx_ptr->ctx, grm_ptr->grammar, token);
+    llama_grammar_accept_token(grm_ptr->grammar, ctx_ptr->ctx, token);
 
     return Qnil;
   }
