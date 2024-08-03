@@ -1,3 +1,11 @@
+## [[0.17.5](https://github.com/yoshoku/llama_cpp.rb/compare/v0.17.4...v0.17.5)] - 2024-08-03
+
+- Change supported llama.cpp version to b3482.
+  - Add `LLAMA_VOCAB_PRE_TYPE_SMOLLM` and `LLAMA_VOCAB_PRE_TYPE_CODESHELL` constants.
+  - Change to call llama_grammar_sample and llama_grammar_accept_token functions instead of deprecated functions.
+
+Implementation binding for llama_lora_adapter_clear has been skipped.
+
 ## [[0.17.4](https://github.com/yoshoku/llama_cpp.rb/compare/v0.17.3...v0.17.4)] - 2024-07-27
 
 - Change supported llama.cpp version to b3436.
