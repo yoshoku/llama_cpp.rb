@@ -20,10 +20,10 @@ module LLaMACpp # rubocop:disable Metrics/ModuleLength
   LLAMA_STATE_SEQ_MAGIC = '0x67677371u'
 
   # LLaMA session version.
-  LLAMA_SESSION_VERSION = '7'
+  LLAMA_SESSION_VERSION = '8'
 
   # LLaMA state seq version.
-  LLAMA_STATE_SEQ_VERSION = '1'
+  LLAMA_STATE_SEQ_VERSION = '2'
 
   # LLaMA default random seed.
   LLAMA_DEFALUT_SEED = '0xFFFFFFFF'
