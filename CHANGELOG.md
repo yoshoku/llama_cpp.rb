@@ -1,3 +1,9 @@
+## [[0.17.6](https://github.com/yoshoku/llama_cpp.rb/compare/v0.17.5...v0.17.6)] - 2024-08-09
+
+- Change supported llama.cpp version to b3524.
+  - Change `LLAMA_SESSION_VERSION` value from 7 to 8.
+  - Change `LLAMA_STATE_SEQ_VERSION` value from 1 to 2.
+
 ## [[0.17.5](https://github.com/yoshoku/llama_cpp.rb/compare/v0.17.4...v0.17.5)] - 2024-08-03
 
 - Change supported llama.cpp version to b3482.
