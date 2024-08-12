@@ -1553,6 +1553,7 @@ public:
     rb_define_method(rb_cLLaMAModel, "token_is_eog?", RUBY_METHOD_FUNC(_llama_model_token_is_eog), 1);
     rb_define_method(rb_cLLaMAModel, "token_is_control?", RUBY_METHOD_FUNC(_llama_model_token_is_control), 1);
     rb_define_method(rb_cLLaMAModel, "has_encoder?", RUBY_METHOD_FUNC(_llama_model_has_encoder), 0);
+    rb_define_method(rb_cLLaMAModel, "has_decoder?", RUBY_METHOD_FUNC(_llama_model_has_decoder), 0);
     rb_define_method(rb_cLLaMAModel, "decoder_start_token", RUBY_METHOD_FUNC(_llama_model_decoder_start_token), 0);
     rb_define_method(rb_cLLaMAModel, "detokenize", RUBY_METHOD_FUNC(_llama_model_detokenize), -1);
   }
@@ -1901,6 +1902,11 @@ private:
   static VALUE _llama_model_has_encoder(VALUE self) {
     LLaMAModelWrapper* ptr = get_llama_model(self);
     return llama_model_has_encoder(ptr->model) ? Qtrue : Qfalse;
+  }
+
+  static VALUE _llama_model_has_decoder(VALUE self) {
+    LLaMAModelWrapper* ptr = get_llama_model(self);
+    return llama_model_has_decoder(ptr->model) ? Qtrue : Qfalse;
   }
 
   static VALUE _llama_model_decoder_start_token(VALUE self) {
