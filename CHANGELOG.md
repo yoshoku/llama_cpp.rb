@@ -1,3 +1,8 @@
+## [[0.17.7](https://github.com/yoshoku/llama_cpp.rb/compare/v0.17.5...v0.17.6)] - 2024-08-17
+
+- Change supported llama.cpp version to b3590.
+  - Add `LLAMA_VOCAB_PRE_TYPE_BLOOM` and `LLAMA_VOCAB_PRE_TYPE_GPT3_FINNISH` constants
+
 ## [[0.17.6](https://github.com/yoshoku/llama_cpp.rb/compare/v0.17.5...v0.17.6)] - 2024-08-09
 
 - Change supported llama.cpp version to b3524.
