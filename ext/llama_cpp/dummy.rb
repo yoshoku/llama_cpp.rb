@@ -609,6 +609,10 @@ module LLaMACpp
     # @return [Integer]
     def decoder_start_token; end
 
+    # Returns whether the model is recurrent (like Mamba, RWKV, etc.).
+    # @return [Boolean]
+    def is_recurrent?; end # rubocop:disable Naming/PredicateName
+
     # Returns the text that is converted from the given tokens.
     #
     # @param tokens [Array<Integer>] The tokens.

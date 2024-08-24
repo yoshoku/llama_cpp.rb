@@ -198,6 +198,7 @@ module LLaMACpp
     def has_encoder?: () -> bool
     def has_decoder?: () -> bool
     def decoder_start_token: () -> Integer
+    def is_recurrent?: () -> bool
     def detokenize: (Array[Integer], ?remove_special: bool, ?unparse_special: bool) -> String
   end
 

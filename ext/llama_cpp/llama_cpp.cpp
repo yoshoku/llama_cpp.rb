@@ -1555,6 +1555,7 @@ public:
     rb_define_method(rb_cLLaMAModel, "has_encoder?", RUBY_METHOD_FUNC(_llama_model_has_encoder), 0);
     rb_define_method(rb_cLLaMAModel, "has_decoder?", RUBY_METHOD_FUNC(_llama_model_has_decoder), 0);
     rb_define_method(rb_cLLaMAModel, "decoder_start_token", RUBY_METHOD_FUNC(_llama_model_decoder_start_token), 0);
+    rb_define_method(rb_cLLaMAModel, "is_recurrent?", RUBY_METHOD_FUNC(_llama_model_is_recurrent), 0);
     rb_define_method(rb_cLLaMAModel, "detokenize", RUBY_METHOD_FUNC(_llama_model_detokenize), -1);
   }
 
@@ -1912,6 +1913,11 @@ private:
   static VALUE _llama_model_decoder_start_token(VALUE self) {
     LLaMAModelWrapper* ptr = get_llama_model(self);
     return INT2NUM(llama_model_decoder_start_token(ptr->model));
+  }
+
+  static VALUE _llama_model_is_recurrent(VALUE self) {
+    LLaMAModelWrapper* ptr = get_llama_model(self);
+    return llama_model_is_recurrent(ptr->model) ? Qtrue : Qfalse;
   }
 
   static VALUE _llama_model_detokenize(int argc, VALUE* argv, VALUE self) {
