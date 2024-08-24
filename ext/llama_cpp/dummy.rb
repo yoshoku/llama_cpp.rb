@@ -118,6 +118,9 @@ module LLaMACpp # rubocop:disable Metrics/ModuleLength
   # LLaMA vocabulary pre-tokenization type.
   LLAMA_VOCAB_PRE_TYPE_GPT3_FINNISH = 24
 
+  # LLaMA vocabulary pre-tokenization type.
+  LLAMA_VOCAB_PRE_TYPE_EXAONE = 25
+
   # LLaMA token attribute type.
   LLAMA_TOKEN_ATTR_UNDEFINED = 0
 
