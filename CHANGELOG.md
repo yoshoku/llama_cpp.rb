@@ -1,3 +1,8 @@
+## [[0.17.9](https://github.com/yoshoku/llama_cpp.rb/compare/v0.17.8...v0.17.9)] - 2024-08-31
+
+- Change supported llama.cpp version to b3639.
+  - There are no changes in the API.
+
 ## [[0.17.8](https://github.com/yoshoku/llama_cpp.rb/compare/v0.17.7...v0.17.8)] - 2024-08-25
 
 - Change supported llama.cpp version to b3614.
