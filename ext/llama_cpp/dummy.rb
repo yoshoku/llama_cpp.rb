@@ -43,6 +43,9 @@ module LLaMACpp # rubocop:disable Metrics/ModuleLength
   # LLaMA vocabulary type.
   LLAMA_VOCAB_TYPE_UGM = 4
 
+  # LLaMA vocabulary type.
+  LLAMA_VOCAB_TYPE_RWKV = 5
+
   # LLaMA vocabulary pre-tokenization type.
   LLAMA_VOCAB_PRE_TYPE_DEFAULT = 0
 
