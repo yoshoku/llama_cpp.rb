@@ -2512,7 +2512,7 @@ private:
       rb_raise(rb_eArgError, "LLaMA context is not initialized");
       return Qnil;
     }
-    llama_set_n_threads(ptr->ctx, NUM2UINT(n_threads), NUM2UINT(n_threads_batch));
+    llama_set_n_threads(ptr->ctx, NUM2INT(n_threads), NUM2INT(n_threads_batch));
     return Qnil;
   }
 
@@ -2558,7 +2558,7 @@ private:
       rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
       return Qnil;
     }
-    return UINT2NUM(llama_n_threads(ptr->ctx));
+    return INT2NUM(llama_n_threads(ptr->ctx));
   }
 
   static VALUE _llama_context_n_threads_batch(VALUE self) {
@@ -2567,7 +2567,7 @@ private:
       rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
       return Qnil;
     }
-    return UINT2NUM(llama_n_threads_batch(ptr->ctx));
+    return INT2NUM(llama_n_threads_batch(ptr->ctx));
   }
 
   static VALUE _llama_context_get_timings(VALUE self) {
