@@ -1,3 +1,12 @@
+## [[0.17.10](https://github.com/yoshoku/llama_cpp.rb/compare/v0.17.9...v0.17.10)] - 2024-09-07
+
+- Change supported llama.cpp version to b3676.
+  - Add `LLAMA_VOCAB_TYPE_RWKV` constant.
+  - Add `LLAMA_FTYPE_MOSTLY_TQ1_0` and `LLAMA_FTYPE_MOSTLY_TQ2_0` constants.
+  - Change type of n_threads and n_threads_batch from uint32_t to int32 in native extension codes.
+
+Implementation bindings for llama_attach_threadpool and llama_detach_threadpool have been skipped.
+
 ## [[0.17.9](https://github.com/yoshoku/llama_cpp.rb/compare/v0.17.8...v0.17.9)] - 2024-08-31
 
 - Change supported llama.cpp version to b3639.
