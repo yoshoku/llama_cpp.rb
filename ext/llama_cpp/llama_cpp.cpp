@@ -3691,6 +3691,8 @@ extern "C" void Init_llama_cpp(void) {
   rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_Q4_0_4_4", INT2NUM(LLAMA_FTYPE_MOSTLY_Q4_0_4_4));
   rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_Q4_0_4_8", INT2NUM(LLAMA_FTYPE_MOSTLY_Q4_0_4_8));
   rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_Q4_0_8_8", INT2NUM(LLAMA_FTYPE_MOSTLY_Q4_0_8_8));
+  rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_TQ1_0", INT2NUM(LLAMA_FTYPE_MOSTLY_TQ1_0));
+  rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_TQ2_0", INT2NUM(LLAMA_FTYPE_MOSTLY_TQ2_0));
 
   rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_GUESSED", INT2NUM(LLAMA_FTYPE_GUESSED));
 
