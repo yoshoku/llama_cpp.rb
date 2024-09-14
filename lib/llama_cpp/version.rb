@@ -6,5 +6,5 @@ module LLaMACpp
   VERSION = '0.17.10'
 
   # The supported version of llama.cpp.
-  LLAMA_CPP_VERSION = 'b3676'
+  LLAMA_CPP_VERSION = 'b3751'
 end
