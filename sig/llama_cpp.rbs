@@ -205,20 +205,6 @@ module LLaMACpp
     def detokenize: (Array[Integer], ?remove_special: bool, ?unparse_special: bool) -> String
   end
 
-  class Timings
-    public
-
-    def t_start_ms: () -> Float
-    def t_end_ms: () -> Float
-    def t_load_ms: () -> Float
-    def t_sample_ms: () -> Float
-    def t_p_eval_ms: () -> Float
-    def t_eval_ms: () -> Float
-    def n_sample: () -> Integer
-    def n_p_eval: () -> Integer
-    def n_eval: () -> Integer
-  end
-
   class ModelKVOverride
     public
 
@@ -295,9 +281,6 @@ module LLaMACpp
     def n_seq_max: () -> Integer
     def n_threads: () -> Integer
     def n_threads_batch: () -> Integer
-    def timings: () -> ::LLaMACpp::Timings
-    def print_timings: () -> void
-    def reset_timings: () -> void
     def kv_cache_token_count: () -> Integer
     def kv_cache_clear: () -> void
     def kv_cache_seq_rm: (Integer, Integer,Integer) -> void

@@ -575,111 +575,6 @@ const rb_data_type_t RbLLaMATokenDataArray::llama_token_data_array_type = {
   RUBY_TYPED_FREE_IMMEDIATELY
 };
 
-class LLaMATimingsWrapper {
-public:
-  struct llama_timings timings;
-
-  LLaMATimingsWrapper() {}
-
-  ~LLaMATimingsWrapper() {}
-};
-
-class RbLLaMATimings {
-public:
-  static VALUE llama_timings_alloc(VALUE self) {
-    LLaMATimingsWrapper* ptr = (LLaMATimingsWrapper*)ruby_xmalloc(sizeof(LLaMATimingsWrapper));
-    new (ptr) LLaMATimingsWrapper();
-    return TypedData_Wrap_Struct(self, &llama_timings_type, ptr);
-  }
-
-  static void llama_timings_free(void* ptr) {
-    ((LLaMATimingsWrapper*)ptr)->~LLaMATimingsWrapper();
-    ruby_xfree(ptr);
-  }
-
-  static size_t llama_timings_size(const void* ptr) {
-    return sizeof(*((LLaMATimingsWrapper*)ptr));
-  }
-
-  static LLaMATimingsWrapper* get_llama_timings(VALUE self) {
-    LLaMATimingsWrapper* ptr;
-    TypedData_Get_Struct(self, LLaMATimingsWrapper, &llama_timings_type, ptr);
-    return ptr;
-  }
-
-  static void define_class(VALUE outer) {
-    rb_cLLaMATimings = rb_define_class_under(outer, "Timings", rb_cObject);
-    rb_define_alloc_func(rb_cLLaMATimings, llama_timings_alloc);
-    rb_define_method(rb_cLLaMATimings, "t_start_ms", RUBY_METHOD_FUNC(_llama_timings_get_t_start_ms), 0);
-    rb_define_method(rb_cLLaMATimings, "t_end_ms", RUBY_METHOD_FUNC(_llama_timings_get_t_end_ms), 0);
-    rb_define_method(rb_cLLaMATimings, "t_load_ms", RUBY_METHOD_FUNC(_llama_timings_get_t_load_ms), 0);
-    rb_define_method(rb_cLLaMATimings, "t_sample_ms", RUBY_METHOD_FUNC(_llama_timings_get_t_sample_ms), 0);
-    rb_define_method(rb_cLLaMATimings, "t_p_eval_ms", RUBY_METHOD_FUNC(_llama_timings_get_t_p_eval_ms), 0);
-    rb_define_method(rb_cLLaMATimings, "t_eval_ms", RUBY_METHOD_FUNC(_llama_timings_get_t_eval_ms), 0);
-    rb_define_method(rb_cLLaMATimings, "n_sample", RUBY_METHOD_FUNC(_llama_timings_get_n_sample), 0);
-    rb_define_method(rb_cLLaMATimings, "n_p_eval", RUBY_METHOD_FUNC(_llama_timings_get_n_p_eval), 0);
-    rb_define_method(rb_cLLaMATimings, "n_eval", RUBY_METHOD_FUNC(_llama_timings_get_n_eval), 0);
-  }
-
-private:
-  static const rb_data_type_t llama_timings_type;
-
-  static VALUE _llama_timings_get_t_start_ms(VALUE self) {
-    LLaMATimingsWrapper* ptr = get_llama_timings(self);
-    return DBL2NUM(ptr->timings.t_start_ms);
-  }
-
-  static VALUE _llama_timings_get_t_end_ms(VALUE self) {
-    LLaMATimingsWrapper* ptr = get_llama_timings(self);
-    return DBL2NUM(ptr->timings.t_end_ms);
-  }
-
-  static VALUE _llama_timings_get_t_load_ms(VALUE self) {
-    LLaMATimingsWrapper* ptr = get_llama_timings(self);
-    return DBL2NUM(ptr->timings.t_load_ms);
-  }
-
-  static VALUE _llama_timings_get_t_sample_ms(VALUE self) {
-    LLaMATimingsWrapper* ptr = get_llama_timings(self);
-    return DBL2NUM(ptr->timings.t_sample_ms);
-  }
-
-  static VALUE _llama_timings_get_t_p_eval_ms(VALUE self) {
-    LLaMATimingsWrapper* ptr = get_llama_timings(self);
-    return DBL2NUM(ptr->timings.t_p_eval_ms);
-  }
-
-  static VALUE _llama_timings_get_t_eval_ms(VALUE self) {
-    LLaMATimingsWrapper* ptr = get_llama_timings(self);
-    return DBL2NUM(ptr->timings.t_eval_ms);
-  }
-
-  static VALUE _llama_timings_get_n_sample(VALUE self) {
-    LLaMATimingsWrapper* ptr = get_llama_timings(self);
-    return INT2NUM(ptr->timings.n_sample);
-  }
-
-  static VALUE _llama_timings_get_n_p_eval(VALUE self) {
-    LLaMATimingsWrapper* ptr = get_llama_timings(self);
-    return INT2NUM(ptr->timings.n_p_eval);
-  }
-
-  static VALUE _llama_timings_get_n_eval(VALUE self) {
-    LLaMATimingsWrapper* ptr = get_llama_timings(self);
-    return INT2NUM(ptr->timings.n_eval);
-  }
-};
-
-const rb_data_type_t RbLLaMATimings::llama_timings_type = {
-  "RbLLaMATimings",
-  { NULL,
-    RbLLaMATimings::llama_timings_free,
-    RbLLaMATimings::llama_timings_size },
-  NULL,
-  NULL,
-  RUBY_TYPED_FREE_IMMEDIATELY
-};
-
 class RbLLaMAModelKVOverride {
 public:
   static VALUE llama_model_kv_override_alloc(VALUE self) {
@@ -2244,9 +2139,6 @@ public:
     rb_define_method(rb_cLLaMAContext, "n_seq_max", RUBY_METHOD_FUNC(_llama_context_n_seq_max), 0);
     rb_define_method(rb_cLLaMAContext, "n_threads", RUBY_METHOD_FUNC(_llama_context_n_threads), 0);
     rb_define_method(rb_cLLaMAContext, "n_threads_batch", RUBY_METHOD_FUNC(_llama_context_n_threads_batch), 0);
-    rb_define_method(rb_cLLaMAContext, "timings", RUBY_METHOD_FUNC(_llama_context_get_timings), 0);
-    rb_define_method(rb_cLLaMAContext, "print_timings", RUBY_METHOD_FUNC(_llama_context_print_timings), 0);
-    rb_define_method(rb_cLLaMAContext, "reset_timings", RUBY_METHOD_FUNC(_llama_context_reset_timings), 0);
     rb_define_method(rb_cLLaMAContext, "kv_cache_token_count", RUBY_METHOD_FUNC(_llama_context_kv_cache_token_count), 0);
     rb_define_method(rb_cLLaMAContext, "kv_cache_clear", RUBY_METHOD_FUNC(_llama_context_kv_cache_clear), 0);
     rb_define_method(rb_cLLaMAContext, "kv_cache_seq_rm", RUBY_METHOD_FUNC(_llama_context_kv_cache_seq_rm), 3);
@@ -2568,38 +2460,6 @@ private:
       return Qnil;
     }
     return INT2NUM(llama_n_threads_batch(ptr->ctx));
-  }
-
-  static VALUE _llama_context_get_timings(VALUE self) {
-    LLaMAContextWrapper* ptr = get_llama_context(self);
-    if (ptr->ctx == NULL) {
-      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
-      return Qnil;
-    }
-    VALUE tm_obj = rb_funcall(rb_cLLaMATimings, rb_intern("new"), 0);
-    LLaMATimingsWrapper* tm_ptr = RbLLaMATimings::get_llama_timings(tm_obj);
-    tm_ptr->timings = llama_get_timings(ptr->ctx);
-    return tm_obj;
-  }
-
-  static VALUE _llama_context_print_timings(VALUE self) {
-    LLaMAContextWrapper* ptr = get_llama_context(self);
-    if (ptr->ctx == NULL) {
-      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
-      return Qnil;
-    }
-    llama_print_timings(ptr->ctx);
-    return Qnil;
-  }
-
-  static VALUE _llama_context_reset_timings(VALUE self) {
-    LLaMAContextWrapper* ptr = get_llama_context(self);
-    if (ptr->ctx == NULL) {
-      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
-      return Qnil;
-    }
-    llama_reset_timings(ptr->ctx);
-    return Qnil;
   }
 
   static VALUE _llama_context_kv_cache_token_count(VALUE self) {

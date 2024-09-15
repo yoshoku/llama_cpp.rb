@@ -918,21 +918,6 @@ module LLaMACpp
     # @return [Integer]
     def n_threads_batch; end
 
-    # Returns the timing information
-    #
-    # @return [Timings]
-    def timings; end
-
-    # Prints timings.
-    #
-    # @return [NilClass]
-    def print_timings; end
-
-    # Resets timings.
-    #
-    # @return [NilClass]
-    def reset_timings; end
-
     # Returns the number of tokens in the kv cache.
     #
     # @return [Integer]
@@ -1153,45 +1138,6 @@ module LLaMACpp
     #
     # @return [Integer]
     def pooling_type(); end
-  end
-
-  # Class for timings
-  class Timings
-    # Returns the time to start.
-    # @return [Float]
-    def t_start_ms; end
-
-    # Returns the time to end.
-    # @return [Float]
-    def t_end_ms; end
-
-    # Returns the time to load model.
-    # @return [Float]
-    def t_load_ms; end
-
-    # Returns the sampling time.
-    # @return [Float]
-    def t_sample_ms; end
-
-    # Returns the time to evaluate prompt.
-    # @return [Float]
-    def t_p_eval_ms; end
-
-    # Returns the time to evaluate.
-    # @return [Float]
-    def t_eval_ms; end
-
-    # Returns the number of samples.
-    # @return [Integer]
-    def n_sample; end
-
-    # Returns the number of prompt evaluations.
-    # @return [Integer]
-    def n_p_eval; end
-
-    # Returns the number of evaluations.
-    # @return [Integer]
-    def n_eval; end
   end
 
   # Class for parameters of context.
