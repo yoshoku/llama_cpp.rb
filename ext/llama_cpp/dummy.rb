@@ -1142,14 +1142,6 @@ module LLaMACpp
 
   # Class for parameters of context.
   class ContextParams
-    # Sets the random seed.
-    # @param seed [Integer]
-    def seed=(seed); end
-
-    # Return the random seed.
-    # @return [Integer]
-    def seed; end
-
     # Sets the number of text context
     # @param n_ctx [Integer]
     def n_ctx=(n_ctx); end

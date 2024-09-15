@@ -319,8 +319,6 @@ module LLaMACpp
   class ContextParams
     public
 
-    def seed: () -> Integer
-    def seed=: (Integer) -> Integer
     def n_ctx: () -> Integer
     def n_ctx=: (Integer) -> Integer
     def n_batch: () -> Integer

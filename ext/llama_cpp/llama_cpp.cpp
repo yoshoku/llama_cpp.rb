@@ -855,8 +855,6 @@ public:
     rb_cLLaMAContextParams = rb_define_class_under(outer, "ContextParams", rb_cObject);
     rb_define_alloc_func(rb_cLLaMAContextParams, llama_context_params_alloc);
     // rb_define_method(rb_cLLaMAContextParams, "initialize", RUBY_METHOD_FUNC(_llama_context_params_init), 0);
-    rb_define_method(rb_cLLaMAContextParams, "seed=", RUBY_METHOD_FUNC(_llama_context_params_set_seed), 1);
-    rb_define_method(rb_cLLaMAContextParams, "seed", RUBY_METHOD_FUNC(_llama_context_params_get_seed), 0);
     rb_define_method(rb_cLLaMAContextParams, "n_ctx=", RUBY_METHOD_FUNC(_llama_context_params_set_n_ctx), 1);
     rb_define_method(rb_cLLaMAContextParams, "n_ctx", RUBY_METHOD_FUNC(_llama_context_params_get_n_ctx), 0);
     rb_define_method(rb_cLLaMAContextParams, "n_batch=", RUBY_METHOD_FUNC(_llama_context_params_set_n_batch), 1);
@@ -913,22 +911,6 @@ private:
   //   new (ptr) LLaMAContextParamsWrapper();
   //   return self;
   // }
-
-  // seed
-  static VALUE _llama_context_params_set_seed(VALUE self, VALUE seed) {
-    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
-    if (NUM2INT(seed) < 0) {
-      rb_raise(rb_eArgError, "seed must be positive");
-      return Qnil;
-    }
-    ptr->params.seed = NUM2INT(seed);
-    return INT2NUM(ptr->params.seed);
-  }
-
-  static VALUE _llama_context_params_get_seed(VALUE self) {
-    LLaMAContextParamsWrapper* ptr = get_llama_context_params(self);
-    return INT2NUM(ptr->params.seed);
-  }
 
   // n_ctx
   static VALUE _llama_context_params_set_n_ctx(VALUE self, VALUE n_ctx) {
