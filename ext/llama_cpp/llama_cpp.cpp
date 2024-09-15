@@ -10,7 +10,6 @@ VALUE rb_cLLaMAContextParams;
 VALUE rb_cLLaMAModelQuantizeParams;
 VALUE rb_cLLaMATokenData;
 VALUE rb_cLLaMATokenDataArray;
-VALUE rb_cLLaMAGrammar;
 
 class LLaMABatchWrapper {
 public:
@@ -1848,109 +1847,6 @@ const rb_data_type_t RbLLaMAModel::llama_model_type = {
   RUBY_TYPED_FREE_IMMEDIATELY
 };
 
-class LLaMAGrammarWrapper {
-public:
-  struct llama_grammar* grammar;
-
-  LLaMAGrammarWrapper() : grammar(nullptr) {}
-
-  ~LLaMAGrammarWrapper() {
-    if (grammar) {
-      llama_grammar_free(grammar);
-    }
-  }
-};
-
-class RbLLaMAGrammar {
-public:
-  static VALUE llama_grammar_alloc(VALUE self) {
-    LLaMAGrammarWrapper* ptr = (LLaMAGrammarWrapper*)ruby_xmalloc(sizeof(LLaMAGrammarWrapper));
-    new (ptr) LLaMAGrammarWrapper();
-    return TypedData_Wrap_Struct(self, &llama_grammar_type, ptr);
-  }
-
-  static void llama_grammar_free(void* ptr) {
-    ((LLaMAGrammarWrapper*)ptr)->~LLaMAGrammarWrapper();
-    ruby_xfree(ptr);
-  }
-
-  static size_t llama_grammar_size(const void* ptr) {
-    return sizeof(*((LLaMAGrammarWrapper*)ptr));
-  }
-
-  static LLaMAGrammarWrapper* get_llama_grammar(VALUE self) {
-    LLaMAGrammarWrapper* ptr;
-    TypedData_Get_Struct(self, LLaMAGrammarWrapper, &llama_grammar_type, ptr);
-    return ptr;
-  }
-
-  static void define_class(VALUE outer) {
-    rb_cLLaMAGrammar = rb_define_class_under(outer, "Grammar", rb_cObject);
-    rb_define_alloc_func(rb_cLLaMAGrammar, llama_grammar_alloc);
-    rb_define_method(rb_cLLaMAGrammar, "initialize", RUBY_METHOD_FUNC(_llama_grammar_init), -1);
-  }
-
-private:
-  static const rb_data_type_t llama_grammar_type;
-
-  static VALUE _llama_grammar_init(int argc, VALUE* argv, VALUE self) {
-    VALUE kw_args = Qnil;
-    ID kw_table[2] = { rb_intern("rules"), rb_intern("start_rule_index") };
-    VALUE kw_values[2] = { Qundef, Qundef };
-    rb_scan_args(argc, argv, ":", &kw_args);
-    rb_get_kwargs(kw_args, kw_table, 2, 0, kw_values);
-
-    if (!RB_TYPE_P(kw_values[0], T_ARRAY)) {
-      rb_raise(rb_eArgError, "rules must be an array");
-      return Qnil;
-    }
-    if (!RB_INTEGER_TYPE_P(kw_values[1])) {
-      rb_raise(rb_eArgError, "start_rule_index must be an integer");
-      return Qnil;
-    }
-
-    const int n_rules = RARRAY_LEN(kw_values[0]);
-    llama_grammar_element** rules = ALLOCA_N(llama_grammar_element*, n_rules);
-    for (int i = 0; i < n_rules; ++i) {
-      VALUE rule = rb_ary_entry(kw_values[0], i);
-      if (!RB_TYPE_P(rule, T_ARRAY)) {
-        rb_raise(rb_eArgError, "element of rules must be an array");
-        return Qnil;
-      }
-      const int n_elements = RARRAY_LEN(rule);
-      llama_grammar_element* elements = ALLOCA_N(llama_grammar_element, n_elements);
-      for (int j = 0; j < n_elements; ++j) {
-        VALUE element = rb_ary_entry(rule, j);
-        if (!rb_obj_is_kind_of(element, rb_cLLaMAGrammarElement)) {
-          rb_raise(rb_eArgError, "element of rule must be an instance of GrammarElement");
-          return Qnil;
-        }
-        LLaMAGrammarElementWrapper* ptr = RbLLaMAGrammarElement::get_llama_grammar_element(element);
-        elements[j] = ptr->element;
-      }
-      rules[i] = elements;
-    }
-
-    const size_t start_rule_index = NUM2SIZET(kw_values[1]);
-
-    LLaMAGrammarWrapper* ptr = get_llama_grammar(self);
-    new (ptr) LLaMAGrammarWrapper();
-    ptr->grammar = llama_grammar_init((const llama_grammar_element**)rules, n_rules, start_rule_index);
-
-    return self;
-  }
-};
-
-const rb_data_type_t RbLLaMAGrammar::llama_grammar_type = {
-  "RbLLaMAGrammar",
-  { NULL,
-    RbLLaMAGrammar::llama_grammar_free,
-    RbLLaMAGrammar::llama_grammar_size },
-  NULL,
-  NULL,
-  RUBY_TYPED_FREE_IMMEDIATELY
-};
-
 class LLaMAContextWrapper {
 public:
   struct llama_context* ctx;
@@ -2035,8 +1931,6 @@ public:
     rb_define_method(rb_cLLaMAContext, "sample_token_mirostat_v2", RUBY_METHOD_FUNC(_llama_context_sample_token_mirostat_v2), -1);
     rb_define_method(rb_cLLaMAContext, "sample_token_greedy", RUBY_METHOD_FUNC(_llama_context_sample_token_greedy), 1);
     rb_define_method(rb_cLLaMAContext, "sample_token", RUBY_METHOD_FUNC(_llama_context_sample_token), 1);
-    rb_define_method(rb_cLLaMAContext, "sample_grammar", RUBY_METHOD_FUNC(_llama_context_sample_grammar), -1);
-    rb_define_method(rb_cLLaMAContext, "grammar_accept_token", RUBY_METHOD_FUNC(_llama_context_grammar_accept_token), -1);
     rb_define_method(rb_cLLaMAContext, "apply_control_vector", RUBY_METHOD_FUNC(_llama_context_apply_control_vector), -1);
     rb_define_method(rb_cLLaMAContext, "pooling_type", RUBY_METHOD_FUNC(_llama_context_pooling_type), 0);
   }
@@ -3088,69 +2982,6 @@ private:
     return INT2NUM(id);
   }
 
-  static VALUE _llama_context_sample_grammar(int argc, VALUE* argv, VALUE self) {
-    VALUE kw_args = Qnil;
-    ID kw_table[1] = { rb_intern("grammar") };
-    VALUE kw_values[1] = { Qundef };
-    VALUE candidates = Qnil;
-    rb_scan_args(argc, argv, "1:", &candidates, &kw_args);
-    rb_get_kwargs(kw_args, kw_table, 1, 0, kw_values);
-
-    if (!rb_obj_is_kind_of(candidates, rb_cLLaMATokenDataArray)) {
-      rb_raise(rb_eArgError, "1st argument must be a TokenDataArray");
-      return Qnil;
-    }
-    if (!rb_obj_is_kind_of(kw_values[0], rb_cLLaMAGrammar)) {
-      rb_raise(rb_eArgError, "grammar must be a Grammar");
-      return Qnil;
-    }
-
-    LLaMAContextWrapper* ctx_ptr = get_llama_context(self);
-    if (ctx_ptr->ctx == NULL) {
-      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
-      return Qnil;
-    }
-    LLaMATokenDataArrayWrapper* cnd_ptr = RbLLaMATokenDataArray::get_llama_token_data_array(candidates);
-    if (cnd_ptr->array.data == nullptr) {
-      rb_raise(rb_eRuntimeError, "TokenDataArray is empty");
-      return Qnil;
-    }
-    LLaMAGrammarWrapper* grm_ptr = RbLLaMAGrammar::get_llama_grammar(kw_values[0]);
-
-    llama_grammar_sample(grm_ptr->grammar, ctx_ptr->ctx, &(cnd_ptr->array));
-
-    return Qnil;
-  }
-
-  static VALUE _llama_context_grammar_accept_token(int argc, VALUE* argv, VALUE self) {
-    VALUE kw_args = Qnil;
-    ID kw_table[2] = { rb_intern("grammar"), rb_intern("token") };
-    VALUE kw_values[2] = { Qundef, Qundef };
-    rb_scan_args(argc, argv, ":", &kw_args);
-    rb_get_kwargs(kw_args, kw_table, 2, 0, kw_values);
-
-    if (!rb_obj_is_kind_of(kw_values[0], rb_cLLaMAGrammar)) {
-      rb_raise(rb_eArgError, "grammar must be a Grammar");
-      return Qnil;
-    }
-    if (!RB_INTEGER_TYPE_P(kw_values[1])) {
-      rb_raise(rb_eArgError, "token must be an Integer");
-      return Qnil;
-    }
-
-    LLaMAContextWrapper* ctx_ptr = get_llama_context(self);
-    if (ctx_ptr->ctx == NULL) {
-      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
-      return Qnil;
-    }
-    LLaMAGrammarWrapper* grm_ptr = RbLLaMAGrammar::get_llama_grammar(kw_values[0]);
-    llama_token token = NUM2INT(kw_values[1]);
-
-    llama_grammar_accept_token(grm_ptr->grammar, ctx_ptr->ctx, token);
-
-    return Qnil;
-  }
-
   static VALUE _llama_context_apply_control_vector(int argc, VALUE* argv, VALUE self) {
     VALUE kw_args = Qnil;
     ID kw_table[4] = { rb_intern("data"), rb_intern("n_embd"), rb_intern("il_start"), rb_intern("il_end") };
@@ -3315,12 +3146,9 @@ extern "C" void Init_llama_cpp(void) {
   RbLLaMAModel::define_class(rb_mLLaMACpp);
   RbLLaMAModelKVOverride::define_class(rb_mLLaMACpp);
   RbLLaMAModelParams::define_class(rb_mLLaMACpp);
-  RbLLaMATimings::define_class(rb_mLLaMACpp);
   RbLLaMAContext::define_class(rb_mLLaMACpp);
   RbLLaMAContextParams::define_class(rb_mLLaMACpp);
   RbLLaMAModelQuantizeParams::define_class(rb_mLLaMACpp);
-  RbLLaMAGrammarElement::define_class(rb_mLLaMACpp);
-  RbLLaMAGrammar::define_class(rb_mLLaMACpp);
 
   rb_define_module_function(rb_mLLaMACpp, "backend_init", rb_llama_llama_backend_init, 0);
   rb_define_module_function(rb_mLLaMACpp, "backend_free", rb_llama_llama_backend_free, 0);

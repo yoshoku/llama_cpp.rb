@@ -310,8 +310,6 @@ module LLaMACpp
     def sample_token_mirostat_v2: (::LLaMACpp::TokenDataArray, tau: Float, eta: Float, mu: Float) -> [Integer, Float]
     def sample_token_greedy: (::LLaMACpp::TokenDataArray) -> Integer
     def sample_token: (::LLaMACpp::TokenDataArray) -> Integer
-    def sample_grammar: (::LLaMACpp::TokenDataArray, grammar: ::LLaMACpp::Grammar) -> void
-    def grammar_accept_token: (grammar: ::LLaMACpp::Grammar, token: Integer) -> void
     def apply_control_vector: (data: Array[Float], n_embd: Integer, il_start: Integer, il_end: Integer) -> void
     def pooling_type: () -> Integer
   end
@@ -389,8 +387,4 @@ module LLaMACpp
   end
 
   class Params = ContextParams
-
-  class Grammar
-    def initialize: (rules: Array[Array[LLaMACpp::GrammarElement]], start_rule_index: Integer) -> void
-  end
 end

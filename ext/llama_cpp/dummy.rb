@@ -1375,12 +1375,4 @@ module LLaMACpp
     # @return [Boolean]
     def keep_split; end
   end
-
-  # Class for grammar.
-  class Grammar
-    # Creates a new Grammar.
-    # @param rules [Array<Array<GrammarElement>>] The grammar rules.
-    # @param start_rule_index [Integer] The index of the start rule.
-    def initialize(rules:, start_rule_index:); end # rubocop:disable Style/RedundantInitialize
-  end
 end
