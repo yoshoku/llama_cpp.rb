@@ -390,16 +390,6 @@ module LLaMACpp
 
   class Params = ContextParams
 
-  class GrammarElement
-    public
-
-    def initialize: (?type: Integer, ?value: Integer) -> void
-    def type: () -> Integer
-    def type=: (Integer) -> Integer
-    def value: () -> Integer
-    def value=: (Integer) -> Integer
-  end
-
   class Grammar
     def initialize: (rules: Array[Array[LLaMACpp::GrammarElement]], start_rule_index: Integer) -> void
   end
