@@ -287,20 +287,6 @@ module LLaMACpp
     def synchronize: () -> void
     def load_session_file: (session_path: String) -> void
     def save_session_file: (session_path: String, session_tokens: Array[Integer]) -> void
-    def sample_repetition_penalties: (::LLaMACpp::TokenDataArray, Array[Integer], penalty_repeat: Float, penalty_freq: Float, penalty_present: Float) -> void
-    def sample_apply_guidance: (logits: Array[Float], logits_guidance: Array[Float], scale: Float) -> void
-    def sample_softmax: (::LLaMACpp::TokenDataArray) -> void
-    def sample_top_k: (::LLaMACpp::TokenDataArray, k: Integer, ?min_keep: Integer) -> void
-    def sample_top_p: (::LLaMACpp::TokenDataArray, prob: Float, ?min_keep: Integer) -> void
-    def sample_min_p: (::LLaMACpp::TokenDataArray, prob: Float, ?min_keep: Integer) -> void
-    def sample_tail_free: (::LLaMACpp::TokenDataArray, z: Float, ?min_keep: Integer) -> void
-    def sample_typical: (::LLaMACpp::TokenDataArray, prob: Float, ?min_keep: Integer) -> void
-    def sample_temp: (::LLaMACpp::TokenDataArray, temp: Float) -> void
-    def sample_entropy: (::LLaMACpp::TokenDataArray, min_temp: Float, max_temp: Float, exponent_val: Float) -> void
-    def sample_token_mirostat: (::LLaMACpp::TokenDataArray, tau: Float, eta: Float, m: Integer, mu: Float) -> [Integer, Float]
-    def sample_token_mirostat_v2: (::LLaMACpp::TokenDataArray, tau: Float, eta: Float, mu: Float) -> [Integer, Float]
-    def sample_token_greedy: (::LLaMACpp::TokenDataArray) -> Integer
-    def sample_token: (::LLaMACpp::TokenDataArray) -> Integer
     def apply_control_vector: (data: Array[Float], n_embd: Integer, il_start: Integer, il_end: Integer) -> void
     def pooling_type: () -> Integer
   end
