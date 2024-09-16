@@ -957,11 +957,6 @@ module LLaMACpp
     # @return [NilClass]
     def kv_cache_update(); end
 
-    # Sets the current rng seed.
-    #
-    # @param seed [Integer] The rng seed.
-    def set_rng_seed(seed); end
-
     # Sets whether to use causal attention.
     #
     # @param causal_attn [Boolean] The flag to use causal attention.

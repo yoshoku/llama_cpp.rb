@@ -1912,7 +1912,6 @@ public:
     rb_define_method(rb_cLLaMAContext, "kv_cache_seq_pos_max", RUBY_METHOD_FUNC(_llama_context_kv_cache_seq_pos_max), 1);
     rb_define_method(rb_cLLaMAContext, "kv_cache_kv_cache_defrag", RUBY_METHOD_FUNC(_llama_context_kv_cache_defrag), 0);
     rb_define_method(rb_cLLaMAContext, "kv_cache_kv_cache_update", RUBY_METHOD_FUNC(_llama_context_kv_cache_update), 0);
-    rb_define_method(rb_cLLaMAContext, "set_rng_seed", RUBY_METHOD_FUNC(_llama_context_set_rng_seed), 1);
     rb_define_method(rb_cLLaMAContext, "set_causal_attn", RUBY_METHOD_FUNC(_llama_context_set_causal_attn), 1);
     rb_define_method(rb_cLLaMAContext, "synchronize", RUBY_METHOD_FUNC(_llama_context_synchronize), 0);
     rb_define_method(rb_cLLaMAContext, "load_session_file", RUBY_METHOD_FUNC(_llama_context_load_session_file), -1);
@@ -2304,21 +2303,6 @@ private:
       return Qnil;
     }
     llama_kv_cache_update(ptr->ctx);
-    return Qnil;
-  }
-
-  static VALUE _llama_context_set_rng_seed(VALUE self, VALUE seed_) {
-    LLaMAContextWrapper* ptr = get_llama_context(self);
-    if (ptr->ctx == NULL) {
-      rb_raise(rb_eRuntimeError, "LLaMA context is not initialized");
-      return Qnil;
-    }
-    if (NUM2INT(seed_) < 0) {
-      rb_raise(rb_eArgError, "seed must be a non-negative integer");
-      return Qnil;
-    }
-    const uint32_t seed = NUM2INT(seed_);
-    llama_set_rng_seed(ptr->ctx, seed);
     return Qnil;
   }
 

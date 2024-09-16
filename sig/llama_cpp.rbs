@@ -282,7 +282,6 @@ module LLaMACpp
     def kv_cache_seq_pos_max: (Integer) -> Integer
     def kv_cache_defrag: () -> void
     def kv_cache_update: () -> void
-    def set_rng_seed: (Integer) -> void
     def set_causal_attn: (bool) -> void
     def synchronize: () -> void
     def load_session_file: (session_path: String) -> void
