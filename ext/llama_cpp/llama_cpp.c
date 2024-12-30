@@ -297,6 +297,7 @@ static rb_data_type_t llama_model_params_type = {
 
 static VALUE llama_model_params_alloc(VALUE self) {
   struct llama_model_params* data = (struct llama_model_params*)ruby_xmalloc(sizeof(struct llama_model_params));
+  *data = llama_model_default_params();
   return TypedData_Wrap_Struct(self, &llama_model_params_type, data);
 }
 
@@ -329,6 +330,7 @@ static rb_data_type_t llama_context_params_type = {
 
 static VALUE llama_context_params_alloc(VALUE self) {
   struct llama_context_params* data = (struct llama_context_params*)ruby_xmalloc(sizeof(struct llama_context_params));
+  *data = llama_context_default_params();
   return TypedData_Wrap_Struct(self, &llama_context_params_type, data);
 }
 
@@ -361,6 +363,7 @@ static rb_data_type_t llama_model_quantize_params_type = {
 
 static VALUE llama_model_quantize_params_alloc(VALUE self) {
   llama_model_quantize_params* data = (llama_model_quantize_params*)ruby_xmalloc(sizeof(llama_model_quantize_params));
+  *data = llama_model_quantize_default_params();
   return TypedData_Wrap_Struct(self, &llama_model_quantize_params_type, data);
 }
 
@@ -425,6 +428,7 @@ static rb_data_type_t llama_sampler_chain_params_type = {
 
 static VALUE llama_sampler_chain_params_alloc(VALUE self) {
   llama_sampler_chain_params* data = (llama_sampler_chain_params*)ruby_xmalloc(sizeof(llama_sampler_chain_params));
+  *data = llama_sampler_chain_default_params();
   return TypedData_Wrap_Struct(self, &llama_sampler_chain_params_type, data);
 }
 
