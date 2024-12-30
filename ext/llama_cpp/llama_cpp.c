@@ -340,6 +340,38 @@ static struct llama_context_params* get_llama_context_params(VALUE self) {
 }
 */
 
+/* llama_model_quantize_params */
+static void llama_model_quantize_params_free(void *ptr) {
+  ruby_xfree(ptr);
+}
+
+static size_t llama_model_quantize_params_size(const void *ptr) {
+  return sizeof(*((struct llama_model_quantize_params*)ptr));
+}
+
+static rb_data_type_t llama_model_quantize_params_type = {
+  "RbLlamaModelQuantizeParams",
+  { NULL,
+    llama_model_quantize_params_free,
+    llama_model_quantize_params_size },
+  NULL,
+  NULL,
+  RUBY_TYPED_FREE_IMMEDIATELY
+};
+
+static VALUE llama_model_quantize_params_alloc(VALUE self) {
+  struct llama_model_quantize_params* data = (struct llama_model_quantize_params*)ruby_xmalloc(sizeof(struct llama_model_quantize_params));
+  return TypedData_Wrap_Struct(self, &llama_model_quantize_params_type, data);
+}
+
+/*
+static struct llama_model_quantize_params* get_llama_model_quantize_params(VALUE self) {
+  struct llama_model_quantize_params* data = NULL;
+  TypedData_Get_Struct(self, struct llama_model_quantize_params, &llama_model_quantize_params_type, data);
+  return data;
+}
+*/
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -534,4 +566,8 @@ void Init_llama_cpp(void) {
   /* llama_context_params */
   VALUE rb_cLlamaContextParams = rb_define_class_under(rb_mLLaMACpp, "ContextParams", rb_cObject);
   rb_define_alloc_func(rb_cLlamaContextParams, llama_context_params_alloc);
+
+  /* llama_model_quantize_params */
+  VALUE rb_cLlamaModelQuantizeParams = rb_define_class_under(rb_mLLaMACpp, "ModelQuantizeParams", rb_cObject);
+  rb_define_alloc_func(rb_cLlamaModelQuantizeParams, llama_model_quantize_params_alloc);
 }
