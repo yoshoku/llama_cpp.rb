@@ -505,6 +505,12 @@ static VALUE llama_lora_adapter_wrapper_alloc(VALUE self) {
   return TypedData_Wrap_Struct(self, &llama_lora_adapter_wrapper_data_type, data);
 }
 
+/* llama_backend_init */
+static VALUE rb_llama_backend_init(VALUE self) {
+  llama_backend_init();
+  return Qnil;
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -719,4 +725,7 @@ void Init_llama_cpp(void) {
   /* llama_lora_adapter */
   VALUE rb_cLlamaLoraAdapter = rb_define_class_under(rb_mLLaMACpp, "LoraAdapter", rb_cObject);
   rb_define_alloc_func(rb_cLlamaLoraAdapter, llama_lora_adapter_wrapper_alloc);
+
+  /* llama_backend_init */
+  rb_define_module_function(rb_mLLaMACpp, "llama_backend_init", rb_llama_backend_init, 0);
 }
