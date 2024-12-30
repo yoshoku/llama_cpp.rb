@@ -511,6 +511,16 @@ static VALUE rb_llama_backend_init(VALUE self) {
   return Qnil;
 }
 
+/* llama_numa_init */
+static VALUE rb_llama_numa_init(VALUE self, VALUE numa) {
+  if (!RB_INTEGER_TYPE_P(numa)) {
+    rb_raise(rb_eArgError, "numa must be an integer");
+    return Qnil;
+  }
+  llama_numa_init((enum ggml_numa_strategy)NUM2INT(numa));
+  return Qnil;
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -728,4 +738,7 @@ void Init_llama_cpp(void) {
 
   /* llama_backend_init */
   rb_define_module_function(rb_mLLaMACpp, "llama_backend_init", rb_llama_backend_init, 0);
+
+  /* llama_numa_init */
+  rb_define_module_function(rb_mLLaMACpp, "llama_numa_init", rb_llama_numa_init, 1);
 }
