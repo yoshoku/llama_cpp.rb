@@ -365,9 +365,41 @@ static VALUE llama_model_quantize_params_alloc(VALUE self) {
 }
 
 /*
-static struct llama_model_quantize_params* get_llama_model_quantize_params(VALUE self) {
-  struct llama_model_quantize_params* data = NULL;
+static llama_model_quantize_params* get_llama_model_quantize_params(VALUE self) {
+  llama_model_quantize_params* data = NULL;
   TypedData_Get_Struct(self, struct llama_model_quantize_params, &llama_model_quantize_params_type, data);
+  return data;
+}
+*/
+
+/* llama_logit_bias */
+static void llama_logit_bias_free(void *ptr) {
+  ruby_xfree(ptr);
+}
+
+static size_t llama_logit_bias_size(const void *ptr) {
+  return sizeof(*((struct llama_logit_bias*)ptr));
+}
+
+static rb_data_type_t llama_logit_bias_type = {
+  "RbLlamaLogitBias",
+  { NULL,
+    llama_logit_bias_free,
+    llama_logit_bias_size },
+  NULL,
+  NULL,
+  RUBY_TYPED_FREE_IMMEDIATELY
+};
+
+static VALUE llama_logit_bias_alloc(VALUE self) {
+  struct llama_logit_bias* data = (struct llama_logit_bias*)ruby_xmalloc(sizeof(struct llama_logit_bias));
+  return TypedData_Wrap_Struct(self, &llama_logit_bias_type, data);
+}
+
+/*
+static llama_logit_bias* get_llama_logit_bias(VALUE self) {
+  llama_logit_bias* data = NULL;
+  TypedData_Get_Struct(self, llama_logit_bias, &llama_logit_bias_type, data);
   return data;
 }
 */
@@ -570,4 +602,8 @@ void Init_llama_cpp(void) {
   /* llama_model_quantize_params */
   VALUE rb_cLlamaModelQuantizeParams = rb_define_class_under(rb_mLLaMACpp, "ModelQuantizeParams", rb_cObject);
   rb_define_alloc_func(rb_cLlamaModelQuantizeParams, llama_model_quantize_params_alloc);
+
+  /* llama_logit_bias */
+  VALUE rb_cLlamaLogitBias = rb_define_class_under(rb_mLLaMACpp, "LogitBias", rb_cObject);
+  rb_define_alloc_func(rb_cLlamaLogitBias, llama_logit_bias_alloc);
 }
