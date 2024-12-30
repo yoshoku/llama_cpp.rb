@@ -468,6 +468,39 @@ static llama_chat_message* get_llama_chat_message(VALUE self) {
 }
 */
 
+/* llama_lora_adapter wrapper */
+typedef struct {
+  struct llama_lora_adapter* adapter;
+} llama_lora_adapter_wrapper;
+
+static void llama_lora_adapter_wrapper_free(void *ptr) {
+  llama_lora_adapter_wrapper* data = (llama_lora_adapter_wrapper*)ptr;
+  if (data->adapter != NULL) {
+    llama_lora_adapter_free(data->adapter);
+  }
+  ruby_xfree(ptr);
+}
+
+static size_t llama_lora_adapter_wrapper_size(const void *ptr) {
+  return sizeof(*((llama_lora_adapter_wrapper*)ptr));
+}
+
+static rb_data_type_t llama_lora_adapter_wrapper_data_type = {
+  "RbLlamaLoraAdapter",
+  { NULL,
+    llama_lora_adapter_wrapper_free,
+    llama_lora_adapter_wrapper_size },
+  NULL,
+  NULL,
+  RUBY_TYPED_FREE_IMMEDIATELY
+};
+
+static VALUE llama_lora_adapter_wrapper_alloc(VALUE self) {
+  llama_lora_adapter_wrapper* data = (llama_lora_adapter_wrapper*)ruby_xmalloc(sizeof(llama_lora_adapter_wrapper));
+  data->adapter = NULL;
+  return TypedData_Wrap_Struct(self, &llama_lora_adapter_wrapper_data_type, data);
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -678,4 +711,8 @@ void Init_llama_cpp(void) {
   /* llama_chat_message */
   VALUE rb_cLlamaChatMessage = rb_define_class_under(rb_mLLaMACpp, "ChatMessage", rb_cObject);
   rb_define_alloc_func(rb_cLlamaChatMessage, llama_chat_message_alloc);
+
+  /* llama_lora_adapter */
+  VALUE rb_cLlamaLoraAdapter = rb_define_class_under(rb_mLLaMACpp, "LoraAdapter", rb_cObject);
+  rb_define_alloc_func(rb_cLlamaLoraAdapter, llama_lora_adapter_wrapper_alloc);
 }
