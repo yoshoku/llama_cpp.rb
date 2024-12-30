@@ -103,6 +103,3 @@ module LLaMACpp
     output.join.scrub('?').strip.delete_prefix(prompt).strip
   end
 end
-
-LLaMACpp.backend_init
-at_exit { LLaMACpp.backend_free }
