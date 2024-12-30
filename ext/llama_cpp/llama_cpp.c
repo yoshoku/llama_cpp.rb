@@ -188,12 +188,12 @@ static llama_token_data_array* get_llama_token_data_array(VALUE self) {
 
 static VALUE llama_token_data_array_get_size(VALUE self) {
   llama_token_data_array* data = get_llama_token_data_array(self);
-  return INT2NUM(data->size);
+  return SIZET2NUM(data->size);
 }
 
 static VALUE llama_token_data_array_get_selected(VALUE self) {
   llama_token_data_array* data = get_llama_token_data_array(self);
-  return INT2NUM(data->selected);
+  return SIZET2NUM(data->selected);
 }
 
 static VALUE llama_token_data_array_get_sorted(VALUE self) {
@@ -243,6 +243,38 @@ static VALUE llama_batch_get_n_tokens(VALUE self) {
   llama_batch* data = get_llama_batch(self);
   return INT2NUM(data->n_tokens);
 }
+
+/* llama_model_kv_override */
+static void llama_model_kv_override_free(void *ptr) {
+  ruby_xfree(ptr);
+}
+
+static size_t llama_model_kv_override_size(const void *ptr) {
+  return sizeof(*((struct llama_model_kv_override*)ptr));
+}
+
+static rb_data_type_t llama_model_kv_override_type = {
+  "RbLlamaModelKvOverride",
+  { NULL,
+    llama_model_kv_override_free,
+    llama_model_kv_override_size },
+  NULL,
+  NULL,
+  RUBY_TYPED_FREE_IMMEDIATELY
+};
+
+static VALUE llama_model_kv_override_alloc(VALUE self) {
+  struct llama_model_kv_override* data = (struct llama_model_kv_override*)ruby_xmalloc(sizeof(struct llama_model_kv_override));
+  return TypedData_Wrap_Struct(self, &llama_model_kv_override_type, data);
+}
+
+/*
+static struct llama_model_kv_override* get_llama_model_kv_override(VALUE self) {
+  struct llama_model_kv_override* data = NULL;
+  TypedData_Get_Struct(self, struct llama_model_kv_override, &llama_model_kv_override_type, data);
+  return data;
+}
+*/
 
 /* MAIN */
 void Init_llama_cpp(void) {
@@ -426,4 +458,8 @@ void Init_llama_cpp(void) {
   rb_define_const(rb_mLLaMACpp, "LLAMA_KV_OVERRIDE_TYPE_FLOAT", INT2NUM(LLAMA_KV_OVERRIDE_TYPE_FLOAT));
   rb_define_const(rb_mLLaMACpp, "LLAMA_KV_OVERRIDE_TYPE_BOOL", INT2NUM(LLAMA_KV_OVERRIDE_TYPE_BOOL));
   rb_define_const(rb_mLLaMACpp, "LLAMA_KV_OVERRIDE_TYPE_STR", INT2NUM(LLAMA_KV_OVERRIDE_TYPE_STR));
+
+  /* llama_model_kv_override */
+  VALUE rb_cLlamaModelKvOverride = rb_define_class_under(rb_mLLaMACpp, "ModelKvOverride", rb_cObject);
+  rb_define_alloc_func(rb_cLlamaModelKvOverride, llama_model_kv_override_alloc);
 }
