@@ -436,6 +436,38 @@ static llama_sampler_chain_params* get_llama_sampler_chain_params(VALUE self) {
 }
 */
 
+/* llama_chat_message */
+static void llama_chat_message_free(void *ptr) {
+  ruby_xfree(ptr);
+}
+
+static size_t llama_chat_message_size(const void *ptr) {
+  return sizeof(*((llama_chat_message*)ptr));
+}
+
+static rb_data_type_t llama_chat_message_type = {
+  "RbLlamaChatMessage",
+  { NULL,
+    llama_chat_message_free,
+    llama_chat_message_size },
+  NULL,
+  NULL,
+  RUBY_TYPED_FREE_IMMEDIATELY
+};
+
+static VALUE llama_chat_message_alloc(VALUE self) {
+  llama_chat_message* data = (llama_chat_message*)ruby_xmalloc(sizeof(llama_chat_message));
+  return TypedData_Wrap_Struct(self, &llama_chat_message_type, data);
+}
+
+/*
+static llama_chat_message* get_llama_chat_message(VALUE self) {
+  llama_chat_message* data = NULL;
+  TypedData_Get_Struct(self, llama_chat_message, &llama_chat_message_type, data);
+  return data;
+}
+*/
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -642,4 +674,8 @@ void Init_llama_cpp(void) {
   /* llama_sampler_chain_params */
   VALUE rb_cLlamaSamplerChainParams = rb_define_class_under(rb_mLLaMACpp, "SamplerChainParams", rb_cObject);
   rb_define_alloc_func(rb_cLlamaSamplerChainParams, llama_sampler_chain_params_alloc);
+
+  /* llama_chat_message */
+  VALUE rb_cLlamaChatMessage = rb_define_class_under(rb_mLLaMACpp, "ChatMessage", rb_cObject);
+  rb_define_alloc_func(rb_cLlamaChatMessage, llama_chat_message_alloc);
 }
