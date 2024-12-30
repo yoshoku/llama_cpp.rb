@@ -201,6 +201,49 @@ static VALUE llama_token_data_array_get_sorted(VALUE self) {
   return data->sorted ? Qtrue : Qfalse;
 }
 
+/* llama_batch */
+static void llama_batch_free_(void *ptr) {
+  llama_batch_free(*((llama_batch*)ptr));
+  ruby_xfree(ptr);
+}
+
+static size_t llama_batch_size(const void *ptr) {
+  return sizeof(*((llama_batch*)ptr));
+}
+
+static rb_data_type_t llama_batch_type = {
+  "RbLlamaBatch",
+  { NULL,
+    llama_batch_free_,
+    llama_batch_size },
+  NULL,
+  NULL,
+  RUBY_TYPED_FREE_IMMEDIATELY
+};
+
+static VALUE llama_batch_alloc(VALUE self) {
+  llama_batch* data = (llama_batch*)ruby_xmalloc(sizeof(llama_batch));
+  data->n_tokens = 0;
+  data->token = NULL;
+  data->embd = NULL;
+  data->pos = NULL;
+  data->n_seq_id = NULL;
+  data->seq_id = NULL;
+  data->logits = NULL;
+  return TypedData_Wrap_Struct(self, &llama_batch_type, data);
+}
+
+static llama_batch* get_llama_batch(VALUE self) {
+  llama_batch* data = NULL;
+  TypedData_Get_Struct(self, llama_batch, &llama_batch_type, data);
+  return data;
+}
+
+static VALUE llama_batch_get_n_tokens(VALUE self) {
+  llama_batch* data = get_llama_batch(self);
+  return INT2NUM(data->n_tokens);
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -372,4 +415,9 @@ void Init_llama_cpp(void) {
   rb_define_method(rb_cLlamaTokenDataArray, "size", RUBY_METHOD_FUNC(llama_token_data_array_get_size), 0);
   rb_define_method(rb_cLlamaTokenDataArray, "selected", RUBY_METHOD_FUNC(llama_token_data_array_get_selected), 0);
   rb_define_method(rb_cLlamaTokenDataArray, "sorted", RUBY_METHOD_FUNC(llama_token_data_array_get_sorted), 0);
+
+  /* llama_batch */
+  VALUE rb_cLlamaBatch = rb_define_class_under(rb_mLLaMACpp, "Batch", rb_cObject);
+  rb_define_alloc_func(rb_cLlamaBatch, llama_batch_alloc);
+  rb_define_method(rb_cLlamaBatch, "n_tokens", RUBY_METHOD_FUNC(llama_batch_get_n_tokens), 0);
 }
