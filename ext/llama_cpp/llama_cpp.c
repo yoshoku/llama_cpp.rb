@@ -276,6 +276,70 @@ static struct llama_model_kv_override* get_llama_model_kv_override(VALUE self) {
 }
 */
 
+/* llama_model_params */
+static void llama_model_params_free(void *ptr) {
+  ruby_xfree(ptr);
+}
+
+static size_t llama_model_params_size(const void *ptr) {
+  return sizeof(*((struct llama_model_params*)ptr));
+}
+
+static rb_data_type_t llama_model_params_type = {
+  "RbLlamaModelParams",
+  { NULL,
+    llama_model_params_free,
+    llama_model_params_size },
+  NULL,
+  NULL,
+  RUBY_TYPED_FREE_IMMEDIATELY
+};
+
+static VALUE llama_model_params_alloc(VALUE self) {
+  struct llama_model_params* data = (struct llama_model_params*)ruby_xmalloc(sizeof(struct llama_model_params));
+  return TypedData_Wrap_Struct(self, &llama_model_params_type, data);
+}
+
+/*
+static struct llama_model_params* get_llama_model_params(VALUE self) {
+  struct llama_model_params* data = NULL;
+  TypedData_Get_Struct(self, struct llama_model_params, &llama_model_params_type, data);
+  return data;
+}
+*/
+
+/* llama_context_params */
+static void llama_context_params_free(void *ptr) {
+  ruby_xfree(ptr);
+}
+
+static size_t llama_context_params_size(const void *ptr) {
+  return sizeof(*((struct llama_context_params*)ptr));
+}
+
+static rb_data_type_t llama_context_params_type = {
+  "RbLlamaContextParams",
+  { NULL,
+    llama_context_params_free,
+    llama_context_params_size },
+  NULL,
+  NULL,
+  RUBY_TYPED_FREE_IMMEDIATELY
+};
+
+static VALUE llama_context_params_alloc(VALUE self) {
+  struct llama_context_params* data = (struct llama_context_params*)ruby_xmalloc(sizeof(struct llama_context_params));
+  return TypedData_Wrap_Struct(self, &llama_context_params_type, data);
+}
+
+/*
+static struct llama_context_params* get_llama_context_params(VALUE self) {
+  struct llama_context_params* data = NULL;
+  TypedData_Get_Struct(self, struct llama_context_params, &llama_context_params_type, data);
+  return data;
+}
+*/
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -462,4 +526,12 @@ void Init_llama_cpp(void) {
   /* llama_model_kv_override */
   VALUE rb_cLlamaModelKvOverride = rb_define_class_under(rb_mLLaMACpp, "ModelKvOverride", rb_cObject);
   rb_define_alloc_func(rb_cLlamaModelKvOverride, llama_model_kv_override_alloc);
+
+  /* llama_model_params */
+  VALUE rb_cLlamaModelParams = rb_define_class_under(rb_mLLaMACpp, "ModelParams", rb_cObject);
+  rb_define_alloc_func(rb_cLlamaModelParams, llama_model_params_alloc);
+
+  /* llama_context_params */
+  VALUE rb_cLlamaContextParams = rb_define_class_under(rb_mLLaMACpp, "ContextParams", rb_cObject);
+  rb_define_alloc_func(rb_cLlamaContextParams, llama_context_params_alloc);
 }
