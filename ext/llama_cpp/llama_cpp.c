@@ -346,7 +346,7 @@ static void llama_model_quantize_params_free(void *ptr) {
 }
 
 static size_t llama_model_quantize_params_size(const void *ptr) {
-  return sizeof(*((struct llama_model_quantize_params*)ptr));
+  return sizeof(*((llama_model_quantize_params*)ptr));
 }
 
 static rb_data_type_t llama_model_quantize_params_type = {
@@ -360,7 +360,7 @@ static rb_data_type_t llama_model_quantize_params_type = {
 };
 
 static VALUE llama_model_quantize_params_alloc(VALUE self) {
-  struct llama_model_quantize_params* data = (struct llama_model_quantize_params*)ruby_xmalloc(sizeof(struct llama_model_quantize_params));
+  llama_model_quantize_params* data = (llama_model_quantize_params*)ruby_xmalloc(sizeof(llama_model_quantize_params));
   return TypedData_Wrap_Struct(self, &llama_model_quantize_params_type, data);
 }
 
@@ -378,7 +378,7 @@ static void llama_logit_bias_free(void *ptr) {
 }
 
 static size_t llama_logit_bias_size(const void *ptr) {
-  return sizeof(*((struct llama_logit_bias*)ptr));
+  return sizeof(*((llama_logit_bias*)ptr));
 }
 
 static rb_data_type_t llama_logit_bias_type = {
@@ -392,7 +392,7 @@ static rb_data_type_t llama_logit_bias_type = {
 };
 
 static VALUE llama_logit_bias_alloc(VALUE self) {
-  struct llama_logit_bias* data = (struct llama_logit_bias*)ruby_xmalloc(sizeof(struct llama_logit_bias));
+  llama_logit_bias* data = (llama_logit_bias*)ruby_xmalloc(sizeof(llama_logit_bias));
   return TypedData_Wrap_Struct(self, &llama_logit_bias_type, data);
 }
 
@@ -400,6 +400,38 @@ static VALUE llama_logit_bias_alloc(VALUE self) {
 static llama_logit_bias* get_llama_logit_bias(VALUE self) {
   llama_logit_bias* data = NULL;
   TypedData_Get_Struct(self, llama_logit_bias, &llama_logit_bias_type, data);
+  return data;
+}
+*/
+
+/* llama_sampler_chain_params */
+static void llama_sampler_chain_params_free(void *ptr) {
+  ruby_xfree(ptr);
+}
+
+static size_t llama_sampler_chain_params_size(const void *ptr) {
+  return sizeof(*((llama_sampler_chain_params*)ptr));
+}
+
+static rb_data_type_t llama_sampler_chain_params_type = {
+  "RbLlamaSamplerChainParams",
+  { NULL,
+    llama_sampler_chain_params_free,
+    llama_sampler_chain_params_size },
+  NULL,
+  NULL,
+  RUBY_TYPED_FREE_IMMEDIATELY
+};
+
+static VALUE llama_sampler_chain_params_alloc(VALUE self) {
+  llama_sampler_chain_params* data = (llama_sampler_chain_params*)ruby_xmalloc(sizeof(llama_sampler_chain_params));
+  return TypedData_Wrap_Struct(self, &llama_sampler_chain_params_type, data);
+}
+
+/*
+static llama_sampler_chain_params* get_llama_sampler_chain_params(VALUE self) {
+  llama_sampler_chain_params* data = NULL;
+  TypedData_Get_Struct(self, llama_sampler_chain_params, &llama_sampler_chain_params_type, data);
   return data;
 }
 */
@@ -606,4 +638,8 @@ void Init_llama_cpp(void) {
   /* llama_logit_bias */
   VALUE rb_cLlamaLogitBias = rb_define_class_under(rb_mLLaMACpp, "LogitBias", rb_cObject);
   rb_define_alloc_func(rb_cLlamaLogitBias, llama_logit_bias_alloc);
+
+  /* llama_sampler_chain_params */
+  VALUE rb_cLlamaSamplerChainParams = rb_define_class_under(rb_mLLaMACpp, "SamplerChainParams", rb_cObject);
+  rb_define_alloc_func(rb_cLlamaSamplerChainParams, llama_sampler_chain_params_alloc);
 }
