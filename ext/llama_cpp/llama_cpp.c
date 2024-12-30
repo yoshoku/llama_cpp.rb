@@ -101,6 +101,54 @@ static VALUE llama_sampler_wrapper_alloc(VALUE self) {
   return TypedData_Wrap_Struct(self, &llama_sampler_wrapper_data_type, data);
 }
 
+/* llama_token_data */
+static void llama_token_data_free(void *ptr) {
+  ruby_xfree(ptr);
+}
+
+static size_t llama_token_data_size(const void *ptr) {
+  return sizeof(*((llama_token_data*)ptr));
+}
+
+static rb_data_type_t llama_token_data_type = {
+  "RbLlamaTokenData",
+  { NULL,
+    llama_token_data_free,
+    llama_token_data_size },
+  NULL,
+  NULL,
+  RUBY_TYPED_FREE_IMMEDIATELY
+};
+
+static VALUE llama_token_data_alloc(VALUE self) {
+  llama_token_data* data = (llama_token_data*)ruby_xmalloc(sizeof(llama_token_data));
+  data->id = 0;
+  data->logit = 0.0;
+  data->p = 0.0;
+  return TypedData_Wrap_Struct(self, &llama_token_data_type, data);
+}
+
+static llama_token_data* get_llama_token_data(VALUE self) {
+  llama_token_data* data = NULL;
+  TypedData_Get_Struct(self, llama_token_data, &llama_token_data_type, data);
+  return data;
+}
+
+static VALUE llama_token_data_get_id(VALUE self) {
+  llama_token_data* data = get_llama_token_data(self);
+  return INT2NUM(data->id);
+}
+
+static VALUE llama_token_data_get_logit(VALUE self) {
+  llama_token_data* data = get_llama_token_data(self);
+  return DBL2NUM(data->logit);
+}
+
+static VALUE llama_token_data_get_p(VALUE self) {
+  llama_token_data* data = get_llama_token_data(self);
+  return DBL2NUM(data->p);
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -258,4 +306,11 @@ void Init_llama_cpp(void) {
   rb_define_const(rb_mLLaMACpp, "LLAMA_SPLIT_MODE_NONE", INT2NUM(LLAMA_SPLIT_MODE_NONE));
   rb_define_const(rb_mLLaMACpp, "LLAMA_SPLIT_MODE_LAYER", INT2NUM(LLAMA_SPLIT_MODE_LAYER));
   rb_define_const(rb_mLLaMACpp, "LLAMA_SPLIT_MODE_ROW", INT2NUM(LLAMA_SPLIT_MODE_ROW));
+
+  /* llama_token_data */
+  VALUE rb_cLlamaTokenData = rb_define_class_under(rb_mLLaMACpp, "TokenData", rb_cObject);
+  rb_define_alloc_func(rb_cLlamaTokenData, llama_token_data_alloc);
+  rb_define_method(rb_cLlamaTokenData, "id", RUBY_METHOD_FUNC(llama_token_data_get_id), 0);
+  rb_define_method(rb_cLlamaTokenData, "logit", RUBY_METHOD_FUNC(llama_token_data_get_logit), 0);
+  rb_define_method(rb_cLlamaTokenData, "p", RUBY_METHOD_FUNC(llama_token_data_get_p), 0);
 }
