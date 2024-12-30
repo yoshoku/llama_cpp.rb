@@ -521,6 +521,12 @@ static VALUE rb_llama_numa_init(VALUE self, VALUE numa) {
   return Qnil;
 }
 
+/* llama_numa_free */
+static VALUE rb_llama_backend_free(VALUE self) {
+  llama_backend_free();
+  return Qnil;
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -741,4 +747,10 @@ void Init_llama_cpp(void) {
 
   /* llama_numa_init */
   rb_define_module_function(rb_mLLaMACpp, "llama_numa_init", rb_llama_numa_init, 1);
+
+  /* llama_attach_threadpool */
+  /* llama_detach_threadpool */
+
+  /* llama_backend_free */
+  rb_define_module_function(rb_mLLaMACpp, "llama_backend_free", rb_llama_backend_free, 0);
 }
