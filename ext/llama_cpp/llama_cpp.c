@@ -1,6 +1,8 @@
 #include "llama_cpp.h"
 
 VALUE rb_mLLaMACpp;
+VALUE rb_cLlamaModel;
+VALUE rb_cLlamaModelParams;
 
 /* llama_model wrapper */
 typedef struct {
@@ -301,13 +303,11 @@ static VALUE llama_model_params_alloc(VALUE self) {
   return TypedData_Wrap_Struct(self, &llama_model_params_type, data);
 }
 
-/*
 static struct llama_model_params* get_llama_model_params(VALUE self) {
   struct llama_model_params* data = NULL;
   TypedData_Get_Struct(self, struct llama_model_params, &llama_model_params_type, data);
   return data;
 }
-*/
 
 /* llama_context_params */
 static void llama_context_params_free(void *ptr) {
@@ -527,13 +527,30 @@ static VALUE rb_llama_backend_free(VALUE self) {
   return Qnil;
 }
 
+/* llama_load_model_from_file */
+static VALUE rb_llama_load_model_from_file(VALUE self, VALUE path_model, VALUE params) {
+  if (!RB_TYPE_P(path_model, T_STRING)) {
+    rb_raise(rb_eArgError, "path_model must be a string");
+    return Qnil;
+  }
+  if (!rb_obj_is_kind_of(params, rb_cLlamaModelParams)) {
+    rb_raise(rb_eArgError, "params must be a ModelParams");
+    return Qnil;
+  }
+  const char* path_model_ = StringValueCStr(path_model);
+  struct llama_model_params* params_ = get_llama_model_params(params);
+  llama_model_wrapper* data = (llama_model_wrapper*)ruby_xmalloc(sizeof(llama_model_wrapper));
+  data->model = llama_load_model_from_file(path_model_, *params_);
+  return TypedData_Wrap_Struct(rb_cLlamaModel, &llama_model_wrapper_data_type, data);
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
   rb_mLLaMACpp = rb_define_module("LLaMACpp");
 
   /* llama_model */
-  VALUE rb_cLlamaModel = rb_define_class_under(rb_mLLaMACpp, "Model", rb_cObject);
+  rb_cLlamaModel = rb_define_class_under(rb_mLLaMACpp, "Model", rb_cObject);
   rb_define_alloc_func(rb_cLlamaModel, llama_model_wrapper_alloc);
 
   /* llama_context */
@@ -715,7 +732,7 @@ void Init_llama_cpp(void) {
   rb_define_alloc_func(rb_cLlamaModelKvOverride, llama_model_kv_override_alloc);
 
   /* llama_model_params */
-  VALUE rb_cLlamaModelParams = rb_define_class_under(rb_mLLaMACpp, "ModelParams", rb_cObject);
+  rb_cLlamaModelParams = rb_define_class_under(rb_mLLaMACpp, "ModelParams", rb_cObject);
   rb_define_alloc_func(rb_cLlamaModelParams, llama_model_params_alloc);
 
   /* llama_context_params */
@@ -753,4 +770,7 @@ void Init_llama_cpp(void) {
 
   /* llama_backend_free */
   rb_define_module_function(rb_mLLaMACpp, "llama_backend_free", rb_llama_backend_free, 0);
+
+  /* llama_load_model_from_file */
+  rb_define_module_function(rb_mLLaMACpp, "llama_load_model_from_file", rb_llama_load_model_from_file, 2);
 }
