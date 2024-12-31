@@ -616,6 +616,11 @@ static VALUE rb_llama_supports_mmap(VALUE self) {
   return llama_supports_mmap() ? Qtrue : Qfalse;
 }
 
+/* llama_supports_mlock */
+static VALUE rb_llama_supports_mlock(VALUE self) {
+  return llama_supports_mlock() ? Qtrue : Qfalse;
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -863,4 +868,7 @@ void Init_llama_cpp(void) {
 
   /* llama_supports_mmap */
   rb_define_module_function(rb_mLLaMACpp, "llama_supports_mmap", rb_llama_supports_mmap, 0);
+
+  /* llama_supports_mlock */
+  rb_define_module_function(rb_mLLaMACpp, "llama_supports_mlock", rb_llama_supports_mlock, 0);
 }
