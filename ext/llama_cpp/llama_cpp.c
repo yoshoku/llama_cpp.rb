@@ -661,6 +661,16 @@ static VALUE rb_llama_n_ubatch(VALUE self, VALUE ctx) {
   return UINT2NUM(llama_n_ubatch(context_wrapper->context));
 }
 
+/* llama_n_seq_max */
+static VALUE rb_llama_n_seq_max(VALUE self, VALUE ctx) {
+  if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
+    rb_raise(rb_eArgError, "ctx must be a Context");
+    return Qnil;
+  }
+  llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
+  return UINT2NUM(llama_n_seq_max(context_wrapper->context));
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -926,4 +936,7 @@ void Init_llama_cpp(void) {
 
   /* llama_n_ubatch */
   rb_define_module_function(rb_mLLaMACpp, "llama_n_ubatch", rb_llama_n_ubatch, 1);
+
+  /* llama_n_seq_max */
+  rb_define_module_function(rb_mLLaMACpp, "llama_n_seq_max", rb_llama_n_seq_max, 1);
 }
