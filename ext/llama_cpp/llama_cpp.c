@@ -641,6 +641,16 @@ static VALUE rb_llama_n_ctx(VALUE self, VALUE ctx) {
   return UINT2NUM(llama_n_ctx(context_wrapper->context));
 }
 
+/* llama_n_batch */
+static VALUE rb_llama_n_batch(VALUE self, VALUE ctx) {
+  if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
+    rb_raise(rb_eArgError, "ctx must be a Context");
+    return Qnil;
+  }
+  llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
+  return UINT2NUM(llama_n_batch(context_wrapper->context));
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -900,4 +910,7 @@ void Init_llama_cpp(void) {
 
   /* llama_n_ctx */
   rb_define_module_function(rb_mLLaMACpp, "llama_n_ctx", rb_llama_n_ctx, 1);
+
+  /* llama_n_batch */
+  rb_define_module_function(rb_mLLaMACpp, "llama_n_batch", rb_llama_n_batch, 1);
 }
