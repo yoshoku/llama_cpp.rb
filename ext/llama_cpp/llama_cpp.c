@@ -611,6 +611,11 @@ static VALUE rb_llama_max_devices(VALUE self) {
   return SIZET2NUM(llama_max_devices());
 }
 
+/* llama_supports_mmap */
+static VALUE rb_llama_supports_mmap(VALUE self) {
+  return llama_supports_mmap() ? Qtrue : Qfalse;
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -855,4 +860,7 @@ void Init_llama_cpp(void) {
 
   /* llama_max_devices */
   rb_define_module_function(rb_mLLaMACpp, "llama_max_devices", rb_llama_max_devices, 0);
+
+  /* llama_supports_mmap */
+  rb_define_module_function(rb_mLLaMACpp, "llama_supports_mmap", rb_llama_supports_mmap, 0);
 }
