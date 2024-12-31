@@ -533,6 +533,20 @@ static VALUE rb_llama_backend_free(VALUE self) {
   return Qnil;
 }
 
+/* llama_free_model */
+static VALUE rb_llama_free_model(VALUE self, VALUE model) {
+  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
+    rb_raise(rb_eArgError, "model must be a Model");
+    return Qnil;
+  }
+  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
+  if (model_wrapper->model != NULL) {
+    llama_free_model(model_wrapper->model);
+    model_wrapper->model = NULL;
+  }
+  return Qnil;
+}
+
 /* llama_load_model_from_file */
 static VALUE rb_llama_load_model_from_file(VALUE self, VALUE path_model, VALUE params) {
   if (!RB_TYPE_P(path_model, T_STRING)) {
@@ -796,6 +810,9 @@ void Init_llama_cpp(void) {
 
   /* llama_load_model_from_file */
   rb_define_module_function(rb_mLLaMACpp, "llama_load_model_from_file", rb_llama_load_model_from_file, 2);
+
+  /* llama_free_model */
+  rb_define_module_function(rb_mLLaMACpp, "llama_free_model", rb_llama_free_model, 1);
 
   /* llama_new_context_with_model */
   rb_define_module_function(rb_mLLaMACpp, "llama_new_context_with_model", rb_llama_new_context_with_model, 2);
