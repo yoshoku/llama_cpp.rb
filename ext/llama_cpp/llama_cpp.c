@@ -721,6 +721,30 @@ static VALUE rb_llama_n_head(VALUE self, VALUE model) {
   return INT2NUM(llama_n_head(model_wrapper->model));
 }
 
+/* llama_get_model */
+/*
+static VALUE rb_llama_get_model(VALUE self, VALUE ctx) {
+  if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
+    rb_raise(rb_eArgError, "ctx must be a Context");
+    return Qnil;
+  }
+  llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
+  llama_model_wrapper* model_wrapper = (llama_model_wrapper*)ruby_xmalloc(sizeof(llama_model_wrapper));
+  model_wrapper->model = llama_get_model(context_wrapper->context);
+  return TypedData_Wrap_Struct(rb_cLlamaModel, &llama_model_wrapper_data_type, model_wrapper);
+}
+*/
+
+/* llama_pooling_type */
+static VALUE rb_llama_pooling_type(VALUE self, VALUE ctx) {
+  if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
+    rb_raise(rb_eArgError, "ctx must be a Context");
+    return Qnil;
+  }
+  llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
+  return INT2NUM(llama_pooling_type(context_wrapper->context));
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -1003,5 +1027,13 @@ void Init_llama_cpp(void) {
   rb_define_module_function(rb_mLLaMACpp, "llama_n_layer", rb_llama_n_layer, 1);
 
   /* llama_n_head */
-  rb_define_module_function(rb_mLLaMACpp, "llama_n_head", rb_llama_n_layer, 1);
+  rb_define_module_function(rb_mLLaMACpp, "llama_n_head", rb_llama_n_head, 1);
+
+  /* llama_get_model */
+  /*
+  rb_define_module_function(rb_mLLaMACpp, "llama_get_model", rb_llama_get_model, 1);
+  */
+
+  /* llama_pooling_type */
+  rb_define_module_function(rb_mLLaMACpp, "llama_pooling_type", rb_llama_pooling_type, 1);
 }
