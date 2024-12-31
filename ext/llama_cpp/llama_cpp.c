@@ -631,6 +631,16 @@ static VALUE rb_llama_supports_rpc(VALUE self) {
   return llama_supports_rpc() ? Qtrue : Qfalse;
 }
 
+/* llama_n_ctx */
+static VALUE rb_llama_n_ctx(VALUE self, VALUE ctx) {
+  if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
+    rb_raise(rb_eArgError, "ctx must be a Context");
+    return Qnil;
+  }
+  llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
+  return UINT2NUM(llama_n_ctx(context_wrapper->context));
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -887,4 +897,7 @@ void Init_llama_cpp(void) {
 
   /* llama_supports_rpc */
   rb_define_module_function(rb_mLLaMACpp, "llama_supports_rpc", rb_llama_supports_rpc, 0);
+
+  /* llama_n_ctx */
+  rb_define_module_function(rb_mLLaMACpp, "llama_n_ctx", rb_llama_n_ctx, 1);
 }
