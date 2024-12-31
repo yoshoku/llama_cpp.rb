@@ -775,6 +775,18 @@ static VALUE rb_llama_rope_freq_scale_train(VALUE self, VALUE model) {
   return DBL2NUM(llama_rope_freq_scale_train(model_wrapper->model));
 }
 
+/* llama_model_desc */
+static VALUE rb_llama_model_desc(VALUE self, VALUE model) {
+  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
+    rb_raise(rb_eArgError, "model must be a Model");
+    return Qnil;
+  }
+  char buf[128];
+  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
+  llama_model_desc(model_wrapper->model, buf, sizeof(buf));
+  return rb_utf8_str_new_cstr(buf);
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -1075,4 +1087,12 @@ void Init_llama_cpp(void) {
 
   /* llama_rope_freq_scale_train */
   rb_define_module_function(rb_mLLaMACpp, "llama_rope_freq_scale_train", rb_llama_rope_freq_scale_train, 1);
+
+  /* llama_model_meta_val_str */
+  /* llama_model_meta_count */
+  /* llama_model_meta_key_by_index */
+  /* llama_model_meta_val_str_by_index */
+
+  /* llama_model_desc */
+  rb_define_module_function(rb_mLLaMACpp, "llama_model_desc", rb_llama_model_desc, 1);
 }
