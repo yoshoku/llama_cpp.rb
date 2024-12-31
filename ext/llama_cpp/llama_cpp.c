@@ -606,6 +606,11 @@ static VALUE rb_llama_time_us(VALUE self) {
   return LONG2NUM(llama_time_us());
 }
 
+/* llama_max_devices */
+static VALUE rb_llama_max_devices(VALUE self) {
+  return SIZET2NUM(llama_max_devices());
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -847,4 +852,7 @@ void Init_llama_cpp(void) {
 
   /* llama_time_us */
   rb_define_module_function(rb_mLLaMACpp, "llama_time_us", rb_llama_time_us, 0);
+
+  /* llama_max_devices */
+  rb_define_module_function(rb_mLLaMACpp, "llama_max_devices", rb_llama_max_devices, 0);
 }
