@@ -2,7 +2,9 @@
 
 VALUE rb_mLLaMACpp;
 VALUE rb_cLlamaModel;
+VALUE rb_cLlamaContext;
 VALUE rb_cLlamaModelParams;
+VALUE rb_cLlamaContextParams;
 
 /* llama_model wrapper */
 typedef struct {
@@ -35,6 +37,12 @@ static VALUE llama_model_wrapper_alloc(VALUE self) {
   llama_model_wrapper* data = (llama_model_wrapper*)ruby_xmalloc(sizeof(llama_model_wrapper));
   data->model = NULL;
   return TypedData_Wrap_Struct(self, &llama_model_wrapper_data_type, data);
+}
+
+static llama_model_wrapper* get_llama_model_wrapper(VALUE self) {
+  llama_model_wrapper* data = NULL;
+  TypedData_Get_Struct(self, llama_model_wrapper, &llama_model_wrapper_data_type, data);
+  return data;
 }
 
 /* llama_context wrapper */
@@ -334,13 +342,11 @@ static VALUE llama_context_params_alloc(VALUE self) {
   return TypedData_Wrap_Struct(self, &llama_context_params_type, data);
 }
 
-/*
 static struct llama_context_params* get_llama_context_params(VALUE self) {
   struct llama_context_params* data = NULL;
   TypedData_Get_Struct(self, struct llama_context_params, &llama_context_params_type, data);
   return data;
 }
-*/
 
 /* llama_model_quantize_params */
 static void llama_model_quantize_params_free(void *ptr) {
@@ -521,7 +527,7 @@ static VALUE rb_llama_numa_init(VALUE self, VALUE numa) {
   return Qnil;
 }
 
-/* llama_numa_free */
+/* llama_backend_free */
 static VALUE rb_llama_backend_free(VALUE self) {
   llama_backend_free();
   return Qnil;
@@ -539,9 +545,26 @@ static VALUE rb_llama_load_model_from_file(VALUE self, VALUE path_model, VALUE p
   }
   const char* path_model_ = StringValueCStr(path_model);
   struct llama_model_params* params_ = get_llama_model_params(params);
-  llama_model_wrapper* data = (llama_model_wrapper*)ruby_xmalloc(sizeof(llama_model_wrapper));
-  data->model = llama_load_model_from_file(path_model_, *params_);
-  return TypedData_Wrap_Struct(rb_cLlamaModel, &llama_model_wrapper_data_type, data);
+  llama_model_wrapper* model_wrapper = (llama_model_wrapper*)ruby_xmalloc(sizeof(llama_model_wrapper));
+  model_wrapper->model = llama_load_model_from_file(path_model_, *params_);
+  return TypedData_Wrap_Struct(rb_cLlamaModel, &llama_model_wrapper_data_type, model_wrapper);
+}
+
+/* llama_new_context_with_model */
+static VALUE rb_llama_new_context_with_model(VALUE self, VALUE model, VALUE params) {
+  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
+    rb_raise(rb_eArgError, "model must be a Model");
+    return Qnil;
+  }
+  if (!rb_obj_is_kind_of(params, rb_cLlamaContextParams)) {
+    rb_raise(rb_eArgError, "params must be a ContextParams");
+    return Qnil;
+  }
+  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
+  struct llama_context_params* params_ = get_llama_context_params(params);
+  llama_context_wrapper* context_wrapper = (llama_context_wrapper*)ruby_xmalloc(sizeof(llama_context_wrapper));
+  context_wrapper->context = llama_new_context_with_model(model_wrapper->model, *params_);
+  return TypedData_Wrap_Struct(rb_cLlamaContext, &llama_context_wrapper_data_type, context_wrapper);
 }
 
 /* MAIN */
@@ -554,7 +577,7 @@ void Init_llama_cpp(void) {
   rb_define_alloc_func(rb_cLlamaModel, llama_model_wrapper_alloc);
 
   /* llama_context */
-  VALUE rb_cLlamaContext = rb_define_class_under(rb_mLLaMACpp, "Context", rb_cObject);
+  rb_cLlamaContext = rb_define_class_under(rb_mLLaMACpp, "Context", rb_cObject);
   rb_define_alloc_func(rb_cLlamaContext, llama_context_wrapper_alloc);
 
   /* llama_sampler */
@@ -736,7 +759,7 @@ void Init_llama_cpp(void) {
   rb_define_alloc_func(rb_cLlamaModelParams, llama_model_params_alloc);
 
   /* llama_context_params */
-  VALUE rb_cLlamaContextParams = rb_define_class_under(rb_mLLaMACpp, "ContextParams", rb_cObject);
+  rb_cLlamaContextParams = rb_define_class_under(rb_mLLaMACpp, "ContextParams", rb_cObject);
   rb_define_alloc_func(rb_cLlamaContextParams, llama_context_params_alloc);
 
   /* llama_model_quantize_params */
@@ -773,4 +796,7 @@ void Init_llama_cpp(void) {
 
   /* llama_load_model_from_file */
   rb_define_module_function(rb_mLLaMACpp, "llama_load_model_from_file", rb_llama_load_model_from_file, 2);
+
+  /* llama_new_context_with_model */
+  rb_define_module_function(rb_mLLaMACpp, "llama_new_context_with_model", rb_llama_new_context_with_model, 2);
 }
