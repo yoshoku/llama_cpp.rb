@@ -621,6 +621,11 @@ static VALUE rb_llama_supports_mlock(VALUE self) {
   return llama_supports_mlock() ? Qtrue : Qfalse;
 }
 
+/* llama_supports_gpu_offload */
+static VALUE rb_llama_supports_gpu_offload(VALUE self) {
+  return llama_supports_gpu_offload() ? Qtrue : Qfalse;
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -871,4 +876,7 @@ void Init_llama_cpp(void) {
 
   /* llama_supports_mlock */
   rb_define_module_function(rb_mLLaMACpp, "llama_supports_mlock", rb_llama_supports_mlock, 0);
+
+  /* llama_supports_gpu_offload */
+  rb_define_module_function(rb_mLLaMACpp, "llama_supports_gpu_offload", rb_llama_supports_gpu_offload, 0);
 }
