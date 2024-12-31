@@ -601,6 +601,11 @@ static VALUE rb_llama_free(VALUE self, VALUE context) {
   return Qnil;
 }
 
+/* llama_time_us */
+static VALUE rb_llama_time_us(VALUE self) {
+  return LONG2NUM(llama_time_us());
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -839,4 +844,7 @@ void Init_llama_cpp(void) {
 
   /* llama_free */
   rb_define_module_function(rb_mLLaMACpp, "llama_free", rb_llama_free, 1);
+
+  /* llama_time_us */
+  rb_define_module_function(rb_mLLaMACpp, "llama_time_us", rb_llama_time_us, 0);
 }
