@@ -701,6 +701,16 @@ static VALUE rb_llama_n_embd(VALUE self, VALUE model) {
   return INT2NUM(llama_n_embd(model_wrapper->model));
 }
 
+/* llama_n_layer */
+static VALUE rb_llama_n_layer(VALUE self, VALUE model) {
+  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
+    rb_raise(rb_eArgError, "model must be a Model");
+    return Qnil;
+  }
+  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
+  return INT2NUM(llama_n_layer(model_wrapper->model));
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -978,4 +988,7 @@ void Init_llama_cpp(void) {
 
   /* llama_n_embd */
   rb_define_module_function(rb_mLLaMACpp, "llama_n_embd", rb_llama_n_embd, 1);
+
+  /* llama_n_layer */
+  rb_define_module_function(rb_mLLaMACpp, "llama_n_layer", rb_llama_n_layer, 1);
 }
