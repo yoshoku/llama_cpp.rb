@@ -78,6 +78,12 @@ static VALUE llama_context_wrapper_alloc(VALUE self) {
   return TypedData_Wrap_Struct(self, &llama_context_wrapper_data_type, data);
 }
 
+static llama_context_wrapper* get_llama_context_wrapper(VALUE self) {
+  llama_context_wrapper* data = NULL;
+  TypedData_Get_Struct(self, llama_context_wrapper, &llama_context_wrapper_data_type, data);
+  return data;
+}
+
 /* llama_sampler wrapper */
 typedef struct {
   struct llama_sampler* sampler;
@@ -581,6 +587,20 @@ static VALUE rb_llama_new_context_with_model(VALUE self, VALUE model, VALUE para
   return TypedData_Wrap_Struct(rb_cLlamaContext, &llama_context_wrapper_data_type, context_wrapper);
 }
 
+/* llama_free */
+static VALUE rb_llama_free(VALUE self, VALUE context) {
+  if (!rb_obj_is_kind_of(context, rb_cLlamaContext)) {
+    rb_raise(rb_eArgError, "context must be a Context");
+    return Qnil;
+  }
+  llama_context_wrapper* context_wrapper = get_llama_context_wrapper(context);
+  if (context_wrapper->context != NULL) {
+    llama_free(context_wrapper->context);
+    context_wrapper->context = NULL;
+  }
+  return Qnil;
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -816,4 +836,7 @@ void Init_llama_cpp(void) {
 
   /* llama_new_context_with_model */
   rb_define_module_function(rb_mLLaMACpp, "llama_new_context_with_model", rb_llama_new_context_with_model, 2);
+
+  /* llama_free */
+  rb_define_module_function(rb_mLLaMACpp, "llama_free", rb_llama_free, 1);
 }
