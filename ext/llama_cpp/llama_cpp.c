@@ -5,6 +5,7 @@ VALUE rb_cLlamaModel;
 VALUE rb_cLlamaContext;
 VALUE rb_cLlamaModelParams;
 VALUE rb_cLlamaContextParams;
+VALUE rb_cLlamaModelQuantizeParams;
 
 /* llama_model wrapper */
 typedef struct {
@@ -379,13 +380,11 @@ static VALUE llama_model_quantize_params_alloc(VALUE self) {
   return TypedData_Wrap_Struct(self, &llama_model_quantize_params_type, data);
 }
 
-/*
 static llama_model_quantize_params* get_llama_model_quantize_params(VALUE self) {
   llama_model_quantize_params* data = NULL;
-  TypedData_Get_Struct(self, struct llama_model_quantize_params, &llama_model_quantize_params_type, data);
+  TypedData_Get_Struct(self, llama_model_quantize_params, &llama_model_quantize_params_type, data);
   return data;
 }
-*/
 
 /* llama_logit_bias */
 static void llama_logit_bias_free(void *ptr) {
@@ -847,6 +846,30 @@ static VALUE rb_llama_model_is_recurrent(VALUE self, VALUE model) {
   return llama_model_is_recurrent(model_wrapper->model) ? Qtrue : Qfalse;
 }
 
+/* llama_model_quantize */
+static VALUE rb_llama_model_quantize(VALUE self, VALUE fname_inp, VALUE fname_out, VALUE params) {
+  if (!RB_TYPE_P(fname_inp, T_STRING)) {
+    rb_raise(rb_eArgError, "fname_inp must be a string");
+    return Qnil;
+  }
+  if (!RB_TYPE_P(fname_out, T_STRING)) {
+    rb_raise(rb_eArgError, "fname_out must be a string");
+    return Qnil;
+  }
+  if (!rb_obj_is_kind_of(params, rb_cLlamaModelQuantizeParams)) {
+    rb_raise(rb_eArgError, "params must be a ModelQuantizeParams");
+    return Qnil;
+  }
+  const char* fname_inp_ = StringValueCStr(fname_inp);
+  const char* fname_out_ = StringValueCStr(fname_out);
+  const llama_model_quantize_params* params_ = get_llama_model_quantize_params(params);
+  const uint32_t res = llama_model_quantize(fname_inp_, fname_out_, params_);
+  RB_GC_GUARD(fname_inp);
+  RB_GC_GUARD(fname_out);
+  RB_GC_GUARD(params);
+  return res == 0 ? Qtrue : Qfalse;
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -1043,7 +1066,7 @@ void Init_llama_cpp(void) {
   rb_define_alloc_func(rb_cLlamaContextParams, llama_context_params_alloc);
 
   /* llama_model_quantize_params */
-  VALUE rb_cLlamaModelQuantizeParams = rb_define_class_under(rb_mLLaMACpp, "ModelQuantizeParams", rb_cObject);
+  rb_cLlamaModelQuantizeParams = rb_define_class_under(rb_mLLaMACpp, "ModelQuantizeParams", rb_cObject);
   rb_define_alloc_func(rb_cLlamaModelQuantizeParams, llama_model_quantize_params_alloc);
 
   /* llama_logit_bias */
@@ -1173,4 +1196,7 @@ void Init_llama_cpp(void) {
 
   /* llama_model_is_recurrent */
   rb_define_module_function(rb_mLLaMACpp, "llama_model_is_recurrent", rb_llama_model_is_recurrent, 1);
+
+  /* llama_model_quantize */
+  rb_define_module_function(rb_mLLaMACpp, "llama_model_quantize", rb_llama_model_quantize, 3);
 }
