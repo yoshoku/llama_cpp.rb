@@ -837,6 +837,16 @@ static VALUE rb_llama_model_decoder_start_token(VALUE self, VALUE model) {
   return INT2NUM(llama_model_decoder_start_token(model_wrapper->model));
 }
 
+/* llama_model_is_recurrent */
+static VALUE rb_llama_model_is_recurrent(VALUE self, VALUE model) {
+  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
+    rb_raise(rb_eArgError, "model must be a Model");
+    return Qnil;
+  }
+  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
+  return llama_model_is_recurrent(model_wrapper->model) ? Qtrue : Qfalse;
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -1160,4 +1170,7 @@ void Init_llama_cpp(void) {
 
   /* llama_model_decoder_start_token */
   rb_define_module_function(rb_mLLaMACpp, "llama_model_decoder_start_token", rb_llama_model_decoder_start_token, 1);
+
+  /* llama_model_is_recurrent */
+  rb_define_module_function(rb_mLLaMACpp, "llama_model_is_recurrent", rb_llama_model_is_recurrent, 1);
 }
