@@ -797,6 +797,16 @@ static VALUE rb_llama_model_size(VALUE self, VALUE model) {
   return ULONG2NUM(llama_model_size(model_wrapper->model));
 }
 
+/* llama_model_n_params */
+static VALUE rb_llama_model_n_params(VALUE self, VALUE model) {
+  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
+    rb_raise(rb_eArgError, "model must be a Model");
+    return Qnil;
+  }
+  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
+  return ULONG2NUM(llama_model_n_params(model_wrapper->model));
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -1108,4 +1118,7 @@ void Init_llama_cpp(void) {
 
   /* llama_model_size */
   rb_define_module_function(rb_mLLaMACpp, "llama_model_size", rb_llama_model_size, 1);
+
+  /* llama_model_n_params */
+  rb_define_module_function(rb_mLLaMACpp, "llama_model_n_params", rb_llama_model_n_params, 1);
 }
