@@ -936,6 +936,18 @@ static VALUE rb_llama_lora_adapter_remove(VALUE self, VALUE ctx, VALUE adapter) 
   return NUM2INT(res);
 }
 
+/* llama_lora_adapter_clear */
+static VALUE rb_llama_lora_adapter_clear(VALUE self, VALUE ctx) {
+  if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
+    rb_raise(rb_eArgError, "ctx must be a Context");
+    return Qnil;
+  }
+  llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
+  llama_lora_adapter_clear(context_wrapper->context);
+  RB_GC_GUARD(ctx);
+  return Qnil;
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -1274,4 +1286,7 @@ void Init_llama_cpp(void) {
 
   /* llama_lora_adapter_remove */
   rb_define_module_function(rb_mLLaMACpp, "llama_lora_adapter_remove", rb_llama_lora_adapter_remove, 2);
+
+  /* llama_lora_adapter_clear */
+  rb_define_module_function(rb_mLLaMACpp, "llama_lora_adapter_clear", rb_llama_lora_adapter_clear, 1);
 }
