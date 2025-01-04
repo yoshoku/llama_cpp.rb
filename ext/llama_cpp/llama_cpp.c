@@ -870,6 +870,25 @@ static VALUE rb_llama_model_quantize(VALUE self, VALUE fname_inp, VALUE fname_ou
   return res == 0 ? Qtrue : Qfalse;
 }
 
+/* llama_lora_adapter_init */
+static VALUE rb_llama_lora_adapter_init(VALUE self, VALUE model, VALUE path_lora) {
+  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
+    rb_raise(rb_eArgError, "model must be a Model");
+    return Qnil;
+  }
+  if (!RB_TYPE_P(path_lora, T_STRING)) {
+    rb_raise(rb_eArgError, "path_lora must be a String");
+    return Qnil;
+  }
+  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
+  const char* path_lora_ = StringValueCStr(path_lora);
+  llama_lora_adapter_wrapper* adapter_wrapper = (llama_lora_adapter_wrapper*)ruby_xmalloc(sizeof(llama_lora_adapter_wrapper));
+  adapter_wrapper->adapter = llama_lora_adapter_init(model_wrapper->model, path_lora_);
+  RB_GC_GUARD(model);
+  RB_GC_GUARD(path_lora);
+  return TypedData_Wrap_Struct(self, &llama_lora_adapter_wrapper_data_type, adapter_wrapper);
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -1199,4 +1218,7 @@ void Init_llama_cpp(void) {
 
   /* llama_model_quantize */
   rb_define_module_function(rb_mLLaMACpp, "llama_model_quantize", rb_llama_model_quantize, 3);
+
+  /* llama_lora_adapter_init */
+  rb_define_module_function(rb_mLLaMACpp, "llama_lora_adapter_init", rb_llama_lora_adapter_init, 2);
 }
