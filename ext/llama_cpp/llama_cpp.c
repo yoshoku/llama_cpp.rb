@@ -6,6 +6,7 @@ VALUE rb_cLlamaContext;
 VALUE rb_cLlamaModelParams;
 VALUE rb_cLlamaContextParams;
 VALUE rb_cLlamaModelQuantizeParams;
+VALUE rb_cLlamaLoraAdapter;
 
 /* llama_model wrapper */
 typedef struct {
@@ -516,6 +517,12 @@ static VALUE llama_lora_adapter_wrapper_alloc(VALUE self) {
   return TypedData_Wrap_Struct(self, &llama_lora_adapter_wrapper_data_type, data);
 }
 
+static llama_lora_adapter_wrapper* get_llama_lora_adapter_wrapper(VALUE self) {
+  llama_lora_adapter_wrapper* data = NULL;
+  TypedData_Get_Struct(self, llama_lora_adapter_wrapper, &llama_lora_adapter_wrapper_data_type, data);
+  return data;
+}
+
 /* llama_backend_init */
 static VALUE rb_llama_backend_init(VALUE self) {
   llama_backend_init();
@@ -889,6 +896,28 @@ static VALUE rb_llama_lora_adapter_init(VALUE self, VALUE model, VALUE path_lora
   return TypedData_Wrap_Struct(self, &llama_lora_adapter_wrapper_data_type, adapter_wrapper);
 }
 
+/* llama_lora_adapter_set */
+static VALUE rb_llama_lora_adapter_set(VALUE self, VALUE ctx, VALUE adapter, VALUE scale) {
+  if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
+    rb_raise(rb_eArgError, "ctx must be a Context");
+    return Qnil;
+  }
+  if (!rb_obj_is_kind_of(adapter, rb_cLlamaLoraAdapter)) {
+    rb_raise(rb_eArgError, "adapter must be a LoraAdapter");
+    return Qnil;
+  }
+  if (!RB_FLOAT_TYPE_P(scale)) {
+    rb_raise(rb_eArgError, "scale must be a Float");
+    return Qnil;
+  }
+  llama_lora_adapter_wrapper* adapter_wrapper = get_llama_lora_adapter_wrapper(adapter);
+  llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
+  const int32_t res = llama_lora_adapter_set(context_wrapper->context, adapter_wrapper->adapter, (float)NUM2DBL(scale));
+  RB_GC_GUARD(ctx);
+  RB_GC_GUARD(adapter);
+  return NUM2INT(res);
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -1101,7 +1130,7 @@ void Init_llama_cpp(void) {
   rb_define_alloc_func(rb_cLlamaChatMessage, llama_chat_message_alloc);
 
   /* llama_lora_adapter */
-  VALUE rb_cLlamaLoraAdapter = rb_define_class_under(rb_mLLaMACpp, "LoraAdapter", rb_cObject);
+  rb_cLlamaLoraAdapter = rb_define_class_under(rb_mLLaMACpp, "LoraAdapter", rb_cObject);
   rb_define_alloc_func(rb_cLlamaLoraAdapter, llama_lora_adapter_wrapper_alloc);
 
   /* llama_backend_init */
@@ -1221,4 +1250,7 @@ void Init_llama_cpp(void) {
 
   /* llama_lora_adapter_init */
   rb_define_module_function(rb_mLLaMACpp, "llama_lora_adapter_init", rb_llama_lora_adapter_init, 2);
+
+  /* llama_lora_adapter_set */
+  rb_define_module_function(rb_mLLaMACpp, "llama_lora_adapter_set", rb_llama_lora_adapter_set, 3);
 }
