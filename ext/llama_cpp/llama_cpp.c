@@ -1246,6 +1246,22 @@ static VALUE rb_llama_kv_cache_seq_div(VALUE self, VALUE ctx, VALUE seq_id, VALU
   return Qnil;
 }
 
+/* llama_kv_cache_seq_pos_max */
+static VALUE rb_llama_kv_cache_seq_pos_max(VALUE self, VALUE ctx, VALUE seq_id) {
+  if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
+    rb_raise(rb_eArgError, "ctx must be a Context");
+    return Qnil;
+  }
+  if (!RB_INTEGER_TYPE_P(seq_id)) {
+    rb_raise(rb_eArgError, "seq_id must be an integer");
+    return Qnil;
+  }
+  llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
+  const int32_t pos_max = llama_kv_cache_seq_pos_max(context_wrapper->context, NUM2INT(seq_id));
+  RB_GC_GUARD(ctx);
+  return INT2NUM(pos_max);
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -1633,4 +1649,7 @@ void Init_llama_cpp(void) {
 
   /* llama_kv_cache_seq_div */
   rb_define_module_function(rb_mLLaMACpp, "llama_kv_cache_seq_div", rb_llama_kv_cache_seq_div, 5);
+
+  /* llama_kv_cache_seq_pos_max */
+  rb_define_module_function(rb_mLLaMACpp, "llama_kv_cache_seq_pos_max", rb_llama_kv_cache_seq_pos_max, 2);
 }
