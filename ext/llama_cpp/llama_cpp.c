@@ -1066,6 +1066,24 @@ static VALUE rb_llama_kv_cache_view_free(VALUE self, VALUE view) {
   return Qnil;
 }
 
+/* llama_kv_cache_view_update */
+static VALUE rb_llama_kv_cache_view_update(VALUE self, VALUE ctx, VALUE view) {
+  if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
+    rb_raise(rb_eArgError, "ctx must be a Context");
+    return Qnil;
+  }
+  if (!rb_obj_is_kind_of(view, rb_cLlamaKvCacheView)) {
+    rb_raise(rb_eArgError, "view must be a KvCacheView");
+    return Qnil;
+  }
+  llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
+  struct llama_kv_cache_view* view_ = get_llama_kv_cache_view(view);
+  llama_kv_cache_view_update(context_wrapper->context, view_);
+  RB_GC_GUARD(ctx);
+  RB_GC_GUARD(view);
+  return Qnil;
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -1426,4 +1444,7 @@ void Init_llama_cpp(void) {
 
   /* llama_kv_cache_view_free */
   rb_define_module_function(rb_mLLaMACpp, "llama_kv_cache_view_free", rb_llama_kv_cache_view_free, 1);
+
+  /* llama_kv_cache_view_update */
+  rb_define_module_function(rb_mLLaMACpp, "llama_kv_cache_view_update", rb_llama_kv_cache_view_update, 2);
 }
