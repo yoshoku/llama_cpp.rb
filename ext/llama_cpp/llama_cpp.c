@@ -1174,6 +1174,22 @@ static VALUE rb_llama_kv_cache_seq_cp(VALUE self, VALUE ctx, VALUE seq_id_src, V
   return Qnil;
 }
 
+/* llama_kv_cache_seq_keep */
+static VALUE rb_llama_kv_cache_seq_keep(VALUE self, VALUE ctx, VALUE seq_id) {
+  if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
+    rb_raise(rb_eArgError, "ctx must be a Context");
+    return Qnil;
+  }
+  if (!RB_INTEGER_TYPE_P(seq_id)) {
+    rb_raise(rb_eArgError, "seq_id must be an integer");
+    return Qnil;
+  }
+  llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
+  llama_kv_cache_seq_keep(context_wrapper->context, NUM2INT(seq_id));
+  RB_GC_GUARD(ctx);
+  return Qnil;
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -1552,4 +1568,7 @@ void Init_llama_cpp(void) {
 
   /* llama_kv_cache_seq_cp */
   rb_define_module_function(rb_mLLaMACpp, "llama_kv_cache_seq_cp", rb_llama_kv_cache_seq_cp, 5);
+
+  /* llama_kv_cache_seq_keep */
+  rb_define_module_function(rb_mLLaMACpp, "llama_kv_cache_seq_keep", rb_llama_kv_cache_seq_keep, 2);
 }
