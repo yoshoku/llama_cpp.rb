@@ -26,7 +26,7 @@ static size_t llama_model_wrapper_size(const void *ptr) {
 }
 
 static rb_data_type_t llama_model_wrapper_data_type = {
-  "RbLlamaModel",
+  "LlamaModel",
   { NULL,
     llama_model_wrapper_free,
     llama_model_wrapper_size },
@@ -65,7 +65,7 @@ static size_t llama_context_wrapper_size(const void *ptr) {
 }
 
 static rb_data_type_t llama_context_wrapper_data_type = {
-  "RbLlamaContext",
+  "LlamaContext",
   { NULL,
     llama_context_wrapper_free,
     llama_context_wrapper_size },
@@ -104,7 +104,7 @@ static size_t llama_sampler_wrapper_size(const void *ptr) {
 }
 
 static rb_data_type_t llama_sampler_wrapper_data_type = {
-  "RbLlamaSampler",
+  "LlamaSampler",
   { NULL,
     llama_sampler_wrapper_free,
     llama_sampler_wrapper_size },
@@ -129,7 +129,7 @@ static size_t llama_token_data_size(const void *ptr) {
 }
 
 static rb_data_type_t llama_token_data_type = {
-  "RbLlamaTokenData",
+  "LlamaTokenData",
   { NULL,
     llama_token_data_free,
     llama_token_data_size },
@@ -180,7 +180,7 @@ static size_t llama_token_data_array_size(const void *ptr) {
 }
 
 static rb_data_type_t llama_token_data_array_type = {
-  "RbLlamaTokenDataArray",
+  "LlamaTokenDataArray",
   { NULL,
     llama_token_data_array_free,
     llama_token_data_array_size },
@@ -230,7 +230,7 @@ static size_t llama_batch_size(const void *ptr) {
 }
 
 static rb_data_type_t llama_batch_type = {
-  "RbLlamaBatch",
+  "LlamaBatch",
   { NULL,
     llama_batch_free_,
     llama_batch_size },
@@ -262,7 +262,7 @@ static VALUE llama_batch_get_n_tokens(VALUE self) {
   return INT2NUM(data->n_tokens);
 }
 
-/* llama_model_kv_override */
+/* struct llama_model_kv_override */
 static void llama_model_kv_override_free(void *ptr) {
   ruby_xfree(ptr);
 }
@@ -272,7 +272,7 @@ static size_t llama_model_kv_override_size(const void *ptr) {
 }
 
 static rb_data_type_t llama_model_kv_override_type = {
-  "RbLlamaModelKvOverride",
+  "LlamaModelKvOverride",
   { NULL,
     llama_model_kv_override_free,
     llama_model_kv_override_size },
@@ -294,7 +294,7 @@ static struct llama_model_kv_override* get_llama_model_kv_override(VALUE self) {
 }
 */
 
-/* llama_model_params */
+/* struct llama_model_params */
 static void llama_model_params_free(void *ptr) {
   ruby_xfree(ptr);
 }
@@ -304,7 +304,7 @@ static size_t llama_model_params_size(const void *ptr) {
 }
 
 static rb_data_type_t llama_model_params_type = {
-  "RbLlamaModelParams",
+  "LlamaModelParams",
   { NULL,
     llama_model_params_free,
     llama_model_params_size },
@@ -325,7 +325,7 @@ static struct llama_model_params* get_llama_model_params(VALUE self) {
   return data;
 }
 
-/* llama_context_params */
+/* struct llama_context_params */
 static void llama_context_params_free(void *ptr) {
   ruby_xfree(ptr);
 }
@@ -335,7 +335,7 @@ static size_t llama_context_params_size(const void *ptr) {
 }
 
 static rb_data_type_t llama_context_params_type = {
-  "RbLlamaContextParams",
+  "LlamaContextParams",
   { NULL,
     llama_context_params_free,
     llama_context_params_size },
@@ -366,7 +366,7 @@ static size_t llama_model_quantize_params_size(const void *ptr) {
 }
 
 static rb_data_type_t llama_model_quantize_params_type = {
-  "RbLlamaModelQuantizeParams",
+  "LlamaModelQuantizeParams",
   { NULL,
     llama_model_quantize_params_free,
     llama_model_quantize_params_size },
@@ -397,7 +397,7 @@ static size_t llama_logit_bias_size(const void *ptr) {
 }
 
 static rb_data_type_t llama_logit_bias_type = {
-  "RbLlamaLogitBias",
+  "LlamaLogitBias",
   { NULL,
     llama_logit_bias_free,
     llama_logit_bias_size },
@@ -429,7 +429,7 @@ static size_t llama_sampler_chain_params_size(const void *ptr) {
 }
 
 static rb_data_type_t llama_sampler_chain_params_type = {
-  "RbLlamaSamplerChainParams",
+  "LlamaSamplerChainParams",
   { NULL,
     llama_sampler_chain_params_free,
     llama_sampler_chain_params_size },
@@ -462,7 +462,7 @@ static size_t llama_chat_message_size(const void *ptr) {
 }
 
 static rb_data_type_t llama_chat_message_type = {
-  "RbLlamaChatMessage",
+  "LlamaChatMessage",
   { NULL,
     llama_chat_message_free,
     llama_chat_message_size },
@@ -502,7 +502,7 @@ static size_t llama_lora_adapter_wrapper_size(const void *ptr) {
 }
 
 static rb_data_type_t llama_lora_adapter_wrapper_data_type = {
-  "RbLlamaLoraAdapter",
+  "LlamaLoraAdapter",
   { NULL,
     llama_lora_adapter_wrapper_free,
     llama_lora_adapter_wrapper_size },
@@ -973,7 +973,7 @@ static size_t llama_kv_cache_view_cell_size(const void *ptr) {
 }
 
 static rb_data_type_t llama_kv_cache_view_cell_type = {
-  "RbLlamaKvCacheViewCell",
+  "LlamaKvCacheViewCell",
   { NULL,
     llama_kv_cache_view_cell_free,
     llama_kv_cache_view_cell_size },
@@ -1008,7 +1008,7 @@ static size_t llama_kv_cache_view_size(const void *ptr) {
 }
 
 static rb_data_type_t llama_kv_cache_view_type = {
-  "RbLlamaKvCacheView",
+  "LlamaKvCacheView",
   { NULL,
     llama_kv_cache_view_free_,
     llama_kv_cache_view_size },
@@ -1044,15 +1044,15 @@ void Init_llama_cpp(void) {
   rb_mLLaMACpp = rb_define_module("LLaMACpp");
 
   /* llama_model */
-  rb_cLlamaModel = rb_define_class_under(rb_mLLaMACpp, "Model", rb_cObject);
+  rb_cLlamaModel = rb_define_class_under(rb_mLLaMACpp, "LlamaModel", rb_cObject);
   rb_define_alloc_func(rb_cLlamaModel, llama_model_wrapper_alloc);
 
   /* llama_context */
-  rb_cLlamaContext = rb_define_class_under(rb_mLLaMACpp, "Context", rb_cObject);
+  rb_cLlamaContext = rb_define_class_under(rb_mLLaMACpp, "LlamaContext", rb_cObject);
   rb_define_alloc_func(rb_cLlamaContext, llama_context_wrapper_alloc);
 
   /* llama_sampler */
-  VALUE rb_cLlamaSampler = rb_define_class_under(rb_mLLaMACpp, "Sampler", rb_cObject);
+  VALUE rb_cLlamaSampler = rb_define_class_under(rb_mLLaMACpp, "LlamaSampler", rb_cObject);
   rb_define_alloc_func(rb_cLlamaSampler, llama_sampler_wrapper_alloc);
 
   /* Constants */
@@ -1197,21 +1197,21 @@ void Init_llama_cpp(void) {
   rb_define_const(rb_mLLaMACpp, "LLAMA_SPLIT_MODE_ROW", INT2NUM(LLAMA_SPLIT_MODE_ROW));
 
   /* llama_token_data */
-  VALUE rb_cLlamaTokenData = rb_define_class_under(rb_mLLaMACpp, "TokenData", rb_cObject);
+  VALUE rb_cLlamaTokenData = rb_define_class_under(rb_mLLaMACpp, "LlamaTokenData", rb_cObject);
   rb_define_alloc_func(rb_cLlamaTokenData, llama_token_data_alloc);
   rb_define_method(rb_cLlamaTokenData, "id", RUBY_METHOD_FUNC(llama_token_data_get_id), 0);
   rb_define_method(rb_cLlamaTokenData, "logit", RUBY_METHOD_FUNC(llama_token_data_get_logit), 0);
   rb_define_method(rb_cLlamaTokenData, "p", RUBY_METHOD_FUNC(llama_token_data_get_p), 0);
 
   /* llama_token_data_array */
-  VALUE rb_cLlamaTokenDataArray = rb_define_class_under(rb_mLLaMACpp, "TokenDataArray", rb_cObject);
+  VALUE rb_cLlamaTokenDataArray = rb_define_class_under(rb_mLLaMACpp, "LlamaTokenDataArray", rb_cObject);
   rb_define_alloc_func(rb_cLlamaTokenDataArray, llama_token_data_array_alloc);
   rb_define_method(rb_cLlamaTokenDataArray, "size", RUBY_METHOD_FUNC(llama_token_data_array_get_size), 0);
   rb_define_method(rb_cLlamaTokenDataArray, "selected", RUBY_METHOD_FUNC(llama_token_data_array_get_selected), 0);
   rb_define_method(rb_cLlamaTokenDataArray, "sorted", RUBY_METHOD_FUNC(llama_token_data_array_get_sorted), 0);
 
   /* llama_batch */
-  VALUE rb_cLlamaBatch = rb_define_class_under(rb_mLLaMACpp, "Batch", rb_cObject);
+  VALUE rb_cLlamaBatch = rb_define_class_under(rb_mLLaMACpp, "LlamaBatch", rb_cObject);
   rb_define_alloc_func(rb_cLlamaBatch, llama_batch_alloc);
   rb_define_method(rb_cLlamaBatch, "n_tokens", RUBY_METHOD_FUNC(llama_batch_get_n_tokens), 0);
 
@@ -1222,35 +1222,35 @@ void Init_llama_cpp(void) {
   rb_define_const(rb_mLLaMACpp, "LLAMA_KV_OVERRIDE_TYPE_STR", INT2NUM(LLAMA_KV_OVERRIDE_TYPE_STR));
 
   /* llama_model_kv_override */
-  VALUE rb_cLlamaModelKvOverride = rb_define_class_under(rb_mLLaMACpp, "ModelKvOverride", rb_cObject);
+  VALUE rb_cLlamaModelKvOverride = rb_define_class_under(rb_mLLaMACpp, "LlamaModelKvOverride", rb_cObject);
   rb_define_alloc_func(rb_cLlamaModelKvOverride, llama_model_kv_override_alloc);
 
   /* llama_model_params */
-  rb_cLlamaModelParams = rb_define_class_under(rb_mLLaMACpp, "ModelParams", rb_cObject);
+  rb_cLlamaModelParams = rb_define_class_under(rb_mLLaMACpp, "LlamaModelParams", rb_cObject);
   rb_define_alloc_func(rb_cLlamaModelParams, llama_model_params_alloc);
 
   /* llama_context_params */
-  rb_cLlamaContextParams = rb_define_class_under(rb_mLLaMACpp, "ContextParams", rb_cObject);
+  rb_cLlamaContextParams = rb_define_class_under(rb_mLLaMACpp, "LlamaContextParams", rb_cObject);
   rb_define_alloc_func(rb_cLlamaContextParams, llama_context_params_alloc);
 
   /* llama_model_quantize_params */
-  rb_cLlamaModelQuantizeParams = rb_define_class_under(rb_mLLaMACpp, "ModelQuantizeParams", rb_cObject);
+  rb_cLlamaModelQuantizeParams = rb_define_class_under(rb_mLLaMACpp, "LlamaModelQuantizeParams", rb_cObject);
   rb_define_alloc_func(rb_cLlamaModelQuantizeParams, llama_model_quantize_params_alloc);
 
   /* llama_logit_bias */
-  VALUE rb_cLlamaLogitBias = rb_define_class_under(rb_mLLaMACpp, "LogitBias", rb_cObject);
+  VALUE rb_cLlamaLogitBias = rb_define_class_under(rb_mLLaMACpp, "LlamaLogitBias", rb_cObject);
   rb_define_alloc_func(rb_cLlamaLogitBias, llama_logit_bias_alloc);
 
   /* llama_sampler_chain_params */
-  VALUE rb_cLlamaSamplerChainParams = rb_define_class_under(rb_mLLaMACpp, "SamplerChainParams", rb_cObject);
+  VALUE rb_cLlamaSamplerChainParams = rb_define_class_under(rb_mLLaMACpp, "LlamaSamplerChainParams", rb_cObject);
   rb_define_alloc_func(rb_cLlamaSamplerChainParams, llama_sampler_chain_params_alloc);
 
   /* llama_chat_message */
-  VALUE rb_cLlamaChatMessage = rb_define_class_under(rb_mLLaMACpp, "ChatMessage", rb_cObject);
+  VALUE rb_cLlamaChatMessage = rb_define_class_under(rb_mLLaMACpp, "LlamaChatMessage", rb_cObject);
   rb_define_alloc_func(rb_cLlamaChatMessage, llama_chat_message_alloc);
 
   /* llama_lora_adapter */
-  rb_cLlamaLoraAdapter = rb_define_class_under(rb_mLLaMACpp, "LoraAdapter", rb_cObject);
+  rb_cLlamaLoraAdapter = rb_define_class_under(rb_mLLaMACpp, "LlamaLoraAdapter", rb_cObject);
   rb_define_alloc_func(rb_cLlamaLoraAdapter, llama_lora_adapter_wrapper_alloc);
 
   /* llama_backend_init */
@@ -1386,10 +1386,10 @@ void Init_llama_cpp(void) {
   /* llama_control_vector_apply */
 
   /* struct llama_kv_cache_view_cell */
-  VALUE rb_cLlamaKvCacheViewCell = rb_define_class_under(rb_mLLaMACpp, "KvCacheViewCell", rb_cObject);
+  VALUE rb_cLlamaKvCacheViewCell = rb_define_class_under(rb_mLLaMACpp, "LlamaKvCacheViewCell", rb_cObject);
   rb_define_alloc_func(rb_cLlamaKvCacheViewCell, llama_kv_cache_view_cell_alloc);
 
   /* struct llama_kv_cache_view */
-  VALUE rb_cLlamaKvCacheView = rb_define_class_under(rb_mLLaMACpp, "KvCacheView", rb_cObject);
+  VALUE rb_cLlamaKvCacheView = rb_define_class_under(rb_mLLaMACpp, "LlamaKvCacheView", rb_cObject);
   rb_define_alloc_func(rb_cLlamaKvCacheView, llama_kv_cache_view_alloc);
 }
