@@ -1038,6 +1038,23 @@ static struct llama_kv_cache_view* get_llama_kv_cache_view(VALUE self) {
 }
 */
 
+/* llama_kv_cache_view_init */
+static VALUE rb_llama_kv_cache_view_init(VALUE self, VALUE ctx, VALUE n_seq_max) {
+  if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
+    rb_raise(rb_eArgError, "ctx must be a Context");
+    return Qnil;
+  }
+  if (!RB_INTEGER_TYPE_P(n_seq_max)) {
+    rb_raise(rb_eArgError, "n_seq_max must be an integer");
+    return Qnil;
+  }
+  llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
+  struct llama_kv_cache_view* data = (struct llama_kv_cache_view*)ruby_xmalloc(sizeof(struct llama_kv_cache_view));
+  *data = llama_kv_cache_view_init(context_wrapper->context, NUM2UINT(n_seq_max));
+  RB_GC_GUARD(ctx);
+  return TypedData_Wrap_Struct(self, &llama_kv_cache_view_type, data);
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -1392,4 +1409,7 @@ void Init_llama_cpp(void) {
   /* struct llama_kv_cache_view */
   VALUE rb_cLlamaKvCacheView = rb_define_class_under(rb_mLLaMACpp, "LlamaKvCacheView", rb_cObject);
   rb_define_alloc_func(rb_cLlamaKvCacheView, llama_kv_cache_view_alloc);
+
+  /* llama_kv_cache_view_init */
+  rb_define_module_function(rb_mLLaMACpp, "llama_kv_cache_view_init", rb_llama_kv_cache_view_init, 2);
 }
