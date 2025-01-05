@@ -1106,6 +1106,17 @@ static VALUE rb_llama_get_kv_cache_used_cells(VALUE self, VALUE ctx) {
   return INT2NUM(n_used_kv_cells);
 }
 
+static VALUE rb_llama_kv_cache_clear(VALUE self, VALUE ctx) {
+  if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
+    rb_raise(rb_eArgError, "ctx must be a Context");
+    return Qnil;
+  }
+  llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
+  llama_kv_cache_clear(context_wrapper->context);
+  RB_GC_GUARD(ctx);
+  return Qnil;
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -1475,4 +1486,7 @@ void Init_llama_cpp(void) {
 
   /* llama_get_kv_cache_used_cells */
   rb_define_module_function(rb_mLLaMACpp, "llama_get_kv_cache_used_cells", rb_llama_get_kv_cache_used_cells, 1);
+
+  /* llama_kv_cache_clear */
+  rb_define_module_function(rb_mLLaMACpp, "llama_kv_cache_clear", rb_llama_kv_cache_clear, 1);
 }
