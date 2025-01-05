@@ -996,6 +996,48 @@ static struct llama_kv_cache_view_cell* get_llama_kv_cache_view_cell(VALUE self)
 }
 */
 
+/* struct llama_kv_cache_view */
+static void llama_kv_cache_view_free_(void *ptr) {
+  struct llama_kv_cache_view* data = (struct llama_kv_cache_view*)ptr;
+  llama_kv_cache_view_free(data);
+  ruby_xfree(ptr);
+}
+
+static size_t llama_kv_cache_view_size(const void *ptr) {
+  return sizeof(*((struct llama_kv_cache_view*)ptr));
+}
+
+static rb_data_type_t llama_kv_cache_view_type = {
+  "RbLlamaKvCacheView",
+  { NULL,
+    llama_kv_cache_view_free_,
+    llama_kv_cache_view_size },
+  NULL,
+  NULL,
+  RUBY_TYPED_FREE_IMMEDIATELY
+};
+
+static VALUE llama_kv_cache_view_alloc(VALUE self) {
+  struct llama_kv_cache_view* data = (struct llama_kv_cache_view*)ruby_xmalloc(sizeof(struct llama_kv_cache_view));
+  data->n_cells = 0;
+  data->n_seq_max = 0;
+  data->token_count = 0;
+  data->used_cells = 0;
+  data->max_contiguous = 0;
+  data->max_contiguous_idx = 0;
+  data->cells = NULL;
+  data->cells_sequences = NULL;
+  return TypedData_Wrap_Struct(self, &llama_kv_cache_view_type, data);
+}
+
+/*
+static struct llama_kv_cache_view* get_llama_kv_cache_view(VALUE self) {
+  struct llama_kv_cache_view* data = NULL;
+  TypedData_Get_Struct(self, struct llama_kv_cache_view, &llama_kv_cache_view_type, data);
+  return data;
+}
+*/
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -1346,4 +1388,8 @@ void Init_llama_cpp(void) {
   /* struct llama_kv_cache_view_cell */
   VALUE rb_cLlamaKvCacheViewCell = rb_define_class_under(rb_mLLaMACpp, "KvCacheViewCell", rb_cObject);
   rb_define_alloc_func(rb_cLlamaKvCacheViewCell, llama_kv_cache_view_cell_alloc);
+
+  /* struct llama_kv_cache_view */
+  VALUE rb_cLlamaKvCacheView = rb_define_class_under(rb_mLLaMACpp, "KvCacheView", rb_cObject);
+  rb_define_alloc_func(rb_cLlamaKvCacheView, llama_kv_cache_view_alloc);
 }
