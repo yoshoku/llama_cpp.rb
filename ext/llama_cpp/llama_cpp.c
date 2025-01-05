@@ -574,6 +574,8 @@ static VALUE rb_llama_load_model_from_file(VALUE self, VALUE path_model, VALUE p
   struct llama_model_params* params_ = get_llama_model_params(params);
   llama_model_wrapper* model_wrapper = (llama_model_wrapper*)ruby_xmalloc(sizeof(llama_model_wrapper));
   model_wrapper->model = llama_load_model_from_file(path_model_, *params_);
+  RB_GC_GUARD(path_model);
+  RB_GC_GUARD(params);
   return TypedData_Wrap_Struct(rb_cLlamaModel, &llama_model_wrapper_data_type, model_wrapper);
 }
 
@@ -591,6 +593,8 @@ static VALUE rb_llama_new_context_with_model(VALUE self, VALUE model, VALUE para
   struct llama_context_params* params_ = get_llama_context_params(params);
   llama_context_wrapper* context_wrapper = (llama_context_wrapper*)ruby_xmalloc(sizeof(llama_context_wrapper));
   context_wrapper->context = llama_new_context_with_model(model_wrapper->model, *params_);
+  RB_GC_GUARD(model);
+  RB_GC_GUARD(params);
   return TypedData_Wrap_Struct(rb_cLlamaContext, &llama_context_wrapper_data_type, context_wrapper);
 }
 
@@ -791,6 +795,7 @@ static VALUE rb_llama_model_desc(VALUE self, VALUE model) {
   char buf[128];
   llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
   llama_model_desc(model_wrapper->model, buf, sizeof(buf));
+  RB_GC_GUARD(model);
   return rb_utf8_str_new_cstr(buf);
 }
 
