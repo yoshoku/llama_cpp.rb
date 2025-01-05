@@ -1146,6 +1146,34 @@ static VALUE rb_llama_kv_cache_seq_rm(VALUE self, VALUE ctx, VALUE seq_id, VALUE
   return res ? Qtrue : Qfalse;
 }
 
+/* llama_kv_cache_seq_cp */
+static VALUE rb_llama_kv_cache_seq_cp(VALUE self, VALUE ctx, VALUE seq_id_src, VALUE seq_id_dst, VALUE p0, VALUE p1) {
+  if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
+    rb_raise(rb_eArgError, "ctx must be a Context");
+    return Qnil;
+  }
+  if (!RB_INTEGER_TYPE_P(seq_id_src)) {
+    rb_raise(rb_eArgError, "seq_id_src must be an integer");
+    return Qnil;
+  }
+  if (!RB_INTEGER_TYPE_P(seq_id_dst)) {
+    rb_raise(rb_eArgError, "seq_id_dst must be an integer");
+    return Qnil;
+  }
+  if (!RB_INTEGER_TYPE_P(p0)) {
+    rb_raise(rb_eArgError, "p0 must be an integer");
+    return Qnil;
+  }
+  if (!RB_INTEGER_TYPE_P(p1)) {
+    rb_raise(rb_eArgError, "p1 must be an integer");
+    return Qnil;
+  }
+  llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
+  llama_kv_cache_seq_cp(context_wrapper->context, NUM2INT(seq_id_src), NUM2INT(seq_id_dst), NUM2INT(p0), NUM2INT(p1));
+  RB_GC_GUARD(ctx);
+  return Qnil;
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -1521,4 +1549,7 @@ void Init_llama_cpp(void) {
 
   /* llama_kv_cache_seq_rm */
   rb_define_module_function(rb_mLLaMACpp, "llama_kv_cache_seq_rm", rb_llama_kv_cache_seq_rm, 4);
+
+  /* llama_kv_cache_seq_cp */
+  rb_define_module_function(rb_mLLaMACpp, "llama_kv_cache_seq_cp", rb_llama_kv_cache_seq_cp, 5);
 }
