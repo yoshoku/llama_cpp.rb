@@ -1084,6 +1084,17 @@ static VALUE rb_llama_kv_cache_view_update(VALUE self, VALUE ctx, VALUE view) {
   return Qnil;
 }
 
+static VALUE rb_llama_get_kv_cache_token_count(VALUE self, VALUE ctx) {
+  if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
+    rb_raise(rb_eArgError, "ctx must be a Context");
+    return Qnil;
+  }
+  llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
+  const int32_t c = llama_get_kv_cache_token_count(context_wrapper->context);
+  RB_GC_GUARD(ctx);
+  return INT2NUM(c);
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -1447,4 +1458,7 @@ void Init_llama_cpp(void) {
 
   /* llama_kv_cache_view_update */
   rb_define_module_function(rb_mLLaMACpp, "llama_kv_cache_view_update", rb_llama_kv_cache_view_update, 2);
+
+  /* llama_get_kv_cache_token_count */
+  rb_define_module_function(rb_mLLaMACpp, "llama_get_kv_cache_token_count", rb_llama_get_kv_cache_token_count, 1);
 }
