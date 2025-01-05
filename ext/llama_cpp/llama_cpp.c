@@ -7,6 +7,7 @@ VALUE rb_cLlamaModelParams;
 VALUE rb_cLlamaContextParams;
 VALUE rb_cLlamaModelQuantizeParams;
 VALUE rb_cLlamaLoraAdapter;
+VALUE rb_cLlamaKvCacheView;
 
 /* llama_model wrapper */
 typedef struct {
@@ -1030,13 +1031,11 @@ static VALUE llama_kv_cache_view_alloc(VALUE self) {
   return TypedData_Wrap_Struct(self, &llama_kv_cache_view_type, data);
 }
 
-/*
 static struct llama_kv_cache_view* get_llama_kv_cache_view(VALUE self) {
   struct llama_kv_cache_view* data = NULL;
   TypedData_Get_Struct(self, struct llama_kv_cache_view, &llama_kv_cache_view_type, data);
   return data;
 }
-*/
 
 /* llama_kv_cache_view_init */
 static VALUE rb_llama_kv_cache_view_init(VALUE self, VALUE ctx, VALUE n_seq_max) {
@@ -1053,6 +1052,18 @@ static VALUE rb_llama_kv_cache_view_init(VALUE self, VALUE ctx, VALUE n_seq_max)
   *data = llama_kv_cache_view_init(context_wrapper->context, NUM2UINT(n_seq_max));
   RB_GC_GUARD(ctx);
   return TypedData_Wrap_Struct(self, &llama_kv_cache_view_type, data);
+}
+
+/* llama_kv_cache_view_free */
+static VALUE rb_llama_kv_cache_view_free(VALUE self, VALUE view) {
+  if (!rb_obj_is_kind_of(view, rb_cLlamaKvCacheView)) {
+    rb_raise(rb_eArgError, "view must be a KvCacheView");
+    return Qnil;
+  }
+  struct llama_kv_cache_view* view_ = get_llama_kv_cache_view(view);
+  llama_kv_cache_view_free(view_);
+  RB_GC_GUARD(view);
+  return Qnil;
 }
 
 /* MAIN */
@@ -1407,9 +1418,12 @@ void Init_llama_cpp(void) {
   rb_define_alloc_func(rb_cLlamaKvCacheViewCell, llama_kv_cache_view_cell_alloc);
 
   /* struct llama_kv_cache_view */
-  VALUE rb_cLlamaKvCacheView = rb_define_class_under(rb_mLLaMACpp, "LlamaKvCacheView", rb_cObject);
+  rb_cLlamaKvCacheView = rb_define_class_under(rb_mLLaMACpp, "LlamaKvCacheView", rb_cObject);
   rb_define_alloc_func(rb_cLlamaKvCacheView, llama_kv_cache_view_alloc);
 
   /* llama_kv_cache_view_init */
   rb_define_module_function(rb_mLLaMACpp, "llama_kv_cache_view_init", rb_llama_kv_cache_view_init, 2);
+
+  /* llama_kv_cache_view_free */
+  rb_define_module_function(rb_mLLaMACpp, "llama_kv_cache_view_free", rb_llama_kv_cache_view_free, 1);
 }
