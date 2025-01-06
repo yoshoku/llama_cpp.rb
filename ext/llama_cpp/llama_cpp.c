@@ -1384,6 +1384,24 @@ static VALUE rb_llama_batch_free(VALUE self, VALUE batch) {
   return Qnil;
 }
 
+/* llama_encode */
+static VALUE rb_llama_encode(VALUE self, VALUE ctx, VALUE batch) {
+  if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
+    return Qnil;
+  }
+  if (!rb_obj_is_kind_of(batch, rb_cLlamaBatch)) {
+    rb_raise(rb_eArgError, "batch must be a LlamaBatch");
+    return Qnil;
+  }
+  llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
+  llama_batch* batch_ = get_llama_batch(batch);
+  const int32_t res = llama_encode(context_wrapper->context, *batch_);
+  RB_GC_GUARD(ctx);
+  RB_GC_GUARD(batch);
+  return INT2NUM(res);
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -1808,4 +1826,7 @@ void Init_llama_cpp(void) {
 
   /* llama_batch_free */
   rb_define_module_function(rb_mLLaMACpp, "llama_batch_free", rb_llama_batch_free, 1);
+
+  /* llama_encode */
+  rb_define_module_function(rb_mLLaMACpp, "llama_encode", rb_llama_encode, 2);
 }
