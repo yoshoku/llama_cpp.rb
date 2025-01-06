@@ -1310,6 +1310,22 @@ static VALUE rb_llama_state_get_size(VALUE self, VALUE ctx) {
   return SIZET2NUM(size);
 }
 
+/*  llama_state_seq_get_size */
+static VALUE rb_llama_state_seq_get_size(VALUE self, VALUE ctx, VALUE seq_id) {
+  if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
+    rb_raise(rb_eArgError, "ctx must be a Context");
+    return Qnil;
+  }
+  if (!RB_INTEGER_TYPE_P(seq_id)) {
+    rb_raise(rb_eArgError, "seq_id must be an integer");
+    return Qnil;
+  }
+  llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
+  const size_t size = llama_state_seq_get_size(context_wrapper->context, NUM2INT(seq_id));
+  RB_GC_GUARD(ctx);
+  return SIZET2NUM(size);
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -1712,4 +1728,12 @@ void Init_llama_cpp(void) {
 
   /* llama_state_get_size */
   rb_define_module_function(rb_mLLaMACpp, "llama_state_get_size", rb_llama_state_get_size, 1);
+
+  /* llama_state_get_dat */
+  /* llama_state_set_data */
+  /* llama_state_load_file */
+  /* llama_state_save_file */
+
+  /* llama_state_seq_get_size */
+  rb_define_module_function(rb_mLLaMACpp, "llama_state_seq_get_size", rb_llama_state_seq_get_size, 2);
 }
