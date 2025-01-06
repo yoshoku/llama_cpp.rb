@@ -1402,6 +1402,24 @@ static VALUE rb_llama_encode(VALUE self, VALUE ctx, VALUE batch) {
   return INT2NUM(res);
 }
 
+/* llama_decode */
+static VALUE rb_llama_decode(VALUE self, VALUE ctx, VALUE batch) {
+  if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
+    return Qnil;
+  }
+  if (!rb_obj_is_kind_of(batch, rb_cLlamaBatch)) {
+    rb_raise(rb_eArgError, "batch must be a LlamaBatch");
+    return Qnil;
+  }
+  llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
+  llama_batch* batch_ = get_llama_batch(batch);
+  const int32_t res = llama_decode(context_wrapper->context, *batch_);
+  RB_GC_GUARD(ctx);
+  RB_GC_GUARD(batch);
+  return INT2NUM(res);
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -1829,4 +1847,7 @@ void Init_llama_cpp(void) {
 
   /* llama_encode */
   rb_define_module_function(rb_mLLaMACpp, "llama_encode", rb_llama_encode, 2);
+
+  /* llama_decode */
+  rb_define_module_function(rb_mLLaMACpp, "llama_decode", rb_llama_decode, 2);
 }
