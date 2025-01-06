@@ -1326,6 +1326,32 @@ static VALUE rb_llama_state_seq_get_size(VALUE self, VALUE ctx, VALUE seq_id) {
   return SIZET2NUM(size);
 }
 
+/* llama_batch_get_one */
+static VALUE rb_llama_batch_get_one(VALUE self, VALUE tokens) {
+  if (!RB_TYPE_P(tokens, T_ARRAY)) {
+    rb_raise(rb_eArgError, "tokens must be an array");
+    return Qnil;
+  }
+  const size_t n_tokens = RARRAY_LEN(tokens);
+  if (n_tokens == 0) {
+    return Qnil;
+  }
+  llama_token* tokens_ = (llama_token*)ruby_xmalloc(sizeof(llama_token) * n_tokens);
+  for (size_t i = 0; i < n_tokens; i++) {
+    VALUE token = rb_ary_entry(tokens, i);
+    if (!RB_INTEGER_TYPE_P(token)) {
+      ruby_xfree(tokens_);
+      rb_raise(rb_eArgError, "tokens must be an array of integers");
+      return Qnil;
+    }
+    tokens_[i] = NUM2INT(token);
+  }
+  llama_batch* batch = (llama_batch*)ruby_xmalloc(sizeof(llama_batch));
+  *batch = llama_batch_get_one(tokens_, (int32_t)n_tokens);
+  ruby_xfree(tokens_);
+  return TypedData_Wrap_Struct(self, &llama_batch_type, batch);
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -1736,4 +1762,12 @@ void Init_llama_cpp(void) {
 
   /* llama_state_seq_get_size */
   rb_define_module_function(rb_mLLaMACpp, "llama_state_seq_get_size", rb_llama_state_seq_get_size, 2);
+
+  /* llama_state_seq_get_data */
+  /* llama_state_seq_set_data */
+  /* llama_state_seq_save_file */
+  /* llama_state_seq_load_file */
+
+  /* llama_batch_get_one */
+  rb_define_module_function(rb_mLLaMACpp, "llama_batch_get_one", rb_llama_batch_get_one, 1);
 }
