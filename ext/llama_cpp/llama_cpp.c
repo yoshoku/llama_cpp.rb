@@ -8,6 +8,7 @@ VALUE rb_cLlamaContextParams;
 VALUE rb_cLlamaModelQuantizeParams;
 VALUE rb_cLlamaLoraAdapter;
 VALUE rb_cLlamaKvCacheView;
+VALUE rb_cLlamaBatch;
 
 /* llama_model wrapper */
 typedef struct {
@@ -1371,6 +1372,18 @@ static VALUE rb_llama_batch_init(VALUE self, VALUE n_tokens, VALUE embd, VALUE n
   return TypedData_Wrap_Struct(self, &llama_batch_type, batch);
 }
 
+/* llama_batch_free */
+static VALUE rb_llama_batch_free(VALUE self, VALUE batch) {
+  if (!rb_obj_is_kind_of(batch, rb_cLlamaBatch)) {
+    rb_raise(rb_eArgError, "batch must be a Batch");
+    return Qnil;
+  }
+  llama_batch* batch_ = get_llama_batch(batch);
+  llama_batch_free(*batch_);
+  RB_GC_GUARD(batch);
+  return Qnil;
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -1544,7 +1557,7 @@ void Init_llama_cpp(void) {
   rb_define_method(rb_cLlamaTokenDataArray, "sorted", RUBY_METHOD_FUNC(llama_token_data_array_get_sorted), 0);
 
   /* llama_batch */
-  VALUE rb_cLlamaBatch = rb_define_class_under(rb_mLLaMACpp, "LlamaBatch", rb_cObject);
+  rb_cLlamaBatch = rb_define_class_under(rb_mLLaMACpp, "LlamaBatch", rb_cObject);
   rb_define_alloc_func(rb_cLlamaBatch, llama_batch_alloc);
   rb_define_method(rb_cLlamaBatch, "n_tokens", RUBY_METHOD_FUNC(llama_batch_get_n_tokens), 0);
 
@@ -1792,4 +1805,7 @@ void Init_llama_cpp(void) {
 
   /* llama_batch_init */
   rb_define_module_function(rb_mLLaMACpp, "llama_batch_init", rb_llama_batch_init, 3);
+
+  /* llama_batch_free */
+  rb_define_module_function(rb_mLLaMACpp, "llama_batch_free", rb_llama_batch_free, 1);
 }
