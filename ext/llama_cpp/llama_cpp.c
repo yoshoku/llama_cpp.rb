@@ -534,7 +534,7 @@ static VALUE rb_llama_backend_init(VALUE self) {
 /* llama_numa_init */
 static VALUE rb_llama_numa_init(VALUE self, VALUE numa) {
   if (!RB_INTEGER_TYPE_P(numa)) {
-    rb_raise(rb_eArgError, "numa must be an integer");
+    rb_raise(rb_eArgError, "numa must be an Integer");
     return Qnil;
   }
   llama_numa_init((enum ggml_numa_strategy)NUM2INT(numa));
@@ -550,7 +550,7 @@ static VALUE rb_llama_backend_free(VALUE self) {
 /* llama_free_model */
 static VALUE rb_llama_free_model(VALUE self, VALUE model) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
-    rb_raise(rb_eArgError, "model must be a Model");
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
     return Qnil;
   }
   llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
@@ -564,11 +564,11 @@ static VALUE rb_llama_free_model(VALUE self, VALUE model) {
 /* llama_load_model_from_file */
 static VALUE rb_llama_load_model_from_file(VALUE self, VALUE path_model, VALUE params) {
   if (!RB_TYPE_P(path_model, T_STRING)) {
-    rb_raise(rb_eArgError, "path_model must be a string");
+    rb_raise(rb_eArgError, "path_model must be a String");
     return Qnil;
   }
   if (!rb_obj_is_kind_of(params, rb_cLlamaModelParams)) {
-    rb_raise(rb_eArgError, "params must be a ModelParams");
+    rb_raise(rb_eArgError, "params must be a LlamaModelParams");
     return Qnil;
   }
   const char* path_model_ = StringValueCStr(path_model);
@@ -583,11 +583,11 @@ static VALUE rb_llama_load_model_from_file(VALUE self, VALUE path_model, VALUE p
 /* llama_new_context_with_model */
 static VALUE rb_llama_new_context_with_model(VALUE self, VALUE model, VALUE params) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
-    rb_raise(rb_eArgError, "model must be a Model");
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
     return Qnil;
   }
   if (!rb_obj_is_kind_of(params, rb_cLlamaContextParams)) {
-    rb_raise(rb_eArgError, "params must be a ContextParams");
+    rb_raise(rb_eArgError, "params must be a LlamaContextParams");
     return Qnil;
   }
   llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
@@ -602,7 +602,7 @@ static VALUE rb_llama_new_context_with_model(VALUE self, VALUE model, VALUE para
 /* llama_free */
 static VALUE rb_llama_free(VALUE self, VALUE context) {
   if (!rb_obj_is_kind_of(context, rb_cLlamaContext)) {
-    rb_raise(rb_eArgError, "context must be a Context");
+    rb_raise(rb_eArgError, "context must be a LlamaContext");
     return Qnil;
   }
   llama_context_wrapper* context_wrapper = get_llama_context_wrapper(context);
@@ -646,7 +646,7 @@ static VALUE rb_llama_supports_rpc(VALUE self) {
 /* llama_n_ctx */
 static VALUE rb_llama_n_ctx(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
-    rb_raise(rb_eArgError, "ctx must be a Context");
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
     return Qnil;
   }
   llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
@@ -656,7 +656,7 @@ static VALUE rb_llama_n_ctx(VALUE self, VALUE ctx) {
 /* llama_n_batch */
 static VALUE rb_llama_n_batch(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
-    rb_raise(rb_eArgError, "ctx must be a Context");
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
     return Qnil;
   }
   llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
@@ -666,7 +666,7 @@ static VALUE rb_llama_n_batch(VALUE self, VALUE ctx) {
 /* llama_n_ubatch */
 static VALUE rb_llama_n_ubatch(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
-    rb_raise(rb_eArgError, "ctx must be a Context");
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
     return Qnil;
   }
   llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
@@ -676,7 +676,7 @@ static VALUE rb_llama_n_ubatch(VALUE self, VALUE ctx) {
 /* llama_n_seq_max */
 static VALUE rb_llama_n_seq_max(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
-    rb_raise(rb_eArgError, "ctx must be a Context");
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
     return Qnil;
   }
   llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
@@ -686,7 +686,7 @@ static VALUE rb_llama_n_seq_max(VALUE self, VALUE ctx) {
 /* llama_n_vocab */
 static VALUE rb_llama_n_vocab(VALUE self, VALUE model) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
-    rb_raise(rb_eArgError, "model must be a Model");
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
     return Qnil;
   }
   llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
@@ -696,7 +696,7 @@ static VALUE rb_llama_n_vocab(VALUE self, VALUE model) {
 /* llama_n_ctx_train */
 static VALUE rb_llama_n_ctx_train(VALUE self, VALUE model) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
-    rb_raise(rb_eArgError, "model must be a Model");
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
     return Qnil;
   }
   llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
@@ -706,7 +706,7 @@ static VALUE rb_llama_n_ctx_train(VALUE self, VALUE model) {
 /* llama_n_embd */
 static VALUE rb_llama_n_embd(VALUE self, VALUE model) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
-    rb_raise(rb_eArgError, "model must be a Model");
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
     return Qnil;
   }
   llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
@@ -716,7 +716,7 @@ static VALUE rb_llama_n_embd(VALUE self, VALUE model) {
 /* llama_n_layer */
 static VALUE rb_llama_n_layer(VALUE self, VALUE model) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
-    rb_raise(rb_eArgError, "model must be a Model");
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
     return Qnil;
   }
   llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
@@ -726,7 +726,7 @@ static VALUE rb_llama_n_layer(VALUE self, VALUE model) {
 /* llama_n_head */
 static VALUE rb_llama_n_head(VALUE self, VALUE model) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
-    rb_raise(rb_eArgError, "model must be a Model");
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
     return Qnil;
   }
   llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
@@ -750,7 +750,7 @@ static VALUE rb_llama_get_model(VALUE self, VALUE ctx) {
 /* llama_pooling_type */
 static VALUE rb_llama_pooling_type(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
-    rb_raise(rb_eArgError, "ctx must be a Context");
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
     return Qnil;
   }
   llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
@@ -760,7 +760,7 @@ static VALUE rb_llama_pooling_type(VALUE self, VALUE ctx) {
 /* llama_vocab_type */
 static VALUE rb_llama_vocab_type(VALUE self, VALUE model) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
-    rb_raise(rb_eArgError, "model must be a Model");
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
     return Qnil;
   }
   llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
@@ -770,7 +770,7 @@ static VALUE rb_llama_vocab_type(VALUE self, VALUE model) {
 /* llama_rope_type */
 static VALUE rb_llama_rope_type(VALUE self, VALUE model) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
-    rb_raise(rb_eArgError, "model must be a Model");
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
     return Qnil;
   }
   llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
@@ -780,7 +780,7 @@ static VALUE rb_llama_rope_type(VALUE self, VALUE model) {
 /* llama_rope_freq_scale_train */
 static VALUE rb_llama_rope_freq_scale_train(VALUE self, VALUE model) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
-    rb_raise(rb_eArgError, "model must be a Model");
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
     return Qnil;
   }
   llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
@@ -790,7 +790,7 @@ static VALUE rb_llama_rope_freq_scale_train(VALUE self, VALUE model) {
 /* llama_model_desc */
 static VALUE rb_llama_model_desc(VALUE self, VALUE model) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
-    rb_raise(rb_eArgError, "model must be a Model");
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
     return Qnil;
   }
   char buf[128];
@@ -803,7 +803,7 @@ static VALUE rb_llama_model_desc(VALUE self, VALUE model) {
 /* llama_model_size */
 static VALUE rb_llama_model_size(VALUE self, VALUE model) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
-    rb_raise(rb_eArgError, "model must be a Model");
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
     return Qnil;
   }
   llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
@@ -813,7 +813,7 @@ static VALUE rb_llama_model_size(VALUE self, VALUE model) {
 /* llama_model_n_params */
 static VALUE rb_llama_model_n_params(VALUE self, VALUE model) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
-    rb_raise(rb_eArgError, "model must be a Model");
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
     return Qnil;
   }
   llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
@@ -823,7 +823,7 @@ static VALUE rb_llama_model_n_params(VALUE self, VALUE model) {
 /* llama_model_has_encoder */
 static VALUE rb_llama_model_has_encoder(VALUE self, VALUE model) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
-    rb_raise(rb_eArgError, "model must be a Model");
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
     return Qnil;
   }
   llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
@@ -833,7 +833,7 @@ static VALUE rb_llama_model_has_encoder(VALUE self, VALUE model) {
 /* llama_model_has_decoder */
 static VALUE rb_llama_model_has_decoder(VALUE self, VALUE model) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
-    rb_raise(rb_eArgError, "model must be a Model");
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
     return Qnil;
   }
   llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
@@ -843,7 +843,7 @@ static VALUE rb_llama_model_has_decoder(VALUE self, VALUE model) {
 /* llama_model_decoder_start_token */
 static VALUE rb_llama_model_decoder_start_token(VALUE self, VALUE model) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
-    rb_raise(rb_eArgError, "model must be a Model");
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
     return Qnil;
   }
   llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
@@ -853,7 +853,7 @@ static VALUE rb_llama_model_decoder_start_token(VALUE self, VALUE model) {
 /* llama_model_is_recurrent */
 static VALUE rb_llama_model_is_recurrent(VALUE self, VALUE model) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
-    rb_raise(rb_eArgError, "model must be a Model");
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
     return Qnil;
   }
   llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
@@ -863,15 +863,15 @@ static VALUE rb_llama_model_is_recurrent(VALUE self, VALUE model) {
 /* llama_model_quantize */
 static VALUE rb_llama_model_quantize(VALUE self, VALUE fname_inp, VALUE fname_out, VALUE params) {
   if (!RB_TYPE_P(fname_inp, T_STRING)) {
-    rb_raise(rb_eArgError, "fname_inp must be a string");
+    rb_raise(rb_eArgError, "fname_inp must be a String");
     return Qnil;
   }
   if (!RB_TYPE_P(fname_out, T_STRING)) {
-    rb_raise(rb_eArgError, "fname_out must be a string");
+    rb_raise(rb_eArgError, "fname_out must be a String");
     return Qnil;
   }
   if (!rb_obj_is_kind_of(params, rb_cLlamaModelQuantizeParams)) {
-    rb_raise(rb_eArgError, "params must be a ModelQuantizeParams");
+    rb_raise(rb_eArgError, "params must be a LlamaModelQuantizeParams");
     return Qnil;
   }
   const char* fname_inp_ = StringValueCStr(fname_inp);
@@ -887,7 +887,7 @@ static VALUE rb_llama_model_quantize(VALUE self, VALUE fname_inp, VALUE fname_ou
 /* llama_lora_adapter_init */
 static VALUE rb_llama_lora_adapter_init(VALUE self, VALUE model, VALUE path_lora) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
-    rb_raise(rb_eArgError, "model must be a Model");
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
     return Qnil;
   }
   if (!RB_TYPE_P(path_lora, T_STRING)) {
@@ -906,11 +906,11 @@ static VALUE rb_llama_lora_adapter_init(VALUE self, VALUE model, VALUE path_lora
 /* llama_lora_adapter_set */
 static VALUE rb_llama_lora_adapter_set(VALUE self, VALUE ctx, VALUE adapter, VALUE scale) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
-    rb_raise(rb_eArgError, "ctx must be a Context");
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
     return Qnil;
   }
   if (!rb_obj_is_kind_of(adapter, rb_cLlamaLoraAdapter)) {
-    rb_raise(rb_eArgError, "adapter must be a LoraAdapter");
+    rb_raise(rb_eArgError, "adapter must be a LlamaLoraAdapter");
     return Qnil;
   }
   if (!RB_FLOAT_TYPE_P(scale)) {
@@ -928,11 +928,11 @@ static VALUE rb_llama_lora_adapter_set(VALUE self, VALUE ctx, VALUE adapter, VAL
 /* llama_lora_adapter_remove */
 static VALUE rb_llama_lora_adapter_remove(VALUE self, VALUE ctx, VALUE adapter) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
-    rb_raise(rb_eArgError, "ctx must be a Context");
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
     return Qnil;
   }
   if (!rb_obj_is_kind_of(adapter, rb_cLlamaLoraAdapter)) {
-    rb_raise(rb_eArgError, "adapter must be a LoraAdapter");
+    rb_raise(rb_eArgError, "adapter must be a LlamaLoraAdapter");
     return Qnil;
   }
   llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
@@ -946,7 +946,7 @@ static VALUE rb_llama_lora_adapter_remove(VALUE self, VALUE ctx, VALUE adapter) 
 /* llama_lora_adapter_clear */
 static VALUE rb_llama_lora_adapter_clear(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
-    rb_raise(rb_eArgError, "ctx must be a Context");
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
     return Qnil;
   }
   llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
@@ -958,7 +958,7 @@ static VALUE rb_llama_lora_adapter_clear(VALUE self, VALUE ctx) {
 /* llama_lora_adapter_free */
 static VALUE rb_llama_lora_adapter_free(VALUE self, VALUE adapter) {
   if (!rb_obj_is_kind_of(adapter, rb_cLlamaLoraAdapter)) {
-    rb_raise(rb_eArgError, "adapter must be a LoraAdapter");
+    rb_raise(rb_eArgError, "adapter must be a LlamaLoraAdapter");
     return Qnil;
   }
   llama_lora_adapter_wrapper* adapter_wrapper = get_llama_lora_adapter_wrapper(adapter);
@@ -1046,11 +1046,11 @@ static struct llama_kv_cache_view* get_llama_kv_cache_view(VALUE self) {
 /* llama_kv_cache_view_init */
 static VALUE rb_llama_kv_cache_view_init(VALUE self, VALUE ctx, VALUE n_seq_max) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
-    rb_raise(rb_eArgError, "ctx must be a Context");
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
     return Qnil;
   }
   if (!RB_INTEGER_TYPE_P(n_seq_max)) {
-    rb_raise(rb_eArgError, "n_seq_max must be an integer");
+    rb_raise(rb_eArgError, "n_seq_max must be an Integer");
     return Qnil;
   }
   llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
@@ -1063,7 +1063,7 @@ static VALUE rb_llama_kv_cache_view_init(VALUE self, VALUE ctx, VALUE n_seq_max)
 /* llama_kv_cache_view_free */
 static VALUE rb_llama_kv_cache_view_free(VALUE self, VALUE view) {
   if (!rb_obj_is_kind_of(view, rb_cLlamaKvCacheView)) {
-    rb_raise(rb_eArgError, "view must be a KvCacheView");
+    rb_raise(rb_eArgError, "view must be a LlamaKvCacheView");
     return Qnil;
   }
   struct llama_kv_cache_view* view_ = get_llama_kv_cache_view(view);
@@ -1075,11 +1075,11 @@ static VALUE rb_llama_kv_cache_view_free(VALUE self, VALUE view) {
 /* llama_kv_cache_view_update */
 static VALUE rb_llama_kv_cache_view_update(VALUE self, VALUE ctx, VALUE view) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
-    rb_raise(rb_eArgError, "ctx must be a Context");
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
     return Qnil;
   }
   if (!rb_obj_is_kind_of(view, rb_cLlamaKvCacheView)) {
-    rb_raise(rb_eArgError, "view must be a KvCacheView");
+    rb_raise(rb_eArgError, "view must be a LlamaKvCacheView");
     return Qnil;
   }
   llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
@@ -1092,7 +1092,7 @@ static VALUE rb_llama_kv_cache_view_update(VALUE self, VALUE ctx, VALUE view) {
 
 static VALUE rb_llama_get_kv_cache_token_count(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
-    rb_raise(rb_eArgError, "ctx must be a Context");
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
     return Qnil;
   }
   llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
@@ -1103,7 +1103,7 @@ static VALUE rb_llama_get_kv_cache_token_count(VALUE self, VALUE ctx) {
 
 static VALUE rb_llama_get_kv_cache_used_cells(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
-    rb_raise(rb_eArgError, "ctx must be a Context");
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
     return Qnil;
   }
   llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
@@ -1114,7 +1114,7 @@ static VALUE rb_llama_get_kv_cache_used_cells(VALUE self, VALUE ctx) {
 
 static VALUE rb_llama_kv_cache_clear(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
-    rb_raise(rb_eArgError, "ctx must be a Context");
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
     return Qnil;
   }
   llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
@@ -1126,19 +1126,19 @@ static VALUE rb_llama_kv_cache_clear(VALUE self, VALUE ctx) {
 /* llama_kv_cache_seq_rm */
 static VALUE rb_llama_kv_cache_seq_rm(VALUE self, VALUE ctx, VALUE seq_id, VALUE p0, VALUE p1) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
-    rb_raise(rb_eArgError, "ctx must be a Context");
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
     return Qnil;
   }
   if (!RB_INTEGER_TYPE_P(seq_id)) {
-    rb_raise(rb_eArgError, "seq_id must be an integer");
+    rb_raise(rb_eArgError, "seq_id must be an Integer");
     return Qnil;
   }
   if (!RB_INTEGER_TYPE_P(p0)) {
-    rb_raise(rb_eArgError, "p0 must be an integer");
+    rb_raise(rb_eArgError, "p0 must be an Integer");
     return Qnil;
   }
   if (!RB_INTEGER_TYPE_P(p1)) {
-    rb_raise(rb_eArgError, "p1 must be an integer");
+    rb_raise(rb_eArgError, "p1 must be an Integer");
     return Qnil;
   }
   llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
@@ -1150,23 +1150,23 @@ static VALUE rb_llama_kv_cache_seq_rm(VALUE self, VALUE ctx, VALUE seq_id, VALUE
 /* llama_kv_cache_seq_cp */
 static VALUE rb_llama_kv_cache_seq_cp(VALUE self, VALUE ctx, VALUE seq_id_src, VALUE seq_id_dst, VALUE p0, VALUE p1) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
-    rb_raise(rb_eArgError, "ctx must be a Context");
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
     return Qnil;
   }
   if (!RB_INTEGER_TYPE_P(seq_id_src)) {
-    rb_raise(rb_eArgError, "seq_id_src must be an integer");
+    rb_raise(rb_eArgError, "seq_id_src must be an Integer");
     return Qnil;
   }
   if (!RB_INTEGER_TYPE_P(seq_id_dst)) {
-    rb_raise(rb_eArgError, "seq_id_dst must be an integer");
+    rb_raise(rb_eArgError, "seq_id_dst must be an Integer");
     return Qnil;
   }
   if (!RB_INTEGER_TYPE_P(p0)) {
-    rb_raise(rb_eArgError, "p0 must be an integer");
+    rb_raise(rb_eArgError, "p0 must be an Integer");
     return Qnil;
   }
   if (!RB_INTEGER_TYPE_P(p1)) {
-    rb_raise(rb_eArgError, "p1 must be an integer");
+    rb_raise(rb_eArgError, "p1 must be an Integer");
     return Qnil;
   }
   llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
@@ -1178,11 +1178,11 @@ static VALUE rb_llama_kv_cache_seq_cp(VALUE self, VALUE ctx, VALUE seq_id_src, V
 /* llama_kv_cache_seq_keep */
 static VALUE rb_llama_kv_cache_seq_keep(VALUE self, VALUE ctx, VALUE seq_id) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
-    rb_raise(rb_eArgError, "ctx must be a Context");
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
     return Qnil;
   }
   if (!RB_INTEGER_TYPE_P(seq_id)) {
-    rb_raise(rb_eArgError, "seq_id must be an integer");
+    rb_raise(rb_eArgError, "seq_id must be an Integer");
     return Qnil;
   }
   llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
@@ -1194,23 +1194,23 @@ static VALUE rb_llama_kv_cache_seq_keep(VALUE self, VALUE ctx, VALUE seq_id) {
 /* llama_kv_cache_seq_add */
 static VALUE rb_llama_kv_cache_seq_add(VALUE self, VALUE ctx, VALUE seq_id, VALUE p0, VALUE p1, VALUE delta) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
-    rb_raise(rb_eArgError, "ctx must be a Context");
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
     return Qnil;
   }
   if (!RB_INTEGER_TYPE_P(seq_id)) {
-    rb_raise(rb_eArgError, "seq_id must be an integer");
+    rb_raise(rb_eArgError, "seq_id must be an Integer");
     return Qnil;
   }
   if (!RB_INTEGER_TYPE_P(p0)) {
-    rb_raise(rb_eArgError, "p0 must be an integer");
+    rb_raise(rb_eArgError, "p0 must be an Integer");
     return Qnil;
   }
   if (!RB_INTEGER_TYPE_P(p1)) {
-    rb_raise(rb_eArgError, "p1 must be an integer");
+    rb_raise(rb_eArgError, "p1 must be an Integer");
     return Qnil;
   }
   if (!RB_INTEGER_TYPE_P(delta)) {
-    rb_raise(rb_eArgError, "delta must be an integer");
+    rb_raise(rb_eArgError, "delta must be an Integer");
     return Qnil;
   }
   llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
@@ -1222,23 +1222,23 @@ static VALUE rb_llama_kv_cache_seq_add(VALUE self, VALUE ctx, VALUE seq_id, VALU
 /* llama_kv_cache_seq_div */
 static VALUE rb_llama_kv_cache_seq_div(VALUE self, VALUE ctx, VALUE seq_id, VALUE p0, VALUE p1, VALUE d) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
-    rb_raise(rb_eArgError, "ctx must be a Context");
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
     return Qnil;
   }
   if (!RB_INTEGER_TYPE_P(seq_id)) {
-    rb_raise(rb_eArgError, "seq_id must be an integer");
+    rb_raise(rb_eArgError, "seq_id must be an Integer");
     return Qnil;
   }
   if (!RB_INTEGER_TYPE_P(p0)) {
-    rb_raise(rb_eArgError, "p0 must be an integer");
+    rb_raise(rb_eArgError, "p0 must be an Integer");
     return Qnil;
   }
   if (!RB_INTEGER_TYPE_P(p1)) {
-    rb_raise(rb_eArgError, "p1 must be an integer");
+    rb_raise(rb_eArgError, "p1 must be an Integer");
     return Qnil;
   }
   if (!RB_INTEGER_TYPE_P(d)) {
-    rb_raise(rb_eArgError, "d must be an integer");
+    rb_raise(rb_eArgError, "d must be an Integer");
     return Qnil;
   }
   llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
@@ -1250,11 +1250,11 @@ static VALUE rb_llama_kv_cache_seq_div(VALUE self, VALUE ctx, VALUE seq_id, VALU
 /* llama_kv_cache_seq_pos_max */
 static VALUE rb_llama_kv_cache_seq_pos_max(VALUE self, VALUE ctx, VALUE seq_id) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
-    rb_raise(rb_eArgError, "ctx must be a Context");
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
     return Qnil;
   }
   if (!RB_INTEGER_TYPE_P(seq_id)) {
-    rb_raise(rb_eArgError, "seq_id must be an integer");
+    rb_raise(rb_eArgError, "seq_id must be an Integer");
     return Qnil;
   }
   llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
@@ -1266,7 +1266,7 @@ static VALUE rb_llama_kv_cache_seq_pos_max(VALUE self, VALUE ctx, VALUE seq_id) 
 /* llama_kv_cache_defrag */
 static VALUE rb_llama_kv_cache_defrag(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
-    rb_raise(rb_eArgError, "ctx must be a Context");
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
     return Qnil;
   }
   llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
@@ -1278,7 +1278,7 @@ static VALUE rb_llama_kv_cache_defrag(VALUE self, VALUE ctx) {
 /* llama_kv_cache_update */
 static VALUE rb_llama_kv_cache_update(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
-    rb_raise(rb_eArgError, "ctx must be a Context");
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
     return Qnil;
   }
   llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
@@ -1290,7 +1290,7 @@ static VALUE rb_llama_kv_cache_update(VALUE self, VALUE ctx) {
 /* llama_kv_cache_can_shift */
 static VALUE rb_llama_kv_cache_can_shift(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
-    rb_raise(rb_eArgError, "ctx must be a Context");
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
     return Qnil;
   }
   llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
@@ -1302,7 +1302,7 @@ static VALUE rb_llama_kv_cache_can_shift(VALUE self, VALUE ctx) {
 /* llama_state_get_size */
 static VALUE rb_llama_state_get_size(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
-    rb_raise(rb_eArgError, "ctx must be a Context");
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
     return Qnil;
   }
   llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
@@ -1314,11 +1314,11 @@ static VALUE rb_llama_state_get_size(VALUE self, VALUE ctx) {
 /*  llama_state_seq_get_size */
 static VALUE rb_llama_state_seq_get_size(VALUE self, VALUE ctx, VALUE seq_id) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
-    rb_raise(rb_eArgError, "ctx must be a Context");
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
     return Qnil;
   }
   if (!RB_INTEGER_TYPE_P(seq_id)) {
-    rb_raise(rb_eArgError, "seq_id must be an integer");
+    rb_raise(rb_eArgError, "seq_id must be an Integer");
     return Qnil;
   }
   llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
@@ -1330,7 +1330,7 @@ static VALUE rb_llama_state_seq_get_size(VALUE self, VALUE ctx, VALUE seq_id) {
 /* llama_batch_get_one */
 static VALUE rb_llama_batch_get_one(VALUE self, VALUE tokens) {
   if (!RB_TYPE_P(tokens, T_ARRAY)) {
-    rb_raise(rb_eArgError, "tokens must be an array");
+    rb_raise(rb_eArgError, "tokens must be an Array");
     return Qnil;
   }
   const size_t n_tokens = RARRAY_LEN(tokens);
@@ -1342,7 +1342,7 @@ static VALUE rb_llama_batch_get_one(VALUE self, VALUE tokens) {
     VALUE token = rb_ary_entry(tokens, i);
     if (!RB_INTEGER_TYPE_P(token)) {
       ruby_xfree(tokens_);
-      rb_raise(rb_eArgError, "tokens must be an array of integers");
+      rb_raise(rb_eArgError, "tokens must be an Array of Integers");
       return Qnil;
     }
     tokens_[i] = NUM2INT(token);
@@ -1356,15 +1356,15 @@ static VALUE rb_llama_batch_get_one(VALUE self, VALUE tokens) {
 /* llama_batch_init */
 static VALUE rb_llama_batch_init(VALUE self, VALUE n_tokens, VALUE embd, VALUE n_seq_max) {
   if (!RB_INTEGER_TYPE_P(n_tokens)) {
-    rb_raise(rb_eArgError, "n_tokens must be an integer");
+    rb_raise(rb_eArgError, "n_tokens must be an Integer");
     return Qnil;
   }
   if (!RB_INTEGER_TYPE_P(embd)) {
-    rb_raise(rb_eArgError, "embd must be an integer");
+    rb_raise(rb_eArgError, "embd must be an Integer");
     return Qnil;
   }
   if (!RB_INTEGER_TYPE_P(n_seq_max)) {
-    rb_raise(rb_eArgError, "n_seq_max must be an integer");
+    rb_raise(rb_eArgError, "n_seq_max must be an Integer");
     return Qnil;
   }
   llama_batch* batch = (llama_batch*)ruby_xmalloc(sizeof(llama_batch));
@@ -1375,7 +1375,7 @@ static VALUE rb_llama_batch_init(VALUE self, VALUE n_tokens, VALUE embd, VALUE n
 /* llama_batch_free */
 static VALUE rb_llama_batch_free(VALUE self, VALUE batch) {
   if (!rb_obj_is_kind_of(batch, rb_cLlamaBatch)) {
-    rb_raise(rb_eArgError, "batch must be a Batch");
+    rb_raise(rb_eArgError, "batch must be a LlamaBatch");
     return Qnil;
   }
   llama_batch* batch_ = get_llama_batch(batch);
