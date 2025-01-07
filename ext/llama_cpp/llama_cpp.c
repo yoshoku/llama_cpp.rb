@@ -1452,6 +1452,18 @@ static VALUE rb_llama_n_threads(VALUE self, VALUE ctx) {
   return INT2NUM(n_threads);
 }
 
+/* llama_n_threads_batch */
+static VALUE rb_llama_n_threads_batch(VALUE self, VALUE ctx) {
+  if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
+    return Qnil;
+  }
+  llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
+  const int32_t n_threads_batch = llama_n_threads_batch(context_wrapper->context);
+  RB_GC_GUARD(ctx);
+  return INT2NUM(n_threads_batch);
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -1888,4 +1900,7 @@ void Init_llama_cpp(void) {
 
   /* llama_n_threads */
   rb_define_module_function(rb_mLLaMACpp, "llama_n_threads", rb_llama_n_threads, 1);
+
+  /* llama_n_threads_batch */
+  rb_define_module_function(rb_mLLaMACpp, "llama_n_threads_batch", rb_llama_n_threads_batch, 1);
 }
