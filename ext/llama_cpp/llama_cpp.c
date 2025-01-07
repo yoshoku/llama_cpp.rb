@@ -1490,6 +1490,18 @@ static VALUE rb_llama_set_causal_attn(VALUE self, VALUE ctx, VALUE causal_attn) 
   return Qnil;
 }
 
+/* llama_synchronize */
+static VALUE rb_llama_synchronize(VALUE self, VALUE ctx) {
+  if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
+    return Qnil;
+  }
+  llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
+  llama_synchronize(context_wrapper->context);
+  RB_GC_GUARD(ctx);
+  return Qnil;
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -1935,4 +1947,9 @@ void Init_llama_cpp(void) {
 
   /* llama_set_causal_attn */
   rb_define_module_function(rb_mLLaMACpp, "llama_set_causal_attn", rb_llama_set_causal_attn, 2);
+
+  /* llama_set_abort_callback */
+
+  /* llama_synchronize */
+  rb_define_module_function(rb_mLLaMACpp, "llama_synchronize", rb_llama_synchronize, 1);
 }
