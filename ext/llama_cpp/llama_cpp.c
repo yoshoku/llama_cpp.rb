@@ -1464,6 +1464,19 @@ static VALUE rb_llama_n_threads_batch(VALUE self, VALUE ctx) {
   return INT2NUM(n_threads_batch);
 }
 
+/* llama_set_embeddings */
+static VALUE rb_llama_set_embeddings(VALUE self, VALUE ctx, VALUE embeddings) {
+  if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
+    return Qnil;
+  }
+  llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
+  const bool embeddings_ = RTEST(embeddings) ? true : false;
+  llama_set_embeddings(context_wrapper->context, embeddings_);
+  RB_GC_GUARD(ctx);
+  return Qnil;
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -1903,4 +1916,7 @@ void Init_llama_cpp(void) {
 
   /* llama_n_threads_batch */
   rb_define_module_function(rb_mLLaMACpp, "llama_n_threads_batch", rb_llama_n_threads_batch, 1);
+
+  /* llama_set_embeddings */
+  rb_define_module_function(rb_mLLaMACpp, "llama_set_embeddings", rb_llama_set_embeddings, 2);
 }
