@@ -1502,6 +1502,22 @@ static VALUE rb_llama_synchronize(VALUE self, VALUE ctx) {
   return Qnil;
 }
 
+/* llama_token_get_score */
+static VALUE rb_llama_token_get_score(VALUE self, VALUE model, VALUE token) {
+  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
+    return Qnil;
+  }
+  if (!RB_INTEGER_TYPE_P(token)) {
+    rb_raise(rb_eArgError, "token must be an Integer");
+    return Qnil;
+  }
+  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
+  const float score = llama_token_get_score(model_wrapper->model, NUM2INT(token));
+  RB_GC_GUARD(model);
+  return DBL2NUM(score);
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -1952,4 +1968,14 @@ void Init_llama_cpp(void) {
 
   /* llama_synchronize */
   rb_define_module_function(rb_mLLaMACpp, "llama_synchronize", rb_llama_synchronize, 1);
+
+  /* llama_get_logits */
+  /* llama_get_logits_ith */
+  /* llama_get_embeddings */
+  /* llama_get_embeddings_ith */
+  /* llama_get_embeddings_seq */
+  /* llama_token_get_text */
+
+  /* llama_token_get_score */
+  rb_define_module_function(rb_mLLaMACpp, "llama_token_get_score", rb_llama_token_get_score, 2);
 }
