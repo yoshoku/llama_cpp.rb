@@ -1739,8 +1739,8 @@ void Init_llama_cpp(void) {
   /* llama_numa_init */
   rb_define_module_function(rb_mLLaMACpp, "llama_numa_init", rb_llama_numa_init, 1);
 
-  /* llama_attach_threadpool */
-  /* llama_detach_threadpool */
+  /* TODO: llama_attach_threadpool */
+  /* TODO: llama_detach_threadpool */
 
   /* llama_backend_free */
   rb_define_module_function(rb_mLLaMACpp, "llama_backend_free", rb_llama_backend_free, 0);
@@ -1802,7 +1802,7 @@ void Init_llama_cpp(void) {
   /* llama_n_head */
   rb_define_module_function(rb_mLLaMACpp, "llama_n_head", rb_llama_n_head, 1);
 
-  /* llama_get_model */
+  /* TODO: llama_get_model */
   /*
   rb_define_module_function(rb_mLLaMACpp, "llama_get_model", rb_llama_get_model, 1);
   */
@@ -1819,10 +1819,10 @@ void Init_llama_cpp(void) {
   /* llama_rope_freq_scale_train */
   rb_define_module_function(rb_mLLaMACpp, "llama_rope_freq_scale_train", rb_llama_rope_freq_scale_train, 1);
 
-  /* llama_model_meta_val_str */
-  /* llama_model_meta_count */
-  /* llama_model_meta_key_by_index */
-  /* llama_model_meta_val_str_by_index */
+  /* TODO: llama_model_meta_val_str */
+  /* TODO: llama_model_meta_count */
+  /* TODO: llama_model_meta_key_by_index */
+  /* TODO: llama_model_meta_val_str_by_index */
 
   /* llama_model_desc */
   rb_define_module_function(rb_mLLaMACpp, "llama_model_desc", rb_llama_model_desc, 1);
@@ -1863,7 +1863,7 @@ void Init_llama_cpp(void) {
   /* llama_lora_adapter_free */
   rb_define_module_function(rb_mLLaMACpp, "llama_lora_adapter_free", rb_llama_lora_adapter_free, 1);
 
-  /* llama_control_vector_apply */
+  /* TODO: llama_control_vector_apply */
 
   /* struct llama_kv_cache_view_cell */
   VALUE rb_cLlamaKvCacheViewCell = rb_define_class_under(rb_mLLaMACpp, "LlamaKvCacheViewCell", rb_cObject);
@@ -1921,18 +1921,18 @@ void Init_llama_cpp(void) {
   /* llama_state_get_size */
   rb_define_module_function(rb_mLLaMACpp, "llama_state_get_size", rb_llama_state_get_size, 1);
 
-  /* llama_state_get_dat */
-  /* llama_state_set_data */
-  /* llama_state_load_file */
-  /* llama_state_save_file */
+  /* TODO: llama_state_get_dat */
+  /* TODO: llama_state_set_data */
+  /* TODO: llama_state_load_file */
+  /* TODO: llama_state_save_file */
 
   /* llama_state_seq_get_size */
   rb_define_module_function(rb_mLLaMACpp, "llama_state_seq_get_size", rb_llama_state_seq_get_size, 2);
 
-  /* llama_state_seq_get_data */
-  /* llama_state_seq_set_data */
-  /* llama_state_seq_save_file */
-  /* llama_state_seq_load_file */
+  /* TODO: llama_state_seq_get_data */
+  /* TODO: llama_state_seq_set_data */
+  /* TODO: llama_state_seq_save_file */
+  /* TODO: llama_state_seq_load_file */
 
   /* llama_batch_get_one */
   rb_define_module_function(rb_mLLaMACpp, "llama_batch_get_one", rb_llama_batch_get_one, 1);
@@ -1969,12 +1969,12 @@ void Init_llama_cpp(void) {
   /* llama_synchronize */
   rb_define_module_function(rb_mLLaMACpp, "llama_synchronize", rb_llama_synchronize, 1);
 
-  /* llama_get_logits */
-  /* llama_get_logits_ith */
-  /* llama_get_embeddings */
-  /* llama_get_embeddings_ith */
-  /* llama_get_embeddings_seq */
-  /* llama_token_get_text */
+  /* TODO: llama_get_logits */
+  /* TODO: llama_get_logits_ith */
+  /* TODO: llama_get_embeddings */
+  /* TODO: llama_get_embeddings_ith */
+  /* TODO: llama_get_embeddings_seq */
+  /* TODO: llama_token_get_text */
 
   /* llama_token_get_score */
   rb_define_module_function(rb_mLLaMACpp, "llama_token_get_score", rb_llama_token_get_score, 2);
