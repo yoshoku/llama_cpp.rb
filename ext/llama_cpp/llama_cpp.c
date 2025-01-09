@@ -1662,6 +1662,18 @@ static VALUE rb_llama_add_bos_token(VALUE self, VALUE model) {
   return flag ? Qtrue : Qfalse;
 }
 
+/* llama_add_eos_token */
+static VALUE rb_llama_add_eos_token(VALUE self, VALUE model) {
+  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
+    return Qnil;
+  }
+  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
+  const bool flag = llama_add_eos_token(model_wrapper->model);
+  RB_GC_GUARD(model);
+  return flag ? Qtrue : Qfalse;
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -2155,4 +2167,7 @@ void Init_llama_cpp(void) {
 
   /* llama_add_bos_token */
   rb_define_module_function(rb_mLLaMACpp, "llama_add_bos_token", rb_llama_add_bos_token, 1);
+
+  /* llama_add_eos_token */
+  rb_define_module_function(rb_mLLaMACpp, "llama_add_eos_token", rb_llama_add_eos_token, 1);
 }
