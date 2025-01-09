@@ -1650,6 +1650,18 @@ static VALUE rb_llama_token_pad(VALUE self, VALUE model) {
   return INT2NUM(token);
 }
 
+/* llama_add_bos_token */
+static VALUE rb_llama_add_bos_token(VALUE self, VALUE model) {
+  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
+    return Qnil;
+  }
+  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
+  const bool flag = llama_add_bos_token(model_wrapper->model);
+  RB_GC_GUARD(model);
+  return flag ? Qtrue : Qfalse;
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -2140,4 +2152,7 @@ void Init_llama_cpp(void) {
 
   /* llama_token_pad */
   rb_define_module_function(rb_mLLaMACpp, "llama_token_pad", rb_llama_token_pad, 1);
+
+  /* llama_add_bos_token */
+  rb_define_module_function(rb_mLLaMACpp, "llama_add_bos_token", rb_llama_add_bos_token, 1);
 }
