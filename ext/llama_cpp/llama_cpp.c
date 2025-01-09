@@ -1614,6 +1614,18 @@ static VALUE rb_llama_token_cls(VALUE self, VALUE model) {
   return INT2NUM(token);
 }
 
+/* llama_token_sep */
+static VALUE rb_llama_token_sep(VALUE self, VALUE model) {
+  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
+    return Qnil;
+  }
+  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
+  const int32_t token = llama_token_sep(model_wrapper->model);
+  RB_GC_GUARD(model);
+  return INT2NUM(token);
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -2095,4 +2107,7 @@ void Init_llama_cpp(void) {
 
   /* llama_token_cls */
   rb_define_module_function(rb_mLLaMACpp, "llama_token_cls", rb_llama_token_cls, 1);
+
+  /* llama_token_sep */
+  rb_define_module_function(rb_mLLaMACpp, "llama_token_sep", rb_llama_token_sep, 1);
 }
