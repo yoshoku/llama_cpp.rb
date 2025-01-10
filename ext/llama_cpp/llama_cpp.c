@@ -1746,6 +1746,57 @@ static VALUE rb_llama_token_fim_sep(VALUE self, VALUE model) {
   return INT2NUM(token);
 }
 
+/* llama_tokenize */
+static VALUE rb_llama_tokenize(VALUE self, VALUE model, VALUE text, VALUE n_tokens_max, VALUE add_special, VALUE parse_special) {
+  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
+    return Qnil;
+  }
+  if (!RB_TYPE_P(text, T_STRING)) {
+    rb_raise(rb_eArgError, "text must be a String");
+    return Qnil;
+  }
+  if (!RB_INTEGER_TYPE_P(n_tokens_max)) {
+    rb_raise(rb_eArgError, "n_tokens_max must be an Integer");
+    return Qnil;
+  }
+
+  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
+  const char* text_ = StringValueCStr(text);
+  const int32_t text_len = (int32_t)strlen(text_);
+  int32_t n_tokens_max_ = NUM2INT(n_tokens_max);
+  const bool add_special_ = RTEST(add_special) ? true : false;
+  const bool parse_special_ = RTEST(parse_special) ? true : false;
+
+  if (text_len <= 0) {
+    rb_raise(rb_eArgError, "text must not be empty");
+    return Qnil;
+  }
+  if (n_tokens_max_ <= 0) {
+    n_tokens_max_ = text_len + (add_special_ ? 1 : 0);
+  }
+
+  llama_token* tokens = (llama_token*)ruby_xmalloc(sizeof(llama_token) * n_tokens_max_);
+  const int32_t n_tokens = llama_tokenize(model_wrapper->model, text_, text_len, tokens, n_tokens_max_, add_special_, parse_special_);
+
+  if (n_tokens < 0) {
+    ruby_xfree(tokens);
+    rb_raise(rb_eRuntimeError, "Failed to tokenize. The number of tokens (%d) is greater than n_max_tokens.", -n_tokens);
+    return Qnil;
+  }
+
+  VALUE ret = rb_ary_new2(n_tokens);
+  for (int i = 0; i < n_tokens; i++) {
+    rb_ary_store(ret, i, INT2NUM(tokens[i]));
+  }
+
+  ruby_xfree(tokens);
+  RB_GC_GUARD(model);
+  RB_GC_GUARD(text);
+
+  return ret;
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -2260,4 +2311,7 @@ void Init_llama_cpp(void) {
 
   /* llama_token_fim_sep */
   rb_define_module_function(rb_mLLaMACpp, "llama_token_fim_sep", rb_llama_token_fim_sep, 1);
+
+  /* llama_tokenize */
+  rb_define_module_function(rb_mLLaMACpp, "llama_tokenize", rb_llama_tokenize, 5);
 }
