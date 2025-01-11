@@ -2042,6 +2042,11 @@ static VALUE rb_llama_sampler_chain_remove(VALUE self, VALUE chain, VALUE i) {
   return TypedData_Wrap_Struct(self, &llama_sampler_data_type, smpl);
 }
 
+/* llama_sampler_init_greedy */
+static VALUE rb_llama_sampler_init_greedy(VALUE self) {
+  struct llama_sampler* sampler = llama_sampler_init_greedy();
+  return TypedData_Wrap_Struct(self, &llama_sampler_data_type, sampler);
+}
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -2603,4 +2608,7 @@ void Init_llama_cpp(void) {
 
   /* llama_sampler_chain_remove */
   rb_define_module_function(rb_mLLaMACpp, "llama_sampler_chain_remove", rb_llama_sampler_chain_remove, 2);
+
+  /* llama_sampler_init_greedy */
+  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_init_greedy", rb_llama_sampler_init_greedy, 0);
 }
