@@ -9,6 +9,7 @@ VALUE rb_cLlamaModelQuantizeParams;
 VALUE rb_cLlamaLoraAdapter;
 VALUE rb_cLlamaKvCacheView;
 VALUE rb_cLlamaBatch;
+VALUE rb_cLlamaSampler;
 
 /* llama_model wrapper */
 typedef struct {
@@ -86,39 +87,6 @@ static llama_context_wrapper* get_llama_context_wrapper(VALUE self) {
   llama_context_wrapper* data = NULL;
   TypedData_Get_Struct(self, llama_context_wrapper, &llama_context_wrapper_data_type, data);
   return data;
-}
-
-/* llama_sampler wrapper */
-typedef struct {
-  struct llama_sampler* sampler;
-} llama_sampler_wrapper;
-
-static void llama_sampler_wrapper_free(void *ptr) {
-  llama_sampler_wrapper* data = (llama_sampler_wrapper*)ptr;
-  if (data->sampler != NULL) {
-    llama_sampler_free(data->sampler);
-  }
-  ruby_xfree(ptr);
-}
-
-static size_t llama_sampler_wrapper_size(const void *ptr) {
-  return sizeof(*((llama_sampler_wrapper*)ptr));
-}
-
-static rb_data_type_t llama_sampler_wrapper_data_type = {
-  "LlamaSampler",
-  { NULL,
-    llama_sampler_wrapper_free,
-    llama_sampler_wrapper_size },
-  NULL,
-  NULL,
-  RUBY_TYPED_FREE_IMMEDIATELY
-};
-
-static VALUE llama_sampler_wrapper_alloc(VALUE self) {
-  llama_sampler_wrapper* data = (llama_sampler_wrapper*)ruby_xmalloc(sizeof(llama_sampler_wrapper));
-  data->sampler = NULL;
-  return TypedData_Wrap_Struct(self, &llama_sampler_wrapper_data_type, data);
 }
 
 /* llama_token_data */
@@ -1884,6 +1852,41 @@ static VALUE rb_llama_detokenize(VALUE self, VALUE model, VALUE tokens, VALUE re
   return ret;
 }
 
+/* llama_sampler */
+static void llama_sampler_free_(void* ptr) {
+  llama_sampler_free((struct llama_sampler*)ptr);
+  if (ptr != NULL) {
+    ruby_xfree(ptr);
+  }
+}
+
+static size_t llama_sampler_size(const void* ptr) {
+  return sizeof(*((struct llama_sampler*)ptr));
+}
+
+static rb_data_type_t llama_sampler_data_type = {
+  "LlamaSampler",
+  { NULL,
+    llama_sampler_free_,
+    llama_sampler_size },
+  NULL,
+  NULL,
+  RUBY_TYPED_FREE_IMMEDIATELY
+};
+
+static VALUE llama_sampler_alloc(VALUE self) {
+  struct llama_sampler* data = (struct llama_sampler*)ruby_xmalloc(sizeof(struct llama_sampler));
+  return TypedData_Wrap_Struct(self, &llama_sampler_data_type, data);
+}
+
+/*
+static struct llama_sampler* get_llama_sampler(VALUE self) {
+  struct llama_sampler* data = NULL;
+  TypedData_Get_Struct(self, struct llama_sampler, &llama_sampler_data_type, data);
+  return data;
+}
+*/
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -1896,10 +1899,6 @@ void Init_llama_cpp(void) {
   /* llama_context */
   rb_cLlamaContext = rb_define_class_under(rb_mLLaMACpp, "LlamaContext", rb_cObject);
   rb_define_alloc_func(rb_cLlamaContext, llama_context_wrapper_alloc);
-
-  /* llama_sampler */
-  VALUE rb_cLlamaSampler = rb_define_class_under(rb_mLLaMACpp, "LlamaSampler", rb_cObject);
-  rb_define_alloc_func(rb_cLlamaSampler, llama_sampler_wrapper_alloc);
 
   /* Constants */
   sprintf(tmp, "0x%x", LLAMA_DEFAULT_SEED);
@@ -2407,4 +2406,13 @@ void Init_llama_cpp(void) {
 
   /* llama_detokenize */
   rb_define_module_function(rb_mLLaMACpp, "llama_detokenize", rb_llama_detokenize, 4);
+
+  /* TODO: llama_chat_apply_template */
+  /* TODO: llama_chat_builtin_templates */
+
+  /* TODO: struct llama_sampler_i */
+
+  /* llama_sampler */
+  rb_cLlamaSampler = rb_define_class_under(rb_mLLaMACpp, "LlamaSampler", rb_cObject);
+  rb_define_alloc_func(rb_cLlamaSampler, llama_sampler_alloc);
 }
