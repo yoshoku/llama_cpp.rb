@@ -11,6 +11,7 @@ VALUE rb_cLlamaKvCacheView;
 VALUE rb_cLlamaTokenDataArray;
 VALUE rb_cLlamaBatch;
 VALUE rb_cLlamaSampler;
+VALUE rb_cLlamaSamplerChainParams;
 
 /* llama_model wrapper */
 typedef struct {
@@ -415,13 +416,11 @@ static VALUE llama_sampler_chain_params_alloc(VALUE self) {
   return TypedData_Wrap_Struct(self, &llama_sampler_chain_params_type, data);
 }
 
-/*
 static llama_sampler_chain_params* get_llama_sampler_chain_params(VALUE self) {
   llama_sampler_chain_params* data = NULL;
   TypedData_Get_Struct(self, llama_sampler_chain_params, &llama_sampler_chain_params_type, data);
   return data;
 }
-*/
 
 /* llama_chat_message */
 static void llama_chat_message_free(void *ptr) {
@@ -1969,6 +1968,18 @@ static VALUE rb_llama_sampler_free(VALUE self, VALUE sampler) {
   return Qnil;
 }
 
+/* llama_sampler_chain_init */
+static VALUE rb_llama_sampler_chain_init(VALUE self, VALUE params) {
+  if (!rb_obj_is_kind_of(params, rb_cLlamaSamplerChainParams)) {
+    rb_raise(rb_eArgError, "params must be a LlamaSamplerChainParams");
+    return Qnil;
+  }
+  llama_sampler_chain_params* params_ = get_llama_sampler_chain_params(params);
+  struct llama_sampler* sampler = llama_sampler_chain_init(*params_);
+  RB_GC_GUARD(params);
+  return TypedData_Wrap_Struct(self, &llama_sampler_data_type, sampler);
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -2169,7 +2180,7 @@ void Init_llama_cpp(void) {
   rb_define_alloc_func(rb_cLlamaLogitBias, llama_logit_bias_alloc);
 
   /* llama_sampler_chain_params */
-  VALUE rb_cLlamaSamplerChainParams = rb_define_class_under(rb_mLLaMACpp, "LlamaSamplerChainParams", rb_cObject);
+  rb_cLlamaSamplerChainParams = rb_define_class_under(rb_mLLaMACpp, "LlamaSamplerChainParams", rb_cObject);
   rb_define_alloc_func(rb_cLlamaSamplerChainParams, llama_sampler_chain_params_alloc);
 
   /* llama_chat_message */
@@ -2515,4 +2526,7 @@ void Init_llama_cpp(void) {
 
   /* llama_sampler_free */
   rb_define_module_function(rb_mLLaMACpp, "llama_sampler_free", rb_llama_sampler_free, 1);
+
+  /* llama_sampler_chain_init */
+  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_chain_init", rb_llama_sampler_chain_init, 1);
 }
