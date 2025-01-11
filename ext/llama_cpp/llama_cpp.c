@@ -2026,6 +2026,22 @@ static VALUE rb_llama_sampler_chain_n(VALUE self, VALUE chain) {
   return INT2NUM(n);
 }
 
+/* llama_sampler_chain_remove */
+static VALUE rb_llama_sampler_chain_remove(VALUE self, VALUE chain, VALUE i) {
+  if (!rb_obj_is_kind_of(chain, rb_cLlamaSampler)) {
+    rb_raise(rb_eArgError, "chain must be a LlamaSampler");
+    return Qnil;
+  }
+  if (!RB_INTEGER_TYPE_P(i)) {
+    rb_raise(rb_eArgError, "i must be an Integer");
+    return Qnil;
+  }
+  struct llama_sampler* chain_ = get_llama_sampler(chain);
+  struct llama_sampler* smpl = llama_sampler_chain_remove(chain_, NUM2INT(i));
+  RB_GC_GUARD(chain);
+  return TypedData_Wrap_Struct(self, &llama_sampler_data_type, smpl);
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -2584,4 +2600,7 @@ void Init_llama_cpp(void) {
 
   /* llama_sampler_chain_n */
   rb_define_module_function(rb_mLLaMACpp, "llama_sampler_chain_n", rb_llama_sampler_chain_n, 1);
+
+  /* llama_sampler_chain_remove */
+  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_chain_remove", rb_llama_sampler_chain_remove, 2);
 }
