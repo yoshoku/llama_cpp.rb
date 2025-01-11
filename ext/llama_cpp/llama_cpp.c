@@ -1797,6 +1797,46 @@ static VALUE rb_llama_tokenize(VALUE self, VALUE model, VALUE text, VALUE n_toke
   return ret;
 }
 
+/* llama_token_to_piece */
+static VALUE rb_llama_token_to_piece(VALUE self, VALUE model, VALUE token, VALUE lstrip, VALUE special) {
+  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
+    return Qnil;
+  }
+  if (!RB_INTEGER_TYPE_P(token)) {
+    rb_raise(rb_eArgError, "token must be an Integer");
+    return Qnil;
+  }
+  if (!RB_INTEGER_TYPE_P(lstrip)) {
+    rb_raise(rb_eArgError, "lstrip must be an Integer");
+    return Qnil;
+  }
+
+  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
+  llama_token token_ = NUM2INT(token);
+  const int32_t lstrip_ = NUM2INT(lstrip);
+  const bool special_ = RTEST(special) ? true : false;
+  char *buf = (char*)ruby_xmalloc(sizeof(char) * 8);
+  const int32_t n_tokens = llama_token_to_piece(model_wrapper->model, token_, buf, 8, lstrip_, special_);
+
+  if (n_tokens < 0) {
+    ruby_xfree(buf);
+    buf = (char*)ruby_xmalloc(sizeof(char) * -n_tokens);
+    const int32_t check = llama_token_to_piece(model_wrapper->model, token_, buf, -n_tokens, lstrip_, special_);
+    if (check != -n_tokens) {
+      ruby_xfree(buf);
+      rb_raise(rb_eRuntimeError, "Failed to convert");
+      return Qnil;
+    }
+  }
+
+  VALUE ret = rb_utf8_str_new_cstr(buf);
+  ruby_xfree(buf);
+  RB_GC_GUARD(model);
+
+  return ret;
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -2314,4 +2354,7 @@ void Init_llama_cpp(void) {
 
   /* llama_tokenize */
   rb_define_module_function(rb_mLLaMACpp, "llama_tokenize", rb_llama_tokenize, 5);
+
+  /* llama_token_to_piece */
+  rb_define_module_function(rb_mLLaMACpp, "llama_token_to_piece", rb_llama_token_to_piece, 4);
 }
