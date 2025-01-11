@@ -2014,6 +2014,18 @@ static VALUE rb_llama_sampler_chain_get(VALUE self, VALUE chain, VALUE i) {
   return TypedData_Wrap_Struct(self, &llama_sampler_data_type, smpl);
 }
 
+/* llama_sampler_chain_n */
+static VALUE rb_llama_sampler_chain_n(VALUE self, VALUE chain) {
+  if (!rb_obj_is_kind_of(chain, rb_cLlamaSampler)) {
+    rb_raise(rb_eArgError, "chain must be a LlamaSampler");
+    return Qnil;
+  }
+  struct llama_sampler* chain_ = get_llama_sampler(chain);
+  const int n = llama_sampler_chain_n(chain_);
+  RB_GC_GUARD(chain);
+  return INT2NUM(n);
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -2569,4 +2581,7 @@ void Init_llama_cpp(void) {
 
   /* llama_sampler_chain_get */
   rb_define_module_function(rb_mLLaMACpp, "llama_sampler_chain_get", rb_llama_sampler_chain_get, 2);
+
+  /* llama_sampler_chain_n */
+  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_chain_n", rb_llama_sampler_chain_n, 1);
 }
