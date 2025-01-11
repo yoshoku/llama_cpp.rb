@@ -1879,13 +1879,23 @@ static VALUE llama_sampler_alloc(VALUE self) {
   return TypedData_Wrap_Struct(self, &llama_sampler_data_type, data);
 }
 
-/*
 static struct llama_sampler* get_llama_sampler(VALUE self) {
   struct llama_sampler* data = NULL;
   TypedData_Get_Struct(self, struct llama_sampler, &llama_sampler_data_type, data);
   return data;
 }
-*/
+
+static VALUE rb_llama_sampler_name(VALUE self, VALUE sampler) {
+  if (!rb_obj_is_kind_of(sampler, rb_cLlamaSampler)) {
+    rb_raise(rb_eArgError, "sampler must be a LlamaSampler");
+    return Qnil;
+  }
+  struct llama_sampler* sampler_ = get_llama_sampler(sampler);
+  const char* name = llama_sampler_name(sampler_);
+  VALUE ret = rb_utf8_str_new_cstr(name);
+  RB_GC_GUARD(sampler);
+  return ret;
+}
 
 /* MAIN */
 void Init_llama_cpp(void) {
@@ -2415,4 +2425,7 @@ void Init_llama_cpp(void) {
   /* llama_sampler */
   rb_cLlamaSampler = rb_define_class_under(rb_mLLaMACpp, "LlamaSampler", rb_cObject);
   rb_define_alloc_func(rb_cLlamaSampler, llama_sampler_alloc);
+
+  /* llama_sampler_name */
+  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_name", rb_llama_sampler_name, 1);
 }
