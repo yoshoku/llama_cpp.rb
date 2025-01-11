@@ -1837,6 +1837,53 @@ static VALUE rb_llama_token_to_piece(VALUE self, VALUE model, VALUE token, VALUE
   return ret;
 }
 
+/* llama_detokenize */
+static VALUE rb_llama_detokenize(VALUE self, VALUE model, VALUE tokens, VALUE remove_special, VALUE unparse_special) {
+  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
+    return Qnil;
+  }
+  if (!RB_TYPE_P(tokens, T_ARRAY)) {
+    rb_raise(rb_eArgError, "tokens must be an Array");
+    return Qnil;
+  }
+
+  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
+  const int32_t n_tokens = (int32_t)RARRAY_LEN(tokens);
+  if (n_tokens == 0) {
+    return Qnil;
+  }
+  llama_token* tokens_ = (llama_token*)ruby_xmalloc(sizeof(llama_token) * n_tokens);
+  for (int32_t i = 0; i < n_tokens; i++) {
+    tokens_[i] = NUM2INT(rb_ary_entry(tokens, i));
+  }
+  const int32_t text_len_max = n_tokens > 1024 ? n_tokens : 1024;
+  char* text = (char*)ruby_xmalloc(sizeof(char) * text_len_max);
+  const bool remove_special_ = RTEST(remove_special) ? true : false;
+  const bool unparse_special_ = RTEST(unparse_special) ? true : false;
+
+  int32_t n_chars = llama_detokenize(model_wrapper->model, tokens_, n_tokens, text, text_len_max, remove_special_, unparse_special_);
+
+  if (n_chars < 0) {
+    ruby_xfree(text);
+    text = (char*)ruby_xmalloc(sizeof(char) * -n_chars);
+    n_chars = llama_detokenize(model_wrapper->model, tokens_, n_tokens, text, -n_chars, remove_special_, unparse_special_);
+    if (n_chars <= (int32_t)strlen(text)) {
+      ruby_xfree(tokens_);
+      ruby_xfree(text);
+      rb_raise(rb_eRuntimeError, "Failed to detokenize");
+      return Qnil;
+    }
+  }
+
+  VALUE ret = rb_utf8_str_new_cstr(text);
+  ruby_xfree(tokens_);
+  ruby_xfree(text);
+  RB_GC_GUARD(model);
+
+  return ret;
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -2357,4 +2404,7 @@ void Init_llama_cpp(void) {
 
   /* llama_token_to_piece */
   rb_define_module_function(rb_mLLaMACpp, "llama_token_to_piece", rb_llama_token_to_piece, 4);
+
+  /* llama_detokenize */
+  rb_define_module_function(rb_mLLaMACpp, "llama_detokenize", rb_llama_detokenize, 4);
 }
