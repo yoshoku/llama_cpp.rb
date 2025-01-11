@@ -8,6 +8,7 @@ VALUE rb_cLlamaContextParams;
 VALUE rb_cLlamaModelQuantizeParams;
 VALUE rb_cLlamaLoraAdapter;
 VALUE rb_cLlamaKvCacheView;
+VALUE rb_cLlamaTokenDataArray;
 VALUE rb_cLlamaBatch;
 VALUE rb_cLlamaSampler;
 
@@ -1913,6 +1914,22 @@ static VALUE rb_llama_sampler_accept(VALUE self, VALUE sampler, VALUE token) {
   return Qnil;
 }
 
+/* llama_sampler_apply */
+static VALUE rb_llama_sampler_apply(VALUE self, VALUE sampler, VALUE cur_p) {
+  if (!rb_obj_is_kind_of(sampler, rb_cLlamaSampler)) {
+    rb_raise(rb_eArgError, "sampler must be a LlamaSampler");
+    return Qnil;
+  }
+  if (!rb_obj_is_kind_of(cur_p, rb_cLlamaTokenDataArray)) {
+    rb_raise(rb_eArgError, "sampler must be a LlamaTokenDataArray");
+    return Qnil;
+  }
+  struct llama_sampler* sampler_ = get_llama_sampler(sampler);
+  llama_token_data_array* cur_p_ = get_llama_token_data_array(cur_p);
+  llama_sampler_apply(sampler_, cur_p_);
+  return Qnil;
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -2075,7 +2092,7 @@ void Init_llama_cpp(void) {
   rb_define_method(rb_cLlamaTokenData, "p", RUBY_METHOD_FUNC(llama_token_data_get_p), 0);
 
   /* llama_token_data_array */
-  VALUE rb_cLlamaTokenDataArray = rb_define_class_under(rb_mLLaMACpp, "LlamaTokenDataArray", rb_cObject);
+  rb_cLlamaTokenDataArray = rb_define_class_under(rb_mLLaMACpp, "LlamaTokenDataArray", rb_cObject);
   rb_define_alloc_func(rb_cLlamaTokenDataArray, llama_token_data_array_alloc);
   rb_define_method(rb_cLlamaTokenDataArray, "size", RUBY_METHOD_FUNC(llama_token_data_array_get_size), 0);
   rb_define_method(rb_cLlamaTokenDataArray, "selected", RUBY_METHOD_FUNC(llama_token_data_array_get_selected), 0);
@@ -2447,4 +2464,7 @@ void Init_llama_cpp(void) {
 
   /* llama_sampler_accept */
   rb_define_module_function(rb_mLLaMACpp, "llama_sampler_accept", rb_llama_sampler_accept, 2);
+
+  /* llama_sampler_apply */
+  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_apply", rb_llama_sampler_apply, 2);
 }
