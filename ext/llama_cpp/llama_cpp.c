@@ -1911,6 +1911,7 @@ static VALUE rb_llama_sampler_accept(VALUE self, VALUE sampler, VALUE token) {
   struct llama_sampler* sampler_ = get_llama_sampler(sampler);
   llama_token token_ = NUM2INT(token);
   llama_sampler_accept(sampler_, token_);
+  RB_GC_GUARD(sampler);
   return Qnil;
 }
 
@@ -1927,6 +1928,8 @@ static VALUE rb_llama_sampler_apply(VALUE self, VALUE sampler, VALUE cur_p) {
   struct llama_sampler* sampler_ = get_llama_sampler(sampler);
   llama_token_data_array* cur_p_ = get_llama_token_data_array(cur_p);
   llama_sampler_apply(sampler_, cur_p_);
+  RB_GC_GUARD(sampler);
+  RB_GC_GUARD(cur_p);
   return Qnil;
 }
 
@@ -1938,6 +1941,7 @@ static VALUE rb_llama_sampler_reset(VALUE self, VALUE sampler) {
   }
   struct llama_sampler* sampler_ = get_llama_sampler(sampler);
   llama_sampler_reset(sampler_);
+  RB_GC_GUARD(sampler);
   return Qnil;
 }
 
@@ -1949,7 +1953,20 @@ static VALUE rb_llama_sampler_clone(VALUE self, VALUE sampler) {
   }
   struct llama_sampler* sampler_ = get_llama_sampler(sampler);
   struct llama_sampler* clone = llama_sampler_clone(sampler_);
+  RB_GC_GUARD(sampler);
   return TypedData_Wrap_Struct(self, &llama_sampler_data_type, clone);
+}
+
+/* llama_sampler_free */
+static VALUE rb_llama_sampler_free(VALUE self, VALUE sampler) {
+  if (!rb_obj_is_kind_of(sampler, rb_cLlamaSampler)) {
+    rb_raise(rb_eArgError, "sampler must be a LlamaSampler");
+    return Qnil;
+  }
+  struct llama_sampler* sampler_ = get_llama_sampler(sampler);
+  llama_sampler_free(sampler_);
+  RB_GC_GUARD(sampler);
+  return Qnil;
 }
 
 /* MAIN */
@@ -2495,4 +2512,7 @@ void Init_llama_cpp(void) {
 
   /* llama_sampler_clone */
   rb_define_module_function(rb_mLLaMACpp, "llama_sampler_clone", rb_llama_sampler_clone, 1);
+
+  /* llama_sampler_free */
+  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_free", rb_llama_sampler_free, 1);
 }
