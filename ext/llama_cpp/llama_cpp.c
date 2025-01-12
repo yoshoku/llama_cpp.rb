@@ -2058,6 +2058,16 @@ static VALUE rb_llama_sampler_init_dist(VALUE self, VALUE seed) {
   return TypedData_Wrap_Struct(self, &llama_sampler_data_type, sampler);
 }
 
+/* llama_sampler_init_top_k */
+static VALUE rb_llama_sampler_init_top_k(VALUE self, VALUE k) {
+  if (!RB_INTEGER_TYPE_P(k)) {
+    rb_raise(rb_eArgError, "k must be an Integer");
+    return Qnil;
+  }
+  struct llama_sampler* sampler = llama_sampler_init_top_k(NUM2INT(k));
+  return TypedData_Wrap_Struct(rb_cLlamaSampler, &llama_sampler_data_type, sampler);
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -2625,4 +2635,7 @@ void Init_llama_cpp(void) {
 
   /* llama_sampler_init_dist */
   rb_define_module_function(rb_mLLaMACpp, "llama_sampler_init_dist", rb_llama_sampler_init_dist, 1);
+
+  /* llama_sampler_init_top_k */
+  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_init_top_k", rb_llama_sampler_init_top_k, 1);
 }
