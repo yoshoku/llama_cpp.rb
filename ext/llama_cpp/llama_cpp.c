@@ -868,7 +868,7 @@ static VALUE rb_llama_lora_adapter_init(VALUE self, VALUE model, VALUE path_lora
   adapter_wrapper->adapter = llama_lora_adapter_init(model_wrapper->model, path_lora_);
   RB_GC_GUARD(model);
   RB_GC_GUARD(path_lora);
-  return TypedData_Wrap_Struct(self, &llama_lora_adapter_wrapper_data_type, adapter_wrapper);
+  return TypedData_Wrap_Struct(rb_cLlamaLoraAdapter, &llama_lora_adapter_wrapper_data_type, adapter_wrapper);
 }
 
 /* llama_lora_adapter_set */
@@ -1025,7 +1025,7 @@ static VALUE rb_llama_kv_cache_view_init(VALUE self, VALUE ctx, VALUE n_seq_max)
   struct llama_kv_cache_view* data = (struct llama_kv_cache_view*)ruby_xmalloc(sizeof(struct llama_kv_cache_view));
   *data = llama_kv_cache_view_init(context_wrapper->context, NUM2UINT(n_seq_max));
   RB_GC_GUARD(ctx);
-  return TypedData_Wrap_Struct(self, &llama_kv_cache_view_type, data);
+  return TypedData_Wrap_Struct(rb_cLlamaKvCacheView, &llama_kv_cache_view_type, data);
 }
 
 /* llama_kv_cache_view_free */
@@ -1318,7 +1318,7 @@ static VALUE rb_llama_batch_get_one(VALUE self, VALUE tokens) {
   llama_batch* batch = (llama_batch*)ruby_xmalloc(sizeof(llama_batch));
   *batch = llama_batch_get_one(tokens_, (int32_t)n_tokens);
   ruby_xfree(tokens_);
-  return TypedData_Wrap_Struct(self, &llama_batch_type, batch);
+  return TypedData_Wrap_Struct(rb_cLlamaBatch, &llama_batch_type, batch);
 }
 
 /* llama_batch_init */
@@ -1337,7 +1337,7 @@ static VALUE rb_llama_batch_init(VALUE self, VALUE n_tokens, VALUE embd, VALUE n
   }
   llama_batch* batch = (llama_batch*)ruby_xmalloc(sizeof(llama_batch));
   *batch = llama_batch_init(NUM2INT(n_tokens), NUM2INT(embd), NUM2INT(n_seq_max));
-  return TypedData_Wrap_Struct(self, &llama_batch_type, batch);
+  return TypedData_Wrap_Struct(rb_cLlamaBatch, &llama_batch_type, batch);
 }
 
 /* llama_batch_free */
@@ -1953,7 +1953,7 @@ static VALUE rb_llama_sampler_clone(VALUE self, VALUE sampler) {
   struct llama_sampler* sampler_ = get_llama_sampler(sampler);
   struct llama_sampler* clone = llama_sampler_clone(sampler_);
   RB_GC_GUARD(sampler);
-  return TypedData_Wrap_Struct(self, &llama_sampler_data_type, clone);
+  return TypedData_Wrap_Struct(rb_cLlamaSampler, &llama_sampler_data_type, clone);
 }
 
 /* llama_sampler_free */
@@ -1977,7 +1977,7 @@ static VALUE rb_llama_sampler_chain_init(VALUE self, VALUE params) {
   llama_sampler_chain_params* params_ = get_llama_sampler_chain_params(params);
   struct llama_sampler* sampler = llama_sampler_chain_init(*params_);
   RB_GC_GUARD(params);
-  return TypedData_Wrap_Struct(self, &llama_sampler_data_type, sampler);
+  return TypedData_Wrap_Struct(rb_cLlamaSampler, &llama_sampler_data_type, sampler);
 }
 
 /* llama_sampler_chain_add */
@@ -2011,7 +2011,7 @@ static VALUE rb_llama_sampler_chain_get(VALUE self, VALUE chain, VALUE i) {
   struct llama_sampler* chain_ = get_llama_sampler(chain);
   struct llama_sampler* smpl = llama_sampler_chain_get(chain_, NUM2INT(i));
   RB_GC_GUARD(chain);
-  return TypedData_Wrap_Struct(self, &llama_sampler_data_type, smpl);
+  return TypedData_Wrap_Struct(rb_cLlamaSampler, &llama_sampler_data_type, smpl);
 }
 
 /* llama_sampler_chain_n */
@@ -2039,13 +2039,13 @@ static VALUE rb_llama_sampler_chain_remove(VALUE self, VALUE chain, VALUE i) {
   struct llama_sampler* chain_ = get_llama_sampler(chain);
   struct llama_sampler* smpl = llama_sampler_chain_remove(chain_, NUM2INT(i));
   RB_GC_GUARD(chain);
-  return TypedData_Wrap_Struct(self, &llama_sampler_data_type, smpl);
+  return TypedData_Wrap_Struct(rb_cLlamaSampler, &llama_sampler_data_type, smpl);
 }
 
 /* llama_sampler_init_greedy */
 static VALUE rb_llama_sampler_init_greedy(VALUE self) {
   struct llama_sampler* sampler = llama_sampler_init_greedy();
-  return TypedData_Wrap_Struct(self, &llama_sampler_data_type, sampler);
+  return TypedData_Wrap_Struct(rb_cLlamaSampler, &llama_sampler_data_type, sampler);
 }
 
 /* llama_sampler_init_dist */
@@ -2055,7 +2055,7 @@ static VALUE rb_llama_sampler_init_dist(VALUE self, VALUE seed) {
     return Qnil;
   }
   struct llama_sampler* sampler = llama_sampler_init_dist(NUM2UINT(seed));
-  return TypedData_Wrap_Struct(self, &llama_sampler_data_type, sampler);
+  return TypedData_Wrap_Struct(rb_cLlamaSampler, &llama_sampler_data_type, sampler);
 }
 
 /* llama_sampler_init_top_k */
