@@ -529,8 +529,8 @@ static VALUE rb_llama_model_free(VALUE self, VALUE model) {
   return Qnil;
 }
 
-/* llama_load_model_from_file */
-static VALUE rb_llama_load_model_from_file(VALUE self, VALUE path_model, VALUE params) {
+/* llama_model_load_from_file */
+static VALUE rb_llama_model_load_from_file(VALUE self, VALUE path_model, VALUE params) {
   if (!RB_TYPE_P(path_model, T_STRING)) {
     rb_raise(rb_eArgError, "path_model must be a String");
     return Qnil;
@@ -542,7 +542,7 @@ static VALUE rb_llama_load_model_from_file(VALUE self, VALUE path_model, VALUE p
   const char* path_model_ = StringValueCStr(path_model);
   struct llama_model_params* params_ = get_llama_model_params(params);
   llama_model_wrapper* model_wrapper = (llama_model_wrapper*)ruby_xmalloc(sizeof(llama_model_wrapper));
-  model_wrapper->model = llama_load_model_from_file(path_model_, *params_);
+  model_wrapper->model = llama_model_load_from_file(path_model_, *params_);
   RB_GC_GUARD(path_model);
   RB_GC_GUARD(params);
   return TypedData_Wrap_Struct(rb_cLlamaModel, &llama_model_wrapper_data_type, model_wrapper);
@@ -2291,8 +2291,8 @@ void Init_llama_cpp(void) {
   /* llama_backend_free */
   rb_define_module_function(rb_mLLaMACpp, "llama_backend_free", rb_llama_backend_free, 0);
 
-  /* llama_load_model_from_file */
-  rb_define_module_function(rb_mLLaMACpp, "llama_load_model_from_file", rb_llama_load_model_from_file, 2);
+  /* llama_model_load_from_file */
+  rb_define_module_function(rb_mLLaMACpp, "llama_model_load_from_file", rb_llama_model_load_from_file, 2);
 
   /* llama_model_free */
   rb_define_module_function(rb_mLLaMACpp, "llama_model_free", rb_llama_model_free, 1);
