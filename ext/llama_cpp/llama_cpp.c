@@ -871,8 +871,8 @@ static VALUE rb_llama_adapter_lora_init(VALUE self, VALUE model, VALUE path_lora
   return TypedData_Wrap_Struct(rb_cLlamaAdapterLora, &llama_adapter_lora_wrapper_data_type, adapter_wrapper);
 }
 
-/* llama_adapter_lora_set */
-static VALUE rb_llama_adapter_lora_set(VALUE self, VALUE ctx, VALUE adapter, VALUE scale) {
+/* llama_set_adapter_lora */
+static VALUE rb_llama_set_adapter_lora(VALUE self, VALUE ctx, VALUE adapter, VALUE scale) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
     return Qnil;
@@ -887,7 +887,7 @@ static VALUE rb_llama_adapter_lora_set(VALUE self, VALUE ctx, VALUE adapter, VAL
   }
   llama_adapter_lora_wrapper* adapter_wrapper = get_llama_adapter_lora_wrapper(adapter);
   llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
-  const int32_t res = llama_adapter_lora_set(context_wrapper->context, adapter_wrapper->adapter, (float)NUM2DBL(scale));
+  const int32_t res = llama_set_adapter_lora(context_wrapper->context, adapter_wrapper->adapter, (float)NUM2DBL(scale));
   RB_GC_GUARD(ctx);
   RB_GC_GUARD(adapter);
   return NUM2INT(res);
@@ -2397,8 +2397,8 @@ void Init_llama_cpp(void) {
   /* llama_adapter_lora_init */
   rb_define_module_function(rb_mLLaMACpp, "llama_adapter_lora_init", rb_llama_adapter_lora_init, 2);
 
-  /* llama_adapter_lora_set */
-  rb_define_module_function(rb_mLLaMACpp, "llama_adapter_lora_set", rb_llama_adapter_lora_set, 3);
+  /* llama_set_adapter_lora */
+  rb_define_module_function(rb_mLLaMACpp, "llama_set_adapter_lora", rb_llama_set_adapter_lora, 3);
 
   /* llama_rm_adapter_lora */
   rb_define_module_function(rb_mLLaMACpp, "llama_rm_adapter_lora", rb_llama_rm_adapter_lora, 2);
