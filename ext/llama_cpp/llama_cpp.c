@@ -548,8 +548,8 @@ static VALUE rb_llama_model_load_from_file(VALUE self, VALUE path_model, VALUE p
   return TypedData_Wrap_Struct(rb_cLlamaModel, &llama_model_wrapper_data_type, model_wrapper);
 }
 
-/* llama_new_context_with_model */
-static VALUE rb_llama_new_context_with_model(VALUE self, VALUE model, VALUE params) {
+/* llama_init_from_model */
+static VALUE rb_llama_init_from_model(VALUE self, VALUE model, VALUE params) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
     rb_raise(rb_eArgError, "model must be a LlamaModel");
     return Qnil;
@@ -561,7 +561,7 @@ static VALUE rb_llama_new_context_with_model(VALUE self, VALUE model, VALUE para
   llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
   struct llama_context_params* params_ = get_llama_context_params(params);
   llama_context_wrapper* context_wrapper = (llama_context_wrapper*)ruby_xmalloc(sizeof(llama_context_wrapper));
-  context_wrapper->context = llama_new_context_with_model(model_wrapper->model, *params_);
+  context_wrapper->context = llama_init_from_model(model_wrapper->model, *params_);
   RB_GC_GUARD(model);
   RB_GC_GUARD(params);
   return TypedData_Wrap_Struct(rb_cLlamaContext, &llama_context_wrapper_data_type, context_wrapper);
@@ -2297,8 +2297,8 @@ void Init_llama_cpp(void) {
   /* llama_model_free */
   rb_define_module_function(rb_mLLaMACpp, "llama_model_free", rb_llama_model_free, 1);
 
-  /* llama_new_context_with_model */
-  rb_define_module_function(rb_mLLaMACpp, "llama_new_context_with_model", rb_llama_new_context_with_model, 2);
+  /* llama_init_from_model */
+  rb_define_module_function(rb_mLLaMACpp, "llama_init_from_model", rb_llama_init_from_model, 2);
 
   /* llama_free */
   rb_define_module_function(rb_mLLaMACpp, "llama_free", rb_llama_free, 1);
