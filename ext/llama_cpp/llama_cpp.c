@@ -21,7 +21,7 @@ typedef struct {
 static void llama_model_wrapper_free(void *ptr) {
   llama_model_wrapper* data = (llama_model_wrapper*)ptr;
   if (data->model != NULL) {
-    llama_free_model(data->model);
+    llama_model_free(data->model);
   }
   ruby_xfree(ptr);
 }
@@ -515,15 +515,15 @@ static VALUE rb_llama_backend_free(VALUE self) {
   return Qnil;
 }
 
-/* llama_free_model */
-static VALUE rb_llama_free_model(VALUE self, VALUE model) {
+/* llama_model_free */
+static VALUE rb_llama_model_free(VALUE self, VALUE model) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
     rb_raise(rb_eArgError, "model must be a LlamaModel");
     return Qnil;
   }
   llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
   if (model_wrapper->model != NULL) {
-    llama_free_model(model_wrapper->model);
+    llama_model_free(model_wrapper->model);
     model_wrapper->model = NULL;
   }
   return Qnil;
@@ -2294,8 +2294,8 @@ void Init_llama_cpp(void) {
   /* llama_load_model_from_file */
   rb_define_module_function(rb_mLLaMACpp, "llama_load_model_from_file", rb_llama_load_model_from_file, 2);
 
-  /* llama_free_model */
-  rb_define_module_function(rb_mLLaMACpp, "llama_free_model", rb_llama_free_model, 1);
+  /* llama_model_free */
+  rb_define_module_function(rb_mLLaMACpp, "llama_model_free", rb_llama_model_free, 1);
 
   /* llama_new_context_with_model */
   rb_define_module_function(rb_mLLaMACpp, "llama_new_context_with_model", rb_llama_new_context_with_model, 2);
