@@ -1,6 +1,7 @@
 #include "llama_cpp.h"
 
 VALUE rb_mLLaMACpp;
+VALUE rb_cLlamaVocab;
 VALUE rb_cLlamaModel;
 VALUE rb_cLlamaContext;
 VALUE rb_cLlamaModelParams;
@@ -12,6 +13,43 @@ VALUE rb_cLlamaTokenDataArray;
 VALUE rb_cLlamaBatch;
 VALUE rb_cLlamaSampler;
 VALUE rb_cLlamaSamplerChainParams;
+
+/* llama_vocab wrapper */
+typedef struct {
+  struct llama_vocab* vocab;
+} llama_vocab_wrapper;
+
+static void llama_vocab_wrapper_free(void *ptr) {
+  ruby_xfree(ptr);
+}
+
+static size_t llama_vocab_wrapper_size(const void *ptr) {
+  return sizeof(*((llama_vocab_wrapper*)ptr));
+}
+
+static rb_data_type_t llama_vocab_wrapper_data_type = {
+  "LlamaVocab",
+  { NULL,
+    llama_vocab_wrapper_free,
+    llama_vocab_wrapper_size },
+  NULL,
+  NULL,
+  RUBY_TYPED_FREE_IMMEDIATELY
+};
+
+static VALUE llama_vocab_wrapper_alloc(VALUE self) {
+  llama_vocab_wrapper* data = (llama_vocab_wrapper*)ruby_xmalloc(sizeof(llama_vocab_wrapper));
+  data->vocab = NULL;
+  return TypedData_Wrap_Struct(self, &llama_vocab_wrapper_data_type, data);
+}
+
+/*
+static llama_vocab_wrapper* get_llama_vocab_wrapper(VALUE self) {
+  llama_vocab_wrapper* data = NULL;
+  TypedData_Get_Struct(self, llama_vocab_wrapper, &llama_vocab_wrapper_data_type, data);
+  return data;
+}
+*/
 
 /* llama_model wrapper */
 typedef struct {
@@ -2072,6 +2110,10 @@ static VALUE rb_llama_sampler_init_top_k(VALUE self, VALUE k) {
 void Init_llama_cpp(void) {
   char tmp[12];
   rb_mLLaMACpp = rb_define_module("LLaMACpp");
+
+  /* llama_vocab */
+  rb_cLlamaVocab = rb_define_class_under(rb_mLLaMACpp, "LlamaVocab", rb_cObject);
+  rb_define_alloc_func(rb_cLlamaVocab, llama_vocab_wrapper_alloc);
 
   /* llama_model */
   rb_cLlamaModel = rb_define_class_under(rb_mLLaMACpp, "LlamaModel", rb_cObject);
