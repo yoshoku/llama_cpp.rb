@@ -691,14 +691,14 @@ static VALUE rb_llama_model_n_layer(VALUE self, VALUE model) {
   return INT2NUM(llama_model_n_layer(model_wrapper->model));
 }
 
-/* llama_n_head */
-static VALUE rb_llama_n_head(VALUE self, VALUE model) {
+/* llama_model_n_head */
+static VALUE rb_llama_model_n_head(VALUE self, VALUE model) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
     rb_raise(rb_eArgError, "model must be a LlamaModel");
     return Qnil;
   }
   llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
-  return INT2NUM(llama_n_head(model_wrapper->model));
+  return INT2NUM(llama_model_n_head(model_wrapper->model));
 }
 
 /* llama_get_model */
@@ -2345,8 +2345,8 @@ void Init_llama_cpp(void) {
   /* llama_model_n_layer */
   rb_define_module_function(rb_mLLaMACpp, "llama_model_n_layer", rb_llama_model_n_layer, 1);
 
-  /* llama_n_head */
-  rb_define_module_function(rb_mLLaMACpp, "llama_n_head", rb_llama_n_head, 1);
+  /* llama_model_n_head */
+  rb_define_module_function(rb_mLLaMACpp, "llama_model_n_head", rb_llama_model_n_head, 1);
 
   /* TODO: llama_get_model */
   /*
