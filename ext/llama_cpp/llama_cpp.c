@@ -6,7 +6,7 @@ VALUE rb_cLlamaContext;
 VALUE rb_cLlamaModelParams;
 VALUE rb_cLlamaContextParams;
 VALUE rb_cLlamaModelQuantizeParams;
-VALUE rb_cLlamaLoraAdapter;
+VALUE rb_cLlamaAdapterLora;
 VALUE rb_cLlamaKvCacheView;
 VALUE rb_cLlamaTokenDataArray;
 VALUE rb_cLlamaBatch;
@@ -454,42 +454,42 @@ static llama_chat_message* get_llama_chat_message(VALUE self) {
 }
 */
 
-/* llama_lora_adapter wrapper */
+/* llama_adapter_lora wrapper */
 typedef struct {
-  struct llama_lora_adapter* adapter;
-} llama_lora_adapter_wrapper;
+  struct llama_adapter_lora* adapter;
+} llama_adapter_lora_wrapper;
 
-static void llama_lora_adapter_wrapper_free(void *ptr) {
-  llama_lora_adapter_wrapper* data = (llama_lora_adapter_wrapper*)ptr;
+static void llama_adapter_lora_wrapper_free(void *ptr) {
+  llama_adapter_lora_wrapper* data = (llama_adapter_lora_wrapper*)ptr;
   if (data->adapter != NULL) {
-    llama_lora_adapter_free(data->adapter);
+    llama_adapter_lora_free(data->adapter);
   }
   ruby_xfree(ptr);
 }
 
-static size_t llama_lora_adapter_wrapper_size(const void *ptr) {
-  return sizeof(*((llama_lora_adapter_wrapper*)ptr));
+static size_t llama_adapter_lora_wrapper_size(const void *ptr) {
+  return sizeof(*((llama_adapter_lora_wrapper*)ptr));
 }
 
-static rb_data_type_t llama_lora_adapter_wrapper_data_type = {
-  "LlamaLoraAdapter",
+static rb_data_type_t llama_adapter_lora_wrapper_data_type = {
+  "LlamaAdapterLora",
   { NULL,
-    llama_lora_adapter_wrapper_free,
-    llama_lora_adapter_wrapper_size },
+    llama_adapter_lora_wrapper_free,
+    llama_adapter_lora_wrapper_size },
   NULL,
   NULL,
   RUBY_TYPED_FREE_IMMEDIATELY
 };
 
-static VALUE llama_lora_adapter_wrapper_alloc(VALUE self) {
-  llama_lora_adapter_wrapper* data = (llama_lora_adapter_wrapper*)ruby_xmalloc(sizeof(llama_lora_adapter_wrapper));
+static VALUE llama_adapter_lora_wrapper_alloc(VALUE self) {
+  llama_adapter_lora_wrapper* data = (llama_adapter_lora_wrapper*)ruby_xmalloc(sizeof(llama_adapter_lora_wrapper));
   data->adapter = NULL;
-  return TypedData_Wrap_Struct(self, &llama_lora_adapter_wrapper_data_type, data);
+  return TypedData_Wrap_Struct(self, &llama_adapter_lora_wrapper_data_type, data);
 }
 
-static llama_lora_adapter_wrapper* get_llama_lora_adapter_wrapper(VALUE self) {
-  llama_lora_adapter_wrapper* data = NULL;
-  TypedData_Get_Struct(self, llama_lora_adapter_wrapper, &llama_lora_adapter_wrapper_data_type, data);
+static llama_adapter_lora_wrapper* get_llama_adapter_lora_wrapper(VALUE self) {
+  llama_adapter_lora_wrapper* data = NULL;
+  TypedData_Get_Struct(self, llama_adapter_lora_wrapper, &llama_adapter_lora_wrapper_data_type, data);
   return data;
 }
 
@@ -852,8 +852,8 @@ static VALUE rb_llama_model_quantize(VALUE self, VALUE fname_inp, VALUE fname_ou
   return res == 0 ? Qtrue : Qfalse;
 }
 
-/* llama_lora_adapter_init */
-static VALUE rb_llama_lora_adapter_init(VALUE self, VALUE model, VALUE path_lora) {
+/* llama_adapter_lora_init */
+static VALUE rb_llama_adapter_lora_init(VALUE self, VALUE model, VALUE path_lora) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
     rb_raise(rb_eArgError, "model must be a LlamaModel");
     return Qnil;
@@ -864,74 +864,74 @@ static VALUE rb_llama_lora_adapter_init(VALUE self, VALUE model, VALUE path_lora
   }
   llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
   const char* path_lora_ = StringValueCStr(path_lora);
-  llama_lora_adapter_wrapper* adapter_wrapper = (llama_lora_adapter_wrapper*)ruby_xmalloc(sizeof(llama_lora_adapter_wrapper));
-  adapter_wrapper->adapter = llama_lora_adapter_init(model_wrapper->model, path_lora_);
+  llama_adapter_lora_wrapper* adapter_wrapper = (llama_adapter_lora_wrapper*)ruby_xmalloc(sizeof(llama_adapter_lora_wrapper));
+  adapter_wrapper->adapter = llama_adapter_lora_init(model_wrapper->model, path_lora_);
   RB_GC_GUARD(model);
   RB_GC_GUARD(path_lora);
-  return TypedData_Wrap_Struct(rb_cLlamaLoraAdapter, &llama_lora_adapter_wrapper_data_type, adapter_wrapper);
+  return TypedData_Wrap_Struct(rb_cLlamaAdapterLora, &llama_adapter_lora_wrapper_data_type, adapter_wrapper);
 }
 
-/* llama_lora_adapter_set */
-static VALUE rb_llama_lora_adapter_set(VALUE self, VALUE ctx, VALUE adapter, VALUE scale) {
+/* llama_adapter_lora_set */
+static VALUE rb_llama_adapter_lora_set(VALUE self, VALUE ctx, VALUE adapter, VALUE scale) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
     return Qnil;
   }
-  if (!rb_obj_is_kind_of(adapter, rb_cLlamaLoraAdapter)) {
-    rb_raise(rb_eArgError, "adapter must be a LlamaLoraAdapter");
+  if (!rb_obj_is_kind_of(adapter, rb_cLlamaAdapterLora)) {
+    rb_raise(rb_eArgError, "adapter must be a LlamaAdapterLora");
     return Qnil;
   }
   if (!RB_FLOAT_TYPE_P(scale)) {
     rb_raise(rb_eArgError, "scale must be a Float");
     return Qnil;
   }
-  llama_lora_adapter_wrapper* adapter_wrapper = get_llama_lora_adapter_wrapper(adapter);
+  llama_adapter_lora_wrapper* adapter_wrapper = get_llama_adapter_lora_wrapper(adapter);
   llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
-  const int32_t res = llama_lora_adapter_set(context_wrapper->context, adapter_wrapper->adapter, (float)NUM2DBL(scale));
+  const int32_t res = llama_adapter_lora_set(context_wrapper->context, adapter_wrapper->adapter, (float)NUM2DBL(scale));
   RB_GC_GUARD(ctx);
   RB_GC_GUARD(adapter);
   return NUM2INT(res);
 }
 
-/* llama_lora_adapter_remove */
-static VALUE rb_llama_lora_adapter_remove(VALUE self, VALUE ctx, VALUE adapter) {
+/* llama_rm_adapter_lora */
+static VALUE rb_llama_rm_adapter_lora(VALUE self, VALUE ctx, VALUE adapter) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
     return Qnil;
   }
-  if (!rb_obj_is_kind_of(adapter, rb_cLlamaLoraAdapter)) {
-    rb_raise(rb_eArgError, "adapter must be a LlamaLoraAdapter");
+  if (!rb_obj_is_kind_of(adapter, rb_cLlamaAdapterLora)) {
+    rb_raise(rb_eArgError, "adapter must be a LlamaAdapterLora");
     return Qnil;
   }
   llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
-  llama_lora_adapter_wrapper* adapter_wrapper = get_llama_lora_adapter_wrapper(adapter);
-  const int32_t res = llama_lora_adapter_remove(context_wrapper->context, adapter_wrapper->adapter);
+  llama_adapter_lora_wrapper* adapter_wrapper = get_llama_adapter_lora_wrapper(adapter);
+  const int32_t res = llama_rm_adapter_lora(context_wrapper->context, adapter_wrapper->adapter);
   RB_GC_GUARD(ctx);
   RB_GC_GUARD(adapter);
   return NUM2INT(res);
 }
 
-/* llama_lora_adapter_clear */
-static VALUE rb_llama_lora_adapter_clear(VALUE self, VALUE ctx) {
+/* llama_clear_adapter_lora */
+static VALUE rb_llama_clear_adapter_lora(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
     return Qnil;
   }
   llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
-  llama_lora_adapter_clear(context_wrapper->context);
+  llama_clear_adapter_lora(context_wrapper->context);
   RB_GC_GUARD(ctx);
   return Qnil;
 }
 
-/* llama_lora_adapter_free */
-static VALUE rb_llama_lora_adapter_free(VALUE self, VALUE adapter) {
-  if (!rb_obj_is_kind_of(adapter, rb_cLlamaLoraAdapter)) {
-    rb_raise(rb_eArgError, "adapter must be a LlamaLoraAdapter");
+/* llama_adapter_lora_free */
+static VALUE rb_llama_adapter_lora_free(VALUE self, VALUE adapter) {
+  if (!rb_obj_is_kind_of(adapter, rb_cLlamaAdapterLora)) {
+    rb_raise(rb_eArgError, "adapter must be a LlamaAdapterLora");
     return Qnil;
   }
-  llama_lora_adapter_wrapper* adapter_wrapper = get_llama_lora_adapter_wrapper(adapter);
+  llama_adapter_lora_wrapper* adapter_wrapper = get_llama_adapter_lora_wrapper(adapter);
   if (adapter_wrapper->adapter != NULL) {
-    llama_lora_adapter_free(adapter_wrapper->adapter);
+    llama_adapter_lora_free(adapter_wrapper->adapter);
     adapter_wrapper->adapter = NULL;
   }
   RB_GC_GUARD(adapter);
@@ -2275,9 +2275,9 @@ void Init_llama_cpp(void) {
   VALUE rb_cLlamaChatMessage = rb_define_class_under(rb_mLLaMACpp, "LlamaChatMessage", rb_cObject);
   rb_define_alloc_func(rb_cLlamaChatMessage, llama_chat_message_alloc);
 
-  /* llama_lora_adapter */
-  rb_cLlamaLoraAdapter = rb_define_class_under(rb_mLLaMACpp, "LlamaLoraAdapter", rb_cObject);
-  rb_define_alloc_func(rb_cLlamaLoraAdapter, llama_lora_adapter_wrapper_alloc);
+  /* llama_adapter_lora */
+  rb_cLlamaAdapterLora = rb_define_class_under(rb_mLLaMACpp, "LlamaAdapterLora", rb_cObject);
+  rb_define_alloc_func(rb_cLlamaAdapterLora, llama_adapter_lora_wrapper_alloc);
 
   /* llama_backend_init */
   rb_define_module_function(rb_mLLaMACpp, "llama_backend_init", rb_llama_backend_init, 0);
@@ -2394,20 +2394,20 @@ void Init_llama_cpp(void) {
   /* llama_model_quantize */
   rb_define_module_function(rb_mLLaMACpp, "llama_model_quantize", rb_llama_model_quantize, 3);
 
-  /* llama_lora_adapter_init */
-  rb_define_module_function(rb_mLLaMACpp, "llama_lora_adapter_init", rb_llama_lora_adapter_init, 2);
+  /* llama_adapter_lora_init */
+  rb_define_module_function(rb_mLLaMACpp, "llama_adapter_lora_init", rb_llama_adapter_lora_init, 2);
 
-  /* llama_lora_adapter_set */
-  rb_define_module_function(rb_mLLaMACpp, "llama_lora_adapter_set", rb_llama_lora_adapter_set, 3);
+  /* llama_adapter_lora_set */
+  rb_define_module_function(rb_mLLaMACpp, "llama_adapter_lora_set", rb_llama_adapter_lora_set, 3);
 
-  /* llama_lora_adapter_remove */
-  rb_define_module_function(rb_mLLaMACpp, "llama_lora_adapter_remove", rb_llama_lora_adapter_remove, 2);
+  /* llama_rm_adapter_lora */
+  rb_define_module_function(rb_mLLaMACpp, "llama_rm_adapter_lora", rb_llama_rm_adapter_lora, 2);
 
-  /* llama_lora_adapter_clear */
-  rb_define_module_function(rb_mLLaMACpp, "llama_lora_adapter_clear", rb_llama_lora_adapter_clear, 1);
+  /* llama_clear_adapter_lora */
+  rb_define_module_function(rb_mLLaMACpp, "llama_clear_adapter_lora", rb_llama_clear_adapter_lora, 1);
 
-  /* llama_lora_adapter_free */
-  rb_define_module_function(rb_mLLaMACpp, "llama_lora_adapter_free", rb_llama_lora_adapter_free, 1);
+  /* llama_adapter_lora_free */
+  rb_define_module_function(rb_mLLaMACpp, "llama_adapter_lora_free", rb_llama_adapter_lora_free, 1);
 
   /* TODO: llama_control_vector_apply */
 
