@@ -796,6 +796,18 @@ static VALUE rb_llama_vocab_type(VALUE self, VALUE vocab) {
   return vt;
 }
 
+/* llama_vocab_n_tokens */
+static VALUE rb_llama_vocab_n_tokens(VALUE self, VALUE vocab) {
+  if (!rb_obj_is_kind_of(vocab, rb_cLlamaVocab)) {
+    rb_raise(rb_eArgError, "vocab must be a LlamaVocab");
+    return Qnil;
+  }
+  llama_vocab_wrapper* vocab_wrapper = get_llama_vocab_wrapper(vocab);
+  VALUE n_tokens = INT2NUM(llama_vocab_n_tokens(vocab_wrapper->vocab));
+  RB_GC_GUARD(vocab);
+  return n_tokens;
+}
+
 /* llama_model_desc */
 static VALUE rb_llama_model_desc(VALUE self, VALUE model) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
@@ -2410,6 +2422,9 @@ void Init_llama_cpp(void) {
 
   /* llama_vocab_type */
   rb_define_module_function(rb_mLLaMACpp, "llama_vocab_type", rb_llama_vocab_type, 1);
+
+  /* llama_vocab_n_tokens */
+  rb_define_module_function(rb_mLLaMACpp, "llama_vocab_n_tokens", rb_llama_vocab_n_tokens, 1);
 
   /* TODO: llama_model_meta_val_str */
   /* TODO: llama_model_meta_count */
