@@ -537,6 +537,12 @@ static VALUE rb_llama_backend_init(VALUE self) {
   return Qnil;
 }
 
+/* llama_backend_free */
+static VALUE rb_llama_backend_free(VALUE self) {
+  llama_backend_free();
+  return Qnil;
+}
+
 /* llama_numa_init */
 static VALUE rb_llama_numa_init(VALUE self, VALUE numa) {
   if (!RB_INTEGER_TYPE_P(numa)) {
@@ -544,12 +550,6 @@ static VALUE rb_llama_numa_init(VALUE self, VALUE numa) {
     return Qnil;
   }
   llama_numa_init((enum ggml_numa_strategy)NUM2INT(numa));
-  return Qnil;
-}
-
-/* llama_backend_free */
-static VALUE rb_llama_backend_free(VALUE self) {
-  llama_backend_free();
   return Qnil;
 }
 
@@ -689,56 +689,6 @@ static VALUE rb_llama_n_seq_max(VALUE self, VALUE ctx) {
   return UINT2NUM(llama_n_seq_max(context_wrapper->context));
 }
 
-/* llama_n_vocab */
-static VALUE rb_llama_n_vocab(VALUE self, VALUE model) {
-  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
-    rb_raise(rb_eArgError, "model must be a LlamaModel");
-    return Qnil;
-  }
-  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
-  return INT2NUM(llama_n_vocab(model_wrapper->model));
-}
-
-/* llama_model_n_ctx_train */
-static VALUE rb_llama_model_n_ctx_train(VALUE self, VALUE model) {
-  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
-    rb_raise(rb_eArgError, "model must be a LlamaModel");
-    return Qnil;
-  }
-  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
-  return INT2NUM(llama_model_n_ctx_train(model_wrapper->model));
-}
-
-/* llama_model_n_embd */
-static VALUE rb_llama_model_n_embd(VALUE self, VALUE model) {
-  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
-    rb_raise(rb_eArgError, "model must be a LlamaModel");
-    return Qnil;
-  }
-  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
-  return INT2NUM(llama_model_n_embd(model_wrapper->model));
-}
-
-/* llama_model_n_layer */
-static VALUE rb_llama_model_n_layer(VALUE self, VALUE model) {
-  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
-    rb_raise(rb_eArgError, "model must be a LlamaModel");
-    return Qnil;
-  }
-  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
-  return INT2NUM(llama_model_n_layer(model_wrapper->model));
-}
-
-/* llama_model_n_head */
-static VALUE rb_llama_model_n_head(VALUE self, VALUE model) {
-  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
-    rb_raise(rb_eArgError, "model must be a LlamaModel");
-    return Qnil;
-  }
-  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
-  return INT2NUM(llama_model_n_head(model_wrapper->model));
-}
-
 /* llama_get_model */
 /*
 static VALUE rb_llama_get_model(VALUE self, VALUE ctx) {
@@ -781,6 +731,46 @@ static VALUE rb_llama_model_rope_type(VALUE self, VALUE model) {
   }
   llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
   return INT2NUM(llama_model_rope_type(model_wrapper->model));
+}
+
+/* llama_model_n_ctx_train */
+static VALUE rb_llama_model_n_ctx_train(VALUE self, VALUE model) {
+  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
+    return Qnil;
+  }
+  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
+  return INT2NUM(llama_model_n_ctx_train(model_wrapper->model));
+}
+
+/* llama_model_n_embd */
+static VALUE rb_llama_model_n_embd(VALUE self, VALUE model) {
+  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
+    return Qnil;
+  }
+  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
+  return INT2NUM(llama_model_n_embd(model_wrapper->model));
+}
+
+/* llama_model_n_layer */
+static VALUE rb_llama_model_n_layer(VALUE self, VALUE model) {
+  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
+    return Qnil;
+  }
+  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
+  return INT2NUM(llama_model_n_layer(model_wrapper->model));
+}
+
+/* llama_model_n_head */
+static VALUE rb_llama_model_n_head(VALUE self, VALUE model) {
+  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
+    return Qnil;
+  }
+  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
+  return INT2NUM(llama_model_n_head(model_wrapper->model));
 }
 
 /* llama_model_rope_freq_scale_train */
@@ -2325,14 +2315,14 @@ void Init_llama_cpp(void) {
   /* llama_backend_init */
   rb_define_module_function(rb_mLLaMACpp, "llama_backend_init", rb_llama_backend_init, 0);
 
+  /* llama_backend_free */
+  rb_define_module_function(rb_mLLaMACpp, "llama_backend_free", rb_llama_backend_free, 0);
+
   /* llama_numa_init */
   rb_define_module_function(rb_mLLaMACpp, "llama_numa_init", rb_llama_numa_init, 1);
 
   /* TODO: llama_attach_threadpool */
   /* TODO: llama_detach_threadpool */
-
-  /* llama_backend_free */
-  rb_define_module_function(rb_mLLaMACpp, "llama_backend_free", rb_llama_backend_free, 0);
 
   /* llama_model_load_from_file */
   rb_define_module_function(rb_mLLaMACpp, "llama_model_load_from_file", rb_llama_model_load_from_file, 2);
@@ -2376,21 +2366,6 @@ void Init_llama_cpp(void) {
   /* llama_n_seq_max */
   rb_define_module_function(rb_mLLaMACpp, "llama_n_seq_max", rb_llama_n_seq_max, 1);
 
-  /* llama_n_vocab */
-  rb_define_module_function(rb_mLLaMACpp, "llama_n_vocab", rb_llama_n_vocab, 1);
-
-  /* llama_model_n_ctx_train */
-  rb_define_module_function(rb_mLLaMACpp, "llama_model_n_ctx_train", rb_llama_model_n_ctx_train, 1);
-
-  /* llama_model_n_embd */
-  rb_define_module_function(rb_mLLaMACpp, "llama_model_n_embd", rb_llama_model_n_embd, 1);
-
-  /* llama_model_n_layer */
-  rb_define_module_function(rb_mLLaMACpp, "llama_model_n_layer", rb_llama_model_n_layer, 1);
-
-  /* llama_model_n_head */
-  rb_define_module_function(rb_mLLaMACpp, "llama_model_n_head", rb_llama_model_n_head, 1);
-
   /* TODO: llama_get_model */
   /*
   rb_define_module_function(rb_mLLaMACpp, "llama_get_model", rb_llama_get_model, 1);
@@ -2404,6 +2379,18 @@ void Init_llama_cpp(void) {
 
   /* llama_model_rope_type */
   rb_define_module_function(rb_mLLaMACpp, "llama_model_rope_type", rb_llama_model_rope_type, 1);
+
+  /* llama_model_n_ctx_train */
+  rb_define_module_function(rb_mLLaMACpp, "llama_model_n_ctx_train", rb_llama_model_n_ctx_train, 1);
+
+  /* llama_model_n_embd */
+  rb_define_module_function(rb_mLLaMACpp, "llama_model_n_embd", rb_llama_model_n_embd, 1);
+
+  /* llama_model_n_layer */
+  rb_define_module_function(rb_mLLaMACpp, "llama_model_n_layer", rb_llama_model_n_layer, 1);
+
+  /* llama_model_n_head */
+  rb_define_module_function(rb_mLLaMACpp, "llama_model_n_head", rb_llama_model_n_head, 1);
 
   /* llama_model_rope_freq_scale_train */
   rb_define_module_function(rb_mLLaMACpp, "llama_model_rope_freq_scale_train", rb_llama_model_rope_freq_scale_train, 1);
