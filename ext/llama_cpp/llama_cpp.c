@@ -719,7 +719,7 @@ static VALUE rb_llama_model_get_vocab(VALUE self, VALUE model) {
   }
   llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
   llama_vocab_wrapper* vocab_wrapper = (llama_vocab_wrapper*)ruby_xmalloc(sizeof(llama_vocab_wrapper));
-  vocab_wrapper->vocab = llama_model_get_vocab(model_wrapper->model);
+  vocab_wrapper->vocab = (struct llama_vocab*)llama_model_get_vocab(model_wrapper->model);
   RB_GC_GUARD(model);
   return TypedData_Wrap_Struct(rb_cLlamaVocab, &llama_vocab_wrapper_data_type, vocab_wrapper);
 }
@@ -830,6 +830,20 @@ static VALUE rb_llama_model_size(VALUE self, VALUE model) {
   llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
   return ULONG2NUM(llama_model_size(model_wrapper->model));
 }
+
+/* llama_model_chat_template */
+/*
+static VALUE rb_llama_model_chat_template(VALUE self, VALUE model) {
+  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
+    return Qnil;
+  }
+  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
+  const char* templ = llama_model_chat_template(model_wrapper->model)
+  RB_GC_GUARD(model);
+  return rb_utf8_str_new_cstr(templ);
+}
+*/
 
 /* llama_model_n_params */
 static VALUE rb_llama_model_n_params(VALUE self, VALUE model) {
@@ -1521,6 +1535,22 @@ static VALUE rb_llama_synchronize(VALUE self, VALUE ctx) {
   llama_synchronize(context_wrapper->context);
   RB_GC_GUARD(ctx);
   return Qnil;
+}
+
+/* llama_vocab_get_text */
+static VALUE rb_llama_vocab_get_text(VALUE self, VALUE vocab, VALUE token) {
+  if (!rb_obj_is_kind_of(vocab, rb_cLlamaVocab)) {
+    rb_raise(rb_eArgError, "vocab must be a LlamaVocab");
+    return Qnil;
+  }
+  if (!RB_INTEGER_TYPE_P(token)) {
+    rb_raise(rb_eArgError, "token must be an Integer");
+    return Qnil;
+  }
+  llama_vocab_wrapper* vocab_wrapper = get_llama_vocab_wrapper(vocab);
+  const char* text = llama_vocab_get_text(vocab_wrapper->vocab, NUM2INT(token));
+  RB_GC_GUARD(vocab);
+  return rb_utf8_str_new_cstr(text);
 }
 
 /* llama_token_get_score */
@@ -2437,6 +2467,9 @@ void Init_llama_cpp(void) {
   /* llama_model_size */
   rb_define_module_function(rb_mLLaMACpp, "llama_model_size", rb_llama_model_size, 1);
 
+  /* TODO: llama_model_chat_template */
+  /* rb_define_module_function(rb_mLLaMACpp, "llama_model_chat_template", rb_llama_model_chat_template, 1); */
+
   /* llama_model_n_params */
   rb_define_module_function(rb_mLLaMACpp, "llama_model_n_params", rb_llama_model_n_params, 1);
 
@@ -2581,7 +2614,9 @@ void Init_llama_cpp(void) {
   /* TODO: llama_get_embeddings */
   /* TODO: llama_get_embeddings_ith */
   /* TODO: llama_get_embeddings_seq */
-  /* TODO: llama_token_get_text */
+
+  /* llama_vocab_get_text */
+  rb_define_module_function(rb_mLLaMACpp, "llama_vocab_get_text", rb_llama_vocab_get_text, 2);
 
   /* llama_token_get_score */
   rb_define_module_function(rb_mLLaMACpp, "llama_token_get_score", rb_llama_token_get_score, 2);
