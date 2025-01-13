@@ -713,6 +713,19 @@ static VALUE rb_llama_pooling_type(VALUE self, VALUE ctx) {
   return INT2NUM(llama_pooling_type(context_wrapper->context));
 }
 
+/* llama_model_get_vocab */
+static VALUE rb_llama_model_get_vocab(VALUE self, VALUE model) {
+  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
+    return Qnil;
+  }
+  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
+  llama_vocab_wrapper* vocab_wrapper = (llama_vocab_wrapper*)ruby_xmalloc(sizeof(llama_vocab_wrapper));
+  vocab_wrapper->vocab = llama_model_get_vocab(model_wrapper->model);
+  RB_GC_GUARD(model);
+  return TypedData_Wrap_Struct(rb_cLlamaVocab, &llama_vocab_wrapper_data_type, vocab_wrapper);
+}
+
 /* llama_vocab_type */
 static VALUE rb_llama_vocab_type(VALUE self, VALUE model) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
@@ -2373,6 +2386,9 @@ void Init_llama_cpp(void) {
 
   /* llama_pooling_type */
   rb_define_module_function(rb_mLLaMACpp, "llama_pooling_type", rb_llama_pooling_type, 1);
+
+  /* llama_model_get_vocab */
+  rb_define_module_function(rb_mLLaMACpp, "llama_model_get_vocab", rb_llama_model_get_vocab, 1);
 
   /* llama_vocab_type */
   rb_define_module_function(rb_mLLaMACpp, "llama_vocab_type", rb_llama_vocab_type, 1);
