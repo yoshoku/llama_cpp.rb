@@ -1601,19 +1601,19 @@ static VALUE rb_llama_vocab_is_eog(VALUE self, VALUE vocab, VALUE token) {
   return is_eog ? Qtrue : Qfalse;
 }
 
-/* llama_token_is_control */
-static VALUE rb_llama_token_is_control(VALUE self, VALUE model, VALUE token) {
-  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
-    rb_raise(rb_eArgError, "model must be a LlamaModel");
+/* llama_vocab_is_control */
+static VALUE rb_llama_vocab_is_control(VALUE self, VALUE vocab, VALUE token) {
+  if (!rb_obj_is_kind_of(vocab, rb_cLlamaVocab)) {
+    rb_raise(rb_eArgError, "model must be a LlamaVocab");
     return Qnil;
   }
   if (!RB_INTEGER_TYPE_P(token)) {
     rb_raise(rb_eArgError, "token must be an Integer");
     return Qnil;
   }
-  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
-  const bool is_control = llama_token_is_control(model_wrapper->model, NUM2INT(token));
-  RB_GC_GUARD(model);
+  llama_vocab_wrapper* vocab_wrapper = get_llama_vocab_wrapper(vocab);
+  const bool is_control = llama_token_is_control(vocab_wrapper->vocab, NUM2INT(token));
+  RB_GC_GUARD(vocab);
   return is_control ? Qtrue : Qfalse;
 }
 
@@ -2627,8 +2627,8 @@ void Init_llama_cpp(void) {
   /* llama_vocab_is_eog */
   rb_define_module_function(rb_mLLaMACpp, "llama_vocab_is_eog", rb_llama_vocab_is_eog, 2);
 
-  /* llama_token_is_control */
-  rb_define_module_function(rb_mLLaMACpp, "llama_token_is_control", rb_llama_token_is_control, 2);
+  /* llama_vocab_is_control */
+  rb_define_module_function(rb_mLLaMACpp, "llama_vocab_is_control", rb_llama_vocab_is_control, 2);
 
   /* llama_token_bos */
   rb_define_module_function(rb_mLLaMACpp, "llama_token_bos", rb_llama_token_bos, 1);
