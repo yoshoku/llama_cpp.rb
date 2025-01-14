@@ -1585,19 +1585,19 @@ static VALUE rb_llama_vocab_get_attr(VALUE self, VALUE vocab, VALUE token) {
   return INT2NUM(attr);
 }
 
-/* llama_token_is_eog */
-static VALUE rb_llama_token_is_eog(VALUE self, VALUE model, VALUE token) {
-  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
-    rb_raise(rb_eArgError, "model must be a LlamaModel");
+/* llama_vocab_is_eog */
+static VALUE rb_llama_vocab_is_eog(VALUE self, VALUE vocab, VALUE token) {
+  if (!rb_obj_is_kind_of(vocab, rb_cLlamaVocab)) {
+    rb_raise(rb_eArgError, "vocab must be a LlamaVocab");
     return Qnil;
   }
   if (!RB_INTEGER_TYPE_P(token)) {
     rb_raise(rb_eArgError, "token must be an Integer");
     return Qnil;
   }
-  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
-  const bool is_eog = llama_token_is_eog(model_wrapper->model, NUM2INT(token));
-  RB_GC_GUARD(model);
+  llama_vocab_wrapper* vocab_wrapper = get_llama_vocab_wrapper(vocab);
+  const bool is_eog = llama_vocab_is_eog(vocab_wrapper->vocab, NUM2INT(token));
+  RB_GC_GUARD(vocab);
   return is_eog ? Qtrue : Qfalse;
 }
 
@@ -2624,8 +2624,8 @@ void Init_llama_cpp(void) {
   /* llama_vocab_get_attr */
   rb_define_module_function(rb_mLLaMACpp, "llama_vocab_get_attr", rb_llama_vocab_get_attr, 2);
 
-  /* llama_token_is_eog */
-  rb_define_module_function(rb_mLLaMACpp, "llama_token_is_eog", rb_llama_token_is_eog, 2);
+  /* llama_vocab_is_eog */
+  rb_define_module_function(rb_mLLaMACpp, "llama_vocab_is_eog", rb_llama_vocab_is_eog, 2);
 
   /* llama_token_is_control */
   rb_define_module_function(rb_mLLaMACpp, "llama_token_is_control", rb_llama_token_is_control, 2);
