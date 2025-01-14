@@ -1553,19 +1553,19 @@ static VALUE rb_llama_vocab_get_text(VALUE self, VALUE vocab, VALUE token) {
   return rb_utf8_str_new_cstr(text);
 }
 
-/* llama_token_get_score */
-static VALUE rb_llama_token_get_score(VALUE self, VALUE model, VALUE token) {
-  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
-    rb_raise(rb_eArgError, "model must be a LlamaModel");
+/* llama_vocab_get_score */
+static VALUE rb_llama_vocab_get_score(VALUE self, VALUE vocab, VALUE token) {
+  if (!rb_obj_is_kind_of(vocab, rb_cLlamaVocab)) {
+    rb_raise(rb_eArgError, "vocab must be a LlamaVocab");
     return Qnil;
   }
   if (!RB_INTEGER_TYPE_P(token)) {
     rb_raise(rb_eArgError, "token must be an Integer");
     return Qnil;
   }
-  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
-  const float score = llama_token_get_score(model_wrapper->model, NUM2INT(token));
-  RB_GC_GUARD(model);
+  llama_vocab_wrapper* vocab_wrapper = get_llama_vocab_wrapper(vocab);
+  const float score = llama_vocab_get_score(vocab_wrapper->vocab, NUM2INT(token));
+  RB_GC_GUARD(vocab);
   return DBL2NUM(score);
 }
 
@@ -2618,8 +2618,8 @@ void Init_llama_cpp(void) {
   /* llama_vocab_get_text */
   rb_define_module_function(rb_mLLaMACpp, "llama_vocab_get_text", rb_llama_vocab_get_text, 2);
 
-  /* llama_token_get_score */
-  rb_define_module_function(rb_mLLaMACpp, "llama_token_get_score", rb_llama_token_get_score, 2);
+  /* llama_vocab_get_score */
+  rb_define_module_function(rb_mLLaMACpp, "llama_vocab_get_score", rb_llama_vocab_get_score, 2);
 
   /* llama_token_get_attr */
   rb_define_module_function(rb_mLLaMACpp, "llama_token_get_attr", rb_llama_token_get_attr, 2);
