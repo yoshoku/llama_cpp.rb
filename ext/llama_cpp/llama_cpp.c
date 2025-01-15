@@ -2354,6 +2354,18 @@ static VALUE rb_llama_sampler_init_infill(VALUE self, VALUE vocab) {
   return TypedData_Wrap_Struct(rb_cLlamaSampler, &llama_sampler_data_type, sampler);
 }
 
+/* llama_sampler_get_seed */
+static VALUE rb_llama_sampler_get_seed(VALUE self, VALUE smpl) {
+  if (!rb_obj_is_kind_of(smpl, rb_cLlamaSampler)) {
+    rb_raise(rb_eArgError, "smpl must be a LlamaSampler");
+    return Qnil;
+  }
+  struct llama_sampler* smpl_ = get_llama_sampler(smpl);
+  const uint32_t seed = llama_sampler_get_seed(smpl_);
+  RB_GC_GUARD(smpl);
+  return UINT2NUM(seed);
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -2972,4 +2984,7 @@ void Init_llama_cpp(void) {
 
   /* llama_sampler_init_infill */
   rb_define_module_function(rb_mLLaMACpp, "llama_sampler_init_infill", rb_llama_sampler_init_infill, 1);
+
+  /* llama_sampler_get_seed */
+  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_get_seed", rb_llama_sampler_get_seed, 1);
 }
