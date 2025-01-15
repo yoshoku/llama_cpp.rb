@@ -2299,6 +2299,28 @@ static VALUE rb_llama_sampler_init_grammar(VALUE self, VALUE vocab, VALUE gramma
   return TypedData_Wrap_Struct(rb_cLlamaSampler, &llama_sampler_data_type, sampler);
 }
 
+/* llama_sampler_init_penalties */
+static VALUE rb_llama_sampler_init_penalties(VALUE self, VALUE penalty_last_n, VALUE penalty_repeat, VALUE penalty_freq, VALUE penalty_present) {
+  if (!RB_INTEGER_TYPE_P(penalty_last_n)) {
+    rb_raise(rb_eArgError, "penalty_last_n must be an Integer");
+    return Qnil;
+  }
+  if (!RB_FLOAT_TYPE_P(penalty_repeat)) {
+    rb_raise(rb_eArgError, "penalty_repeat must be a Float");
+    return Qnil;
+  }
+  if (!RB_FLOAT_TYPE_P(penalty_freq)) {
+    rb_raise(rb_eArgError, "penalty_freq must be a Float");
+    return Qnil;
+  }
+  if (!RB_FLOAT_TYPE_P(penalty_present)) {
+    rb_raise(rb_eArgError, "penalty_present must be a Float");
+    return Qnil;
+  }
+  struct llama_sampler* sampler = llama_sampler_init_penalties(NUM2INT(penalty_last_n), NUM2DBL(penalty_repeat), NUM2DBL(penalty_freq), NUM2DBL(penalty_present));
+  return TypedData_Wrap_Struct(rb_cLlamaSampler, &llama_sampler_data_type, sampler);
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -2906,4 +2928,7 @@ void Init_llama_cpp(void) {
 
   /* llama_sampler_init_grammar */
   rb_define_module_function(rb_mLLaMACpp, "llama_sampler_init_grammar", rb_llama_sampler_init_grammar, 3);
+
+  /* llama_sampler_init_penalties */
+  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_init_penalties", rb_llama_sampler_init_penalties, 4);
 }
