@@ -2388,6 +2388,12 @@ static VALUE rb_llama_sampler_sample(VALUE self, VALUE smpl, VALUE ctx, VALUE id
   return INT2NUM(token);
 }
 
+/* llama_print_system_info */
+static VALUE rb_llama_print_system_info(VALUE self) {
+  const char* info = llama_print_system_info();
+  return rb_utf8_str_new_cstr(info);
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -3012,4 +3018,12 @@ void Init_llama_cpp(void) {
 
   /* llama_sampler_sample */
   rb_define_module_function(rb_mLLaMACpp, "llama_sampler_sample", rb_llama_sampler_sample, 3);
+
+  /* TODO: llama_split_path */
+  /* TODO: llama_split_prefix */
+
+  /* llama_print_system_info */
+  rb_define_module_function(rb_mLLaMACpp, "llama_print_system_info", rb_llama_print_system_info, 0);
+
+  /* TODO: llama_log_set */
 }
