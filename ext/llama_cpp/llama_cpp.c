@@ -7,6 +7,7 @@ VALUE rb_cLlamaContext;
 VALUE rb_cLlamaModelParams;
 VALUE rb_cLlamaContextParams;
 VALUE rb_cLlamaModelQuantizeParams;
+VALUE rb_cLlamaLogitBias;
 VALUE rb_cLlamaAdapterLora;
 VALUE rb_cLlamaKvCacheView;
 VALUE rb_cLlamaTokenDataArray;
@@ -419,13 +420,11 @@ static VALUE llama_logit_bias_alloc(VALUE self) {
   return TypedData_Wrap_Struct(self, &llama_logit_bias_type, data);
 }
 
-/*
 static llama_logit_bias* get_llama_logit_bias(VALUE self) {
   llama_logit_bias* data = NULL;
   TypedData_Get_Struct(self, llama_logit_bias, &llama_logit_bias_type, data);
   return data;
 }
-*/
 
 /* llama_sampler_chain_params */
 static void llama_sampler_chain_params_free(void *ptr) {
@@ -2321,6 +2320,28 @@ static VALUE rb_llama_sampler_init_penalties(VALUE self, VALUE penalty_last_n, V
   return TypedData_Wrap_Struct(rb_cLlamaSampler, &llama_sampler_data_type, sampler);
 }
 
+/* llama_sampler_init_logit_bias */
+static VALUE rb_llama_sampler_init_logit_bias(VALUE self, VALUE n_vocab, VALUE n_logit_bias, VALUE logit_bias) {
+  if (!RB_INTEGER_TYPE_P(n_vocab)) {
+    rb_raise(rb_eArgError, "n_vocab must be an Integer");
+    return Qnil;
+  }
+  if (!RB_INTEGER_TYPE_P(n_logit_bias)) {
+    rb_raise(rb_eArgError, "n_logit_bias must be an Integer");
+    return Qnil;
+  }
+  if (!rb_obj_is_kind_of(logit_bias, rb_cLlamaLogitBias)) {
+    rb_raise(rb_eArgError, "logit_bias must be a LlamaLogitBias");
+    return Qnil;
+  }
+  const int32_t n_vocab_ = NUM2INT(n_vocab);
+  const int32_t n_logit_bias_ = NUM2INT(n_logit_bias);
+  const llama_logit_bias* logit_bias_ = get_llama_logit_bias(logit_bias);
+  struct llama_sampler* sampler = llama_sampler_init_logit_bias(n_vocab_, n_logit_bias_, logit_bias_);
+  RB_GC_GUARD(logit_bias);
+  return TypedData_Wrap_Struct(rb_cLlamaSampler, &llama_sampler_data_type, sampler);
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -2522,7 +2543,7 @@ void Init_llama_cpp(void) {
   rb_define_alloc_func(rb_cLlamaModelQuantizeParams, llama_model_quantize_params_alloc);
 
   /* llama_logit_bias */
-  VALUE rb_cLlamaLogitBias = rb_define_class_under(rb_mLLaMACpp, "LlamaLogitBias", rb_cObject);
+  rb_cLlamaLogitBias = rb_define_class_under(rb_mLLaMACpp, "LlamaLogitBias", rb_cObject);
   rb_define_alloc_func(rb_cLlamaLogitBias, llama_logit_bias_alloc);
 
   /* llama_sampler_chain_params */
@@ -2931,4 +2952,9 @@ void Init_llama_cpp(void) {
 
   /* llama_sampler_init_penalties */
   rb_define_module_function(rb_mLLaMACpp, "llama_sampler_init_penalties", rb_llama_sampler_init_penalties, 4);
+
+  /* TODO: llama_sampler_init_dry */
+
+  /* llama_sampler_init_logit_bias */
+  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_init_logit_bias", rb_llama_sampler_init_logit_bias, 3);
 }
