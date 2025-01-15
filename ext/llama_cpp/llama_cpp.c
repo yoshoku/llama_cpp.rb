@@ -2231,6 +2231,32 @@ static VALUE rb_llama_sampler_init_xtc(VALUE self, VALUE p, VALUE t, VALUE min_k
   return TypedData_Wrap_Struct(rb_cLlamaSampler, &llama_sampler_data_type, sampler);
 }
 
+/* llama_sampler_init_mirostat */
+static VALUE rb_llama_sampler_init_mirostat(VALUE self, VALUE n_vocab, VALUE seed, VALUE tau, VALUE eta, VALUE m) {
+  if (!RB_INTEGER_TYPE_P(n_vocab)) {
+    rb_raise(rb_eArgError, "n_vocab must be an Integer");
+    return Qnil;
+  }
+  if (!RB_INTEGER_TYPE_P(seed)) {
+    rb_raise(rb_eArgError, "seed must be an Integer");
+    return Qnil;
+  }
+  if (!RB_FLOAT_TYPE_P(tau)) {
+    rb_raise(rb_eArgError, "tau must be a Float");
+    return Qnil;
+  }
+  if (!RB_FLOAT_TYPE_P(eta)) {
+    rb_raise(rb_eArgError, "eta must be a Float");
+    return Qnil;
+  }
+  if (!RB_INTEGER_TYPE_P(m)) {
+    rb_raise(rb_eArgError, "m must be an Integer ");
+    return Qnil;
+  }
+  struct llama_sampler* sampler = llama_sampler_init_mirostat(NUM2INT(n_vocab), NUM2UINT(seed), NUM2DBL(tau), NUM2DBL(eta), NUM2INT(m));
+  return TypedData_Wrap_Struct(rb_cLlamaSampler, &llama_sampler_data_type, sampler);
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -2829,4 +2855,7 @@ void Init_llama_cpp(void) {
 
   /* llama_sampler_init_xtc */
   rb_define_module_function(rb_mLLaMACpp, "llama_sampler_init_xtc", rb_llama_sampler_init_xtc, 4);
+
+  /* llama_sampler_init_mirostat */
+  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_init_mirostat", rb_llama_sampler_init_mirostat, 5);
 }
