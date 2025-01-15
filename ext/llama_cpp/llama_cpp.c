@@ -1877,9 +1877,9 @@ static VALUE rb_llama_token_to_piece(VALUE self, VALUE vocab, VALUE token, VALUE
 }
 
 /* llama_detokenize */
-static VALUE rb_llama_detokenize(VALUE self, VALUE model, VALUE tokens, VALUE remove_special, VALUE unparse_special) {
-  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
-    rb_raise(rb_eArgError, "model must be a LlamaModel");
+static VALUE rb_llama_detokenize(VALUE self, VALUE vocab, VALUE tokens, VALUE remove_special, VALUE unparse_special) {
+  if (!rb_obj_is_kind_of(vocab, rb_cLlamaVocab)) {
+    rb_raise(rb_eArgError, "vocab must be a LlamaVocab");
     return Qnil;
   }
   if (!RB_TYPE_P(tokens, T_ARRAY)) {
@@ -1887,7 +1887,7 @@ static VALUE rb_llama_detokenize(VALUE self, VALUE model, VALUE tokens, VALUE re
     return Qnil;
   }
 
-  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
+  llama_vocab_wrapper* vocab_wrapper = get_llama_vocab_wrapper(vocab);
   const int32_t n_tokens = (int32_t)RARRAY_LEN(tokens);
   if (n_tokens == 0) {
     return Qnil;
@@ -1901,12 +1901,12 @@ static VALUE rb_llama_detokenize(VALUE self, VALUE model, VALUE tokens, VALUE re
   const bool remove_special_ = RTEST(remove_special) ? true : false;
   const bool unparse_special_ = RTEST(unparse_special) ? true : false;
 
-  int32_t n_chars = llama_detokenize(model_wrapper->model, tokens_, n_tokens, text, text_len_max, remove_special_, unparse_special_);
+  int32_t n_chars = llama_detokenize(vocab_wrapper->vocab, tokens_, n_tokens, text, text_len_max, remove_special_, unparse_special_);
 
   if (n_chars < 0) {
     ruby_xfree(text);
     text = (char*)ruby_xmalloc(sizeof(char) * -n_chars);
-    n_chars = llama_detokenize(model_wrapper->model, tokens_, n_tokens, text, -n_chars, remove_special_, unparse_special_);
+    n_chars = llama_detokenize(vocab_wrapper->vocab, tokens_, n_tokens, text, -n_chars, remove_special_, unparse_special_);
     if (n_chars <= (int32_t)strlen(text)) {
       ruby_xfree(tokens_);
       ruby_xfree(text);
@@ -1918,7 +1918,7 @@ static VALUE rb_llama_detokenize(VALUE self, VALUE model, VALUE tokens, VALUE re
   VALUE ret = rb_utf8_str_new_cstr(text);
   ruby_xfree(tokens_);
   ruby_xfree(text);
-  RB_GC_GUARD(model);
+  RB_GC_GUARD(vocab);
 
   return ret;
 }
