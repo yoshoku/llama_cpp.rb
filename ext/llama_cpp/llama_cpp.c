@@ -1837,9 +1837,9 @@ static VALUE rb_llama_tokenize(VALUE self, VALUE vocab, VALUE text, VALUE n_toke
 }
 
 /* llama_token_to_piece */
-static VALUE rb_llama_token_to_piece(VALUE self, VALUE model, VALUE token, VALUE lstrip, VALUE special) {
-  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
-    rb_raise(rb_eArgError, "model must be a LlamaModel");
+static VALUE rb_llama_token_to_piece(VALUE self, VALUE vocab, VALUE token, VALUE lstrip, VALUE special) {
+  if (!rb_obj_is_kind_of(vocab, rb_cLlamaVocab)) {
+    rb_raise(rb_eArgError, "vocab must be a LlamaVocab");
     return Qnil;
   }
   if (!RB_INTEGER_TYPE_P(token)) {
@@ -1851,17 +1851,17 @@ static VALUE rb_llama_token_to_piece(VALUE self, VALUE model, VALUE token, VALUE
     return Qnil;
   }
 
-  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
+  llama_vocab_wrapper* vocab_wrapper = get_llama_vocab_wrapper(vocab);
   llama_token token_ = NUM2INT(token);
   const int32_t lstrip_ = NUM2INT(lstrip);
   const bool special_ = RTEST(special) ? true : false;
   char *buf = (char*)ruby_xmalloc(sizeof(char) * 8);
-  const int32_t n_tokens = llama_token_to_piece(model_wrapper->model, token_, buf, 8, lstrip_, special_);
+  const int32_t n_tokens = llama_token_to_piece(vocab_wrapper->vocab, token_, buf, 8, lstrip_, special_);
 
   if (n_tokens < 0) {
     ruby_xfree(buf);
     buf = (char*)ruby_xmalloc(sizeof(char) * -n_tokens);
-    const int32_t check = llama_token_to_piece(model_wrapper->model, token_, buf, -n_tokens, lstrip_, special_);
+    const int32_t check = llama_token_to_piece(vocab_wrapper->vocab, token_, buf, -n_tokens, lstrip_, special_);
     if (check != -n_tokens) {
       ruby_xfree(buf);
       rb_raise(rb_eRuntimeError, "Failed to convert");
@@ -1871,7 +1871,7 @@ static VALUE rb_llama_token_to_piece(VALUE self, VALUE model, VALUE token, VALUE
 
   VALUE ret = rb_utf8_str_new_cstr(buf);
   ruby_xfree(buf);
-  RB_GC_GUARD(model);
+  RB_GC_GUARD(vocab);
 
   return ret;
 }
