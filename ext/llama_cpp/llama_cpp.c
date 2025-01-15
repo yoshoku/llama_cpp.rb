@@ -2275,6 +2275,30 @@ static VALUE rb_llama_sampler_init_mirostat_v2(VALUE self, VALUE seed, VALUE tau
   return TypedData_Wrap_Struct(rb_cLlamaSampler, &llama_sampler_data_type, sampler);
 }
 
+/* llama_sampler_init_grammar */
+static VALUE rb_llama_sampler_init_grammar(VALUE self, VALUE vocab, VALUE grammar_str, VALUE grammar_root) {
+  if (!rb_obj_is_kind_of(vocab, rb_cLlamaVocab)) {
+    rb_raise(rb_eArgError, "vocab must be a LlamaVocab");
+    return Qnil;
+  }
+  if (!RB_TYPE_P(grammar_str, T_STRING)) {
+    rb_raise(rb_eArgError, "grammar_str must be a String");
+    return Qnil;
+  }
+  if (!RB_TYPE_P(grammar_root, T_STRING)) {
+    rb_raise(rb_eArgError, "grammar_root must be a String");
+    return Qnil;
+  }
+  llama_vocab_wrapper* vocab_wrapper = get_llama_vocab_wrapper(vocab);
+  const char* grammar_str_ = StringValueCStr(grammar_str);
+  const char* grammar_root_ = StringValueCStr(grammar_root);
+  struct llama_sampler* sampler = llama_sampler_init_grammar(vocab_wrapper->vocab, grammar_str_, grammar_root_);
+  RB_GC_GUARD(vocab);
+  RB_GC_GUARD(grammar_str);
+  RB_GC_GUARD(grammar_root);
+  return TypedData_Wrap_Struct(rb_cLlamaSampler, &llama_sampler_data_type, sampler);
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -2879,4 +2903,7 @@ void Init_llama_cpp(void) {
 
   /* llama_sampler_init_mirostat_v2 */
   rb_define_module_function(rb_mLLaMACpp, "llama_sampler_init_mirostat_v2", rb_llama_sampler_init_mirostat_v2, 3);
+
+  /* llama_sampler_init_grammar */
+  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_init_grammar", rb_llama_sampler_init_grammar, 3);
 }
