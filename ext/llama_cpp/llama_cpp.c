@@ -2366,6 +2366,28 @@ static VALUE rb_llama_sampler_get_seed(VALUE self, VALUE smpl) {
   return UINT2NUM(seed);
 }
 
+/* llama_sampler_sample */
+static VALUE rb_llama_sampler_sample(VALUE self, VALUE smpl, VALUE ctx, VALUE idx) {
+  if (!rb_obj_is_kind_of(smpl, rb_cLlamaSampler)) {
+    rb_raise(rb_eArgError, "smpl must be a LlamaSampler");
+    return Qnil;
+  }
+  if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
+    return Qnil;
+  }
+  if (!RB_INTEGER_TYPE_P(idx)) {
+    rb_raise(rb_eArgError, "idx must be an Integer");
+    return Qnil;
+  }
+  struct llama_sampler* sampler = get_llama_sampler(smpl);
+  llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
+  const int32_t token = llama_sampler_sample(sampler, context_wrapper->context, NUM2INT(idx));
+  RB_GC_GUARD(smpl);
+  RB_GC_GUARD(ctx);
+  return INT2NUM(token);
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -2987,4 +3009,7 @@ void Init_llama_cpp(void) {
 
   /* llama_sampler_get_seed */
   rb_define_module_function(rb_mLLaMACpp, "llama_sampler_get_seed", rb_llama_sampler_get_seed, 1);
+
+  /* llama_sampler_sample */
+  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_sample", rb_llama_sampler_sample, 3);
 }
