@@ -1786,9 +1786,9 @@ static VALUE rb_llama_vocab_fim_sep(VALUE self, VALUE vocab) {
 }
 
 /* llama_tokenize */
-static VALUE rb_llama_tokenize(VALUE self, VALUE model, VALUE text, VALUE n_tokens_max, VALUE add_special, VALUE parse_special) {
-  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
-    rb_raise(rb_eArgError, "model must be a LlamaModel");
+static VALUE rb_llama_tokenize(VALUE self, VALUE vocab, VALUE text, VALUE n_tokens_max, VALUE add_special, VALUE parse_special) {
+  if (!rb_obj_is_kind_of(vocab, rb_cLlamaVocab)) {
+    rb_raise(rb_eArgError, "vocab must be a LlamaVocab");
     return Qnil;
   }
   if (!RB_TYPE_P(text, T_STRING)) {
@@ -1800,7 +1800,7 @@ static VALUE rb_llama_tokenize(VALUE self, VALUE model, VALUE text, VALUE n_toke
     return Qnil;
   }
 
-  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
+  llama_vocab_wrapper* vocab_wrapper = get_llama_vocab_wrapper(vocab);
   const char* text_ = StringValueCStr(text);
   const int32_t text_len = (int32_t)strlen(text_);
   int32_t n_tokens_max_ = NUM2INT(n_tokens_max);
@@ -1816,7 +1816,7 @@ static VALUE rb_llama_tokenize(VALUE self, VALUE model, VALUE text, VALUE n_toke
   }
 
   llama_token* tokens = (llama_token*)ruby_xmalloc(sizeof(llama_token) * n_tokens_max_);
-  const int32_t n_tokens = llama_tokenize(model_wrapper->model, text_, text_len, tokens, n_tokens_max_, add_special_, parse_special_);
+  const int32_t n_tokens = llama_tokenize(vocab_wrapper->vocab, text_, text_len, tokens, n_tokens_max_, add_special_, parse_special_);
 
   if (n_tokens < 0) {
     ruby_xfree(tokens);
@@ -1830,7 +1830,7 @@ static VALUE rb_llama_tokenize(VALUE self, VALUE model, VALUE text, VALUE n_toke
   }
 
   ruby_xfree(tokens);
-  RB_GC_GUARD(model);
+  RB_GC_GUARD(vocab);
   RB_GC_GUARD(text);
 
   return ret;
