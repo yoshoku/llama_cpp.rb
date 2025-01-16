@@ -15,6 +15,7 @@ VALUE rb_cLlamaBatch;
 VALUE rb_cLlamaSampler;
 VALUE rb_cLlamaSamplerChainParams;
 VALUE rb_cLlamaPerfContextData;
+VALUE rb_cLlamaPerfSamplerData;
 
 /* llama_vocab wrapper */
 typedef struct {
@@ -2431,6 +2432,38 @@ static struct llama_perf_context_data* get_llama_perf_context_data(VALUE self) {
   return data;
 }
 
+/* struct llama_perf_sampler_data */
+static void llama_perf_sampler_data_free(void* ptr) {
+  ruby_xfree(ptr);
+}
+
+static size_t llama_perf_sampler_data_size(const void* ptr) {
+  return sizeof(*((struct llama_perf_sampler_data*)ptr));
+}
+
+static rb_data_type_t llama_perf_sampler_data_type = {
+  "LlamaPerfSamplerData",
+  { NULL,
+    llama_perf_sampler_data_free,
+    llama_perf_sampler_data_size },
+  NULL,
+  NULL,
+  RUBY_TYPED_FREE_IMMEDIATELY
+};
+
+static VALUE llama_perf_sampler_data_alloc(VALUE self) {
+  struct llama_perf_sampler_data* data = (struct llama_perf_sampler_data*)ruby_xmalloc(sizeof(struct llama_perf_sampler_data));
+  data->t_sample_ms = 0.0;
+  data->n_sample = 0;
+  return TypedData_Wrap_Struct(self, &llama_perf_sampler_data_type, data);
+}
+
+static struct llama_perf_sampler_data* get_llama_perf_sampler_data(VALUE self) {
+  struct llama_perf_sampler_data* data = NULL;
+  TypedData_Get_Struct(self, struct llama_perf_sampler_data, &llama_perf_sampler_data_type, data);
+  return data;
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -3067,4 +3100,8 @@ void Init_llama_cpp(void) {
   /* struct llama_perf_context_data */
   rb_cLlamaPerfContextData = rb_define_class_under(rb_mLLaMACpp, "LlamaPerfContextData", rb_cObject);
   rb_define_alloc_func(rb_cLlamaPerfContextData, llama_perf_context_data_alloc);
+
+  /* struct llama_perf_sampler_data */
+  rb_cLlamaPerfSamplerData = rb_define_class_under(rb_mLLaMACpp, "LlamaPerfSamplerData", rb_cObject);
+  rb_define_alloc_func(rb_cLlamaPerfSamplerData, llama_perf_sampler_data_alloc);
 }
