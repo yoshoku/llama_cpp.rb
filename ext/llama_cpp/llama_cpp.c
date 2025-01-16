@@ -2493,6 +2493,18 @@ static VALUE rb_llama_perf_context_print(VALUE self, VALUE ctx) {
   return Qnil;
 }
 
+/* llama_perf_context_reset */
+static VALUE rb_llama_perf_context_reset(VALUE self, VALUE ctx) {
+  if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
+    return Qnil;
+  }
+  llama_context_wrapper* ctx_wrapper = get_llama_context_wrapper(ctx);
+  llama_perf_context_reset(ctx_wrapper->context);
+  RB_GC_GUARD(ctx);
+  return Qnil;
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -3139,4 +3151,7 @@ void Init_llama_cpp(void) {
 
   /* llama_perf_context_print */
   rb_define_module_function(rb_mLLaMACpp, "llama_perf_context_print", rb_llama_perf_context_print, 1);
+
+  /* llama_perf_context_reset */
+  rb_define_module_function(rb_mLLaMACpp, "llama_perf_context_reset", rb_llama_perf_context_reset, 1);
 }
