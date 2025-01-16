@@ -14,6 +14,7 @@ VALUE rb_cLlamaTokenDataArray;
 VALUE rb_cLlamaBatch;
 VALUE rb_cLlamaSampler;
 VALUE rb_cLlamaSamplerChainParams;
+VALUE rb_cLlamaPerfContextData;
 
 /* llama_vocab wrapper */
 typedef struct {
@@ -2394,6 +2395,42 @@ static VALUE rb_llama_print_system_info(VALUE self) {
   return rb_utf8_str_new_cstr(info);
 }
 
+/* struct llama_perf_context_data */
+static void llama_perf_context_data_free(void* ptr) {
+  ruby_xfree(ptr);
+}
+
+static size_t llama_perf_context_data_size(const void* ptr) {
+  return sizeof(*((struct llama_perf_context_data*)ptr));
+}
+
+static rb_data_type_t llama_perf_context_data_type = {
+  "LlamaPerfContextData",
+  { NULL,
+    llama_perf_context_data_free,
+    llama_perf_context_data_size },
+  NULL,
+  NULL,
+  RUBY_TYPED_FREE_IMMEDIATELY
+};
+
+static VALUE llama_perf_context_data_alloc(VALUE self) {
+  struct llama_perf_context_data* data = (struct llama_perf_context_data*)ruby_xmalloc(sizeof(struct llama_perf_context_data));
+  data->t_start_ms = 0.0;
+  data->t_load_ms = 0.0;
+  data->t_p_eval_ms = 0.0;
+  data->t_eval_ms = 0.0;
+  data->n_p_eval = 0;
+  data->n_eval = 0;
+  return TypedData_Wrap_Struct(self, &llama_perf_context_data_type, data);
+}
+
+static struct llama_perf_context_data* get_llama_perf_context_data(VALUE self) {
+  struct llama_perf_context_data* data = NULL;
+  TypedData_Get_Struct(self, struct llama_perf_context_data, &llama_perf_context_data_type, data);
+  return data;
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -3026,4 +3063,8 @@ void Init_llama_cpp(void) {
   rb_define_module_function(rb_mLLaMACpp, "llama_print_system_info", rb_llama_print_system_info, 0);
 
   /* TODO: llama_log_set */
+
+  /* struct llama_perf_context_data */
+  rb_cLlamaPerfContextData = rb_define_class_under(rb_mLLaMACpp, "LlamaPerfContextData", rb_cObject);
+  rb_define_alloc_func(rb_cLlamaPerfContextData, llama_perf_context_data_alloc);
 }
