@@ -2426,11 +2426,13 @@ static VALUE llama_perf_context_data_alloc(VALUE self) {
   return TypedData_Wrap_Struct(self, &llama_perf_context_data_type, data);
 }
 
+/*
 static struct llama_perf_context_data* get_llama_perf_context_data(VALUE self) {
   struct llama_perf_context_data* data = NULL;
   TypedData_Get_Struct(self, struct llama_perf_context_data, &llama_perf_context_data_type, data);
   return data;
 }
+*/
 
 /* struct llama_perf_sampler_data */
 static void llama_perf_sampler_data_free(void* ptr) {
@@ -2458,10 +2460,25 @@ static VALUE llama_perf_sampler_data_alloc(VALUE self) {
   return TypedData_Wrap_Struct(self, &llama_perf_sampler_data_type, data);
 }
 
+/*
 static struct llama_perf_sampler_data* get_llama_perf_sampler_data(VALUE self) {
   struct llama_perf_sampler_data* data = NULL;
   TypedData_Get_Struct(self, struct llama_perf_sampler_data, &llama_perf_sampler_data_type, data);
   return data;
+}
+*/
+
+/* llama_perf_context */
+static VALUE rb_llama_perf_context(VALUE self, VALUE ctx) {
+  if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
+    return Qnil;
+  }
+  llama_context_wrapper* ctx_wrapper = get_llama_context_wrapper(ctx);
+  struct llama_perf_context_data* data = (struct llama_perf_context_data*)ruby_xmalloc(sizeof(struct llama_perf_context_data));
+  *data = llama_perf_context(ctx_wrapper->context);
+  RB_GC_GUARD(ctx);
+  return TypedData_Wrap_Struct(rb_cLlamaPerfContextData, &llama_perf_context_data_type, data);
 }
 
 /* MAIN */
@@ -3104,4 +3121,7 @@ void Init_llama_cpp(void) {
   /* struct llama_perf_sampler_data */
   rb_cLlamaPerfSamplerData = rb_define_class_under(rb_mLLaMACpp, "LlamaPerfSamplerData", rb_cObject);
   rb_define_alloc_func(rb_cLlamaPerfSamplerData, llama_perf_sampler_data_alloc);
+
+  /* llama_perf_context */
+  rb_define_module_function(rb_mLLaMACpp, "llama_perf_context", rb_llama_perf_context, 1);
 }
