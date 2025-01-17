@@ -2460,13 +2460,21 @@ static VALUE llama_perf_sampler_data_alloc(VALUE self) {
   return TypedData_Wrap_Struct(self, &llama_perf_sampler_data_type, data);
 }
 
-/*
 static struct llama_perf_sampler_data* get_llama_perf_sampler_data(VALUE self) {
   struct llama_perf_sampler_data* data = NULL;
   TypedData_Get_Struct(self, struct llama_perf_sampler_data, &llama_perf_sampler_data_type, data);
   return data;
 }
-*/
+
+static VALUE llama_perf_sampler_data_get_t_sample_ms(VALUE self) {
+  struct llama_perf_sampler_data* data = get_llama_perf_sampler_data(self);
+  return DBL2NUM(data->t_sample_ms);
+}
+
+static VALUE llama_perf_sampler_data_get_n_sample(VALUE self) {
+  struct llama_perf_sampler_data* data = get_llama_perf_sampler_data(self);
+  return INT2NUM(data->n_sample);
+}
 
 /* llama_perf_context */
 static VALUE rb_llama_perf_context(VALUE self, VALUE ctx) {
@@ -3182,6 +3190,8 @@ void Init_llama_cpp(void) {
   /* struct llama_perf_sampler_data */
   rb_cLlamaPerfSamplerData = rb_define_class_under(rb_mLLaMACpp, "LlamaPerfSamplerData", rb_cObject);
   rb_define_alloc_func(rb_cLlamaPerfSamplerData, llama_perf_sampler_data_alloc);
+  rb_define_method(rb_cLlamaPerfSamplerData, "t_sample_ms", RUBY_METHOD_FUNC(llama_perf_sampler_data_get_t_sample_ms), 0);
+  rb_define_method(rb_cLlamaPerfSamplerData, "n_sample", RUBY_METHOD_FUNC(llama_perf_sampler_data_get_n_sample), 0);
 
   /* llama_perf_context */
   rb_define_module_function(rb_mLLaMACpp, "llama_perf_context", rb_llama_perf_context, 1);
