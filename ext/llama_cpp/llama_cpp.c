@@ -2426,13 +2426,41 @@ static VALUE llama_perf_context_data_alloc(VALUE self) {
   return TypedData_Wrap_Struct(self, &llama_perf_context_data_type, data);
 }
 
-/*
 static struct llama_perf_context_data* get_llama_perf_context_data(VALUE self) {
   struct llama_perf_context_data* data = NULL;
   TypedData_Get_Struct(self, struct llama_perf_context_data, &llama_perf_context_data_type, data);
   return data;
 }
-*/
+
+static VALUE llama_perf_context_data_get_t_start_ms(VALUE self) {
+  struct llama_perf_context_data* data = get_llama_perf_context_data(self);
+  return DBL2NUM(data->t_start_ms);
+}
+
+static VALUE llama_perf_context_data_get_t_load_ms(VALUE self) {
+  struct llama_perf_context_data* data = get_llama_perf_context_data(self);
+  return DBL2NUM(data->t_load_ms);
+}
+
+static VALUE llama_perf_context_data_get_t_p_eval_ms(VALUE self) {
+  struct llama_perf_context_data* data = get_llama_perf_context_data(self);
+  return DBL2NUM(data->t_p_eval_ms);
+}
+
+static VALUE llama_perf_context_data_get_t_eval_ms(VALUE self) {
+  struct llama_perf_context_data* data = get_llama_perf_context_data(self);
+  return DBL2NUM(data->t_eval_ms);
+}
+
+static VALUE llama_perf_context_data_get_n_p_eval(VALUE self) {
+  struct llama_perf_context_data* data = get_llama_perf_context_data(self);
+  return INT2NUM(data->n_p_eval);
+}
+
+static VALUE llama_perf_context_data_get_n_eval(VALUE self) {
+  struct llama_perf_context_data* data = get_llama_perf_context_data(self);
+  return INT2NUM(data->n_eval);
+}
 
 /* struct llama_perf_sampler_data */
 static void llama_perf_sampler_data_free(void* ptr) {
@@ -3186,6 +3214,12 @@ void Init_llama_cpp(void) {
   /* struct llama_perf_context_data */
   rb_cLlamaPerfContextData = rb_define_class_under(rb_mLLaMACpp, "LlamaPerfContextData", rb_cObject);
   rb_define_alloc_func(rb_cLlamaPerfContextData, llama_perf_context_data_alloc);
+  rb_define_method(rb_cLlamaPerfContextData, "t_start_ms", RUBY_METHOD_FUNC(llama_perf_context_data_get_t_start_ms), 0);
+  rb_define_method(rb_cLlamaPerfContextData, "t_load_ms", RUBY_METHOD_FUNC(llama_perf_context_data_get_t_load_ms), 0);
+  rb_define_method(rb_cLlamaPerfContextData, "t_p_eval_ms", RUBY_METHOD_FUNC(llama_perf_context_data_get_t_p_eval_ms), 0);
+  rb_define_method(rb_cLlamaPerfContextData, "t_eval_ms", RUBY_METHOD_FUNC(llama_perf_context_data_get_t_eval_ms), 0);
+  rb_define_method(rb_cLlamaPerfContextData, "n_p_eval", RUBY_METHOD_FUNC(llama_perf_context_data_get_n_p_eval), 0);
+  rb_define_method(rb_cLlamaPerfContextData, "n_eval", RUBY_METHOD_FUNC(llama_perf_context_data_get_n_eval), 0);
 
   /* struct llama_perf_sampler_data */
   rb_cLlamaPerfSamplerData = rb_define_class_under(rb_mLLaMACpp, "LlamaPerfSamplerData", rb_cObject);
