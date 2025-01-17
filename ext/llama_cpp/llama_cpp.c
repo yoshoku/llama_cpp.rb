@@ -2505,6 +2505,19 @@ static VALUE rb_llama_perf_context_reset(VALUE self, VALUE ctx) {
   return Qnil;
 }
 
+/* llama_perf_sampler */
+static VALUE rb_llama_perf_sampler(VALUE self, VALUE chain) {
+  if (!rb_obj_is_kind_of(chain, rb_cLlamaSampler)) {
+    rb_raise(rb_eArgError, "chain must be a LlamaSampler");
+    return Qnil;
+  }
+  struct llama_sampler* chain_ = get_llama_sampler(chain);
+  struct llama_perf_sampler_data* data = (struct llama_perf_sampler_data*)ruby_xmalloc(sizeof(struct llama_perf_sampler_data));
+  *data = llama_perf_sampler(chain_);
+  RB_GC_GUARD(chain);
+  return TypedData_Wrap_Struct(rb_cLlamaPerfSamplerData, &llama_perf_sampler_data_type, data);
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -3154,4 +3167,7 @@ void Init_llama_cpp(void) {
 
   /* llama_perf_context_reset */
   rb_define_module_function(rb_mLLaMACpp, "llama_perf_context_reset", rb_llama_perf_context_reset, 1);
+
+  /* llama_perf_sampler */
+  rb_define_module_function(rb_mLLaMACpp, "llama_perf_sampler", rb_llama_perf_sampler, 1);
 }
