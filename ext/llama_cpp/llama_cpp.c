@@ -2493,6 +2493,18 @@ static VALUE rb_llama_perf_context_print(VALUE self, VALUE ctx) {
   return Qnil;
 }
 
+/* llama_perf_sampler_print */
+static VALUE rb_llama_perf_sampler_print(VALUE self, VALUE chain) {
+  if (!rb_obj_is_kind_of(chain, rb_cLlamaSampler)) {
+    rb_raise(rb_eArgError, "chain must be a LlamaSampler");
+    return Qnil;
+  }
+  struct llama_sampler* chain_ = get_llama_sampler(chain);
+  llama_perf_sampler_print(chain_);
+  RB_GC_GUARD(chain);
+  return Qnil;
+}
+
 /* llama_perf_context_reset */
 static VALUE rb_llama_perf_context_reset(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
@@ -3170,4 +3182,7 @@ void Init_llama_cpp(void) {
 
   /* llama_perf_sampler */
   rb_define_module_function(rb_mLLaMACpp, "llama_perf_sampler", rb_llama_perf_sampler, 1);
+
+  /* llama_perf_sampler_print */
+  rb_define_module_function(rb_mLLaMACpp, "llama_perf_sampler_print", rb_llama_perf_sampler_print, 1);
 }
