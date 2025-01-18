@@ -483,13 +483,21 @@ static VALUE llama_chat_message_alloc(VALUE self) {
   return TypedData_Wrap_Struct(self, &llama_chat_message_type, data);
 }
 
-/*
 static llama_chat_message* get_llama_chat_message(VALUE self) {
   llama_chat_message* data = NULL;
   TypedData_Get_Struct(self, llama_chat_message, &llama_chat_message_type, data);
   return data;
 }
-*/
+
+static VALUE llama_chat_message_get_role(VALUE self) {
+  llama_chat_message* data = get_llama_chat_message(self);
+  return rb_utf8_str_new_cstr(data->role);
+}
+
+static VALUE llama_chat_message_get_content(VALUE self) {
+  llama_chat_message* data = get_llama_chat_message(self);
+  return rb_utf8_str_new_cstr(data->content);
+}
 
 /* llama_adapter_lora wrapper */
 typedef struct {
@@ -2824,6 +2832,8 @@ void Init_llama_cpp(void) {
   /* llama_chat_message */
   VALUE rb_cLlamaChatMessage = rb_define_class_under(rb_mLLaMACpp, "LlamaChatMessage", rb_cObject);
   rb_define_alloc_func(rb_cLlamaChatMessage, llama_chat_message_alloc);
+  rb_define_method(rb_cLlamaChatMessage, "role", RUBY_METHOD_FUNC(llama_chat_message_get_role), 0);
+  rb_define_method(rb_cLlamaChatMessage, "content", RUBY_METHOD_FUNC(llama_chat_message_get_content), 0);
 
   /* llama_adapter_lora */
   rb_cLlamaAdapterLora = rb_define_class_under(rb_mLLaMACpp, "LlamaAdapterLora", rb_cObject);
