@@ -1079,6 +1079,38 @@ static struct llama_kv_cache_view* get_llama_kv_cache_view(VALUE self) {
   return data;
 }
 
+static VALUE llama_kv_cache_view_get_n_cells(VALUE self) {
+  struct llama_kv_cache_view* data = get_llama_kv_cache_view(self);
+  return INT2NUM(data->n_cells);
+}
+
+static VALUE llama_kv_cache_view_get_n_seq_max(VALUE self) {
+  struct llama_kv_cache_view* data = get_llama_kv_cache_view(self);
+  return INT2NUM(data->n_seq_max);
+}
+
+static VALUE llama_kv_cache_view_get_token_count(VALUE self) {
+  struct llama_kv_cache_view* data = get_llama_kv_cache_view(self);
+  return INT2NUM(data->token_count);
+}
+
+static VALUE llama_kv_cache_view_get_used_cells(VALUE self) {
+  struct llama_kv_cache_view* data = get_llama_kv_cache_view(self);
+  return INT2NUM(data->used_cells);
+}
+
+static VALUE llama_kv_cache_view_get_max_contiguous(VALUE self) {
+  struct llama_kv_cache_view* data = get_llama_kv_cache_view(self);
+  return INT2NUM(data->max_contiguous);
+}
+
+static VALUE llama_kv_cache_view_get_max_contiguous_idx(VALUE self) {
+  struct llama_kv_cache_view* data = get_llama_kv_cache_view(self);
+  return INT2NUM(data->max_contiguous_idx);
+}
+/* TODO: struct llama_kv_cache_view_cell * cells; */
+/* TODO: llama_seq_id * cells_sequences; */
+
 /* llama_kv_cache_view_init */
 static VALUE rb_llama_kv_cache_view_init(VALUE self, VALUE ctx, VALUE n_seq_max) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
@@ -2939,6 +2971,12 @@ void Init_llama_cpp(void) {
   /* struct llama_kv_cache_view */
   rb_cLlamaKvCacheView = rb_define_class_under(rb_mLLaMACpp, "LlamaKvCacheView", rb_cObject);
   rb_define_alloc_func(rb_cLlamaKvCacheView, llama_kv_cache_view_alloc);
+  rb_define_method(rb_cLlamaKvCacheView, "n_cells", RUBY_METHOD_FUNC(llama_kv_cache_view_get_n_cells), 0);
+  rb_define_method(rb_cLlamaKvCacheView, "n_seq_max", RUBY_METHOD_FUNC(llama_kv_cache_view_get_n_seq_max), 0);
+  rb_define_method(rb_cLlamaKvCacheView, "token_count", RUBY_METHOD_FUNC(llama_kv_cache_view_get_token_count), 0);
+  rb_define_method(rb_cLlamaKvCacheView, "used_cells", RUBY_METHOD_FUNC(llama_kv_cache_view_get_used_cells), 0);
+  rb_define_method(rb_cLlamaKvCacheView, "max_contiguous", RUBY_METHOD_FUNC(llama_kv_cache_view_get_max_contiguous), 0);
+  rb_define_method(rb_cLlamaKvCacheView, "max_contiguous_idx", RUBY_METHOD_FUNC(llama_kv_cache_view_get_max_contiguous_idx), 0);
 
   /* llama_kv_cache_view_init */
   rb_define_module_function(rb_mLLaMACpp, "llama_kv_cache_view_init", rb_llama_kv_cache_view_init, 2);
