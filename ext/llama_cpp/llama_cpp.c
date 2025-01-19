@@ -459,6 +459,17 @@ static llama_sampler_chain_params* get_llama_sampler_chain_params(VALUE self) {
   return data;
 }
 
+static VALUE llama_sampler_chain_params_get_no_perf(VALUE self) {
+  llama_sampler_chain_params* data = get_llama_sampler_chain_params(self);
+  return data->no_perf ? Qtrue : Qfalse;
+}
+
+static VALUE llama_sampler_chain_params_set_no_perf(VALUE self, VALUE no_perf) {
+  llama_sampler_chain_params* data = get_llama_sampler_chain_params(self);
+  data->no_perf = RTEST(no_perf) ? true : false;
+  return no_perf;
+}
+
 /* llama_chat_message */
 static void llama_chat_message_free(void *ptr) {
   ruby_xfree(ptr);
@@ -2828,6 +2839,8 @@ void Init_llama_cpp(void) {
   /* llama_sampler_chain_params */
   rb_cLlamaSamplerChainParams = rb_define_class_under(rb_mLLaMACpp, "LlamaSamplerChainParams", rb_cObject);
   rb_define_alloc_func(rb_cLlamaSamplerChainParams, llama_sampler_chain_params_alloc);
+  rb_define_method(rb_cLlamaSamplerChainParams, "no_perf", RUBY_METHOD_FUNC(llama_sampler_chain_params_get_no_perf), 0);
+  rb_define_method(rb_cLlamaSamplerChainParams, "no_perf=", RUBY_METHOD_FUNC(llama_sampler_chain_params_set_no_perf), 1);
 
   /* llama_chat_message */
   VALUE rb_cLlamaChatMessage = rb_define_class_under(rb_mLLaMACpp, "LlamaChatMessage", rb_cObject);
