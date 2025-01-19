@@ -336,6 +336,98 @@ static struct llama_model_params* get_llama_model_params(VALUE self) {
   return data;
 }
 
+static VALUE llama_model_params_get_n_gpu_layers(VALUE self) {
+  struct llama_model_params* data = get_llama_model_params(self);
+  return INT2NUM(data->n_gpu_layers);
+}
+
+static VALUE llama_model_params_set_n_gpu_layers(VALUE self, VALUE n_gpu_layers) {
+  struct llama_model_params* data = get_llama_model_params(self);
+  data->n_gpu_layers = NUM2INT(n_gpu_layers);
+  return n_gpu_layers;
+}
+
+static VALUE llama_model_params_get_split_mode(VALUE self) {
+  struct llama_model_params* data = get_llama_model_params(self);
+  return INT2NUM(data->split_mode);
+}
+
+static VALUE llama_model_params_set_split_mode(VALUE self, VALUE split_mode) {
+  struct llama_model_params* data = get_llama_model_params(self);
+  data->split_mode = (enum llama_split_mode)NUM2INT(split_mode);
+  return split_mode;
+}
+
+static VALUE llama_model_params_get_main_gpu(VALUE self) {
+  struct llama_model_params* data = get_llama_model_params(self);
+  return INT2NUM(data->main_gpu);
+}
+
+static VALUE llama_model_params_set_main_gpu(VALUE self, VALUE main_gpu) {
+  struct llama_model_params* data = get_llama_model_params(self);
+  data->main_gpu = NUM2INT(main_gpu);
+  return main_gpu;
+}
+
+static VALUE llama_model_params_get_tensor_split(VALUE self) {
+  if (llama_max_devices() < 1) {
+    return rb_ary_new();
+  }
+  struct llama_model_params* data = get_llama_model_params(self);
+  if (data->tensor_split == NULL) {
+    return rb_ary_new();
+  }
+  VALUE ret = rb_ary_new2(llama_max_devices());
+  for (size_t i = 0; i < llama_max_devices(); i++) {
+    rb_ary_store(ret, i, DBL2NUM(data->tensor_split[i]));
+  }
+  return ret;
+}
+
+static VALUE llama_model_params_get_vocab_only(VALUE self) {
+  struct llama_model_params* data = get_llama_model_params(self);
+  return data->vocab_only ? Qtrue : Qfalse;
+}
+
+static VALUE llama_model_params_set_vocab_only(VALUE self, VALUE vocab_only) {
+  struct llama_model_params* data = get_llama_model_params(self);
+  data->vocab_only = RTEST(vocab_only) ? true : false;
+  return vocab_only;
+}
+
+static VALUE llama_model_params_get_use_mmap(VALUE self) {
+  struct llama_model_params* data = get_llama_model_params(self);
+  return data->use_mmap ? Qtrue : Qfalse;
+}
+
+static VALUE llama_model_params_set_use_mmap(VALUE self, VALUE use_mmap) {
+  struct llama_model_params* data = get_llama_model_params(self);
+  data->use_mmap = RTEST(use_mmap) ? true : false;
+  return use_mmap;
+}
+
+static VALUE llama_model_params_get_use_mlock(VALUE self) {
+  struct llama_model_params* data = get_llama_model_params(self);
+  return data->use_mlock ? Qtrue : Qfalse;
+}
+
+static VALUE llama_model_params_set_use_mlock(VALUE self, VALUE use_mlock) {
+  struct llama_model_params* data = get_llama_model_params(self);
+  data->use_mlock = RTEST(use_mlock) ? true : false;
+  return use_mlock;
+}
+
+static VALUE llama_model_params_get_check_tensors(VALUE self) {
+  struct llama_model_params* data = get_llama_model_params(self);
+  return data->check_tensors ? Qtrue : Qfalse;
+}
+
+static VALUE llama_model_params_set_check_tensors(VALUE self, VALUE check_tensors) {
+  struct llama_model_params* data = get_llama_model_params(self);
+  data->check_tensors = RTEST(check_tensors) ? true : false;
+  return check_tensors;
+}
+
 /* struct llama_context_params */
 static void llama_context_params_free(void *ptr) {
   ruby_xfree(ptr);
@@ -3196,6 +3288,25 @@ void Init_llama_cpp(void) {
   /* llama_model_params */
   rb_cLlamaModelParams = rb_define_class_under(rb_mLLaMACpp, "LlamaModelParams", rb_cObject);
   rb_define_alloc_func(rb_cLlamaModelParams, llama_model_params_alloc);
+  /* TODO: ggml_backend_dev_t* devices */
+  rb_define_method(rb_cLlamaModelParams, "n_gpu_layers", RUBY_METHOD_FUNC(llama_model_params_get_n_gpu_layers), 0);
+  rb_define_method(rb_cLlamaModelParams, "n_gpu_layers=", RUBY_METHOD_FUNC(llama_model_params_set_n_gpu_layers), 1);
+  rb_define_method(rb_cLlamaModelParams, "split_mode", RUBY_METHOD_FUNC(llama_model_params_get_split_mode), 0);
+  rb_define_method(rb_cLlamaModelParams, "split_mode=", RUBY_METHOD_FUNC(llama_model_params_set_split_mode), 1);
+  rb_define_method(rb_cLlamaModelParams, "main_gpu", RUBY_METHOD_FUNC(llama_model_params_get_main_gpu), 0);
+  rb_define_method(rb_cLlamaModelParams, "main_gpu=", RUBY_METHOD_FUNC(llama_model_params_set_main_gpu), 1);
+  rb_define_method(rb_cLlamaModelParams, "tensor_split", RUBY_METHOD_FUNC(llama_model_params_get_tensor_split), 0);
+  /* TODO: llama_progress_callback progress_callback */
+  /* TODO: void* progress_callback_user_data */
+  /* TODO: const struct llama_model_kv_override* kv_overrides */
+  rb_define_method(rb_cLlamaModelParams, "vocab_only", RUBY_METHOD_FUNC(llama_model_params_get_vocab_only), 0);
+  rb_define_method(rb_cLlamaModelParams, "vocab_only=", RUBY_METHOD_FUNC(llama_model_params_set_vocab_only), 1);
+  rb_define_method(rb_cLlamaModelParams, "use_mmap", RUBY_METHOD_FUNC(llama_model_params_get_use_mmap), 0);
+  rb_define_method(rb_cLlamaModelParams, "use_mmap=", RUBY_METHOD_FUNC(llama_model_params_set_use_mmap), 1);
+  rb_define_method(rb_cLlamaModelParams, "use_mlock", RUBY_METHOD_FUNC(llama_model_params_get_use_mlock), 0);
+  rb_define_method(rb_cLlamaModelParams, "use_mlock=", RUBY_METHOD_FUNC(llama_model_params_set_use_mlock), 1);
+  rb_define_method(rb_cLlamaModelParams, "check_tensors", RUBY_METHOD_FUNC(llama_model_params_get_check_tensors), 0);
+  rb_define_method(rb_cLlamaModelParams, "check_tensors=", RUBY_METHOD_FUNC(llama_model_params_set_check_tensors), 1);
 
   /* llama_context_params */
   rb_cLlamaContextParams = rb_define_class_under(rb_mLLaMACpp, "LlamaContextParams", rb_cObject);
