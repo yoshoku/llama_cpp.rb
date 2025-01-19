@@ -428,6 +428,16 @@ static llama_logit_bias* get_llama_logit_bias(VALUE self) {
   return data;
 }
 
+static VALUE llama_logit_bias_get_token(VALUE self) {
+  llama_logit_bias* data = get_llama_logit_bias(self);
+  return INT2NUM(data->token);
+}
+
+static VALUE llama_logit_bias_get_bias(VALUE self) {
+  llama_logit_bias* data = get_llama_logit_bias(self);
+  return DBL2NUM(data->bias);
+}
+
 /* llama_sampler_chain_params */
 static void llama_sampler_chain_params_free(void *ptr) {
   ruby_xfree(ptr);
@@ -2835,6 +2845,8 @@ void Init_llama_cpp(void) {
   /* llama_logit_bias */
   rb_cLlamaLogitBias = rb_define_class_under(rb_mLLaMACpp, "LlamaLogitBias", rb_cObject);
   rb_define_alloc_func(rb_cLlamaLogitBias, llama_logit_bias_alloc);
+  rb_define_method(rb_cLlamaLogitBias, "token", RUBY_METHOD_FUNC(llama_logit_bias_get_token), 0);
+  rb_define_method(rb_cLlamaLogitBias, "bias", RUBY_METHOD_FUNC(llama_logit_bias_get_bias), 0);
 
   /* llama_sampler_chain_params */
   rb_cLlamaSamplerChainParams = rb_define_class_under(rb_mLLaMACpp, "LlamaSamplerChainParams", rb_cObject);
