@@ -367,6 +367,270 @@ static struct llama_context_params* get_llama_context_params(VALUE self) {
   return data;
 }
 
+static VALUE llama_context_params_get_n_ctx(VALUE self) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  return UINT2NUM(data->n_ctx);
+}
+
+static VALUE llama_context_params_set_n_ctx(VALUE self, VALUE n_ctx) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  data->n_ctx = NUM2UINT(n_ctx);
+  return n_ctx;
+}
+
+static VALUE llama_context_params_get_n_batch(VALUE self) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  return UINT2NUM(data->n_batch);
+}
+
+static VALUE llama_context_params_set_n_batch(VALUE self, VALUE n_batch) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  data->n_batch = NUM2UINT(n_batch);
+  return n_batch;
+}
+
+static VALUE llama_context_params_get_n_ubatch(VALUE self) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  return UINT2NUM(data->n_ubatch);
+}
+
+static VALUE llama_context_params_set_n_ubatch(VALUE self, VALUE n_ubatch) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  data->n_ubatch = NUM2UINT(n_ubatch);
+  return n_ubatch;
+}
+
+static VALUE llama_context_params_get_n_seq_max(VALUE self) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  return UINT2NUM(data->n_seq_max);
+}
+
+static VALUE llama_context_params_set_n_seq_max(VALUE self, VALUE n_seq_max) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  data->n_seq_max = NUM2UINT(n_seq_max);
+  return n_seq_max;
+}
+
+static VALUE llama_context_params_get_n_threads(VALUE self) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  return INT2NUM(data->n_threads);
+}
+
+static VALUE llama_context_params_set_n_threads(VALUE self, VALUE n_threads) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  data->n_threads = NUM2INT(n_threads);
+  return n_threads;
+}
+
+static VALUE llama_context_params_get_n_threads_batch(VALUE self) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  return INT2NUM(data->n_threads_batch);
+}
+
+static VALUE llama_context_params_set_n_threads_batch(VALUE self, VALUE n_threads_batch) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  data->n_threads = NUM2INT(n_threads_batch);
+  return n_threads_batch;
+}
+
+static VALUE llama_context_params_get_rope_scaling_type(VALUE self) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  return INT2NUM(data->rope_scaling_type);
+}
+
+static VALUE llama_context_params_set_rope_scaling_type(VALUE self, VALUE rope_scaling_type) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  data->rope_scaling_type = (enum llama_rope_scaling_type)NUM2INT(rope_scaling_type);
+  return rope_scaling_type;
+}
+
+static VALUE llama_context_params_get_pooling_type(VALUE self) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  return INT2NUM(data->pooling_type);
+}
+
+static VALUE llama_context_params_set_pooling_type(VALUE self, VALUE pooling_type) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  data->pooling_type = (enum llama_pooling_type)NUM2INT(pooling_type);
+  return pooling_type;
+}
+
+static VALUE llama_context_params_get_attention_type(VALUE self) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  return INT2NUM(data->attention_type);
+}
+
+static VALUE llama_context_params_set_attention_type(VALUE self, VALUE attention_type) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  data->attention_type = (enum llama_attention_type)NUM2INT(attention_type);
+  return attention_type;
+}
+
+static VALUE llama_context_params_get_rope_freq_base(VALUE self) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  return DBL2NUM(data->rope_freq_base);
+}
+
+static VALUE llama_context_params_set_rope_freq_base(VALUE self, VALUE rope_freq_base) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  data->rope_freq_base = NUM2DBL(rope_freq_base);
+  return rope_freq_base;
+}
+
+static VALUE llama_context_params_get_rope_freq_scale(VALUE self) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  return DBL2NUM(data->rope_freq_scale);
+}
+
+static VALUE llama_context_params_set_rope_freq_scale(VALUE self, VALUE rope_freq_scale) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  data->rope_freq_scale = NUM2DBL(rope_freq_scale);
+  return rope_freq_scale;
+}
+
+static VALUE llama_context_params_get_yarn_ext_factor(VALUE self) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  return DBL2NUM(data->yarn_ext_factor);
+}
+
+static VALUE llama_context_params_set_yarn_ext_factor(VALUE self, VALUE yarn_ext_factor) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  data->yarn_ext_factor = NUM2DBL(yarn_ext_factor);
+  return yarn_ext_factor;
+}
+
+static VALUE llama_context_params_get_yarn_attn_factor(VALUE self) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  return DBL2NUM(data->yarn_attn_factor);
+}
+
+static VALUE llama_context_params_set_yarn_attn_factor(VALUE self, VALUE yarn_attn_factor) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  data->yarn_attn_factor = NUM2DBL(yarn_attn_factor);
+  return yarn_attn_factor;
+}
+
+static VALUE llama_context_params_get_yarn_beta_fast(VALUE self) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  return DBL2NUM(data->yarn_beta_fast);
+}
+
+static VALUE llama_context_params_set_yarn_beta_fast(VALUE self, VALUE yarn_beta_fast) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  data->yarn_beta_fast = NUM2DBL(yarn_beta_fast);
+  return yarn_beta_fast;
+}
+
+static VALUE llama_context_params_get_yarn_beta_slow(VALUE self) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  return DBL2NUM(data->yarn_beta_slow);
+}
+
+static VALUE llama_context_params_set_yarn_beta_slow(VALUE self, VALUE yarn_beta_slow) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  data->yarn_beta_slow = NUM2DBL(yarn_beta_slow);
+  return yarn_beta_slow;
+}
+
+static VALUE llama_context_params_get_yarn_orig_ctx(VALUE self) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  return UINT2NUM(data->yarn_orig_ctx);
+}
+
+static VALUE llama_context_params_set_yarn_orig_ctx(VALUE self, VALUE yarn_orig_ctx) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  data->yarn_orig_ctx = NUM2UINT(yarn_orig_ctx);
+  return yarn_orig_ctx;
+}
+
+static VALUE llama_context_params_get_defrag_thold(VALUE self) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  return DBL2NUM(data->defrag_thold);
+}
+
+static VALUE llama_context_params_set_defrag_thold(VALUE self, VALUE defrag_thold) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  data->defrag_thold = NUM2DBL(defrag_thold);
+  return defrag_thold;
+}
+
+static VALUE llama_context_params_get_type_k(VALUE self) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  return INT2NUM(data->type_k);
+}
+
+static VALUE llama_context_params_set_type_k(VALUE self, VALUE type_k) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  data->type_k = (enum ggml_type)NUM2INT(type_k);
+  return type_k;
+}
+
+static VALUE llama_context_params_get_type_v(VALUE self) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  return INT2NUM(data->type_v);
+}
+
+static VALUE llama_context_params_set_type_v(VALUE self, VALUE type_v) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  data->type_v = (enum ggml_type)NUM2INT(type_v);
+  return type_v;
+}
+
+static VALUE llama_context_params_get_logits_all(VALUE self) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  return data->logits_all ? Qtrue : Qfalse;
+}
+
+static VALUE llama_context_params_set_logits_all(VALUE self, VALUE logits_all) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  data->logits_all = RTEST(logits_all) ? true : false;
+  return logits_all;
+}
+
+static VALUE llama_context_params_get_embeddings(VALUE self) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  return data->embeddings ? Qtrue : Qfalse;
+}
+
+static VALUE llama_context_params_set_embeddings(VALUE self, VALUE embeddings) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  data->embeddings = RTEST(embeddings) ? true : false;
+  return embeddings;
+}
+
+static VALUE llama_context_params_get_offload_kqv(VALUE self) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  return data->offload_kqv ? Qtrue : Qfalse;
+}
+
+static VALUE llama_context_params_set_offload_kqv(VALUE self, VALUE offload_kqv) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  data->offload_kqv = RTEST(offload_kqv) ? true : false;
+  return offload_kqv;
+}
+
+static VALUE llama_context_params_get_flash_attn(VALUE self) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  return data->flash_attn ? Qtrue : Qfalse;
+}
+
+static VALUE llama_context_params_set_flash_attn(VALUE self, VALUE flash_attn) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  data->flash_attn = RTEST(flash_attn) ? true : false;
+  return flash_attn;
+}
+
+static VALUE llama_context_params_get_no_perf(VALUE self) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  return data->no_perf ? Qtrue : Qfalse;
+}
+
+static VALUE llama_context_params_set_no_perf(VALUE self, VALUE no_perf) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  data->no_perf = RTEST(no_perf) ? true : false;
+  return no_perf;
+}
+
 /* llama_model_quantize_params */
 static void llama_model_quantize_params_free(void *ptr) {
   ruby_xfree(ptr);
@@ -2936,6 +3200,58 @@ void Init_llama_cpp(void) {
   /* llama_context_params */
   rb_cLlamaContextParams = rb_define_class_under(rb_mLLaMACpp, "LlamaContextParams", rb_cObject);
   rb_define_alloc_func(rb_cLlamaContextParams, llama_context_params_alloc);
+  rb_define_method(rb_cLlamaContextParams, "n_ctx", RUBY_METHOD_FUNC(llama_context_params_get_n_ctx), 0);
+  rb_define_method(rb_cLlamaContextParams, "n_ctx=", RUBY_METHOD_FUNC(llama_context_params_set_n_ctx), 1);
+  rb_define_method(rb_cLlamaContextParams, "n_batch", RUBY_METHOD_FUNC(llama_context_params_get_n_batch), 0);
+  rb_define_method(rb_cLlamaContextParams, "n_batch=", RUBY_METHOD_FUNC(llama_context_params_set_n_batch), 1);
+  rb_define_method(rb_cLlamaContextParams, "n_ubatch", RUBY_METHOD_FUNC(llama_context_params_get_n_ubatch), 0);
+  rb_define_method(rb_cLlamaContextParams, "n_ubatch=", RUBY_METHOD_FUNC(llama_context_params_set_n_ubatch), 1);
+  rb_define_method(rb_cLlamaContextParams, "n_seq_max", RUBY_METHOD_FUNC(llama_context_params_get_n_seq_max), 0);
+  rb_define_method(rb_cLlamaContextParams, "n_seq_max=", RUBY_METHOD_FUNC(llama_context_params_set_n_seq_max), 1);
+  rb_define_method(rb_cLlamaContextParams, "n_threads", RUBY_METHOD_FUNC(llama_context_params_get_n_threads), 0);
+  rb_define_method(rb_cLlamaContextParams, "n_threads=", RUBY_METHOD_FUNC(llama_context_params_set_n_threads), 1);
+  rb_define_method(rb_cLlamaContextParams, "n_threads_batch", RUBY_METHOD_FUNC(llama_context_params_get_n_threads_batch), 0);
+  rb_define_method(rb_cLlamaContextParams, "n_threads_batch=", RUBY_METHOD_FUNC(llama_context_params_set_n_threads_batch), 1);
+  rb_define_method(rb_cLlamaContextParams, "rope_scaling_type", RUBY_METHOD_FUNC(llama_context_params_get_rope_scaling_type), 0);
+  rb_define_method(rb_cLlamaContextParams, "rope_scaling_type=", RUBY_METHOD_FUNC(llama_context_params_set_rope_scaling_type), 1);
+  rb_define_method(rb_cLlamaContextParams, "pooling_type", RUBY_METHOD_FUNC(llama_context_params_get_pooling_type), 0);
+  rb_define_method(rb_cLlamaContextParams, "pooling_type=", RUBY_METHOD_FUNC(llama_context_params_set_pooling_type), 1);
+  rb_define_method(rb_cLlamaContextParams, "attention_type", RUBY_METHOD_FUNC(llama_context_params_get_attention_type), 0);
+  rb_define_method(rb_cLlamaContextParams, "attention_type=", RUBY_METHOD_FUNC(llama_context_params_set_attention_type), 1);
+  rb_define_method(rb_cLlamaContextParams, "rope_freq_base", RUBY_METHOD_FUNC(llama_context_params_get_rope_freq_base), 0);
+  rb_define_method(rb_cLlamaContextParams, "rope_freq_base=", RUBY_METHOD_FUNC(llama_context_params_set_rope_freq_base), 1);
+  rb_define_method(rb_cLlamaContextParams, "rope_freq_scale", RUBY_METHOD_FUNC(llama_context_params_get_rope_freq_scale), 0);
+  rb_define_method(rb_cLlamaContextParams, "rope_freq_scale=", RUBY_METHOD_FUNC(llama_context_params_set_rope_freq_scale), 1);
+  rb_define_method(rb_cLlamaContextParams, "yarn_ext_factor", RUBY_METHOD_FUNC(llama_context_params_get_yarn_ext_factor), 0);
+  rb_define_method(rb_cLlamaContextParams, "yarn_ext_factor=", RUBY_METHOD_FUNC(llama_context_params_set_yarn_ext_factor), 1);
+  rb_define_method(rb_cLlamaContextParams, "yarn_attn_factor", RUBY_METHOD_FUNC(llama_context_params_get_yarn_attn_factor), 0);
+  rb_define_method(rb_cLlamaContextParams, "yarn_attn_factor=", RUBY_METHOD_FUNC(llama_context_params_set_yarn_attn_factor), 1);
+  rb_define_method(rb_cLlamaContextParams, "yarn_beta_fast", RUBY_METHOD_FUNC(llama_context_params_get_yarn_beta_fast), 0);
+  rb_define_method(rb_cLlamaContextParams, "yarn_beta_fast=", RUBY_METHOD_FUNC(llama_context_params_set_yarn_beta_fast), 1);
+  rb_define_method(rb_cLlamaContextParams, "yarn_beta_slow", RUBY_METHOD_FUNC(llama_context_params_get_yarn_beta_slow), 0);
+  rb_define_method(rb_cLlamaContextParams, "yarn_beta_slow=", RUBY_METHOD_FUNC(llama_context_params_set_yarn_beta_slow), 1);
+  rb_define_method(rb_cLlamaContextParams, "yarn_orig_ctx", RUBY_METHOD_FUNC(llama_context_params_get_yarn_orig_ctx), 0);
+  rb_define_method(rb_cLlamaContextParams, "yarn_orig_ctx=", RUBY_METHOD_FUNC(llama_context_params_set_yarn_orig_ctx), 1);
+  rb_define_method(rb_cLlamaContextParams, "defrag_thold", RUBY_METHOD_FUNC(llama_context_params_get_defrag_thold), 0);
+  rb_define_method(rb_cLlamaContextParams, "defrag_thold=", RUBY_METHOD_FUNC(llama_context_params_set_defrag_thold), 1);
+  /* TODO: ggml_backend_sched_eval_callback cb_eval */
+  /* TODO: void* cb_eval_user_data */
+  rb_define_method(rb_cLlamaContextParams, "type_k", RUBY_METHOD_FUNC(llama_context_params_get_type_k), 0);
+  rb_define_method(rb_cLlamaContextParams, "type_k=", RUBY_METHOD_FUNC(llama_context_params_set_type_k), 1);
+  rb_define_method(rb_cLlamaContextParams, "type_v", RUBY_METHOD_FUNC(llama_context_params_get_type_v), 0);
+  rb_define_method(rb_cLlamaContextParams, "type_v=", RUBY_METHOD_FUNC(llama_context_params_set_type_v), 1);
+  rb_define_method(rb_cLlamaContextParams, "logits_all", RUBY_METHOD_FUNC(llama_context_params_get_logits_all), 0);
+  rb_define_method(rb_cLlamaContextParams, "logits_all=", RUBY_METHOD_FUNC(llama_context_params_set_logits_all), 1);
+  rb_define_method(rb_cLlamaContextParams, "embeddings", RUBY_METHOD_FUNC(llama_context_params_get_embeddings), 0);
+  rb_define_method(rb_cLlamaContextParams, "embeddings=", RUBY_METHOD_FUNC(llama_context_params_set_embeddings), 1);
+  rb_define_method(rb_cLlamaContextParams, "offload_kqv", RUBY_METHOD_FUNC(llama_context_params_get_offload_kqv), 0);
+  rb_define_method(rb_cLlamaContextParams, "offload_kqv=", RUBY_METHOD_FUNC(llama_context_params_set_offload_kqv), 1);
+  rb_define_method(rb_cLlamaContextParams, "flash_attn", RUBY_METHOD_FUNC(llama_context_params_get_flash_attn), 0);
+  rb_define_method(rb_cLlamaContextParams, "flash_attn=", RUBY_METHOD_FUNC(llama_context_params_set_flash_attn), 1);
+  rb_define_method(rb_cLlamaContextParams, "no_perf", RUBY_METHOD_FUNC(llama_context_params_get_no_perf), 0);
+  rb_define_method(rb_cLlamaContextParams, "no_perf=", RUBY_METHOD_FUNC(llama_context_params_set_no_perf), 1);
+  /* TODO: ggml_abort_callback abort_callback */
+  /* TODO: void* abort_callback_data */
 
   /* llama_model_quantize_params */
   rb_cLlamaModelQuantizeParams = rb_define_class_under(rb_mLLaMACpp, "LlamaModelQuantizeParams", rb_cObject);
@@ -2958,6 +3274,8 @@ void Init_llama_cpp(void) {
   rb_define_method(rb_cLlamaModelQuantizeParams, "pure=", RUBY_METHOD_FUNC(llama_model_quantize_params_set_pure), 1);
   rb_define_method(rb_cLlamaModelQuantizeParams, "keep_split", RUBY_METHOD_FUNC(llama_model_quantize_params_get_keep_split), 0);
   rb_define_method(rb_cLlamaModelQuantizeParams, "keep_split=", RUBY_METHOD_FUNC(llama_model_quantize_params_set_keep_split), 1);
+  /* TODO: void* imatrix */
+  /* TODO: void* kv_overrides */
 
   /* llama_logit_bias */
   rb_cLlamaLogitBias = rb_define_class_under(rb_mLLaMACpp, "LlamaLogitBias", rb_cObject);
