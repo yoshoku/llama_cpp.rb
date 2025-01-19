@@ -398,6 +398,105 @@ static llama_model_quantize_params* get_llama_model_quantize_params(VALUE self) 
   return data;
 }
 
+static VALUE llama_model_quantize_params_get_nthread(VALUE self) {
+  llama_model_quantize_params* data = get_llama_model_quantize_params(self);
+  return INT2NUM(data->nthread);
+}
+
+static VALUE llama_model_quantize_params_set_nthread(VALUE self, VALUE nthread) {
+  llama_model_quantize_params* data = get_llama_model_quantize_params(self);
+  data->nthread = NUM2INT(nthread);
+  return nthread;
+}
+
+static VALUE llama_model_quantize_params_get_ftype(VALUE self) {
+  llama_model_quantize_params* data = get_llama_model_quantize_params(self);
+  return INT2NUM(data->ftype);
+}
+
+static VALUE llama_model_quantize_params_set_ftype(VALUE self, VALUE ftype) {
+  llama_model_quantize_params* data = get_llama_model_quantize_params(self);
+  data->ftype = (enum llama_ftype)NUM2INT(ftype);
+  return ftype;
+}
+
+static VALUE llama_model_quantize_params_get_output_tensor_type(VALUE self) {
+  llama_model_quantize_params* data = get_llama_model_quantize_params(self);
+  return INT2NUM(data->output_tensor_type);
+}
+
+static VALUE llama_model_quantize_params_set_output_tensor_type(VALUE self, VALUE output_tensor_type) {
+  llama_model_quantize_params* data = get_llama_model_quantize_params(self);
+  data->output_tensor_type = (enum ggml_type)NUM2INT(output_tensor_type);
+  return output_tensor_type;
+}
+
+static VALUE llama_model_quantize_params_get_token_embedding_type(VALUE self) {
+  llama_model_quantize_params* data = get_llama_model_quantize_params(self);
+  return INT2NUM(data->token_embedding_type);
+}
+
+static VALUE llama_model_quantize_params_set_token_embedding_type(VALUE self, VALUE token_embedding_type) {
+  llama_model_quantize_params* data = get_llama_model_quantize_params(self);
+  data->token_embedding_type = (enum ggml_type)NUM2INT(token_embedding_type);
+  return token_embedding_type;
+}
+
+static VALUE llama_model_quantize_params_get_allow_requantize(VALUE self) {
+  llama_model_quantize_params* data = get_llama_model_quantize_params(self);
+  return data->allow_requantize ? Qtrue : Qfalse;
+}
+
+static VALUE llama_model_quantize_params_set_allow_requantize(VALUE self, VALUE allow_requantize) {
+  llama_model_quantize_params* data = get_llama_model_quantize_params(self);
+  data->allow_requantize = RTEST(allow_requantize) ? true : false;
+  return allow_requantize;
+}
+
+static VALUE llama_model_quantize_params_get_quantize_output_tensor(VALUE self) {
+  llama_model_quantize_params* data = get_llama_model_quantize_params(self);
+  return data->quantize_output_tensor ? Qtrue : Qfalse;
+}
+
+static VALUE llama_model_quantize_params_set_quantize_output_tensor(VALUE self, VALUE quantize_output_tensor) {
+  llama_model_quantize_params* data = get_llama_model_quantize_params(self);
+  data->quantize_output_tensor = RTEST(quantize_output_tensor) ? true : false;
+  return quantize_output_tensor;
+}
+
+static VALUE llama_model_quantize_params_get_only_copy(VALUE self) {
+  llama_model_quantize_params* data = get_llama_model_quantize_params(self);
+  return data->only_copy ? Qtrue : Qfalse;
+}
+
+static VALUE llama_model_quantize_params_set_only_copy(VALUE self, VALUE only_copy) {
+  llama_model_quantize_params* data = get_llama_model_quantize_params(self);
+  data->only_copy = RTEST(only_copy) ? true : false;
+  return only_copy;
+}
+
+static VALUE llama_model_quantize_params_get_pure(VALUE self) {
+  llama_model_quantize_params* data = get_llama_model_quantize_params(self);
+  return data->pure ? Qtrue : Qfalse;
+}
+
+static VALUE llama_model_quantize_params_set_pure(VALUE self, VALUE pure) {
+  llama_model_quantize_params* data = get_llama_model_quantize_params(self);
+  data->pure = RTEST(pure) ? true : false;
+  return pure;
+}
+
+static VALUE llama_model_quantize_params_get_keep_split(VALUE self) {
+  llama_model_quantize_params* data = get_llama_model_quantize_params(self);
+  return data->keep_split ? Qtrue : Qfalse;
+}
+
+static VALUE llama_model_quantize_params_set_keep_split(VALUE self, VALUE keep_split) {
+  llama_model_quantize_params* data = get_llama_model_quantize_params(self);
+  data->keep_split = RTEST(keep_split) ? true : false;
+  return keep_split;
+}
+
 /* llama_logit_bias */
 static void llama_logit_bias_free(void *ptr) {
   ruby_xfree(ptr);
@@ -2841,6 +2940,24 @@ void Init_llama_cpp(void) {
   /* llama_model_quantize_params */
   rb_cLlamaModelQuantizeParams = rb_define_class_under(rb_mLLaMACpp, "LlamaModelQuantizeParams", rb_cObject);
   rb_define_alloc_func(rb_cLlamaModelQuantizeParams, llama_model_quantize_params_alloc);
+  rb_define_method(rb_cLlamaModelQuantizeParams, "nthread", RUBY_METHOD_FUNC(llama_model_quantize_params_get_nthread), 0);
+  rb_define_method(rb_cLlamaModelQuantizeParams, "nthread=", RUBY_METHOD_FUNC(llama_model_quantize_params_set_nthread), 1);
+  rb_define_method(rb_cLlamaModelQuantizeParams, "ftype", RUBY_METHOD_FUNC(llama_model_quantize_params_get_ftype), 0);
+  rb_define_method(rb_cLlamaModelQuantizeParams, "ftype=", RUBY_METHOD_FUNC(llama_model_quantize_params_set_ftype), 1);
+  rb_define_method(rb_cLlamaModelQuantizeParams, "output_tensor_type", RUBY_METHOD_FUNC(llama_model_quantize_params_get_output_tensor_type), 0);
+  rb_define_method(rb_cLlamaModelQuantizeParams, "output_tensor_type=", RUBY_METHOD_FUNC(llama_model_quantize_params_set_output_tensor_type), 1);
+  rb_define_method(rb_cLlamaModelQuantizeParams, "token_embedding_type", RUBY_METHOD_FUNC(llama_model_quantize_params_get_token_embedding_type), 0);
+  rb_define_method(rb_cLlamaModelQuantizeParams, "token_embedding_type=", RUBY_METHOD_FUNC(llama_model_quantize_params_set_token_embedding_type), 1);
+  rb_define_method(rb_cLlamaModelQuantizeParams, "allow_requantize", RUBY_METHOD_FUNC(llama_model_quantize_params_get_allow_requantize), 0);
+  rb_define_method(rb_cLlamaModelQuantizeParams, "allow_requantize=", RUBY_METHOD_FUNC(llama_model_quantize_params_set_allow_requantize), 1);
+  rb_define_method(rb_cLlamaModelQuantizeParams, "quantize_output_tensor", RUBY_METHOD_FUNC(llama_model_quantize_params_get_quantize_output_tensor), 0);
+  rb_define_method(rb_cLlamaModelQuantizeParams, "quantize_output_tensor=", RUBY_METHOD_FUNC(llama_model_quantize_params_set_quantize_output_tensor), 1);
+  rb_define_method(rb_cLlamaModelQuantizeParams, "only_copy", RUBY_METHOD_FUNC(llama_model_quantize_params_get_only_copy), 0);
+  rb_define_method(rb_cLlamaModelQuantizeParams, "only_copy=", RUBY_METHOD_FUNC(llama_model_quantize_params_set_only_copy), 1);
+  rb_define_method(rb_cLlamaModelQuantizeParams, "pure", RUBY_METHOD_FUNC(llama_model_quantize_params_get_pure), 0);
+  rb_define_method(rb_cLlamaModelQuantizeParams, "pure=", RUBY_METHOD_FUNC(llama_model_quantize_params_set_pure), 1);
+  rb_define_method(rb_cLlamaModelQuantizeParams, "keep_split", RUBY_METHOD_FUNC(llama_model_quantize_params_get_keep_split), 0);
+  rb_define_method(rb_cLlamaModelQuantizeParams, "keep_split=", RUBY_METHOD_FUNC(llama_model_quantize_params_set_keep_split), 1);
 
   /* llama_logit_bias */
   rb_cLlamaLogitBias = rb_define_class_under(rb_mLLaMACpp, "LlamaLogitBias", rb_cObject);
