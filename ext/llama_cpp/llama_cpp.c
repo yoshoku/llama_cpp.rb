@@ -1225,6 +1225,7 @@ static VALUE rb_llama_pooling_type(VALUE self, VALUE ctx) {
 }
 
 /* llama_model_get_vocab */
+/*
 static VALUE rb_llama_model_get_vocab(VALUE self, VALUE model) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
     rb_raise(rb_eArgError, "model must be a LlamaModel");
@@ -1236,6 +1237,7 @@ static VALUE rb_llama_model_get_vocab(VALUE self, VALUE model) {
   RB_GC_GUARD(model);
   return TypedData_Wrap_Struct(rb_cLlamaVocab, &llama_vocab_wrapper_data_type, vocab_wrapper);
 }
+*/
 
 /* llama_model_rope_type */
 static VALUE rb_llama_model_rope_type(VALUE self, VALUE model) {
@@ -3514,8 +3516,10 @@ void Init_llama_cpp(void) {
   /* llama_pooling_type */
   rb_define_module_function(rb_mLlamaCpp, "llama_pooling_type", rb_llama_pooling_type, 1);
 
-  /* llama_model_get_vocab */
+  /* TODO: llama_model_get_vocab */
+  /*
   rb_define_module_function(rb_mLlamaCpp, "llama_model_get_vocab", rb_llama_model_get_vocab, 1);
+  */
 
   /* llama_model_rope_type */
   rb_define_module_function(rb_mLlamaCpp, "llama_model_rope_type", rb_llama_model_rope_type, 1);
