@@ -3294,6 +3294,7 @@ void Init_llama_cpp(void) {
   /* llama_token_data_array */
   rb_cLlamaTokenDataArray = rb_define_class_under(rb_mLLaMACpp, "LlamaTokenDataArray", rb_cObject);
   rb_define_alloc_func(rb_cLlamaTokenDataArray, llama_token_data_array_alloc);
+  /* TODO: llama_token_data* data */
   rb_define_method(rb_cLlamaTokenDataArray, "size", RUBY_METHOD_FUNC(llama_token_data_array_get_size), 0);
   rb_define_method(rb_cLlamaTokenDataArray, "selected", RUBY_METHOD_FUNC(llama_token_data_array_get_selected), 0);
   rb_define_method(rb_cLlamaTokenDataArray, "sorted", RUBY_METHOD_FUNC(llama_token_data_array_get_sorted), 0);
@@ -3302,6 +3303,12 @@ void Init_llama_cpp(void) {
   rb_cLlamaBatch = rb_define_class_under(rb_mLLaMACpp, "LlamaBatch", rb_cObject);
   rb_define_alloc_func(rb_cLlamaBatch, llama_batch_alloc);
   rb_define_method(rb_cLlamaBatch, "n_tokens", RUBY_METHOD_FUNC(llama_batch_get_n_tokens), 0);
+  /* TODO: llama_token* token */
+  /* TODO: float* embd */
+  /* TODO: llama_pos* pos */
+  /* TODO: int32_t* n_seq_id */
+  /* TODO: llama_seq_id** seq_id */
+  /* TODO: int8_t* logits */
 
   /* llama_model_kv_override_type */
   rb_define_const(rb_mLLaMACpp, "LLAMA_KV_OVERRIDE_TYPE_INT", INT2NUM(LLAMA_KV_OVERRIDE_TYPE_INT));
