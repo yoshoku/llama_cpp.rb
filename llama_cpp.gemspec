@@ -4,7 +4,7 @@ require_relative 'lib/llama_cpp/version'
 
 Gem::Specification.new do |spec|
   spec.name = 'llama_cpp'
-  spec.version = LLaMACpp::VERSION
+  spec.version = LlamaCpp::VERSION
   spec.authors = ['yoshoku']
   spec.email = ['yoshoku@outlook.com']
 

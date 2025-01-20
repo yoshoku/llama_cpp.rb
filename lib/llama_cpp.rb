@@ -4,7 +4,7 @@ require_relative 'llama_cpp/version'
 require_relative 'llama_cpp/llama_cpp'
 
 # llama_cpp.rb provides Ruby bindings for the llama.cpp.
-module LLaMACpp
+module LlamaCpp
   module_function
 
   # Generates sentences following the given prompt for operation check.
@@ -103,3 +103,5 @@ module LLaMACpp
     output.join.scrub('?').strip.delete_prefix(prompt).strip
   end
 end
+
+LLaMACpp = LlamaCpp

@@ -1,6 +1,6 @@
 #include "llama_cpp.h"
 
-VALUE rb_mLLaMACpp;
+VALUE rb_mLlamaCpp;
 VALUE rb_cLlamaVocab;
 VALUE rb_cLlamaModel;
 VALUE rb_cLlamaContext;
@@ -3128,171 +3128,171 @@ static VALUE rb_llama_perf_sampler_reset(VALUE self, VALUE chain) {
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
-  rb_mLLaMACpp = rb_define_module("LLaMACpp");
+  rb_mLlamaCpp = rb_define_module("LlamaCpp");
 
   /* llama_vocab */
-  rb_cLlamaVocab = rb_define_class_under(rb_mLLaMACpp, "LlamaVocab", rb_cObject);
+  rb_cLlamaVocab = rb_define_class_under(rb_mLlamaCpp, "LlamaVocab", rb_cObject);
   rb_define_alloc_func(rb_cLlamaVocab, llama_vocab_wrapper_alloc);
 
   /* llama_model */
-  rb_cLlamaModel = rb_define_class_under(rb_mLLaMACpp, "LlamaModel", rb_cObject);
+  rb_cLlamaModel = rb_define_class_under(rb_mLlamaCpp, "LlamaModel", rb_cObject);
   rb_define_alloc_func(rb_cLlamaModel, llama_model_wrapper_alloc);
 
   /* llama_context */
-  rb_cLlamaContext = rb_define_class_under(rb_mLLaMACpp, "LlamaContext", rb_cObject);
+  rb_cLlamaContext = rb_define_class_under(rb_mLlamaCpp, "LlamaContext", rb_cObject);
   rb_define_alloc_func(rb_cLlamaContext, llama_context_wrapper_alloc);
 
   /* Constants */
   sprintf(tmp, "0x%x", LLAMA_DEFAULT_SEED);
-  rb_define_const(rb_mLLaMACpp, "LLAMA_DEFAULT_SEED", rb_str_new2(tmp));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_DEFAULT_SEED", rb_str_new2(tmp));
 
-  rb_define_const(rb_mLLaMACpp, "LLAMA_TOKEN_NULL", INT2NUM(LLAMA_TOKEN_NULL));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_TOKEN_NULL", INT2NUM(LLAMA_TOKEN_NULL));
 
   sprintf(tmp, "0x%x", LLAMA_FILE_MAGIC_GGLA);
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FILE_MAGIC_GGLA", rb_str_new2(tmp));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FILE_MAGIC_GGLA", rb_str_new2(tmp));
   sprintf(tmp, "0x%x", LLAMA_FILE_MAGIC_GGSN);
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FILE_MAGIC_GGSN", rb_str_new2(tmp));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FILE_MAGIC_GGSN", rb_str_new2(tmp));
   sprintf(tmp, "0x%x",  LLAMA_FILE_MAGIC_GGSQ);
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FILE_MAGIC_GGSQ", rb_str_new2(tmp));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FILE_MAGIC_GGSQ", rb_str_new2(tmp));
 
   sprintf(tmp, "0x%x", LLAMA_SESSION_MAGIC);
-  rb_define_const(rb_mLLaMACpp, "LLAMA_SESSION_MAGIC", rb_str_new2(tmp));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_SESSION_VERSION", INT2NUM(LLAMA_SESSION_VERSION));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_SESSION_MAGIC", rb_str_new2(tmp));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_SESSION_VERSION", INT2NUM(LLAMA_SESSION_VERSION));
 
   sprintf(tmp, "0x%x", LLAMA_STATE_SEQ_MAGIC);
-  rb_define_const(rb_mLLaMACpp, "LLAMA_STATE_SEQ_MAGIC", rb_str_new2(tmp));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_STATE_SEQ_VERSION", INT2NUM(LLAMA_STATE_SEQ_VERSION));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_STATE_SEQ_MAGIC", rb_str_new2(tmp));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_STATE_SEQ_VERSION", INT2NUM(LLAMA_STATE_SEQ_VERSION));
 
   /* Enums */
   /* llama_vocab_type */
-  rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_TYPE_NONE", INT2NUM(LLAMA_VOCAB_TYPE_NONE));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_TYPE_SPM", INT2NUM(LLAMA_VOCAB_TYPE_SPM));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_TYPE_BPE", INT2NUM(LLAMA_VOCAB_TYPE_BPE));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_TYPE_WPM", INT2NUM(LLAMA_VOCAB_TYPE_WPM));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_TYPE_UGM", INT2NUM(LLAMA_VOCAB_TYPE_UGM));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_TYPE_RWKV", INT2NUM(LLAMA_VOCAB_TYPE_RWKV));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_TYPE_NONE", INT2NUM(LLAMA_VOCAB_TYPE_NONE));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_TYPE_SPM", INT2NUM(LLAMA_VOCAB_TYPE_SPM));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_TYPE_BPE", INT2NUM(LLAMA_VOCAB_TYPE_BPE));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_TYPE_WPM", INT2NUM(LLAMA_VOCAB_TYPE_WPM));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_TYPE_UGM", INT2NUM(LLAMA_VOCAB_TYPE_UGM));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_TYPE_RWKV", INT2NUM(LLAMA_VOCAB_TYPE_RWKV));
   /* llama_vocab_pre_type */
-  rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_PRE_TYPE_DEFAULT", INT2NUM(LLAMA_VOCAB_PRE_TYPE_DEFAULT));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_PRE_TYPE_LLAMA3", INT2NUM(LLAMA_VOCAB_PRE_TYPE_LLAMA3));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_PRE_TYPE_DEEPSEEK_LLM", INT2NUM(LLAMA_VOCAB_PRE_TYPE_DEEPSEEK_LLM));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_PRE_TYPE_DEEPSEEK_CODER", INT2NUM(LLAMA_VOCAB_PRE_TYPE_DEEPSEEK_CODER));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_PRE_TYPE_FALCON", INT2NUM(LLAMA_VOCAB_PRE_TYPE_FALCON));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_PRE_TYPE_MPT", INT2NUM(LLAMA_VOCAB_PRE_TYPE_MPT));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_PRE_TYPE_STARCODER", INT2NUM(LLAMA_VOCAB_PRE_TYPE_STARCODER));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_PRE_TYPE_GPT2", INT2NUM(LLAMA_VOCAB_PRE_TYPE_GPT2));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_PRE_TYPE_REFACT", INT2NUM(LLAMA_VOCAB_PRE_TYPE_REFACT));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_PRE_TYPE_COMMAND_R", INT2NUM(LLAMA_VOCAB_PRE_TYPE_COMMAND_R));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_PRE_TYPE_STABLELM2", INT2NUM(LLAMA_VOCAB_PRE_TYPE_STABLELM2));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_PRE_TYPE_QWEN2", INT2NUM(LLAMA_VOCAB_PRE_TYPE_QWEN2));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_PRE_TYPE_OLMO", INT2NUM(LLAMA_VOCAB_PRE_TYPE_OLMO));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_PRE_TYPE_DBRX", INT2NUM(LLAMA_VOCAB_PRE_TYPE_DBRX));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_PRE_TYPE_SMAUG", INT2NUM(LLAMA_VOCAB_PRE_TYPE_SMAUG));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_PRE_TYPE_PORO", INT2NUM(LLAMA_VOCAB_PRE_TYPE_PORO));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_PRE_TYPE_CHATGLM3", INT2NUM(LLAMA_VOCAB_PRE_TYPE_CHATGLM3));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_PRE_TYPE_CHATGLM4", INT2NUM(LLAMA_VOCAB_PRE_TYPE_CHATGLM4));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_PRE_TYPE_VIKING", INT2NUM(LLAMA_VOCAB_PRE_TYPE_VIKING));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_PRE_TYPE_JAIS", INT2NUM(LLAMA_VOCAB_PRE_TYPE_JAIS));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_PRE_TYPE_TEKKEN", INT2NUM(LLAMA_VOCAB_PRE_TYPE_TEKKEN));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_PRE_TYPE_SMOLLM", INT2NUM(LLAMA_VOCAB_PRE_TYPE_SMOLLM));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_PRE_TYPE_CODESHELL", INT2NUM(LLAMA_VOCAB_PRE_TYPE_CODESHELL));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_PRE_TYPE_BLOOM", INT2NUM(LLAMA_VOCAB_PRE_TYPE_BLOOM));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_PRE_TYPE_GPT3_FINNISH", INT2NUM(LLAMA_VOCAB_PRE_TYPE_GPT3_FINNISH));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_PRE_TYPE_EXAONE", INT2NUM(LLAMA_VOCAB_PRE_TYPE_EXAONE));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_PRE_TYPE_CHAMELEON", INT2NUM(LLAMA_VOCAB_PRE_TYPE_CHAMELEON));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_PRE_TYPE_MINERVA", INT2NUM(LLAMA_VOCAB_PRE_TYPE_MINERVA));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_VOCAB_PRE_TYPE_DEEPSEEK3_LLM", INT2NUM(LLAMA_VOCAB_PRE_TYPE_DEEPSEEK3_LLM));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_PRE_TYPE_DEFAULT", INT2NUM(LLAMA_VOCAB_PRE_TYPE_DEFAULT));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_PRE_TYPE_LLAMA3", INT2NUM(LLAMA_VOCAB_PRE_TYPE_LLAMA3));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_PRE_TYPE_DEEPSEEK_LLM", INT2NUM(LLAMA_VOCAB_PRE_TYPE_DEEPSEEK_LLM));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_PRE_TYPE_DEEPSEEK_CODER", INT2NUM(LLAMA_VOCAB_PRE_TYPE_DEEPSEEK_CODER));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_PRE_TYPE_FALCON", INT2NUM(LLAMA_VOCAB_PRE_TYPE_FALCON));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_PRE_TYPE_MPT", INT2NUM(LLAMA_VOCAB_PRE_TYPE_MPT));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_PRE_TYPE_STARCODER", INT2NUM(LLAMA_VOCAB_PRE_TYPE_STARCODER));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_PRE_TYPE_GPT2", INT2NUM(LLAMA_VOCAB_PRE_TYPE_GPT2));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_PRE_TYPE_REFACT", INT2NUM(LLAMA_VOCAB_PRE_TYPE_REFACT));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_PRE_TYPE_COMMAND_R", INT2NUM(LLAMA_VOCAB_PRE_TYPE_COMMAND_R));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_PRE_TYPE_STABLELM2", INT2NUM(LLAMA_VOCAB_PRE_TYPE_STABLELM2));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_PRE_TYPE_QWEN2", INT2NUM(LLAMA_VOCAB_PRE_TYPE_QWEN2));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_PRE_TYPE_OLMO", INT2NUM(LLAMA_VOCAB_PRE_TYPE_OLMO));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_PRE_TYPE_DBRX", INT2NUM(LLAMA_VOCAB_PRE_TYPE_DBRX));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_PRE_TYPE_SMAUG", INT2NUM(LLAMA_VOCAB_PRE_TYPE_SMAUG));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_PRE_TYPE_PORO", INT2NUM(LLAMA_VOCAB_PRE_TYPE_PORO));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_PRE_TYPE_CHATGLM3", INT2NUM(LLAMA_VOCAB_PRE_TYPE_CHATGLM3));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_PRE_TYPE_CHATGLM4", INT2NUM(LLAMA_VOCAB_PRE_TYPE_CHATGLM4));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_PRE_TYPE_VIKING", INT2NUM(LLAMA_VOCAB_PRE_TYPE_VIKING));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_PRE_TYPE_JAIS", INT2NUM(LLAMA_VOCAB_PRE_TYPE_JAIS));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_PRE_TYPE_TEKKEN", INT2NUM(LLAMA_VOCAB_PRE_TYPE_TEKKEN));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_PRE_TYPE_SMOLLM", INT2NUM(LLAMA_VOCAB_PRE_TYPE_SMOLLM));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_PRE_TYPE_CODESHELL", INT2NUM(LLAMA_VOCAB_PRE_TYPE_CODESHELL));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_PRE_TYPE_BLOOM", INT2NUM(LLAMA_VOCAB_PRE_TYPE_BLOOM));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_PRE_TYPE_GPT3_FINNISH", INT2NUM(LLAMA_VOCAB_PRE_TYPE_GPT3_FINNISH));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_PRE_TYPE_EXAONE", INT2NUM(LLAMA_VOCAB_PRE_TYPE_EXAONE));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_PRE_TYPE_CHAMELEON", INT2NUM(LLAMA_VOCAB_PRE_TYPE_CHAMELEON));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_PRE_TYPE_MINERVA", INT2NUM(LLAMA_VOCAB_PRE_TYPE_MINERVA));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_PRE_TYPE_DEEPSEEK3_LLM", INT2NUM(LLAMA_VOCAB_PRE_TYPE_DEEPSEEK3_LLM));
   /* llama_rope_type */
-  rb_define_const(rb_mLLaMACpp, "LLAMA_ROPE_TYPE_NONE", INT2NUM(LLAMA_ROPE_TYPE_NONE));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_ROPE_TYPE_NORM", INT2NUM(LLAMA_ROPE_TYPE_NORM));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_ROPE_TYPE_NEOX", INT2NUM(LLAMA_ROPE_TYPE_NEOX));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_ROPE_TYPE_MROPE", INT2NUM(LLAMA_ROPE_TYPE_MROPE));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_ROPE_TYPE_VISION", INT2NUM(LLAMA_ROPE_TYPE_VISION));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_ROPE_TYPE_NONE", INT2NUM(LLAMA_ROPE_TYPE_NONE));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_ROPE_TYPE_NORM", INT2NUM(LLAMA_ROPE_TYPE_NORM));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_ROPE_TYPE_NEOX", INT2NUM(LLAMA_ROPE_TYPE_NEOX));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_ROPE_TYPE_MROPE", INT2NUM(LLAMA_ROPE_TYPE_MROPE));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_ROPE_TYPE_VISION", INT2NUM(LLAMA_ROPE_TYPE_VISION));
   /* llama_token_type */
-  rb_define_const(rb_mLLaMACpp, "LLAMA_TOKEN_TYPE_UNDEFINED", INT2NUM(LLAMA_TOKEN_TYPE_UNDEFINED));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_TOKEN_TYPE_NORMAL", INT2NUM(LLAMA_TOKEN_TYPE_NORMAL));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_TOKEN_TYPE_UNKNOWN", INT2NUM(LLAMA_TOKEN_TYPE_UNKNOWN));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_TOKEN_TYPE_CONTROL", INT2NUM(LLAMA_TOKEN_TYPE_CONTROL));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_TOKEN_TYPE_USER_DEFINED", INT2NUM(LLAMA_TOKEN_TYPE_USER_DEFINED));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_TOKEN_TYPE_UNUSED", INT2NUM(LLAMA_TOKEN_TYPE_UNUSED));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_TOKEN_TYPE_BYTE", INT2NUM(LLAMA_TOKEN_TYPE_BYTE));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_TOKEN_TYPE_UNDEFINED", INT2NUM(LLAMA_TOKEN_TYPE_UNDEFINED));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_TOKEN_TYPE_NORMAL", INT2NUM(LLAMA_TOKEN_TYPE_NORMAL));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_TOKEN_TYPE_UNKNOWN", INT2NUM(LLAMA_TOKEN_TYPE_UNKNOWN));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_TOKEN_TYPE_CONTROL", INT2NUM(LLAMA_TOKEN_TYPE_CONTROL));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_TOKEN_TYPE_USER_DEFINED", INT2NUM(LLAMA_TOKEN_TYPE_USER_DEFINED));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_TOKEN_TYPE_UNUSED", INT2NUM(LLAMA_TOKEN_TYPE_UNUSED));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_TOKEN_TYPE_BYTE", INT2NUM(LLAMA_TOKEN_TYPE_BYTE));
   /* llama_token_attr */
-  rb_define_const(rb_mLLaMACpp, "LLAMA_TOKEN_ATTR_UNDEFINED", INT2NUM(LLAMA_TOKEN_ATTR_UNDEFINED));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_TOKEN_ATTR_UNKNOWN", INT2NUM(LLAMA_TOKEN_ATTR_UNKNOWN));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_TOKEN_ATTR_UNUSED", INT2NUM(LLAMA_TOKEN_ATTR_UNUSED));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_TOKEN_ATTR_NORMAL", INT2NUM(LLAMA_TOKEN_ATTR_NORMAL));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_TOKEN_ATTR_CONTROL", INT2NUM(LLAMA_TOKEN_ATTR_CONTROL));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_TOKEN_ATTR_USER_DEFINED", INT2NUM(LLAMA_TOKEN_ATTR_USER_DEFINED));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_TOKEN_ATTR_BYTE", INT2NUM(LLAMA_TOKEN_ATTR_BYTE));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_TOKEN_ATTR_NORMALIZED", INT2NUM(LLAMA_TOKEN_ATTR_NORMALIZED));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_TOKEN_ATTR_LSTRIP", INT2NUM(LLAMA_TOKEN_ATTR_LSTRIP));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_TOKEN_ATTR_RSTRIP", INT2NUM(LLAMA_TOKEN_ATTR_RSTRIP));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_TOKEN_ATTR_SINGLE_WORD", INT2NUM(LLAMA_TOKEN_ATTR_SINGLE_WORD));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_TOKEN_ATTR_UNDEFINED", INT2NUM(LLAMA_TOKEN_ATTR_UNDEFINED));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_TOKEN_ATTR_UNKNOWN", INT2NUM(LLAMA_TOKEN_ATTR_UNKNOWN));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_TOKEN_ATTR_UNUSED", INT2NUM(LLAMA_TOKEN_ATTR_UNUSED));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_TOKEN_ATTR_NORMAL", INT2NUM(LLAMA_TOKEN_ATTR_NORMAL));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_TOKEN_ATTR_CONTROL", INT2NUM(LLAMA_TOKEN_ATTR_CONTROL));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_TOKEN_ATTR_USER_DEFINED", INT2NUM(LLAMA_TOKEN_ATTR_USER_DEFINED));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_TOKEN_ATTR_BYTE", INT2NUM(LLAMA_TOKEN_ATTR_BYTE));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_TOKEN_ATTR_NORMALIZED", INT2NUM(LLAMA_TOKEN_ATTR_NORMALIZED));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_TOKEN_ATTR_LSTRIP", INT2NUM(LLAMA_TOKEN_ATTR_LSTRIP));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_TOKEN_ATTR_RSTRIP", INT2NUM(LLAMA_TOKEN_ATTR_RSTRIP));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_TOKEN_ATTR_SINGLE_WORD", INT2NUM(LLAMA_TOKEN_ATTR_SINGLE_WORD));
   /* llama_ftype */
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_ALL_F32", INT2NUM(LLAMA_FTYPE_ALL_F32));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_F16", INT2NUM(LLAMA_FTYPE_MOSTLY_F16));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_Q4_0", INT2NUM(LLAMA_FTYPE_MOSTLY_Q4_0));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_Q4_1", INT2NUM(LLAMA_FTYPE_MOSTLY_Q4_1));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_Q8_0", INT2NUM(LLAMA_FTYPE_MOSTLY_Q8_0));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_Q5_0", INT2NUM(LLAMA_FTYPE_MOSTLY_Q5_0));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_Q5_1", INT2NUM(LLAMA_FTYPE_MOSTLY_Q5_1));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_Q2_K", INT2NUM(LLAMA_FTYPE_MOSTLY_Q2_K));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_Q3_K_S", INT2NUM(LLAMA_FTYPE_MOSTLY_Q3_K_S));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_Q3_K_M", INT2NUM(LLAMA_FTYPE_MOSTLY_Q3_K_M));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_Q3_K_L", INT2NUM(LLAMA_FTYPE_MOSTLY_Q3_K_L));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_Q4_K_S", INT2NUM(LLAMA_FTYPE_MOSTLY_Q4_K_S));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_Q4_K_M", INT2NUM(LLAMA_FTYPE_MOSTLY_Q4_K_M));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_Q5_K_S", INT2NUM(LLAMA_FTYPE_MOSTLY_Q5_K_S));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_Q5_K_M", INT2NUM(LLAMA_FTYPE_MOSTLY_Q5_K_M));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_Q6_K", INT2NUM(LLAMA_FTYPE_MOSTLY_Q6_K));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_IQ2_XXS", INT2NUM(LLAMA_FTYPE_MOSTLY_IQ2_XXS));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_IQ2_XS", INT2NUM(LLAMA_FTYPE_MOSTLY_IQ2_XS));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_Q2_K_S", INT2NUM(LLAMA_FTYPE_MOSTLY_Q2_K_S));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_IQ3_XS", INT2NUM(LLAMA_FTYPE_MOSTLY_IQ3_XS));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_IQ3_XXS", INT2NUM(LLAMA_FTYPE_MOSTLY_IQ3_XXS));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_IQ1_S", INT2NUM(LLAMA_FTYPE_MOSTLY_IQ1_S));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_IQ4_NL", INT2NUM(LLAMA_FTYPE_MOSTLY_IQ4_NL));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_IQ3_S", INT2NUM(LLAMA_FTYPE_MOSTLY_IQ3_S));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_IQ3_M", INT2NUM(LLAMA_FTYPE_MOSTLY_IQ3_M));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_IQ2_S", INT2NUM(LLAMA_FTYPE_MOSTLY_IQ2_S));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_IQ2_M", INT2NUM(LLAMA_FTYPE_MOSTLY_IQ2_M));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_IQ4_XS", INT2NUM(LLAMA_FTYPE_MOSTLY_IQ4_XS));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_IQ1_M", INT2NUM(LLAMA_FTYPE_MOSTLY_IQ1_M));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_BF16", INT2NUM(LLAMA_FTYPE_MOSTLY_BF16));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_TQ1_0", INT2NUM(LLAMA_FTYPE_MOSTLY_TQ1_0));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_MOSTLY_TQ2_0", INT2NUM(LLAMA_FTYPE_MOSTLY_TQ2_0));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_FTYPE_GUESSED", INT2NUM(LLAMA_FTYPE_GUESSED));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_ALL_F32", INT2NUM(LLAMA_FTYPE_ALL_F32));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_F16", INT2NUM(LLAMA_FTYPE_MOSTLY_F16));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_Q4_0", INT2NUM(LLAMA_FTYPE_MOSTLY_Q4_0));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_Q4_1", INT2NUM(LLAMA_FTYPE_MOSTLY_Q4_1));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_Q8_0", INT2NUM(LLAMA_FTYPE_MOSTLY_Q8_0));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_Q5_0", INT2NUM(LLAMA_FTYPE_MOSTLY_Q5_0));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_Q5_1", INT2NUM(LLAMA_FTYPE_MOSTLY_Q5_1));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_Q2_K", INT2NUM(LLAMA_FTYPE_MOSTLY_Q2_K));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_Q3_K_S", INT2NUM(LLAMA_FTYPE_MOSTLY_Q3_K_S));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_Q3_K_M", INT2NUM(LLAMA_FTYPE_MOSTLY_Q3_K_M));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_Q3_K_L", INT2NUM(LLAMA_FTYPE_MOSTLY_Q3_K_L));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_Q4_K_S", INT2NUM(LLAMA_FTYPE_MOSTLY_Q4_K_S));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_Q4_K_M", INT2NUM(LLAMA_FTYPE_MOSTLY_Q4_K_M));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_Q5_K_S", INT2NUM(LLAMA_FTYPE_MOSTLY_Q5_K_S));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_Q5_K_M", INT2NUM(LLAMA_FTYPE_MOSTLY_Q5_K_M));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_Q6_K", INT2NUM(LLAMA_FTYPE_MOSTLY_Q6_K));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_IQ2_XXS", INT2NUM(LLAMA_FTYPE_MOSTLY_IQ2_XXS));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_IQ2_XS", INT2NUM(LLAMA_FTYPE_MOSTLY_IQ2_XS));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_Q2_K_S", INT2NUM(LLAMA_FTYPE_MOSTLY_Q2_K_S));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_IQ3_XS", INT2NUM(LLAMA_FTYPE_MOSTLY_IQ3_XS));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_IQ3_XXS", INT2NUM(LLAMA_FTYPE_MOSTLY_IQ3_XXS));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_IQ1_S", INT2NUM(LLAMA_FTYPE_MOSTLY_IQ1_S));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_IQ4_NL", INT2NUM(LLAMA_FTYPE_MOSTLY_IQ4_NL));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_IQ3_S", INT2NUM(LLAMA_FTYPE_MOSTLY_IQ3_S));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_IQ3_M", INT2NUM(LLAMA_FTYPE_MOSTLY_IQ3_M));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_IQ2_S", INT2NUM(LLAMA_FTYPE_MOSTLY_IQ2_S));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_IQ2_M", INT2NUM(LLAMA_FTYPE_MOSTLY_IQ2_M));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_IQ4_XS", INT2NUM(LLAMA_FTYPE_MOSTLY_IQ4_XS));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_IQ1_M", INT2NUM(LLAMA_FTYPE_MOSTLY_IQ1_M));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_BF16", INT2NUM(LLAMA_FTYPE_MOSTLY_BF16));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_TQ1_0", INT2NUM(LLAMA_FTYPE_MOSTLY_TQ1_0));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_TQ2_0", INT2NUM(LLAMA_FTYPE_MOSTLY_TQ2_0));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_GUESSED", INT2NUM(LLAMA_FTYPE_GUESSED));
   /* llama_rope_scaling_type */
-  rb_define_const(rb_mLLaMACpp, "LLAMA_ROPE_SCALING_TYPE_UNSPECIFIED", INT2NUM(LLAMA_ROPE_SCALING_TYPE_UNSPECIFIED));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_ROPE_SCALING_TYPE_NONE", INT2NUM(LLAMA_ROPE_SCALING_TYPE_NONE));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_ROPE_SCALING_TYPE_LINEAR", INT2NUM(LLAMA_ROPE_SCALING_TYPE_LINEAR));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_ROPE_SCALING_TYPE_YARN", INT2NUM(LLAMA_ROPE_SCALING_TYPE_YARN));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_ROPE_SCALING_TYPE_LONGROPE", INT2NUM(LLAMA_ROPE_SCALING_TYPE_LONGROPE));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_ROPE_SCALING_TYPE_MAX_VALUE", INT2NUM(LLAMA_ROPE_SCALING_TYPE_MAX_VALUE));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_ROPE_SCALING_TYPE_UNSPECIFIED", INT2NUM(LLAMA_ROPE_SCALING_TYPE_UNSPECIFIED));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_ROPE_SCALING_TYPE_NONE", INT2NUM(LLAMA_ROPE_SCALING_TYPE_NONE));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_ROPE_SCALING_TYPE_LINEAR", INT2NUM(LLAMA_ROPE_SCALING_TYPE_LINEAR));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_ROPE_SCALING_TYPE_YARN", INT2NUM(LLAMA_ROPE_SCALING_TYPE_YARN));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_ROPE_SCALING_TYPE_LONGROPE", INT2NUM(LLAMA_ROPE_SCALING_TYPE_LONGROPE));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_ROPE_SCALING_TYPE_MAX_VALUE", INT2NUM(LLAMA_ROPE_SCALING_TYPE_MAX_VALUE));
   /* llama_pooling_type */
-  rb_define_const(rb_mLLaMACpp, "LLAMA_POOLING_TYPE_UNSPECIFIED", INT2NUM(LLAMA_POOLING_TYPE_UNSPECIFIED));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_POOLING_TYPE_NONE", INT2NUM(LLAMA_POOLING_TYPE_NONE));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_POOLING_TYPE_MEAN", INT2NUM(LLAMA_POOLING_TYPE_MEAN));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_POOLING_TYPE_CLS", INT2NUM(LLAMA_POOLING_TYPE_CLS));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_POOLING_TYPE_LAST", INT2NUM(LLAMA_POOLING_TYPE_LAST));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_POOLING_TYPE_RANK", INT2NUM(LLAMA_POOLING_TYPE_RANK));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_POOLING_TYPE_UNSPECIFIED", INT2NUM(LLAMA_POOLING_TYPE_UNSPECIFIED));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_POOLING_TYPE_NONE", INT2NUM(LLAMA_POOLING_TYPE_NONE));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_POOLING_TYPE_MEAN", INT2NUM(LLAMA_POOLING_TYPE_MEAN));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_POOLING_TYPE_CLS", INT2NUM(LLAMA_POOLING_TYPE_CLS));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_POOLING_TYPE_LAST", INT2NUM(LLAMA_POOLING_TYPE_LAST));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_POOLING_TYPE_RANK", INT2NUM(LLAMA_POOLING_TYPE_RANK));
   /* llama_attention_type */
-  rb_define_const(rb_mLLaMACpp, "LLAMA_ATTENTION_TYPE_UNSPECIFIED", INT2NUM(LLAMA_ATTENTION_TYPE_UNSPECIFIED));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_ATTENTION_TYPE_CAUSAL", INT2NUM(LLAMA_ATTENTION_TYPE_CAUSAL));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_ATTENTION_TYPE_NON_CAUSAL", INT2NUM(LLAMA_ATTENTION_TYPE_NON_CAUSAL));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_ATTENTION_TYPE_UNSPECIFIED", INT2NUM(LLAMA_ATTENTION_TYPE_UNSPECIFIED));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_ATTENTION_TYPE_CAUSAL", INT2NUM(LLAMA_ATTENTION_TYPE_CAUSAL));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_ATTENTION_TYPE_NON_CAUSAL", INT2NUM(LLAMA_ATTENTION_TYPE_NON_CAUSAL));
   /* llama_split_mode */
-  rb_define_const(rb_mLLaMACpp, "LLAMA_SPLIT_MODE_NONE", INT2NUM(LLAMA_SPLIT_MODE_NONE));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_SPLIT_MODE_LAYER", INT2NUM(LLAMA_SPLIT_MODE_LAYER));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_SPLIT_MODE_ROW", INT2NUM(LLAMA_SPLIT_MODE_ROW));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_SPLIT_MODE_NONE", INT2NUM(LLAMA_SPLIT_MODE_NONE));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_SPLIT_MODE_LAYER", INT2NUM(LLAMA_SPLIT_MODE_LAYER));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_SPLIT_MODE_ROW", INT2NUM(LLAMA_SPLIT_MODE_ROW));
 
   /* llama_token_data */
-  VALUE rb_cLlamaTokenData = rb_define_class_under(rb_mLLaMACpp, "LlamaTokenData", rb_cObject);
+  VALUE rb_cLlamaTokenData = rb_define_class_under(rb_mLlamaCpp, "LlamaTokenData", rb_cObject);
   rb_define_alloc_func(rb_cLlamaTokenData, llama_token_data_alloc);
   rb_define_method(rb_cLlamaTokenData, "id", RUBY_METHOD_FUNC(llama_token_data_get_id), 0);
   rb_define_method(rb_cLlamaTokenData, "logit", RUBY_METHOD_FUNC(llama_token_data_get_logit), 0);
   rb_define_method(rb_cLlamaTokenData, "p", RUBY_METHOD_FUNC(llama_token_data_get_p), 0);
 
   /* llama_token_data_array */
-  rb_cLlamaTokenDataArray = rb_define_class_under(rb_mLLaMACpp, "LlamaTokenDataArray", rb_cObject);
+  rb_cLlamaTokenDataArray = rb_define_class_under(rb_mLlamaCpp, "LlamaTokenDataArray", rb_cObject);
   rb_define_alloc_func(rb_cLlamaTokenDataArray, llama_token_data_array_alloc);
   /* TODO: llama_token_data* data */
   rb_define_method(rb_cLlamaTokenDataArray, "size", RUBY_METHOD_FUNC(llama_token_data_array_get_size), 0);
@@ -3300,7 +3300,7 @@ void Init_llama_cpp(void) {
   rb_define_method(rb_cLlamaTokenDataArray, "sorted", RUBY_METHOD_FUNC(llama_token_data_array_get_sorted), 0);
 
   /* llama_batch */
-  rb_cLlamaBatch = rb_define_class_under(rb_mLLaMACpp, "LlamaBatch", rb_cObject);
+  rb_cLlamaBatch = rb_define_class_under(rb_mLlamaCpp, "LlamaBatch", rb_cObject);
   rb_define_alloc_func(rb_cLlamaBatch, llama_batch_alloc);
   rb_define_method(rb_cLlamaBatch, "n_tokens", RUBY_METHOD_FUNC(llama_batch_get_n_tokens), 0);
   /* TODO: llama_token* token */
@@ -3311,13 +3311,13 @@ void Init_llama_cpp(void) {
   /* TODO: int8_t* logits */
 
   /* llama_model_kv_override_type */
-  rb_define_const(rb_mLLaMACpp, "LLAMA_KV_OVERRIDE_TYPE_INT", INT2NUM(LLAMA_KV_OVERRIDE_TYPE_INT));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_KV_OVERRIDE_TYPE_FLOAT", INT2NUM(LLAMA_KV_OVERRIDE_TYPE_FLOAT));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_KV_OVERRIDE_TYPE_BOOL", INT2NUM(LLAMA_KV_OVERRIDE_TYPE_BOOL));
-  rb_define_const(rb_mLLaMACpp, "LLAMA_KV_OVERRIDE_TYPE_STR", INT2NUM(LLAMA_KV_OVERRIDE_TYPE_STR));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_KV_OVERRIDE_TYPE_INT", INT2NUM(LLAMA_KV_OVERRIDE_TYPE_INT));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_KV_OVERRIDE_TYPE_FLOAT", INT2NUM(LLAMA_KV_OVERRIDE_TYPE_FLOAT));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_KV_OVERRIDE_TYPE_BOOL", INT2NUM(LLAMA_KV_OVERRIDE_TYPE_BOOL));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_KV_OVERRIDE_TYPE_STR", INT2NUM(LLAMA_KV_OVERRIDE_TYPE_STR));
 
   /* llama_model_kv_override */
-  VALUE rb_cLlamaModelKvOverride = rb_define_class_under(rb_mLLaMACpp, "LlamaModelKvOverride", rb_cObject);
+  VALUE rb_cLlamaModelKvOverride = rb_define_class_under(rb_mLlamaCpp, "LlamaModelKvOverride", rb_cObject);
   rb_define_alloc_func(rb_cLlamaModelKvOverride, llama_model_kv_override_alloc);
   rb_define_method(rb_cLlamaModelKvOverride, "tag", RUBY_METHOD_FUNC(llama_model_kv_override_get_tag), 0);
   rb_define_method(rb_cLlamaModelKvOverride, "key", RUBY_METHOD_FUNC(llama_model_kv_override_get_key), 0);
@@ -3328,7 +3328,7 @@ void Init_llama_cpp(void) {
 
 
   /* llama_model_params */
-  rb_cLlamaModelParams = rb_define_class_under(rb_mLLaMACpp, "LlamaModelParams", rb_cObject);
+  rb_cLlamaModelParams = rb_define_class_under(rb_mLlamaCpp, "LlamaModelParams", rb_cObject);
   rb_define_alloc_func(rb_cLlamaModelParams, llama_model_params_alloc);
   /* TODO: ggml_backend_dev_t* devices */
   rb_define_method(rb_cLlamaModelParams, "n_gpu_layers", RUBY_METHOD_FUNC(llama_model_params_get_n_gpu_layers), 0);
@@ -3351,7 +3351,7 @@ void Init_llama_cpp(void) {
   rb_define_method(rb_cLlamaModelParams, "check_tensors=", RUBY_METHOD_FUNC(llama_model_params_set_check_tensors), 1);
 
   /* llama_context_params */
-  rb_cLlamaContextParams = rb_define_class_under(rb_mLLaMACpp, "LlamaContextParams", rb_cObject);
+  rb_cLlamaContextParams = rb_define_class_under(rb_mLlamaCpp, "LlamaContextParams", rb_cObject);
   rb_define_alloc_func(rb_cLlamaContextParams, llama_context_params_alloc);
   rb_define_method(rb_cLlamaContextParams, "n_ctx", RUBY_METHOD_FUNC(llama_context_params_get_n_ctx), 0);
   rb_define_method(rb_cLlamaContextParams, "n_ctx=", RUBY_METHOD_FUNC(llama_context_params_set_n_ctx), 1);
@@ -3407,7 +3407,7 @@ void Init_llama_cpp(void) {
   /* TODO: void* abort_callback_data */
 
   /* llama_model_quantize_params */
-  rb_cLlamaModelQuantizeParams = rb_define_class_under(rb_mLLaMACpp, "LlamaModelQuantizeParams", rb_cObject);
+  rb_cLlamaModelQuantizeParams = rb_define_class_under(rb_mLlamaCpp, "LlamaModelQuantizeParams", rb_cObject);
   rb_define_alloc_func(rb_cLlamaModelQuantizeParams, llama_model_quantize_params_alloc);
   rb_define_method(rb_cLlamaModelQuantizeParams, "nthread", RUBY_METHOD_FUNC(llama_model_quantize_params_get_nthread), 0);
   rb_define_method(rb_cLlamaModelQuantizeParams, "nthread=", RUBY_METHOD_FUNC(llama_model_quantize_params_set_nthread), 1);
@@ -3431,115 +3431,115 @@ void Init_llama_cpp(void) {
   /* TODO: void* kv_overrides */
 
   /* llama_logit_bias */
-  rb_cLlamaLogitBias = rb_define_class_under(rb_mLLaMACpp, "LlamaLogitBias", rb_cObject);
+  rb_cLlamaLogitBias = rb_define_class_under(rb_mLlamaCpp, "LlamaLogitBias", rb_cObject);
   rb_define_alloc_func(rb_cLlamaLogitBias, llama_logit_bias_alloc);
   rb_define_method(rb_cLlamaLogitBias, "token", RUBY_METHOD_FUNC(llama_logit_bias_get_token), 0);
   rb_define_method(rb_cLlamaLogitBias, "bias", RUBY_METHOD_FUNC(llama_logit_bias_get_bias), 0);
 
   /* llama_sampler_chain_params */
-  rb_cLlamaSamplerChainParams = rb_define_class_under(rb_mLLaMACpp, "LlamaSamplerChainParams", rb_cObject);
+  rb_cLlamaSamplerChainParams = rb_define_class_under(rb_mLlamaCpp, "LlamaSamplerChainParams", rb_cObject);
   rb_define_alloc_func(rb_cLlamaSamplerChainParams, llama_sampler_chain_params_alloc);
   rb_define_method(rb_cLlamaSamplerChainParams, "no_perf", RUBY_METHOD_FUNC(llama_sampler_chain_params_get_no_perf), 0);
   rb_define_method(rb_cLlamaSamplerChainParams, "no_perf=", RUBY_METHOD_FUNC(llama_sampler_chain_params_set_no_perf), 1);
 
   /* llama_chat_message */
-  VALUE rb_cLlamaChatMessage = rb_define_class_under(rb_mLLaMACpp, "LlamaChatMessage", rb_cObject);
+  VALUE rb_cLlamaChatMessage = rb_define_class_under(rb_mLlamaCpp, "LlamaChatMessage", rb_cObject);
   rb_define_alloc_func(rb_cLlamaChatMessage, llama_chat_message_alloc);
   rb_define_method(rb_cLlamaChatMessage, "role", RUBY_METHOD_FUNC(llama_chat_message_get_role), 0);
   rb_define_method(rb_cLlamaChatMessage, "content", RUBY_METHOD_FUNC(llama_chat_message_get_content), 0);
 
   /* llama_adapter_lora */
-  rb_cLlamaAdapterLora = rb_define_class_under(rb_mLLaMACpp, "LlamaAdapterLora", rb_cObject);
+  rb_cLlamaAdapterLora = rb_define_class_under(rb_mLlamaCpp, "LlamaAdapterLora", rb_cObject);
   rb_define_alloc_func(rb_cLlamaAdapterLora, llama_adapter_lora_wrapper_alloc);
 
   /* llama_backend_init */
-  rb_define_module_function(rb_mLLaMACpp, "llama_backend_init", rb_llama_backend_init, 0);
+  rb_define_module_function(rb_mLlamaCpp, "llama_backend_init", rb_llama_backend_init, 0);
 
   /* llama_backend_free */
-  rb_define_module_function(rb_mLLaMACpp, "llama_backend_free", rb_llama_backend_free, 0);
+  rb_define_module_function(rb_mLlamaCpp, "llama_backend_free", rb_llama_backend_free, 0);
 
   /* llama_numa_init */
-  rb_define_module_function(rb_mLLaMACpp, "llama_numa_init", rb_llama_numa_init, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_numa_init", rb_llama_numa_init, 1);
 
   /* TODO: llama_attach_threadpool */
   /* TODO: llama_detach_threadpool */
 
   /* llama_model_load_from_file */
-  rb_define_module_function(rb_mLLaMACpp, "llama_model_load_from_file", rb_llama_model_load_from_file, 2);
+  rb_define_module_function(rb_mLlamaCpp, "llama_model_load_from_file", rb_llama_model_load_from_file, 2);
 
   /* llama_model_free */
-  rb_define_module_function(rb_mLLaMACpp, "llama_model_free", rb_llama_model_free, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_model_free", rb_llama_model_free, 1);
 
   /* llama_init_from_model */
-  rb_define_module_function(rb_mLLaMACpp, "llama_init_from_model", rb_llama_init_from_model, 2);
+  rb_define_module_function(rb_mLlamaCpp, "llama_init_from_model", rb_llama_init_from_model, 2);
 
   /* llama_free */
-  rb_define_module_function(rb_mLLaMACpp, "llama_free", rb_llama_free, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_free", rb_llama_free, 1);
 
   /* llama_time_us */
-  rb_define_module_function(rb_mLLaMACpp, "llama_time_us", rb_llama_time_us, 0);
+  rb_define_module_function(rb_mLlamaCpp, "llama_time_us", rb_llama_time_us, 0);
 
   /* llama_max_devices */
-  rb_define_module_function(rb_mLLaMACpp, "llama_max_devices", rb_llama_max_devices, 0);
+  rb_define_module_function(rb_mLlamaCpp, "llama_max_devices", rb_llama_max_devices, 0);
 
   /* llama_supports_mmap */
-  rb_define_module_function(rb_mLLaMACpp, "llama_supports_mmap", rb_llama_supports_mmap, 0);
+  rb_define_module_function(rb_mLlamaCpp, "llama_supports_mmap", rb_llama_supports_mmap, 0);
 
   /* llama_supports_mlock */
-  rb_define_module_function(rb_mLLaMACpp, "llama_supports_mlock", rb_llama_supports_mlock, 0);
+  rb_define_module_function(rb_mLlamaCpp, "llama_supports_mlock", rb_llama_supports_mlock, 0);
 
   /* llama_supports_gpu_offload */
-  rb_define_module_function(rb_mLLaMACpp, "llama_supports_gpu_offload", rb_llama_supports_gpu_offload, 0);
+  rb_define_module_function(rb_mLlamaCpp, "llama_supports_gpu_offload", rb_llama_supports_gpu_offload, 0);
 
   /* llama_supports_rpc */
-  rb_define_module_function(rb_mLLaMACpp, "llama_supports_rpc", rb_llama_supports_rpc, 0);
+  rb_define_module_function(rb_mLlamaCpp, "llama_supports_rpc", rb_llama_supports_rpc, 0);
 
   /* llama_n_ctx */
-  rb_define_module_function(rb_mLLaMACpp, "llama_n_ctx", rb_llama_n_ctx, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_n_ctx", rb_llama_n_ctx, 1);
 
   /* llama_n_batch */
-  rb_define_module_function(rb_mLLaMACpp, "llama_n_batch", rb_llama_n_batch, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_n_batch", rb_llama_n_batch, 1);
 
   /* llama_n_ubatch */
-  rb_define_module_function(rb_mLLaMACpp, "llama_n_ubatch", rb_llama_n_ubatch, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_n_ubatch", rb_llama_n_ubatch, 1);
 
   /* llama_n_seq_max */
-  rb_define_module_function(rb_mLLaMACpp, "llama_n_seq_max", rb_llama_n_seq_max, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_n_seq_max", rb_llama_n_seq_max, 1);
 
   /* TODO: llama_get_model */
   /*
-  rb_define_module_function(rb_mLLaMACpp, "llama_get_model", rb_llama_get_model, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_get_model", rb_llama_get_model, 1);
   */
 
   /* llama_pooling_type */
-  rb_define_module_function(rb_mLLaMACpp, "llama_pooling_type", rb_llama_pooling_type, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_pooling_type", rb_llama_pooling_type, 1);
 
   /* llama_model_get_vocab */
-  rb_define_module_function(rb_mLLaMACpp, "llama_model_get_vocab", rb_llama_model_get_vocab, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_model_get_vocab", rb_llama_model_get_vocab, 1);
 
   /* llama_model_rope_type */
-  rb_define_module_function(rb_mLLaMACpp, "llama_model_rope_type", rb_llama_model_rope_type, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_model_rope_type", rb_llama_model_rope_type, 1);
 
   /* llama_model_n_ctx_train */
-  rb_define_module_function(rb_mLLaMACpp, "llama_model_n_ctx_train", rb_llama_model_n_ctx_train, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_model_n_ctx_train", rb_llama_model_n_ctx_train, 1);
 
   /* llama_model_n_embd */
-  rb_define_module_function(rb_mLLaMACpp, "llama_model_n_embd", rb_llama_model_n_embd, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_model_n_embd", rb_llama_model_n_embd, 1);
 
   /* llama_model_n_layer */
-  rb_define_module_function(rb_mLLaMACpp, "llama_model_n_layer", rb_llama_model_n_layer, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_model_n_layer", rb_llama_model_n_layer, 1);
 
   /* llama_model_n_head */
-  rb_define_module_function(rb_mLLaMACpp, "llama_model_n_head", rb_llama_model_n_head, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_model_n_head", rb_llama_model_n_head, 1);
 
   /* llama_model_rope_freq_scale_train */
-  rb_define_module_function(rb_mLLaMACpp, "llama_model_rope_freq_scale_train", rb_llama_model_rope_freq_scale_train, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_model_rope_freq_scale_train", rb_llama_model_rope_freq_scale_train, 1);
 
   /* llama_vocab_type */
-  rb_define_module_function(rb_mLLaMACpp, "llama_vocab_type", rb_llama_vocab_type, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_vocab_type", rb_llama_vocab_type, 1);
 
   /* llama_vocab_n_tokens */
-  rb_define_module_function(rb_mLLaMACpp, "llama_vocab_n_tokens", rb_llama_vocab_n_tokens, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_vocab_n_tokens", rb_llama_vocab_n_tokens, 1);
 
   /* TODO: llama_model_meta_val_str */
   /* TODO: llama_model_meta_count */
@@ -3547,56 +3547,56 @@ void Init_llama_cpp(void) {
   /* TODO: llama_model_meta_val_str_by_index */
 
   /* llama_model_desc */
-  rb_define_module_function(rb_mLLaMACpp, "llama_model_desc", rb_llama_model_desc, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_model_desc", rb_llama_model_desc, 1);
 
   /* llama_model_size */
-  rb_define_module_function(rb_mLLaMACpp, "llama_model_size", rb_llama_model_size, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_model_size", rb_llama_model_size, 1);
 
   /* TODO: llama_model_chat_template */
-  /* rb_define_module_function(rb_mLLaMACpp, "llama_model_chat_template", rb_llama_model_chat_template, 1); */
+  /* rb_define_module_function(rb_mLlamaCpp, "llama_model_chat_template", rb_llama_model_chat_template, 1); */
 
   /* llama_model_n_params */
-  rb_define_module_function(rb_mLLaMACpp, "llama_model_n_params", rb_llama_model_n_params, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_model_n_params", rb_llama_model_n_params, 1);
 
   /* llama_model_has_encoder */
-  rb_define_module_function(rb_mLLaMACpp, "llama_model_has_encoder", rb_llama_model_has_encoder, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_model_has_encoder", rb_llama_model_has_encoder, 1);
 
   /* llama_model_has_decoder */
-  rb_define_module_function(rb_mLLaMACpp, "llama_model_has_decoder", rb_llama_model_has_decoder, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_model_has_decoder", rb_llama_model_has_decoder, 1);
 
   /* llama_model_decoder_start_token */
-  rb_define_module_function(rb_mLLaMACpp, "llama_model_decoder_start_token", rb_llama_model_decoder_start_token, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_model_decoder_start_token", rb_llama_model_decoder_start_token, 1);
 
   /* llama_model_is_recurrent */
-  rb_define_module_function(rb_mLLaMACpp, "llama_model_is_recurrent", rb_llama_model_is_recurrent, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_model_is_recurrent", rb_llama_model_is_recurrent, 1);
 
   /* llama_model_quantize */
-  rb_define_module_function(rb_mLLaMACpp, "llama_model_quantize", rb_llama_model_quantize, 3);
+  rb_define_module_function(rb_mLlamaCpp, "llama_model_quantize", rb_llama_model_quantize, 3);
 
   /* llama_adapter_lora_init */
-  rb_define_module_function(rb_mLLaMACpp, "llama_adapter_lora_init", rb_llama_adapter_lora_init, 2);
+  rb_define_module_function(rb_mLlamaCpp, "llama_adapter_lora_init", rb_llama_adapter_lora_init, 2);
 
   /* llama_set_adapter_lora */
-  rb_define_module_function(rb_mLLaMACpp, "llama_set_adapter_lora", rb_llama_set_adapter_lora, 3);
+  rb_define_module_function(rb_mLlamaCpp, "llama_set_adapter_lora", rb_llama_set_adapter_lora, 3);
 
   /* llama_rm_adapter_lora */
-  rb_define_module_function(rb_mLLaMACpp, "llama_rm_adapter_lora", rb_llama_rm_adapter_lora, 2);
+  rb_define_module_function(rb_mLlamaCpp, "llama_rm_adapter_lora", rb_llama_rm_adapter_lora, 2);
 
   /* llama_clear_adapter_lora */
-  rb_define_module_function(rb_mLLaMACpp, "llama_clear_adapter_lora", rb_llama_clear_adapter_lora, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_clear_adapter_lora", rb_llama_clear_adapter_lora, 1);
 
   /* llama_adapter_lora_free */
-  rb_define_module_function(rb_mLLaMACpp, "llama_adapter_lora_free", rb_llama_adapter_lora_free, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_adapter_lora_free", rb_llama_adapter_lora_free, 1);
 
   /* TODO: llama_apply_adapter_cvec */
 
   /* struct llama_kv_cache_view_cell */
-  VALUE rb_cLlamaKvCacheViewCell = rb_define_class_under(rb_mLLaMACpp, "LlamaKvCacheViewCell", rb_cObject);
+  VALUE rb_cLlamaKvCacheViewCell = rb_define_class_under(rb_mLlamaCpp, "LlamaKvCacheViewCell", rb_cObject);
   rb_define_alloc_func(rb_cLlamaKvCacheViewCell, llama_kv_cache_view_cell_alloc);
   rb_define_method(rb_cLlamaKvCacheViewCell, "pos", RUBY_METHOD_FUNC(llama_kv_cache_view_cell_get_pos), 0);
 
   /* struct llama_kv_cache_view */
-  rb_cLlamaKvCacheView = rb_define_class_under(rb_mLLaMACpp, "LlamaKvCacheView", rb_cObject);
+  rb_cLlamaKvCacheView = rb_define_class_under(rb_mLlamaCpp, "LlamaKvCacheView", rb_cObject);
   rb_define_alloc_func(rb_cLlamaKvCacheView, llama_kv_cache_view_alloc);
   rb_define_method(rb_cLlamaKvCacheView, "n_cells", RUBY_METHOD_FUNC(llama_kv_cache_view_get_n_cells), 0);
   rb_define_method(rb_cLlamaKvCacheView, "n_seq_max", RUBY_METHOD_FUNC(llama_kv_cache_view_get_n_seq_max), 0);
@@ -3606,52 +3606,52 @@ void Init_llama_cpp(void) {
   rb_define_method(rb_cLlamaKvCacheView, "max_contiguous_idx", RUBY_METHOD_FUNC(llama_kv_cache_view_get_max_contiguous_idx), 0);
 
   /* llama_kv_cache_view_init */
-  rb_define_module_function(rb_mLLaMACpp, "llama_kv_cache_view_init", rb_llama_kv_cache_view_init, 2);
+  rb_define_module_function(rb_mLlamaCpp, "llama_kv_cache_view_init", rb_llama_kv_cache_view_init, 2);
 
   /* llama_kv_cache_view_free */
-  rb_define_module_function(rb_mLLaMACpp, "llama_kv_cache_view_free", rb_llama_kv_cache_view_free, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_kv_cache_view_free", rb_llama_kv_cache_view_free, 1);
 
   /* llama_kv_cache_view_update */
-  rb_define_module_function(rb_mLLaMACpp, "llama_kv_cache_view_update", rb_llama_kv_cache_view_update, 2);
+  rb_define_module_function(rb_mLlamaCpp, "llama_kv_cache_view_update", rb_llama_kv_cache_view_update, 2);
 
   /* llama_get_kv_cache_token_count */
-  rb_define_module_function(rb_mLLaMACpp, "llama_get_kv_cache_token_count", rb_llama_get_kv_cache_token_count, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_get_kv_cache_token_count", rb_llama_get_kv_cache_token_count, 1);
 
   /* llama_get_kv_cache_used_cells */
-  rb_define_module_function(rb_mLLaMACpp, "llama_get_kv_cache_used_cells", rb_llama_get_kv_cache_used_cells, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_get_kv_cache_used_cells", rb_llama_get_kv_cache_used_cells, 1);
 
   /* llama_kv_cache_clear */
-  rb_define_module_function(rb_mLLaMACpp, "llama_kv_cache_clear", rb_llama_kv_cache_clear, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_kv_cache_clear", rb_llama_kv_cache_clear, 1);
 
   /* llama_kv_cache_seq_rm */
-  rb_define_module_function(rb_mLLaMACpp, "llama_kv_cache_seq_rm", rb_llama_kv_cache_seq_rm, 4);
+  rb_define_module_function(rb_mLlamaCpp, "llama_kv_cache_seq_rm", rb_llama_kv_cache_seq_rm, 4);
 
   /* llama_kv_cache_seq_cp */
-  rb_define_module_function(rb_mLLaMACpp, "llama_kv_cache_seq_cp", rb_llama_kv_cache_seq_cp, 5);
+  rb_define_module_function(rb_mLlamaCpp, "llama_kv_cache_seq_cp", rb_llama_kv_cache_seq_cp, 5);
 
   /* llama_kv_cache_seq_keep */
-  rb_define_module_function(rb_mLLaMACpp, "llama_kv_cache_seq_keep", rb_llama_kv_cache_seq_keep, 2);
+  rb_define_module_function(rb_mLlamaCpp, "llama_kv_cache_seq_keep", rb_llama_kv_cache_seq_keep, 2);
 
   /* llama_kv_cache_seq_add */
-  rb_define_module_function(rb_mLLaMACpp, "llama_kv_cache_seq_add", rb_llama_kv_cache_seq_add, 5);
+  rb_define_module_function(rb_mLlamaCpp, "llama_kv_cache_seq_add", rb_llama_kv_cache_seq_add, 5);
 
   /* llama_kv_cache_seq_div */
-  rb_define_module_function(rb_mLLaMACpp, "llama_kv_cache_seq_div", rb_llama_kv_cache_seq_div, 5);
+  rb_define_module_function(rb_mLlamaCpp, "llama_kv_cache_seq_div", rb_llama_kv_cache_seq_div, 5);
 
   /* llama_kv_cache_seq_pos_max */
-  rb_define_module_function(rb_mLLaMACpp, "llama_kv_cache_seq_pos_max", rb_llama_kv_cache_seq_pos_max, 2);
+  rb_define_module_function(rb_mLlamaCpp, "llama_kv_cache_seq_pos_max", rb_llama_kv_cache_seq_pos_max, 2);
 
   /* llama_kv_cache_defrag */
-  rb_define_module_function(rb_mLLaMACpp, "llama_kv_cache_defrag", rb_llama_kv_cache_defrag, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_kv_cache_defrag", rb_llama_kv_cache_defrag, 1);
 
   /* llama_kv_cache_update */
-  rb_define_module_function(rb_mLLaMACpp, "llama_kv_cache_update", rb_llama_kv_cache_update, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_kv_cache_update", rb_llama_kv_cache_update, 1);
 
   /* llama_kv_cache_can_shift */
-  rb_define_module_function(rb_mLLaMACpp, "llama_kv_cache_can_shift", rb_llama_kv_cache_can_shift, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_kv_cache_can_shift", rb_llama_kv_cache_can_shift, 1);
 
   /* llama_state_get_size */
-  rb_define_module_function(rb_mLLaMACpp, "llama_state_get_size", rb_llama_state_get_size, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_state_get_size", rb_llama_state_get_size, 1);
 
   /* TODO: llama_state_get_dat */
   /* TODO: llama_state_set_data */
@@ -3659,7 +3659,7 @@ void Init_llama_cpp(void) {
   /* TODO: llama_state_save_file */
 
   /* llama_state_seq_get_size */
-  rb_define_module_function(rb_mLLaMACpp, "llama_state_seq_get_size", rb_llama_state_seq_get_size, 2);
+  rb_define_module_function(rb_mLlamaCpp, "llama_state_seq_get_size", rb_llama_state_seq_get_size, 2);
 
   /* TODO: llama_state_seq_get_data */
   /* TODO: llama_state_seq_set_data */
@@ -3667,39 +3667,39 @@ void Init_llama_cpp(void) {
   /* TODO: llama_state_seq_load_file */
 
   /* llama_batch_get_one */
-  rb_define_module_function(rb_mLLaMACpp, "llama_batch_get_one", rb_llama_batch_get_one, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_batch_get_one", rb_llama_batch_get_one, 1);
 
   /* llama_batch_init */
-  rb_define_module_function(rb_mLLaMACpp, "llama_batch_init", rb_llama_batch_init, 3);
+  rb_define_module_function(rb_mLlamaCpp, "llama_batch_init", rb_llama_batch_init, 3);
 
   /* llama_batch_free */
-  rb_define_module_function(rb_mLLaMACpp, "llama_batch_free", rb_llama_batch_free, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_batch_free", rb_llama_batch_free, 1);
 
   /* llama_encode */
-  rb_define_module_function(rb_mLLaMACpp, "llama_encode", rb_llama_encode, 2);
+  rb_define_module_function(rb_mLlamaCpp, "llama_encode", rb_llama_encode, 2);
 
   /* llama_decode */
-  rb_define_module_function(rb_mLLaMACpp, "llama_decode", rb_llama_decode, 2);
+  rb_define_module_function(rb_mLlamaCpp, "llama_decode", rb_llama_decode, 2);
 
   /* llama_set_n_threads */
-  rb_define_module_function(rb_mLLaMACpp, "llama_set_n_threads", rb_llama_set_n_threads, 3);
+  rb_define_module_function(rb_mLlamaCpp, "llama_set_n_threads", rb_llama_set_n_threads, 3);
 
   /* llama_n_threads */
-  rb_define_module_function(rb_mLLaMACpp, "llama_n_threads", rb_llama_n_threads, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_n_threads", rb_llama_n_threads, 1);
 
   /* llama_n_threads_batch */
-  rb_define_module_function(rb_mLLaMACpp, "llama_n_threads_batch", rb_llama_n_threads_batch, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_n_threads_batch", rb_llama_n_threads_batch, 1);
 
   /* llama_set_embeddings */
-  rb_define_module_function(rb_mLLaMACpp, "llama_set_embeddings", rb_llama_set_embeddings, 2);
+  rb_define_module_function(rb_mLlamaCpp, "llama_set_embeddings", rb_llama_set_embeddings, 2);
 
   /* llama_set_causal_attn */
-  rb_define_module_function(rb_mLLaMACpp, "llama_set_causal_attn", rb_llama_set_causal_attn, 2);
+  rb_define_module_function(rb_mLlamaCpp, "llama_set_causal_attn", rb_llama_set_causal_attn, 2);
 
   /* llama_set_abort_callback */
 
   /* llama_synchronize */
-  rb_define_module_function(rb_mLLaMACpp, "llama_synchronize", rb_llama_synchronize, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_synchronize", rb_llama_synchronize, 1);
 
   /* TODO: llama_get_logits */
   /* TODO: llama_get_logits_ith */
@@ -3708,70 +3708,70 @@ void Init_llama_cpp(void) {
   /* TODO: llama_get_embeddings_seq */
 
   /* llama_vocab_get_text */
-  rb_define_module_function(rb_mLLaMACpp, "llama_vocab_get_text", rb_llama_vocab_get_text, 2);
+  rb_define_module_function(rb_mLlamaCpp, "llama_vocab_get_text", rb_llama_vocab_get_text, 2);
 
   /* llama_vocab_get_score */
-  rb_define_module_function(rb_mLLaMACpp, "llama_vocab_get_score", rb_llama_vocab_get_score, 2);
+  rb_define_module_function(rb_mLlamaCpp, "llama_vocab_get_score", rb_llama_vocab_get_score, 2);
 
   /* llama_vocab_get_attr */
-  rb_define_module_function(rb_mLLaMACpp, "llama_vocab_get_attr", rb_llama_vocab_get_attr, 2);
+  rb_define_module_function(rb_mLlamaCpp, "llama_vocab_get_attr", rb_llama_vocab_get_attr, 2);
 
   /* llama_vocab_is_eog */
-  rb_define_module_function(rb_mLLaMACpp, "llama_vocab_is_eog", rb_llama_vocab_is_eog, 2);
+  rb_define_module_function(rb_mLlamaCpp, "llama_vocab_is_eog", rb_llama_vocab_is_eog, 2);
 
   /* llama_vocab_is_control */
-  rb_define_module_function(rb_mLLaMACpp, "llama_vocab_is_control", rb_llama_vocab_is_control, 2);
+  rb_define_module_function(rb_mLlamaCpp, "llama_vocab_is_control", rb_llama_vocab_is_control, 2);
 
   /* llama_vocab_bos */
-  rb_define_module_function(rb_mLLaMACpp, "llama_vocab_bos", rb_llama_vocab_bos, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_vocab_bos", rb_llama_vocab_bos, 1);
 
   /* llama_vocab_eos */
-  rb_define_module_function(rb_mLLaMACpp, "llama_vocab_eos", rb_llama_vocab_eos, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_vocab_eos", rb_llama_vocab_eos, 1);
 
   /* llama_vocab_eot */
-  rb_define_module_function(rb_mLLaMACpp, "llama_vocab_eot", rb_llama_vocab_eot, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_vocab_eot", rb_llama_vocab_eot, 1);
 
   /* llama_vocab_sep */
-  rb_define_module_function(rb_mLLaMACpp, "llama_vocab_sep", rb_llama_vocab_sep, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_vocab_sep", rb_llama_vocab_sep, 1);
 
   /* llama_vocab_nl */
-  rb_define_module_function(rb_mLLaMACpp, "llama_vocab_nl", rb_llama_vocab_nl, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_vocab_nl", rb_llama_vocab_nl, 1);
 
   /* llama_vocab_pad */
-  rb_define_module_function(rb_mLLaMACpp, "llama_vocab_pad", rb_llama_vocab_pad, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_vocab_pad", rb_llama_vocab_pad, 1);
 
   /* llama_vocab_get_add_bos */
-  rb_define_module_function(rb_mLLaMACpp, "llama_vocab_get_add_bos", rb_llama_vocab_get_add_bos, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_vocab_get_add_bos", rb_llama_vocab_get_add_bos, 1);
 
   /* llama_vocab_get_add_eos */
-  rb_define_module_function(rb_mLLaMACpp, "llama_vocab_get_add_eos", rb_llama_vocab_get_add_eos, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_vocab_get_add_eos", rb_llama_vocab_get_add_eos, 1);
 
   /* llama_vocab_fim_pre */
-  rb_define_module_function(rb_mLLaMACpp, "llama_vocab_fim_pre", rb_llama_vocab_fim_pre, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_vocab_fim_pre", rb_llama_vocab_fim_pre, 1);
 
   /* llama_vocab_fim_suf */
-  rb_define_module_function(rb_mLLaMACpp, "llama_vocab_fim_suf", rb_llama_vocab_fim_suf, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_vocab_fim_suf", rb_llama_vocab_fim_suf, 1);
 
   /* llama_vocab_fim_mid */
-  rb_define_module_function(rb_mLLaMACpp, "llama_vocab_fim_mid", rb_llama_vocab_fim_mid, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_vocab_fim_mid", rb_llama_vocab_fim_mid, 1);
 
   /* llama_vocab_fim_pad */
-  rb_define_module_function(rb_mLLaMACpp, "llama_vocab_fim_pad", rb_llama_vocab_fim_pad, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_vocab_fim_pad", rb_llama_vocab_fim_pad, 1);
 
   /* llama_vocab_fim_rep */
-  rb_define_module_function(rb_mLLaMACpp, "llama_vocab_fim_rep", rb_llama_vocab_fim_rep, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_vocab_fim_rep", rb_llama_vocab_fim_rep, 1);
 
   /* llama_vocab_fim_sep */
-  rb_define_module_function(rb_mLLaMACpp, "llama_vocab_fim_sep", rb_llama_vocab_fim_sep, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_vocab_fim_sep", rb_llama_vocab_fim_sep, 1);
 
   /* llama_tokenize */
-  rb_define_module_function(rb_mLLaMACpp, "llama_tokenize", rb_llama_tokenize, 5);
+  rb_define_module_function(rb_mLlamaCpp, "llama_tokenize", rb_llama_tokenize, 5);
 
   /* llama_token_to_piece */
-  rb_define_module_function(rb_mLLaMACpp, "llama_token_to_piece", rb_llama_token_to_piece, 4);
+  rb_define_module_function(rb_mLlamaCpp, "llama_token_to_piece", rb_llama_token_to_piece, 4);
 
   /* llama_detokenize */
-  rb_define_module_function(rb_mLLaMACpp, "llama_detokenize", rb_llama_detokenize, 4);
+  rb_define_module_function(rb_mLlamaCpp, "llama_detokenize", rb_llama_detokenize, 4);
 
   /* TODO: llama_chat_apply_template */
   /* TODO: llama_chat_builtin_templates */
@@ -3779,105 +3779,105 @@ void Init_llama_cpp(void) {
   /* TODO: struct llama_sampler_i */
 
   /* llama_sampler */
-  rb_cLlamaSampler = rb_define_class_under(rb_mLLaMACpp, "LlamaSampler", rb_cObject);
+  rb_cLlamaSampler = rb_define_class_under(rb_mLlamaCpp, "LlamaSampler", rb_cObject);
   rb_define_alloc_func(rb_cLlamaSampler, llama_sampler_alloc);
 
   /* llama_sampler_name */
-  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_name", rb_llama_sampler_name, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_sampler_name", rb_llama_sampler_name, 1);
 
   /* llama_sampler_accept */
-  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_accept", rb_llama_sampler_accept, 2);
+  rb_define_module_function(rb_mLlamaCpp, "llama_sampler_accept", rb_llama_sampler_accept, 2);
 
   /* llama_sampler_apply */
-  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_apply", rb_llama_sampler_apply, 2);
+  rb_define_module_function(rb_mLlamaCpp, "llama_sampler_apply", rb_llama_sampler_apply, 2);
 
   /* llama_sampler_reset */
-  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_reset", rb_llama_sampler_reset, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_sampler_reset", rb_llama_sampler_reset, 1);
 
   /* llama_sampler_clone */
-  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_clone", rb_llama_sampler_clone, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_sampler_clone", rb_llama_sampler_clone, 1);
 
   /* llama_sampler_free */
-  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_free", rb_llama_sampler_free, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_sampler_free", rb_llama_sampler_free, 1);
 
   /* llama_sampler_chain_init */
-  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_chain_init", rb_llama_sampler_chain_init, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_sampler_chain_init", rb_llama_sampler_chain_init, 1);
 
   /* llama_sampler_chain_add */
-  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_chain_add", rb_llama_sampler_chain_add, 2);
+  rb_define_module_function(rb_mLlamaCpp, "llama_sampler_chain_add", rb_llama_sampler_chain_add, 2);
 
   /* llama_sampler_chain_get */
-  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_chain_get", rb_llama_sampler_chain_get, 2);
+  rb_define_module_function(rb_mLlamaCpp, "llama_sampler_chain_get", rb_llama_sampler_chain_get, 2);
 
   /* llama_sampler_chain_n */
-  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_chain_n", rb_llama_sampler_chain_n, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_sampler_chain_n", rb_llama_sampler_chain_n, 1);
 
   /* llama_sampler_chain_remove */
-  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_chain_remove", rb_llama_sampler_chain_remove, 2);
+  rb_define_module_function(rb_mLlamaCpp, "llama_sampler_chain_remove", rb_llama_sampler_chain_remove, 2);
 
   /* llama_sampler_init_greedy */
-  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_init_greedy", rb_llama_sampler_init_greedy, 0);
+  rb_define_module_function(rb_mLlamaCpp, "llama_sampler_init_greedy", rb_llama_sampler_init_greedy, 0);
 
   /* llama_sampler_init_dist */
-  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_init_dist", rb_llama_sampler_init_dist, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_sampler_init_dist", rb_llama_sampler_init_dist, 1);
 
   /* llama_sampler_init_top_k */
-  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_init_top_k", rb_llama_sampler_init_top_k, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_sampler_init_top_k", rb_llama_sampler_init_top_k, 1);
 
   /* llama_sampler_init_top_p */
-  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_init_top_p", rb_llama_sampler_init_top_p, 2);
+  rb_define_module_function(rb_mLlamaCpp, "llama_sampler_init_top_p", rb_llama_sampler_init_top_p, 2);
 
   /* llama_sampler_init_min_p */
-  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_init_min_p", rb_llama_sampler_init_min_p, 2);
+  rb_define_module_function(rb_mLlamaCpp, "llama_sampler_init_min_p", rb_llama_sampler_init_min_p, 2);
 
   /* llama_sampler_init_typical */
-  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_init_typical", rb_llama_sampler_init_typical, 2);
+  rb_define_module_function(rb_mLlamaCpp, "llama_sampler_init_typical", rb_llama_sampler_init_typical, 2);
 
   /* llama_sampler_init_temp */
-  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_init_temp", rb_llama_sampler_init_temp, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_sampler_init_temp", rb_llama_sampler_init_temp, 1);
 
   /* llama_sampler_init_temp_ext */
-  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_init_temp_ext", rb_llama_sampler_init_temp_ext, 3);
+  rb_define_module_function(rb_mLlamaCpp, "llama_sampler_init_temp_ext", rb_llama_sampler_init_temp_ext, 3);
 
   /* llama_sampler_init_xtc */
-  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_init_xtc", rb_llama_sampler_init_xtc, 4);
+  rb_define_module_function(rb_mLlamaCpp, "llama_sampler_init_xtc", rb_llama_sampler_init_xtc, 4);
 
   /* llama_sampler_init_mirostat */
-  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_init_mirostat", rb_llama_sampler_init_mirostat, 5);
+  rb_define_module_function(rb_mLlamaCpp, "llama_sampler_init_mirostat", rb_llama_sampler_init_mirostat, 5);
 
   /* llama_sampler_init_mirostat_v2 */
-  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_init_mirostat_v2", rb_llama_sampler_init_mirostat_v2, 3);
+  rb_define_module_function(rb_mLlamaCpp, "llama_sampler_init_mirostat_v2", rb_llama_sampler_init_mirostat_v2, 3);
 
   /* llama_sampler_init_grammar */
-  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_init_grammar", rb_llama_sampler_init_grammar, 3);
+  rb_define_module_function(rb_mLlamaCpp, "llama_sampler_init_grammar", rb_llama_sampler_init_grammar, 3);
 
   /* llama_sampler_init_penalties */
-  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_init_penalties", rb_llama_sampler_init_penalties, 4);
+  rb_define_module_function(rb_mLlamaCpp, "llama_sampler_init_penalties", rb_llama_sampler_init_penalties, 4);
 
   /* TODO: llama_sampler_init_dry */
 
   /* llama_sampler_init_logit_bias */
-  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_init_logit_bias", rb_llama_sampler_init_logit_bias, 3);
+  rb_define_module_function(rb_mLlamaCpp, "llama_sampler_init_logit_bias", rb_llama_sampler_init_logit_bias, 3);
 
   /* llama_sampler_init_infill */
-  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_init_infill", rb_llama_sampler_init_infill, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_sampler_init_infill", rb_llama_sampler_init_infill, 1);
 
   /* llama_sampler_get_seed */
-  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_get_seed", rb_llama_sampler_get_seed, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_sampler_get_seed", rb_llama_sampler_get_seed, 1);
 
   /* llama_sampler_sample */
-  rb_define_module_function(rb_mLLaMACpp, "llama_sampler_sample", rb_llama_sampler_sample, 3);
+  rb_define_module_function(rb_mLlamaCpp, "llama_sampler_sample", rb_llama_sampler_sample, 3);
 
   /* TODO: llama_split_path */
   /* TODO: llama_split_prefix */
 
   /* llama_print_system_info */
-  rb_define_module_function(rb_mLLaMACpp, "llama_print_system_info", rb_llama_print_system_info, 0);
+  rb_define_module_function(rb_mLlamaCpp, "llama_print_system_info", rb_llama_print_system_info, 0);
 
   /* TODO: llama_log_set */
 
   /* struct llama_perf_context_data */
-  rb_cLlamaPerfContextData = rb_define_class_under(rb_mLLaMACpp, "LlamaPerfContextData", rb_cObject);
+  rb_cLlamaPerfContextData = rb_define_class_under(rb_mLlamaCpp, "LlamaPerfContextData", rb_cObject);
   rb_define_alloc_func(rb_cLlamaPerfContextData, llama_perf_context_data_alloc);
   rb_define_method(rb_cLlamaPerfContextData, "t_start_ms", RUBY_METHOD_FUNC(llama_perf_context_data_get_t_start_ms), 0);
   rb_define_method(rb_cLlamaPerfContextData, "t_load_ms", RUBY_METHOD_FUNC(llama_perf_context_data_get_t_load_ms), 0);
@@ -3887,26 +3887,26 @@ void Init_llama_cpp(void) {
   rb_define_method(rb_cLlamaPerfContextData, "n_eval", RUBY_METHOD_FUNC(llama_perf_context_data_get_n_eval), 0);
 
   /* struct llama_perf_sampler_data */
-  rb_cLlamaPerfSamplerData = rb_define_class_under(rb_mLLaMACpp, "LlamaPerfSamplerData", rb_cObject);
+  rb_cLlamaPerfSamplerData = rb_define_class_under(rb_mLlamaCpp, "LlamaPerfSamplerData", rb_cObject);
   rb_define_alloc_func(rb_cLlamaPerfSamplerData, llama_perf_sampler_data_alloc);
   rb_define_method(rb_cLlamaPerfSamplerData, "t_sample_ms", RUBY_METHOD_FUNC(llama_perf_sampler_data_get_t_sample_ms), 0);
   rb_define_method(rb_cLlamaPerfSamplerData, "n_sample", RUBY_METHOD_FUNC(llama_perf_sampler_data_get_n_sample), 0);
 
   /* llama_perf_context */
-  rb_define_module_function(rb_mLLaMACpp, "llama_perf_context", rb_llama_perf_context, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_perf_context", rb_llama_perf_context, 1);
 
   /* llama_perf_context_print */
-  rb_define_module_function(rb_mLLaMACpp, "llama_perf_context_print", rb_llama_perf_context_print, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_perf_context_print", rb_llama_perf_context_print, 1);
 
   /* llama_perf_context_reset */
-  rb_define_module_function(rb_mLLaMACpp, "llama_perf_context_reset", rb_llama_perf_context_reset, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_perf_context_reset", rb_llama_perf_context_reset, 1);
 
   /* llama_perf_sampler */
-  rb_define_module_function(rb_mLLaMACpp, "llama_perf_sampler", rb_llama_perf_sampler, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_perf_sampler", rb_llama_perf_sampler, 1);
 
   /* llama_perf_sampler_print */
-  rb_define_module_function(rb_mLLaMACpp, "llama_perf_sampler_print", rb_llama_perf_sampler_print, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_perf_sampler_print", rb_llama_perf_sampler_print, 1);
 
   /* llama_perf_sampler_reset */
-  rb_define_module_function(rb_mLLaMACpp, "llama_perf_sampler_reset", rb_llama_perf_sampler_reset, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_perf_sampler_reset", rb_llama_perf_sampler_reset, 1);
 }
