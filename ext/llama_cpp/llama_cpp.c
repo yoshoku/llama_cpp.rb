@@ -297,13 +297,41 @@ static VALUE llama_model_kv_override_alloc(VALUE self) {
   return TypedData_Wrap_Struct(self, &llama_model_kv_override_type, data);
 }
 
-/*
 static struct llama_model_kv_override* get_llama_model_kv_override(VALUE self) {
   struct llama_model_kv_override* data = NULL;
   TypedData_Get_Struct(self, struct llama_model_kv_override, &llama_model_kv_override_type, data);
   return data;
 }
-*/
+
+static VALUE llama_model_kv_override_get_tag(VALUE self) {
+  struct llama_model_kv_override* data = get_llama_model_kv_override(self);
+  return INT2NUM(data->tag);
+}
+
+static VALUE llama_model_kv_override_get_key(VALUE self) {
+  struct llama_model_kv_override* data = get_llama_model_kv_override(self);
+  return rb_utf8_str_new_cstr(data->key);
+}
+
+static VALUE llama_model_kv_override_get_val_i64(VALUE self) {
+  struct llama_model_kv_override* data = get_llama_model_kv_override(self);
+  return LONG2NUM(data->val_i64);
+}
+
+static VALUE llama_model_kv_override_get_val_f64(VALUE self) {
+  struct llama_model_kv_override* data = get_llama_model_kv_override(self);
+  return DBL2NUM(data->val_f64);
+}
+
+static VALUE llama_model_kv_override_get_val_bool(VALUE self) {
+  struct llama_model_kv_override* data = get_llama_model_kv_override(self);
+  return data->val_bool ? Qtrue : Qfalse;
+}
+
+static VALUE llama_model_kv_override_get_val_str(VALUE self) {
+  struct llama_model_kv_override* data = get_llama_model_kv_override(self);
+  return rb_utf8_str_new_cstr(data->val_str);
+}
 
 /* struct llama_model_params */
 static void llama_model_params_free(void *ptr) {
@@ -3284,6 +3312,13 @@ void Init_llama_cpp(void) {
   /* llama_model_kv_override */
   VALUE rb_cLlamaModelKvOverride = rb_define_class_under(rb_mLLaMACpp, "LlamaModelKvOverride", rb_cObject);
   rb_define_alloc_func(rb_cLlamaModelKvOverride, llama_model_kv_override_alloc);
+  rb_define_method(rb_cLlamaModelKvOverride, "tag", RUBY_METHOD_FUNC(llama_model_kv_override_get_tag), 0);
+  rb_define_method(rb_cLlamaModelKvOverride, "key", RUBY_METHOD_FUNC(llama_model_kv_override_get_key), 0);
+  rb_define_method(rb_cLlamaModelKvOverride, "val_i64", RUBY_METHOD_FUNC(llama_model_kv_override_get_val_i64), 0);
+  rb_define_method(rb_cLlamaModelKvOverride, "val_f64", RUBY_METHOD_FUNC(llama_model_kv_override_get_val_f64), 0);
+  rb_define_method(rb_cLlamaModelKvOverride, "val_bool", RUBY_METHOD_FUNC(llama_model_kv_override_get_val_bool), 0);
+  rb_define_method(rb_cLlamaModelKvOverride, "val_str", RUBY_METHOD_FUNC(llama_model_kv_override_get_val_str), 0);
+
 
   /* llama_model_params */
   rb_cLlamaModelParams = rb_define_class_under(rb_mLLaMACpp, "LlamaModelParams", rb_cObject);
