@@ -2361,25 +2361,33 @@ static VALUE rb_llama_tokenize(VALUE self, VALUE vocab, VALUE text, VALUE n_toke
     rb_raise(rb_eArgError, "text must not be empty");
     return Qnil;
   }
-  if (n_tokens_max_ <= 0) {
-    n_tokens_max_ = text_len + (add_special_ ? 1 : 0);
-  }
 
-  llama_token* tokens = (llama_token*)ruby_xmalloc(sizeof(llama_token) * n_tokens_max_);
+  llama_token* tokens = n_tokens_max <= 0 ? NULL : (llama_token*)ruby_xmalloc(sizeof(llama_token) * n_tokens_max_);
   const int32_t n_tokens = llama_tokenize(vocab_wrapper->vocab, text_, text_len, tokens, n_tokens_max_, add_special_, parse_special_);
 
   if (n_tokens < 0) {
-    ruby_xfree(tokens);
-    rb_raise(rb_eRuntimeError, "Failed to tokenize. The number of tokens (%d) is greater than n_max_tokens.", -n_tokens);
-    return Qnil;
+    if (tokens != NULL) {
+      ruby_xfree(tokens);
+    }
+    VALUE ret = rb_ary_new2(2);
+    rb_ary_store(ret, 0, INT2NUM(n_tokens));
+    rb_ary_store(ret, 1, Qnil);
+    return ret;
   }
 
-  VALUE ret = rb_ary_new2(n_tokens);
+  VALUE tokens_arr = rb_ary_new2(n_tokens);
   for (int i = 0; i < n_tokens; i++) {
-    rb_ary_store(ret, i, INT2NUM(tokens[i]));
+    rb_ary_store(tokens_arr, i, INT2NUM(tokens[i]));
   }
 
-  ruby_xfree(tokens);
+  if (tokens != NULL) {
+    ruby_xfree(tokens);
+  }
+
+  VALUE ret = rb_ary_new2(2);
+  rb_ary_store(ret, 0, INT2NUM(n_tokens));
+  rb_ary_store(ret, 1, tokens_arr);
+
   RB_GC_GUARD(vocab);
   RB_GC_GUARD(text);
 
