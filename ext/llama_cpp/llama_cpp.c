@@ -55,11 +55,12 @@ static llama_vocab_wrapper* get_llama_vocab_wrapper(VALUE self) {
 /* llama_model wrapper */
 typedef struct {
   struct llama_model* model;
+  bool copied;
 } llama_model_wrapper;
 
 static void llama_model_wrapper_free(void *ptr) {
   llama_model_wrapper* data = (llama_model_wrapper*)ptr;
-  if (data->model != NULL) {
+  if (data->model != NULL && data->copied == false) {
     llama_model_free(data->model);
   }
   ruby_xfree(ptr);
@@ -82,6 +83,7 @@ static rb_data_type_t llama_model_wrapper_data_type = {
 static VALUE llama_model_wrapper_alloc(VALUE self) {
   llama_model_wrapper* data = (llama_model_wrapper*)ruby_xmalloc(sizeof(llama_model_wrapper));
   data->model = NULL;
+  data->copied = false;
   return TypedData_Wrap_Struct(self, &llama_model_wrapper_data_type, data);
 }
 
@@ -1201,7 +1203,6 @@ static VALUE rb_llama_n_seq_max(VALUE self, VALUE ctx) {
 }
 
 /* llama_get_model */
-/*
 static VALUE rb_llama_get_model(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a Context");
@@ -1209,10 +1210,10 @@ static VALUE rb_llama_get_model(VALUE self, VALUE ctx) {
   }
   llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
   llama_model_wrapper* model_wrapper = (llama_model_wrapper*)ruby_xmalloc(sizeof(llama_model_wrapper));
-  model_wrapper->model = llama_get_model(context_wrapper->context);
+  model_wrapper->model = (struct llama_model*)llama_get_model(context_wrapper->context);
+  model_wrapper->copied = true;
   return TypedData_Wrap_Struct(rb_cLlamaModel, &llama_model_wrapper_data_type, model_wrapper);
 }
-*/
 
 /* llama_pooling_type */
 static VALUE rb_llama_pooling_type(VALUE self, VALUE ctx) {
@@ -3517,9 +3518,7 @@ void Init_llama_cpp(void) {
   rb_define_module_function(rb_mLlamaCpp, "llama_n_seq_max", rb_llama_n_seq_max, 1);
 
   /* TODO: llama_get_model */
-  /*
   rb_define_module_function(rb_mLlamaCpp, "llama_get_model", rb_llama_get_model, 1);
-  */
 
   /* llama_pooling_type */
   rb_define_module_function(rb_mLlamaCpp, "llama_pooling_type", rb_llama_pooling_type, 1);
