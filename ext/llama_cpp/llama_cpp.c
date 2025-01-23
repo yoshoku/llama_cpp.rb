@@ -20,6 +20,7 @@ VALUE rb_cLlamaPerfSamplerData;
 /* llama_vocab wrapper */
 typedef struct {
   struct llama_vocab* vocab;
+  bool copied;
 } llama_vocab_wrapper;
 
 static void llama_vocab_wrapper_free(void *ptr) {
@@ -43,6 +44,7 @@ static rb_data_type_t llama_vocab_wrapper_data_type = {
 static VALUE llama_vocab_wrapper_alloc(VALUE self) {
   llama_vocab_wrapper* data = (llama_vocab_wrapper*)ruby_xmalloc(sizeof(llama_vocab_wrapper));
   data->vocab = NULL;
+  data->copied = false;
   return TypedData_Wrap_Struct(self, &llama_vocab_wrapper_data_type, data);
 }
 
@@ -1212,6 +1214,7 @@ static VALUE rb_llama_get_model(VALUE self, VALUE ctx) {
   llama_model_wrapper* model_wrapper = (llama_model_wrapper*)ruby_xmalloc(sizeof(llama_model_wrapper));
   model_wrapper->model = (struct llama_model*)llama_get_model(context_wrapper->context);
   model_wrapper->copied = true;
+  RB_GC_GUARD(ctx);
   return TypedData_Wrap_Struct(rb_cLlamaModel, &llama_model_wrapper_data_type, model_wrapper);
 }
 
@@ -1226,7 +1229,6 @@ static VALUE rb_llama_pooling_type(VALUE self, VALUE ctx) {
 }
 
 /* llama_model_get_vocab */
-/*
 static VALUE rb_llama_model_get_vocab(VALUE self, VALUE model) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
     rb_raise(rb_eArgError, "model must be a LlamaModel");
@@ -1235,10 +1237,10 @@ static VALUE rb_llama_model_get_vocab(VALUE self, VALUE model) {
   llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
   llama_vocab_wrapper* vocab_wrapper = (llama_vocab_wrapper*)ruby_xmalloc(sizeof(llama_vocab_wrapper));
   vocab_wrapper->vocab = (struct llama_vocab*)llama_model_get_vocab(model_wrapper->model);
+  vocab_wrapper->copied = true;
   RB_GC_GUARD(model);
   return TypedData_Wrap_Struct(rb_cLlamaVocab, &llama_vocab_wrapper_data_type, vocab_wrapper);
 }
-*/
 
 /* llama_model_rope_type */
 static VALUE rb_llama_model_rope_type(VALUE self, VALUE model) {
@@ -3524,9 +3526,7 @@ void Init_llama_cpp(void) {
   rb_define_module_function(rb_mLlamaCpp, "llama_pooling_type", rb_llama_pooling_type, 1);
 
   /* TODO: llama_model_get_vocab */
-  /*
   rb_define_module_function(rb_mLlamaCpp, "llama_model_get_vocab", rb_llama_model_get_vocab, 1);
-  */
 
   /* llama_model_rope_type */
   rb_define_module_function(rb_mLlamaCpp, "llama_model_rope_type", rb_llama_model_rope_type, 1);
