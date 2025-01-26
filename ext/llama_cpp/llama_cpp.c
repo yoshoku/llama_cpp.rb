@@ -61,10 +61,6 @@ typedef struct {
 } llama_model_wrapper;
 
 static void llama_model_wrapper_free(void *ptr) {
-  llama_model_wrapper* data = (llama_model_wrapper*)ptr;
-  if (data->model != NULL && data->copied == false) {
-    llama_model_free(data->model);
-  }
   ruby_xfree(ptr);
 }
 
@@ -101,10 +97,6 @@ typedef struct {
 } llama_context_wrapper;
 
 static void llama_context_wrapper_free(void *ptr) {
-  llama_context_wrapper* data = (llama_context_wrapper*)ptr;
-  if (data->context != NULL) {
-    llama_free(data->context);
-  }
   ruby_xfree(ptr);
 }
 
@@ -236,7 +228,6 @@ static VALUE llama_token_data_array_get_sorted(VALUE self) {
 
 /* llama_batch */
 static void llama_batch_free_(void *ptr) {
-  llama_batch_free(*((llama_batch*)ptr));
   ruby_xfree(ptr);
 }
 
@@ -1013,10 +1004,6 @@ typedef struct {
 } llama_adapter_lora_wrapper;
 
 static void llama_adapter_lora_wrapper_free(void *ptr) {
-  llama_adapter_lora_wrapper* data = (llama_adapter_lora_wrapper*)ptr;
-  if (data->adapter != NULL) {
-    llama_adapter_lora_free(data->adapter);
-  }
   ruby_xfree(ptr);
 }
 
@@ -1561,8 +1548,6 @@ static VALUE llama_kv_cache_view_cell_get_pos(VALUE self) {
 
 /* struct llama_kv_cache_view */
 static void llama_kv_cache_view_free_(void *ptr) {
-  struct llama_kv_cache_view* data = (struct llama_kv_cache_view*)ptr;
-  llama_kv_cache_view_free(data);
   ruby_xfree(ptr);
 }
 
@@ -2486,10 +2471,7 @@ static VALUE rb_llama_detokenize(VALUE self, VALUE vocab, VALUE tokens, VALUE re
 
 /* llama_sampler */
 static void llama_sampler_free_(void* ptr) {
-  llama_sampler_free((struct llama_sampler*)ptr);
-  if (ptr != NULL) {
-    ruby_xfree(ptr);
-  }
+  ruby_xfree(ptr);
 }
 
 static size_t llama_sampler_size(const void* ptr) {
