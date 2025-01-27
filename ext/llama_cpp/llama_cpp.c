@@ -1088,6 +1088,34 @@ static VALUE rb_llama_model_load_from_file(VALUE self, VALUE path_model, VALUE p
   return TypedData_Wrap_Struct(rb_cLlamaModel, &llama_model_wrapper_data_type, model_wrapper);
 }
 
+/* llama_model_load_from_splits */
+static VALUE rb_llama_model_load_from_splits(VALUE self, VALUE paths, VALUE params) {
+  if (!RB_TYPE_P(paths, T_ARRAY)) {
+    rb_raise(rb_eArgError, "paths must be an Array");
+    return Qnil;
+  }
+  if (!rb_obj_is_kind_of(params, rb_cLlamaModelParams)) {
+    rb_raise(rb_eArgError, "params must be a LlamaModelParams");
+    return Qnil;
+  }
+  size_t n_paths = RARRAY_LEN(paths);
+  const char** paths_ = ALLOCA_N(const char*, n_paths);
+  for (size_t i = 0; i < n_paths; i++) {
+    VALUE path = rb_ary_entry(paths, i);
+    if (!RB_TYPE_P(path, T_STRING)) {
+      rb_raise(rb_eArgError, "paths must be an Array of Strings");
+      return Qnil;
+    }
+    paths_[i] = StringValueCStr(path);
+  }
+  struct llama_model_params* params_ = get_llama_model_params(params);
+  llama_model_wrapper* model_wrapper = (llama_model_wrapper*)ruby_xmalloc(sizeof(llama_model_wrapper));
+  model_wrapper->model = llama_model_load_from_splits(paths_, n_paths, *params_);
+  RB_GC_GUARD(paths);
+  RB_GC_GUARD(params);
+  return TypedData_Wrap_Struct(rb_cLlamaModel, &llama_model_wrapper_data_type, model_wrapper);
+}
+
 /* llama_init_from_model */
 static VALUE rb_llama_init_from_model(VALUE self, VALUE model, VALUE params) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
@@ -3461,6 +3489,9 @@ void Init_llama_cpp(void) {
 
   /* llama_model_load_from_file */
   rb_define_module_function(rb_mLlamaCpp, "llama_model_load_from_file", rb_llama_model_load_from_file, 2);
+
+  /* llama_model_load_from_splits */
+  rb_define_module_function(rb_mLlamaCpp, "llama_model_load_from_splits", rb_llama_model_load_from_splits, 2);
 
   /* llama_model_free */
   rb_define_module_function(rb_mLlamaCpp, "llama_model_free", rb_llama_model_free, 1);
