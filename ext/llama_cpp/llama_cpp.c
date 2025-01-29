@@ -2352,13 +2352,17 @@ static VALUE rb_llama_vocab_fim_sep(VALUE self, VALUE vocab) {
 }
 
 /* llama_tokenize */
-static VALUE rb_llama_tokenize(VALUE self, VALUE vocab, VALUE text, VALUE n_tokens_max, VALUE add_special, VALUE parse_special) {
+static VALUE rb_llama_tokenize(VALUE self, VALUE vocab, VALUE text, VALUE tokens, VALUE n_tokens_max, VALUE add_special, VALUE parse_special) {
   if (!rb_obj_is_kind_of(vocab, rb_cLlamaVocab)) {
     rb_raise(rb_eArgError, "vocab must be a LlamaVocab");
     return Qnil;
   }
   if (!RB_TYPE_P(text, T_STRING)) {
     rb_raise(rb_eArgError, "text must be a String");
+    return Qnil;
+  }
+  if (!RB_TYPE_P(tokens, T_ARRAY)) {
+    rb_raise(rb_eArgError, "tokens must be an Array");
     return Qnil;
   }
   if (!RB_INTEGER_TYPE_P(n_tokens_max)) {
@@ -2378,36 +2382,34 @@ static VALUE rb_llama_tokenize(VALUE self, VALUE vocab, VALUE text, VALUE n_toke
     return Qnil;
   }
 
-  llama_token* tokens = n_tokens_max <= 0 ? NULL : (llama_token*)ruby_xmalloc(sizeof(llama_token) * n_tokens_max_);
-  const int32_t n_tokens = llama_tokenize(vocab_wrapper->vocab, text_, text_len, tokens, n_tokens_max_, add_special_, parse_special_);
+  llama_token* tokens_ = n_tokens_max <= 0 ? NULL : ALLOCA_N(llama_token, n_tokens_max);
+  const int32_t sz_tokens = (int32_t)RARRAY_LEN(tokens);
+
+  for (int32_t i = 0; i < n_tokens_max_; i++) {
+    if (i >= sz_tokens) break;
+    VALUE token = rb_ary_entry(tokens, i);
+    if (!RB_INTEGER_TYPE_P(token)) {
+      rb_raise(rb_eArgError, "tokens must be an Array of Integers");
+      return Qnil;
+    }
+    tokens_[i] = NUM2INT(token);
+  }
+
+  const int32_t n_tokens = llama_tokenize(vocab_wrapper->vocab, text_, text_len, tokens_, n_tokens_max_, add_special_, parse_special_);
 
   if (n_tokens < 0) {
-    if (tokens != NULL) {
-      ruby_xfree(tokens);
-    }
-    VALUE ret = rb_ary_new2(2);
-    rb_ary_store(ret, 0, INT2NUM(n_tokens));
-    rb_ary_store(ret, 1, Qnil);
-    return ret;
+    return INT2NUM(n_tokens);
   }
 
-  VALUE tokens_arr = rb_ary_new2(n_tokens);
+  rb_ary_resize(tokens, n_tokens);
   for (int i = 0; i < n_tokens; i++) {
-    rb_ary_store(tokens_arr, i, INT2NUM(tokens[i]));
+    rb_ary_store(tokens, i, INT2NUM(tokens_[i]));
   }
-
-  if (tokens != NULL) {
-    ruby_xfree(tokens);
-  }
-
-  VALUE ret = rb_ary_new2(2);
-  rb_ary_store(ret, 0, INT2NUM(n_tokens));
-  rb_ary_store(ret, 1, tokens_arr);
 
   RB_GC_GUARD(vocab);
   RB_GC_GUARD(text);
 
-  return ret;
+  return INT2NUM(n_tokens);
 }
 
 /* llama_token_to_piece */
@@ -3789,7 +3791,7 @@ void Init_llama_cpp(void) {
   rb_define_module_function(rb_mLlamaCpp, "llama_vocab_fim_sep", rb_llama_vocab_fim_sep, 1);
 
   /* llama_tokenize */
-  rb_define_module_function(rb_mLlamaCpp, "llama_tokenize", rb_llama_tokenize, 5);
+  rb_define_module_function(rb_mLlamaCpp, "llama_tokenize", rb_llama_tokenize, 6);
 
   /* llama_token_to_piece */
   rb_define_module_function(rb_mLlamaCpp, "llama_token_to_piece", rb_llama_token_to_piece, 4);
