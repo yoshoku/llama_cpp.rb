@@ -1960,8 +1960,8 @@ static VALUE rb_llama_batch_get_one(VALUE self, VALUE tokens) {
     tokens_[i] = NUM2INT(token);
   }
   llama_batch* batch = (llama_batch*)ruby_xmalloc(sizeof(llama_batch));
-  *batch = llama_batch_get_one(tokens_, (int32_t)n_tokens);
-  ruby_xfree(tokens_);
+  *batch = llama_batch_get_one(NULL, (int32_t)n_tokens);
+  batch->token = tokens_;
   return TypedData_Wrap_Struct(rb_cLlamaBatch, &llama_batch_type, batch);
 }
 
