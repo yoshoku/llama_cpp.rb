@@ -228,6 +228,7 @@ static VALUE llama_token_data_array_get_sorted(VALUE self) {
 
 /* llama_batch */
 static void llama_batch_free_(void *ptr) {
+  llama_batch_free(*((llama_batch*)ptr));
   ruby_xfree(ptr);
 }
 
