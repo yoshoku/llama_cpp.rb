@@ -268,6 +268,16 @@ static VALUE llama_batch_get_n_tokens(VALUE self) {
   return INT2NUM(data->n_tokens);
 }
 
+static VALUE llama_batch_get_token(VALUE self) {
+  llama_batch* data = get_llama_batch(self);
+  int32_t n_tokens = data->n_tokens;
+  VALUE token = rb_ary_new2(n_tokens);
+  for (int32_t i = 0; i < n_tokens; i++) {
+    rb_ary_store(token, i, INT2NUM(data->token[i]));
+  }
+  return token;
+}
+
 /* struct llama_model_kv_override */
 static void llama_model_kv_override_free(void *ptr) {
   ruby_xfree(ptr);
@@ -3328,7 +3338,7 @@ void Init_llama_cpp(void) {
   rb_cLlamaBatch = rb_define_class_under(rb_mLlamaCpp, "LlamaBatch", rb_cObject);
   rb_define_alloc_func(rb_cLlamaBatch, llama_batch_alloc);
   rb_define_method(rb_cLlamaBatch, "n_tokens", RUBY_METHOD_FUNC(llama_batch_get_n_tokens), 0);
-  /* TODO: llama_token* token */
+  rb_define_method(rb_cLlamaBatch, "token", RUBY_METHOD_FUNC(llama_batch_get_token), 0);
   /* TODO: float* embd */
   /* TODO: llama_pos* pos */
   /* TODO: int32_t* n_seq_id */
