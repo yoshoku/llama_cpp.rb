@@ -1587,7 +1587,9 @@ static VALUE llama_kv_cache_view_cell_get_pos(VALUE self) {
 
 /* struct llama_kv_cache_view */
 static void llama_kv_cache_view_free_(void *ptr) {
-  ruby_xfree(ptr);
+  if (ptr != NULL) {
+    ruby_xfree(ptr);
+  }
 }
 
 static size_t llama_kv_cache_view_size(const void *ptr) {
@@ -1680,6 +1682,7 @@ static VALUE rb_llama_kv_cache_view_free(VALUE self, VALUE view) {
   }
   struct llama_kv_cache_view* view_ = get_llama_kv_cache_view(view);
   llama_kv_cache_view_free(view_);
+  view_ = NULL;
   RB_GC_GUARD(view);
   return Qnil;
 }
