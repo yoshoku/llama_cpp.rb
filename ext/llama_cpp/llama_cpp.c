@@ -228,8 +228,11 @@ static VALUE llama_token_data_array_get_sorted(VALUE self) {
 
 /* llama_batch */
 static void llama_batch_free_(void *ptr) {
-  llama_batch_free(*((llama_batch*)ptr));
-  ruby_xfree(ptr);
+  llama_batch* batch = (llama_batch*)ptr;
+  llama_batch_free(*batch);
+  if (batch != NULL) {
+    ruby_xfree(batch);
+  }
 }
 
 static size_t llama_batch_size(const void *ptr) {
@@ -1995,6 +1998,7 @@ static VALUE rb_llama_batch_free(VALUE self, VALUE batch) {
   }
   llama_batch* batch_ = get_llama_batch(batch);
   llama_batch_free(*batch_);
+  batch_ = NULL;
   RB_GC_GUARD(batch);
   return Qnil;
 }
