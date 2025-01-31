@@ -2512,7 +2512,10 @@ static VALUE rb_llama_detokenize(VALUE self, VALUE vocab, VALUE tokens, VALUE re
 
 /* llama_sampler */
 static void llama_sampler_free_(void* ptr) {
-  ruby_xfree(ptr);
+  struct llama_sampler* smpl = (struct llama_sampler*)ptr;
+  if (smpl != NULL) {
+    ruby_xfree(smpl);
+  }
 }
 
 static size_t llama_sampler_size(const void* ptr) {
@@ -2619,6 +2622,7 @@ static VALUE rb_llama_sampler_free(VALUE self, VALUE sampler) {
   }
   struct llama_sampler* sampler_ = get_llama_sampler(sampler);
   llama_sampler_free(sampler_);
+  sampler_ = NULL;
   RB_GC_GUARD(sampler);
   return Qnil;
 }
