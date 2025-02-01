@@ -24,7 +24,9 @@ typedef struct {
 } llama_vocab_wrapper;
 
 static void llama_vocab_wrapper_free(void *ptr) {
-  ruby_xfree(ptr);
+  if (ptr) {
+    ruby_xfree(ptr);
+  }
 }
 
 static size_t llama_vocab_wrapper_size(const void *ptr) {
@@ -61,7 +63,9 @@ typedef struct {
 } llama_model_wrapper;
 
 static void llama_model_wrapper_free(void *ptr) {
-  ruby_xfree(ptr);
+  if (ptr) {
+    ruby_xfree(ptr);
+  }
 }
 
 static size_t llama_model_wrapper_size(const void *ptr) {
@@ -97,7 +101,9 @@ typedef struct {
 } llama_context_wrapper;
 
 static void llama_context_wrapper_free(void *ptr) {
-  ruby_xfree(ptr);
+  if (ptr) {
+    ruby_xfree(ptr);
+  }
 }
 
 static size_t llama_context_wrapper_size(const void *ptr) {
@@ -128,7 +134,9 @@ static llama_context_wrapper* get_llama_context_wrapper(VALUE self) {
 
 /* llama_token_data */
 static void llama_token_data_free(void *ptr) {
-  ruby_xfree(ptr);
+  if (ptr) {
+    ruby_xfree(ptr);
+  }
 }
 
 static size_t llama_token_data_size(const void *ptr) {
@@ -176,10 +184,9 @@ static VALUE llama_token_data_get_p(VALUE self) {
 
 /* llama_token_data_array */
 static void llama_token_data_array_free(void *ptr) {
-  if (((llama_token_data_array*)ptr)->data != NULL) {
-    ruby_xfree(((llama_token_data_array*)ptr)->data);
+  if (ptr) {
+    ruby_xfree(ptr);
   }
-  ruby_xfree(ptr);
 }
 
 static size_t llama_token_data_array_size(const void *ptr) {
@@ -284,7 +291,9 @@ static VALUE llama_batch_get_token(VALUE self) {
 
 /* struct llama_model_kv_override */
 static void llama_model_kv_override_free(void *ptr) {
-  ruby_xfree(ptr);
+  if (ptr) {
+    ruby_xfree(ptr);
+  }
 }
 
 static size_t llama_model_kv_override_size(const void *ptr) {
@@ -344,7 +353,9 @@ static VALUE llama_model_kv_override_get_val_str(VALUE self) {
 
 /* struct llama_model_params */
 static void llama_model_params_free(void *ptr) {
-  ruby_xfree(ptr);
+  if (ptr) {
+    ruby_xfree(ptr);
+  }
 }
 
 static size_t llama_model_params_size(const void *ptr) {
@@ -467,7 +478,9 @@ static VALUE llama_model_params_set_check_tensors(VALUE self, VALUE check_tensor
 
 /* struct llama_context_params */
 static void llama_context_params_free(void *ptr) {
-  ruby_xfree(ptr);
+  if (ptr) {
+    ruby_xfree(ptr);
+  }
 }
 
 static size_t llama_context_params_size(const void *ptr) {
@@ -762,7 +775,9 @@ static VALUE llama_context_params_set_no_perf(VALUE self, VALUE no_perf) {
 
 /* llama_model_quantize_params */
 static void llama_model_quantize_params_free(void *ptr) {
-  ruby_xfree(ptr);
+  if (ptr) {
+    ruby_xfree(ptr);
+  }
 }
 
 static size_t llama_model_quantize_params_size(const void *ptr) {
@@ -892,7 +907,9 @@ static VALUE llama_model_quantize_params_set_keep_split(VALUE self, VALUE keep_s
 
 /* llama_logit_bias */
 static void llama_logit_bias_free(void *ptr) {
-  ruby_xfree(ptr);
+  if (ptr) {
+    ruby_xfree(ptr);
+  }
 }
 
 static size_t llama_logit_bias_size(const void *ptr) {
@@ -932,7 +949,9 @@ static VALUE llama_logit_bias_get_bias(VALUE self) {
 
 /* llama_sampler_chain_params */
 static void llama_sampler_chain_params_free(void *ptr) {
-  ruby_xfree(ptr);
+  if (ptr) {
+    ruby_xfree(ptr);
+  }
 }
 
 static size_t llama_sampler_chain_params_size(const void *ptr) {
@@ -974,7 +993,9 @@ static VALUE llama_sampler_chain_params_set_no_perf(VALUE self, VALUE no_perf) {
 
 /* llama_chat_message */
 static void llama_chat_message_free(void *ptr) {
-  ruby_xfree(ptr);
+  if (ptr) {
+    ruby_xfree(ptr);
+  }
 }
 
 static size_t llama_chat_message_size(const void *ptr) {
@@ -1018,7 +1039,9 @@ typedef struct {
 } llama_adapter_lora_wrapper;
 
 static void llama_adapter_lora_wrapper_free(void *ptr) {
-  ruby_xfree(ptr);
+  if (ptr) {
+    ruby_xfree(ptr);
+  }
 }
 
 static size_t llama_adapter_lora_wrapper_size(const void *ptr) {
@@ -2992,7 +3015,9 @@ static VALUE rb_llama_print_system_info(VALUE self) {
 
 /* struct llama_perf_context_data */
 static void llama_perf_context_data_free(void* ptr) {
-  ruby_xfree(ptr);
+  if (ptr) {
+    ruby_xfree(ptr);
+  }
 }
 
 static size_t llama_perf_context_data_size(const void* ptr) {
@@ -3058,7 +3083,9 @@ static VALUE llama_perf_context_data_get_n_eval(VALUE self) {
 
 /* struct llama_perf_sampler_data */
 static void llama_perf_sampler_data_free(void* ptr) {
-  ruby_xfree(ptr);
+  if (ptr) {
+    ruby_xfree(ptr);
+  }
 }
 
 static size_t llama_perf_sampler_data_size(const void* ptr) {
