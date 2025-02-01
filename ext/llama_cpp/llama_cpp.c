@@ -17,6 +17,12 @@ VALUE rb_cLlamaSamplerChainParams;
 VALUE rb_cLlamaPerfContextData;
 VALUE rb_cLlamaPerfSamplerData;
 
+/* ggml_backend_load_all */
+static VALUE rb_ggml_backend_load_all(VALUE self) {
+  ggml_backend_load_all();
+  return Qnil;
+}
+
 /* llama_vocab wrapper */
 typedef struct {
   struct llama_vocab* vocab;
@@ -3203,6 +3209,9 @@ static VALUE rb_llama_perf_sampler_reset(VALUE self, VALUE chain) {
 void Init_llama_cpp(void) {
   char tmp[12];
   rb_mLlamaCpp = rb_define_module("LlamaCpp");
+
+  /* ggml_backend_load_all */
+  rb_define_module_function(rb_mLlamaCpp, "ggml_backend_load_all", rb_ggml_backend_load_all, 0);
 
   /* llama_vocab */
   rb_cLlamaVocab = rb_define_class_under(rb_mLlamaCpp, "LlamaVocab", rb_cObject);
