@@ -17,7 +17,10 @@ VALUE rb_cLlamaSamplerChainParams;
 VALUE rb_cLlamaPerfContextData;
 VALUE rb_cLlamaPerfSamplerData;
 
-/* ggml_backend_load_all */
+/**
+ * @overload ggml_backend_load_all
+ *   @return [NilClass]
+ */
 static VALUE rb_ggml_backend_load_all(VALUE self) {
   ggml_backend_load_all();
   return Qnil;
@@ -3213,15 +3216,24 @@ void Init_llama_cpp(void) {
   /* ggml_backend_load_all */
   rb_define_module_function(rb_mLlamaCpp, "ggml_backend_load_all", rb_ggml_backend_load_all, 0);
 
-  /* llama_vocab */
+  /**
+   * Document-class: LlamaCpp::LlamaVocab
+   * "struct llama_vocab" wrapper class
+   */
   rb_cLlamaVocab = rb_define_class_under(rb_mLlamaCpp, "LlamaVocab", rb_cObject);
   rb_define_alloc_func(rb_cLlamaVocab, llama_vocab_wrapper_alloc);
 
-  /* llama_model */
+  /**
+   * Document-class: LlamaCpp::LlamaModel
+   * "struct llama_model" wrapper class
+   */
   rb_cLlamaModel = rb_define_class_under(rb_mLlamaCpp, "LlamaModel", rb_cObject);
   rb_define_alloc_func(rb_cLlamaModel, llama_model_wrapper_alloc);
 
-  /* llama_context */
+  /**
+   * Document-class: LlamaCpp::LlamaContext
+   * "struct llama_context" wrapper class
+   */
   rb_cLlamaContext = rb_define_class_under(rb_mLlamaCpp, "LlamaContext", rb_cObject);
   rb_define_alloc_func(rb_cLlamaContext, llama_context_wrapper_alloc);
 
@@ -3248,6 +3260,7 @@ void Init_llama_cpp(void) {
 
   /* Enums */
   /* llama_vocab_type */
+  /* Document-const: LlamaCpp::LLAMA_VOCAB_TYPE_NONE */
   rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_TYPE_NONE", INT2NUM(LLAMA_VOCAB_TYPE_NONE));
   rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_TYPE_SPM", INT2NUM(LLAMA_VOCAB_TYPE_SPM));
   rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_TYPE_BPE", INT2NUM(LLAMA_VOCAB_TYPE_BPE));
@@ -3255,6 +3268,7 @@ void Init_llama_cpp(void) {
   rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_TYPE_UGM", INT2NUM(LLAMA_VOCAB_TYPE_UGM));
   rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_TYPE_RWKV", INT2NUM(LLAMA_VOCAB_TYPE_RWKV));
   /* llama_vocab_pre_type */
+  /* Document-const: LlamaCpp::LLAMA_VOCAB_PRE_TYPE_DEFAULT */
   rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_PRE_TYPE_DEFAULT", INT2NUM(LLAMA_VOCAB_PRE_TYPE_DEFAULT));
   rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_PRE_TYPE_LLAMA3", INT2NUM(LLAMA_VOCAB_PRE_TYPE_LLAMA3));
   rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_PRE_TYPE_DEEPSEEK_LLM", INT2NUM(LLAMA_VOCAB_PRE_TYPE_DEEPSEEK_LLM));
@@ -3285,12 +3299,14 @@ void Init_llama_cpp(void) {
   rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_PRE_TYPE_MINERVA", INT2NUM(LLAMA_VOCAB_PRE_TYPE_MINERVA));
   rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_PRE_TYPE_DEEPSEEK3_LLM", INT2NUM(LLAMA_VOCAB_PRE_TYPE_DEEPSEEK3_LLM));
   /* llama_rope_type */
+  /* Document-const: LlamaCpp::LLAMA_ROPE_TYPE_NONE */
   rb_define_const(rb_mLlamaCpp, "LLAMA_ROPE_TYPE_NONE", INT2NUM(LLAMA_ROPE_TYPE_NONE));
   rb_define_const(rb_mLlamaCpp, "LLAMA_ROPE_TYPE_NORM", INT2NUM(LLAMA_ROPE_TYPE_NORM));
   rb_define_const(rb_mLlamaCpp, "LLAMA_ROPE_TYPE_NEOX", INT2NUM(LLAMA_ROPE_TYPE_NEOX));
   rb_define_const(rb_mLlamaCpp, "LLAMA_ROPE_TYPE_MROPE", INT2NUM(LLAMA_ROPE_TYPE_MROPE));
   rb_define_const(rb_mLlamaCpp, "LLAMA_ROPE_TYPE_VISION", INT2NUM(LLAMA_ROPE_TYPE_VISION));
   /* llama_token_type */
+  /* Document-const: LlamaCpp::LLAMA_TOKEN_TYPE_UNDEFINED */
   rb_define_const(rb_mLlamaCpp, "LLAMA_TOKEN_TYPE_UNDEFINED", INT2NUM(LLAMA_TOKEN_TYPE_UNDEFINED));
   rb_define_const(rb_mLlamaCpp, "LLAMA_TOKEN_TYPE_NORMAL", INT2NUM(LLAMA_TOKEN_TYPE_NORMAL));
   rb_define_const(rb_mLlamaCpp, "LLAMA_TOKEN_TYPE_UNKNOWN", INT2NUM(LLAMA_TOKEN_TYPE_UNKNOWN));
@@ -3299,6 +3315,7 @@ void Init_llama_cpp(void) {
   rb_define_const(rb_mLlamaCpp, "LLAMA_TOKEN_TYPE_UNUSED", INT2NUM(LLAMA_TOKEN_TYPE_UNUSED));
   rb_define_const(rb_mLlamaCpp, "LLAMA_TOKEN_TYPE_BYTE", INT2NUM(LLAMA_TOKEN_TYPE_BYTE));
   /* llama_token_attr */
+  /* Document-const: LlamaCpp::LLAMA_TOKEN_ATTR_UNDEFINED */
   rb_define_const(rb_mLlamaCpp, "LLAMA_TOKEN_ATTR_UNDEFINED", INT2NUM(LLAMA_TOKEN_ATTR_UNDEFINED));
   rb_define_const(rb_mLlamaCpp, "LLAMA_TOKEN_ATTR_UNKNOWN", INT2NUM(LLAMA_TOKEN_ATTR_UNKNOWN));
   rb_define_const(rb_mLlamaCpp, "LLAMA_TOKEN_ATTR_UNUSED", INT2NUM(LLAMA_TOKEN_ATTR_UNUSED));
@@ -3311,6 +3328,7 @@ void Init_llama_cpp(void) {
   rb_define_const(rb_mLlamaCpp, "LLAMA_TOKEN_ATTR_RSTRIP", INT2NUM(LLAMA_TOKEN_ATTR_RSTRIP));
   rb_define_const(rb_mLlamaCpp, "LLAMA_TOKEN_ATTR_SINGLE_WORD", INT2NUM(LLAMA_TOKEN_ATTR_SINGLE_WORD));
   /* llama_ftype */
+  /* Document-const: LlamaCpp::LLAMA_FTYPE_ALL_F32 */
   rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_ALL_F32", INT2NUM(LLAMA_FTYPE_ALL_F32));
   rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_F16", INT2NUM(LLAMA_FTYPE_MOSTLY_F16));
   rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_Q4_0", INT2NUM(LLAMA_FTYPE_MOSTLY_Q4_0));
@@ -3345,6 +3363,7 @@ void Init_llama_cpp(void) {
   rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_TQ2_0", INT2NUM(LLAMA_FTYPE_MOSTLY_TQ2_0));
   rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_GUESSED", INT2NUM(LLAMA_FTYPE_GUESSED));
   /* llama_rope_scaling_type */
+  /* Document-const: LlamaCpp::LLAMA_ROPE_SCALING_TYPE_UNSPECIFIED */
   rb_define_const(rb_mLlamaCpp, "LLAMA_ROPE_SCALING_TYPE_UNSPECIFIED", INT2NUM(LLAMA_ROPE_SCALING_TYPE_UNSPECIFIED));
   rb_define_const(rb_mLlamaCpp, "LLAMA_ROPE_SCALING_TYPE_NONE", INT2NUM(LLAMA_ROPE_SCALING_TYPE_NONE));
   rb_define_const(rb_mLlamaCpp, "LLAMA_ROPE_SCALING_TYPE_LINEAR", INT2NUM(LLAMA_ROPE_SCALING_TYPE_LINEAR));
@@ -3352,6 +3371,7 @@ void Init_llama_cpp(void) {
   rb_define_const(rb_mLlamaCpp, "LLAMA_ROPE_SCALING_TYPE_LONGROPE", INT2NUM(LLAMA_ROPE_SCALING_TYPE_LONGROPE));
   rb_define_const(rb_mLlamaCpp, "LLAMA_ROPE_SCALING_TYPE_MAX_VALUE", INT2NUM(LLAMA_ROPE_SCALING_TYPE_MAX_VALUE));
   /* llama_pooling_type */
+  /* Document-const: LlamaCpp::LLAMA_POOLING_TYPE_UNSPECIFIED */
   rb_define_const(rb_mLlamaCpp, "LLAMA_POOLING_TYPE_UNSPECIFIED", INT2NUM(LLAMA_POOLING_TYPE_UNSPECIFIED));
   rb_define_const(rb_mLlamaCpp, "LLAMA_POOLING_TYPE_NONE", INT2NUM(LLAMA_POOLING_TYPE_NONE));
   rb_define_const(rb_mLlamaCpp, "LLAMA_POOLING_TYPE_MEAN", INT2NUM(LLAMA_POOLING_TYPE_MEAN));
@@ -3359,33 +3379,76 @@ void Init_llama_cpp(void) {
   rb_define_const(rb_mLlamaCpp, "LLAMA_POOLING_TYPE_LAST", INT2NUM(LLAMA_POOLING_TYPE_LAST));
   rb_define_const(rb_mLlamaCpp, "LLAMA_POOLING_TYPE_RANK", INT2NUM(LLAMA_POOLING_TYPE_RANK));
   /* llama_attention_type */
+  /* Document-const: LlamaCpp::LLAMA_ATTENTION_TYPE_UNSPECIFIED */
   rb_define_const(rb_mLlamaCpp, "LLAMA_ATTENTION_TYPE_UNSPECIFIED", INT2NUM(LLAMA_ATTENTION_TYPE_UNSPECIFIED));
   rb_define_const(rb_mLlamaCpp, "LLAMA_ATTENTION_TYPE_CAUSAL", INT2NUM(LLAMA_ATTENTION_TYPE_CAUSAL));
   rb_define_const(rb_mLlamaCpp, "LLAMA_ATTENTION_TYPE_NON_CAUSAL", INT2NUM(LLAMA_ATTENTION_TYPE_NON_CAUSAL));
   /* llama_split_mode */
+  /* Document-const: LlamaCpp::LLAMA_SPLIT_MODE_NONE */
   rb_define_const(rb_mLlamaCpp, "LLAMA_SPLIT_MODE_NONE", INT2NUM(LLAMA_SPLIT_MODE_NONE));
   rb_define_const(rb_mLlamaCpp, "LLAMA_SPLIT_MODE_LAYER", INT2NUM(LLAMA_SPLIT_MODE_LAYER));
   rb_define_const(rb_mLlamaCpp, "LLAMA_SPLIT_MODE_ROW", INT2NUM(LLAMA_SPLIT_MODE_ROW));
 
-  /* llama_token_data */
+  /**
+   * Document-class: LlamaCpp::LlamaTokenData
+   * "struct llama_token_data" wrapper class
+   */
   VALUE rb_cLlamaTokenData = rb_define_class_under(rb_mLlamaCpp, "LlamaTokenData", rb_cObject);
   rb_define_alloc_func(rb_cLlamaTokenData, llama_token_data_alloc);
+  /**
+   * Document-method: id
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaTokenData, "id", RUBY_METHOD_FUNC(llama_token_data_get_id), 0);
+  /**
+   * Document-method: logit
+   * @return [Float]
+   */
   rb_define_method(rb_cLlamaTokenData, "logit", RUBY_METHOD_FUNC(llama_token_data_get_logit), 0);
+  /**
+   * Document-method: p
+   * @return [Float]
+   */
   rb_define_method(rb_cLlamaTokenData, "p", RUBY_METHOD_FUNC(llama_token_data_get_p), 0);
 
-  /* llama_token_data_array */
+  /**
+   * Document-class: LlamaCpp::LlamaTokenDataArray
+   * "struct llama_token_data_array" wrapper class
+   */
   rb_cLlamaTokenDataArray = rb_define_class_under(rb_mLlamaCpp, "LlamaTokenDataArray", rb_cObject);
   rb_define_alloc_func(rb_cLlamaTokenDataArray, llama_token_data_array_alloc);
   /* TODO: llama_token_data* data */
+  /**
+   * Document-method: size
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaTokenDataArray, "size", RUBY_METHOD_FUNC(llama_token_data_array_get_size), 0);
+  /**
+   * Document-method: selected
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaTokenDataArray, "selected", RUBY_METHOD_FUNC(llama_token_data_array_get_selected), 0);
+  /**
+   * Document-method: sorted
+   * @return [Boolean]
+   */
   rb_define_method(rb_cLlamaTokenDataArray, "sorted", RUBY_METHOD_FUNC(llama_token_data_array_get_sorted), 0);
 
-  /* llama_batch */
+  /**
+   * Document-class: LlamaCpp::LlamaBatch
+   * "struct llama_batch" wrapper class
+   */
   rb_cLlamaBatch = rb_define_class_under(rb_mLlamaCpp, "LlamaBatch", rb_cObject);
   rb_define_alloc_func(rb_cLlamaBatch, llama_batch_alloc);
+  /**
+   * Document-method: n_tokens
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaBatch, "n_tokens", RUBY_METHOD_FUNC(llama_batch_get_n_tokens), 0);
+  /**
+   * Document-method: token
+   * @return [Array<Integer>]
+   */
   rb_define_method(rb_cLlamaBatch, "token", RUBY_METHOD_FUNC(llama_batch_get_token), 0);
   /* TODO: float* embd */
   /* TODO: llama_pos* pos */
@@ -3394,144 +3457,582 @@ void Init_llama_cpp(void) {
   /* TODO: int8_t* logits */
 
   /* llama_model_kv_override_type */
+  /* Document-const: LlamaCpp::LLAMA_KV_OVERRIDE_TYPE_INT */
   rb_define_const(rb_mLlamaCpp, "LLAMA_KV_OVERRIDE_TYPE_INT", INT2NUM(LLAMA_KV_OVERRIDE_TYPE_INT));
   rb_define_const(rb_mLlamaCpp, "LLAMA_KV_OVERRIDE_TYPE_FLOAT", INT2NUM(LLAMA_KV_OVERRIDE_TYPE_FLOAT));
   rb_define_const(rb_mLlamaCpp, "LLAMA_KV_OVERRIDE_TYPE_BOOL", INT2NUM(LLAMA_KV_OVERRIDE_TYPE_BOOL));
   rb_define_const(rb_mLlamaCpp, "LLAMA_KV_OVERRIDE_TYPE_STR", INT2NUM(LLAMA_KV_OVERRIDE_TYPE_STR));
 
-  /* llama_model_kv_override */
+  /**
+   * Document-class: LlamaCpp::LlamaModelKvOverride
+   * "struct llama_model_kv_override" wrapper class
+   */
   VALUE rb_cLlamaModelKvOverride = rb_define_class_under(rb_mLlamaCpp, "LlamaModelKvOverride", rb_cObject);
   rb_define_alloc_func(rb_cLlamaModelKvOverride, llama_model_kv_override_alloc);
+  /**
+   * Document-method: tag
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaModelKvOverride, "tag", RUBY_METHOD_FUNC(llama_model_kv_override_get_tag), 0);
+  /**
+   * Document-method: key
+   * @return [String]
+   */
   rb_define_method(rb_cLlamaModelKvOverride, "key", RUBY_METHOD_FUNC(llama_model_kv_override_get_key), 0);
+  /**
+   * Document-method: val_i64
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaModelKvOverride, "val_i64", RUBY_METHOD_FUNC(llama_model_kv_override_get_val_i64), 0);
+  /**
+   * Document-method: val_f64
+   * @return [Float]
+   */
   rb_define_method(rb_cLlamaModelKvOverride, "val_f64", RUBY_METHOD_FUNC(llama_model_kv_override_get_val_f64), 0);
+  /**
+   * Document-method: val_bool
+   * @return [Boolean]
+   */
   rb_define_method(rb_cLlamaModelKvOverride, "val_bool", RUBY_METHOD_FUNC(llama_model_kv_override_get_val_bool), 0);
+  /**
+   * Document-method: val_str
+   * @return [String]
+   */
   rb_define_method(rb_cLlamaModelKvOverride, "val_str", RUBY_METHOD_FUNC(llama_model_kv_override_get_val_str), 0);
 
 
-  /* llama_model_params */
+  /**
+   * Document-class: LlamaCpp::LlamaModelParams
+   * "struct llama_model_params" wrapper class
+   */
   rb_cLlamaModelParams = rb_define_class_under(rb_mLlamaCpp, "LlamaModelParams", rb_cObject);
   rb_define_alloc_func(rb_cLlamaModelParams, llama_model_params_alloc);
   /* TODO: ggml_backend_dev_t* devices */
+  /**
+   * Document-method: n_gpu_layers
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaModelParams, "n_gpu_layers", RUBY_METHOD_FUNC(llama_model_params_get_n_gpu_layers), 0);
+  /**
+   * Document-method: n_gpu_layers=
+   * @param [Integer] n_gpu_layers
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaModelParams, "n_gpu_layers=", RUBY_METHOD_FUNC(llama_model_params_set_n_gpu_layers), 1);
+  /**
+   * Document-method: split_mode
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaModelParams, "split_mode", RUBY_METHOD_FUNC(llama_model_params_get_split_mode), 0);
+  /**
+   * Document-method: split_mode=
+   * @param [Integer] split_mode
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaModelParams, "split_mode=", RUBY_METHOD_FUNC(llama_model_params_set_split_mode), 1);
+  /**
+   * Document-method: main_gpu
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaModelParams, "main_gpu", RUBY_METHOD_FUNC(llama_model_params_get_main_gpu), 0);
+  /**
+   * Document-method: main_gpu=
+   * @param [Integer] main_gpu
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaModelParams, "main_gpu=", RUBY_METHOD_FUNC(llama_model_params_set_main_gpu), 1);
+  /**
+   * Document-method: tensor_split
+   * @return [Array<Float>]
+   */
   rb_define_method(rb_cLlamaModelParams, "tensor_split", RUBY_METHOD_FUNC(llama_model_params_get_tensor_split), 0);
   /* TODO: llama_progress_callback progress_callback */
   /* TODO: void* progress_callback_user_data */
   /* TODO: const struct llama_model_kv_override* kv_overrides */
+  /**
+   * Document-method: vocab_only
+   * @return [Boolean]
+   */
   rb_define_method(rb_cLlamaModelParams, "vocab_only", RUBY_METHOD_FUNC(llama_model_params_get_vocab_only), 0);
+  /**
+   * Document-method: vocab_only=
+   * @param [Boolean] vocab_only
+   * @return [Boolean]
+   */
   rb_define_method(rb_cLlamaModelParams, "vocab_only=", RUBY_METHOD_FUNC(llama_model_params_set_vocab_only), 1);
+  /**
+   * Document-method: use_mmap
+   * @return [Boolean]
+   */
   rb_define_method(rb_cLlamaModelParams, "use_mmap", RUBY_METHOD_FUNC(llama_model_params_get_use_mmap), 0);
+  /**
+   * Document-method: use_mmap=
+   * @param [Boolean] use_mmap
+   * @return [Boolean]
+   */
   rb_define_method(rb_cLlamaModelParams, "use_mmap=", RUBY_METHOD_FUNC(llama_model_params_set_use_mmap), 1);
+  /**
+   * Document-method: use_mlock
+   * @return [Boolean]
+   */
   rb_define_method(rb_cLlamaModelParams, "use_mlock", RUBY_METHOD_FUNC(llama_model_params_get_use_mlock), 0);
+  /**
+   * Document-method: use_mlock=
+   * @param [Boolean] use_mlock
+   * @return [Boolean]
+   */
   rb_define_method(rb_cLlamaModelParams, "use_mlock=", RUBY_METHOD_FUNC(llama_model_params_set_use_mlock), 1);
+  /**
+   * Document-method: check_tensors
+   * @return [Boolean]
+   */
   rb_define_method(rb_cLlamaModelParams, "check_tensors", RUBY_METHOD_FUNC(llama_model_params_get_check_tensors), 0);
+  /**
+   * Document-method: check_tensors=
+   * @param [Boolean] check_tensors
+   * @return [Boolean]
+   */
   rb_define_method(rb_cLlamaModelParams, "check_tensors=", RUBY_METHOD_FUNC(llama_model_params_set_check_tensors), 1);
 
-  /* llama_context_params */
+  /**
+   * Document-class: LlamaCpp::LlamaContextParams
+   * "struct llama_context_params" wrapper class
+   */
   rb_cLlamaContextParams = rb_define_class_under(rb_mLlamaCpp, "LlamaContextParams", rb_cObject);
   rb_define_alloc_func(rb_cLlamaContextParams, llama_context_params_alloc);
+  /**
+   * Document-method: n_ctx
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaContextParams, "n_ctx", RUBY_METHOD_FUNC(llama_context_params_get_n_ctx), 0);
+  /**
+   * Document-method: n_ctx=
+   * @param [Integer] n_ctx
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaContextParams, "n_ctx=", RUBY_METHOD_FUNC(llama_context_params_set_n_ctx), 1);
+  /**
+   * Document-method: n_batch
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaContextParams, "n_batch", RUBY_METHOD_FUNC(llama_context_params_get_n_batch), 0);
+  /**
+   * Document-method: n_batch=
+   * @param [Integer] n_batch
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaContextParams, "n_batch=", RUBY_METHOD_FUNC(llama_context_params_set_n_batch), 1);
+  /**
+   * Document-method: n_ubatch
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaContextParams, "n_ubatch", RUBY_METHOD_FUNC(llama_context_params_get_n_ubatch), 0);
+  /**
+   * Document-method: n_ubatch=
+   * @param [Integer] n_ubatch
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaContextParams, "n_ubatch=", RUBY_METHOD_FUNC(llama_context_params_set_n_ubatch), 1);
+  /**
+   * Document-method: n_seq_max
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaContextParams, "n_seq_max", RUBY_METHOD_FUNC(llama_context_params_get_n_seq_max), 0);
+  /**
+   * Document-method: n_seq_max=
+   * @param [Integer] n_seq_max
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaContextParams, "n_seq_max=", RUBY_METHOD_FUNC(llama_context_params_set_n_seq_max), 1);
+  /**
+   * Document-method: n_threads
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaContextParams, "n_threads", RUBY_METHOD_FUNC(llama_context_params_get_n_threads), 0);
+  /**
+   * Document-method: n_threads=
+   * @param [Integer] n_threads
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaContextParams, "n_threads=", RUBY_METHOD_FUNC(llama_context_params_set_n_threads), 1);
+  /**
+   * Document-method: n_threads_batch
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaContextParams, "n_threads_batch", RUBY_METHOD_FUNC(llama_context_params_get_n_threads_batch), 0);
+  /**
+   * Document-method: n_threads_batch=
+   * @param [Integer] n_threads_batch
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaContextParams, "n_threads_batch=", RUBY_METHOD_FUNC(llama_context_params_set_n_threads_batch), 1);
+  /**
+   * Document-method: rope_scaling_type
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaContextParams, "rope_scaling_type", RUBY_METHOD_FUNC(llama_context_params_get_rope_scaling_type), 0);
+  /**
+   * Document-method: rope_scaling_type=
+   * @param [Integer] rope_scaling_type
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaContextParams, "rope_scaling_type=", RUBY_METHOD_FUNC(llama_context_params_set_rope_scaling_type), 1);
+  /**
+   * Document-method: pooling_type
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaContextParams, "pooling_type", RUBY_METHOD_FUNC(llama_context_params_get_pooling_type), 0);
+  /**
+   * Document-method: pooling_type=
+   * @param [Integer] pooling_type
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaContextParams, "pooling_type=", RUBY_METHOD_FUNC(llama_context_params_set_pooling_type), 1);
+  /**
+   * Document-method: attention_type
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaContextParams, "attention_type", RUBY_METHOD_FUNC(llama_context_params_get_attention_type), 0);
+  /**
+   * Document-method: attention_type=
+   * @param [Integer] attention_type
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaContextParams, "attention_type=", RUBY_METHOD_FUNC(llama_context_params_set_attention_type), 1);
+  /**
+   * Document-method: rope_freq_base
+   * @return [Float]
+   */
   rb_define_method(rb_cLlamaContextParams, "rope_freq_base", RUBY_METHOD_FUNC(llama_context_params_get_rope_freq_base), 0);
+  /**
+   * Document-method: rope_freq_base=
+   * @param [Float] rope_freq_base
+   * @return [Float]
+   */
   rb_define_method(rb_cLlamaContextParams, "rope_freq_base=", RUBY_METHOD_FUNC(llama_context_params_set_rope_freq_base), 1);
+  /**
+   * Document-method: rope_freq_scale
+   * @return [Float]
+   */
   rb_define_method(rb_cLlamaContextParams, "rope_freq_scale", RUBY_METHOD_FUNC(llama_context_params_get_rope_freq_scale), 0);
+  /**
+   * Document-method: rope_freq_scale=
+   * @param [Float] rope_freq_scale
+   * @return [Float]
+   */
   rb_define_method(rb_cLlamaContextParams, "rope_freq_scale=", RUBY_METHOD_FUNC(llama_context_params_set_rope_freq_scale), 1);
+  /**
+   * Document-method: yarn_ext_factor
+   * @return [Float]
+   */
   rb_define_method(rb_cLlamaContextParams, "yarn_ext_factor", RUBY_METHOD_FUNC(llama_context_params_get_yarn_ext_factor), 0);
+  /**
+   * Document-method: yarn_ext_factor=
+   * @param [Float] yarn_ext_factor
+   * @return [Float]
+   */
   rb_define_method(rb_cLlamaContextParams, "yarn_ext_factor=", RUBY_METHOD_FUNC(llama_context_params_set_yarn_ext_factor), 1);
+  /**
+   * Document-method: yarn_attn_factor
+   * @return [Float]
+   */
   rb_define_method(rb_cLlamaContextParams, "yarn_attn_factor", RUBY_METHOD_FUNC(llama_context_params_get_yarn_attn_factor), 0);
+  /**
+   * Document-method: yarn_attn_factor=
+   * @param [Float] yarn_attn_factor
+   * @return [Float]
+   */
   rb_define_method(rb_cLlamaContextParams, "yarn_attn_factor=", RUBY_METHOD_FUNC(llama_context_params_set_yarn_attn_factor), 1);
+  /**
+   * Document-method: yarn_beta_fast
+   * @return [Float]
+   */
   rb_define_method(rb_cLlamaContextParams, "yarn_beta_fast", RUBY_METHOD_FUNC(llama_context_params_get_yarn_beta_fast), 0);
+  /**
+   * Document-method: yarn_beta_fast=
+   * @param [Float] yarn_beta_fast
+   * @return [Float]
+   */
   rb_define_method(rb_cLlamaContextParams, "yarn_beta_fast=", RUBY_METHOD_FUNC(llama_context_params_set_yarn_beta_fast), 1);
+  /**
+   * Document-method: yarn_beta_slow
+   * @return [Float]
+   */
   rb_define_method(rb_cLlamaContextParams, "yarn_beta_slow", RUBY_METHOD_FUNC(llama_context_params_get_yarn_beta_slow), 0);
+  /**
+   * Document-method: yarn_beta_slow=
+   * @param [Float] yarn_beta_slow
+   * @return [Float]
+   */
   rb_define_method(rb_cLlamaContextParams, "yarn_beta_slow=", RUBY_METHOD_FUNC(llama_context_params_set_yarn_beta_slow), 1);
+  /**
+   * Document-method: yarn_orig_ctx
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaContextParams, "yarn_orig_ctx", RUBY_METHOD_FUNC(llama_context_params_get_yarn_orig_ctx), 0);
+  /**
+   * Document-method: yarn_orig_ctx=
+   * @param [Integer] yarn_orig_ctx
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaContextParams, "yarn_orig_ctx=", RUBY_METHOD_FUNC(llama_context_params_set_yarn_orig_ctx), 1);
+  /**
+   * Document-method: defrag_thold
+   * @return [Float]
+   */
   rb_define_method(rb_cLlamaContextParams, "defrag_thold", RUBY_METHOD_FUNC(llama_context_params_get_defrag_thold), 0);
+  /**
+   * Document-method: defrag_thold=
+   * @param [Float] defrag_thold
+   * @return [Float]
+   */
   rb_define_method(rb_cLlamaContextParams, "defrag_thold=", RUBY_METHOD_FUNC(llama_context_params_set_defrag_thold), 1);
   /* TODO: ggml_backend_sched_eval_callback cb_eval */
   /* TODO: void* cb_eval_user_data */
+  /**
+   * Document-method: type_k
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaContextParams, "type_k", RUBY_METHOD_FUNC(llama_context_params_get_type_k), 0);
+  /**
+   * Document-method: type_k=
+   * @param [Integer] type_k
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaContextParams, "type_k=", RUBY_METHOD_FUNC(llama_context_params_set_type_k), 1);
+  /**
+   * Document-method: type_v
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaContextParams, "type_v", RUBY_METHOD_FUNC(llama_context_params_get_type_v), 0);
+  /**
+   * Document-method: type_v=
+   * @param [Integer] type_v
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaContextParams, "type_v=", RUBY_METHOD_FUNC(llama_context_params_set_type_v), 1);
+  /**
+   * Document-method: logits_all
+   * @return [Boolean]
+   */
   rb_define_method(rb_cLlamaContextParams, "logits_all", RUBY_METHOD_FUNC(llama_context_params_get_logits_all), 0);
+  /**
+   * Document-method: logits_all=
+   * @param [Boolean] logits_all
+   * @return [Boolean]
+   */
   rb_define_method(rb_cLlamaContextParams, "logits_all=", RUBY_METHOD_FUNC(llama_context_params_set_logits_all), 1);
+  /**
+   * Document-method: embeddings
+   * @return [Boolean]
+   */
   rb_define_method(rb_cLlamaContextParams, "embeddings", RUBY_METHOD_FUNC(llama_context_params_get_embeddings), 0);
+  /**
+   * Document-method: embeddings=
+   * @param [Boolean] embeddings
+   * @return [Boolean]
+   */
   rb_define_method(rb_cLlamaContextParams, "embeddings=", RUBY_METHOD_FUNC(llama_context_params_set_embeddings), 1);
+  /**
+   * Document-method: offload_kqv
+   * @return [Boolean]
+   */
   rb_define_method(rb_cLlamaContextParams, "offload_kqv", RUBY_METHOD_FUNC(llama_context_params_get_offload_kqv), 0);
+  /**
+   * Document-method: offload_kqv=
+   * @param [Boolean] offload_kqv
+   * @return [Boolean]
+   */
   rb_define_method(rb_cLlamaContextParams, "offload_kqv=", RUBY_METHOD_FUNC(llama_context_params_set_offload_kqv), 1);
+  /**
+   * Document-method: flash_attn
+   * @return [Boolean]
+   */
   rb_define_method(rb_cLlamaContextParams, "flash_attn", RUBY_METHOD_FUNC(llama_context_params_get_flash_attn), 0);
+  /**
+   * Document-method: flash_attn=
+   * @param [Boolean] flash_attn
+   * @return [Boolean]
+   */
   rb_define_method(rb_cLlamaContextParams, "flash_attn=", RUBY_METHOD_FUNC(llama_context_params_set_flash_attn), 1);
+  /**
+   * Document-method: no_perf
+   * @return [Boolean]
+   */
   rb_define_method(rb_cLlamaContextParams, "no_perf", RUBY_METHOD_FUNC(llama_context_params_get_no_perf), 0);
+  /**
+   * Document-method: no_perf=
+   * @param [Boolean] no_perf
+   * @return [Boolean]
+   */
   rb_define_method(rb_cLlamaContextParams, "no_perf=", RUBY_METHOD_FUNC(llama_context_params_set_no_perf), 1);
   /* TODO: ggml_abort_callback abort_callback */
   /* TODO: void* abort_callback_data */
 
-  /* llama_model_quantize_params */
+  /**
+   * Document-class: LlamaCpp::LlamaModelQuantizeParams
+   * "struct llama_model_quantize_params" wrapper class
+   */
   rb_cLlamaModelQuantizeParams = rb_define_class_under(rb_mLlamaCpp, "LlamaModelQuantizeParams", rb_cObject);
   rb_define_alloc_func(rb_cLlamaModelQuantizeParams, llama_model_quantize_params_alloc);
+  /**
+   * Document-method: nthread
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaModelQuantizeParams, "nthread", RUBY_METHOD_FUNC(llama_model_quantize_params_get_nthread), 0);
+  /**
+   * Document-method: nthread=
+   * @param [Integer] nthread
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaModelQuantizeParams, "nthread=", RUBY_METHOD_FUNC(llama_model_quantize_params_set_nthread), 1);
+  /**
+   * Document-method: ftype
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaModelQuantizeParams, "ftype", RUBY_METHOD_FUNC(llama_model_quantize_params_get_ftype), 0);
+  /**
+   * Document-method: ftype=
+   * @param [Integer] ftype
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaModelQuantizeParams, "ftype=", RUBY_METHOD_FUNC(llama_model_quantize_params_set_ftype), 1);
+  /**
+   * Document-method: output_tensor_type
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaModelQuantizeParams, "output_tensor_type", RUBY_METHOD_FUNC(llama_model_quantize_params_get_output_tensor_type), 0);
+  /**
+   * Document-method: output_tensor_type=
+   * @param [Integer] output_tensor_type
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaModelQuantizeParams, "output_tensor_type=", RUBY_METHOD_FUNC(llama_model_quantize_params_set_output_tensor_type), 1);
+  /**
+   * Document-method: token_embedding_type
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaModelQuantizeParams, "token_embedding_type", RUBY_METHOD_FUNC(llama_model_quantize_params_get_token_embedding_type), 0);
+  /**
+   * Document-method: token_embedding_type=
+   * @param [Integer] token_embedding_type
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaModelQuantizeParams, "token_embedding_type=", RUBY_METHOD_FUNC(llama_model_quantize_params_set_token_embedding_type), 1);
+  /**
+   * Document-method: allow_requantize
+   * @return [Boolean]
+   */
   rb_define_method(rb_cLlamaModelQuantizeParams, "allow_requantize", RUBY_METHOD_FUNC(llama_model_quantize_params_get_allow_requantize), 0);
+  /**
+   * Document-method: allow_requantize=
+   * @param [Boolean] allow_requantize
+   * @return [Boolean]
+   */
   rb_define_method(rb_cLlamaModelQuantizeParams, "allow_requantize=", RUBY_METHOD_FUNC(llama_model_quantize_params_set_allow_requantize), 1);
+  /**
+   * Document-method: quantize_output_tensor
+   * @return [Boolean]
+   */
   rb_define_method(rb_cLlamaModelQuantizeParams, "quantize_output_tensor", RUBY_METHOD_FUNC(llama_model_quantize_params_get_quantize_output_tensor), 0);
+  /**
+   * Document-method: quantize_output_tensor=
+   * @param [Boolean] quantize_output_tensor
+   * @return [Boolean]
+   */
   rb_define_method(rb_cLlamaModelQuantizeParams, "quantize_output_tensor=", RUBY_METHOD_FUNC(llama_model_quantize_params_set_quantize_output_tensor), 1);
+  /**
+   * Document-method: only_copy
+   * @return [Boolean]
+   */
   rb_define_method(rb_cLlamaModelQuantizeParams, "only_copy", RUBY_METHOD_FUNC(llama_model_quantize_params_get_only_copy), 0);
+  /**
+   * Document-method: only_copy=
+   * @param [Boolean] only_copy
+   * @return [Boolean]
+   */
   rb_define_method(rb_cLlamaModelQuantizeParams, "only_copy=", RUBY_METHOD_FUNC(llama_model_quantize_params_set_only_copy), 1);
+  /**
+   * Document-method: pure
+   * @return [Boolean]
+   */
   rb_define_method(rb_cLlamaModelQuantizeParams, "pure", RUBY_METHOD_FUNC(llama_model_quantize_params_get_pure), 0);
+  /**
+   * Document-method: pure=
+   * @param [Boolean] pure
+   * @return [Boolean]
+   */
   rb_define_method(rb_cLlamaModelQuantizeParams, "pure=", RUBY_METHOD_FUNC(llama_model_quantize_params_set_pure), 1);
+  /**
+   * Document-method: keep_split
+   * @return [Boolean]
+   */
   rb_define_method(rb_cLlamaModelQuantizeParams, "keep_split", RUBY_METHOD_FUNC(llama_model_quantize_params_get_keep_split), 0);
+  /**
+   * Document-method: keep_split=
+   * @param [Boolean] keep_split
+   * @return [Boolean]
+   */
   rb_define_method(rb_cLlamaModelQuantizeParams, "keep_split=", RUBY_METHOD_FUNC(llama_model_quantize_params_set_keep_split), 1);
   /* TODO: void* imatrix */
   /* TODO: void* kv_overrides */
 
-  /* llama_logit_bias */
+  /**
+   * Document-class: LlamaCpp::LlamaLogitBias
+   * "struct llama_logit_bias" wrapper class
+   */
   rb_cLlamaLogitBias = rb_define_class_under(rb_mLlamaCpp, "LlamaLogitBias", rb_cObject);
   rb_define_alloc_func(rb_cLlamaLogitBias, llama_logit_bias_alloc);
+  /**
+   * Document-method: token
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaLogitBias, "token", RUBY_METHOD_FUNC(llama_logit_bias_get_token), 0);
+  /**
+   * Document-method: bias
+   * @return [Float]
+   */
   rb_define_method(rb_cLlamaLogitBias, "bias", RUBY_METHOD_FUNC(llama_logit_bias_get_bias), 0);
 
-  /* llama_sampler_chain_params */
+  /**
+   * Document-class: LlamaCpp::LlamaSamplerChainParams
+   * "struct llama_sampler_chain_params" wrapper class
+   */
   rb_cLlamaSamplerChainParams = rb_define_class_under(rb_mLlamaCpp, "LlamaSamplerChainParams", rb_cObject);
   rb_define_alloc_func(rb_cLlamaSamplerChainParams, llama_sampler_chain_params_alloc);
+  /**
+   * Document-method: no_perf
+   * @return [Boolean]
+   */
   rb_define_method(rb_cLlamaSamplerChainParams, "no_perf", RUBY_METHOD_FUNC(llama_sampler_chain_params_get_no_perf), 0);
+  /**
+   * Document-method: no_perf=
+   * @param [Boolean] no_perf
+   * @return [Boolean]
+   */
   rb_define_method(rb_cLlamaSamplerChainParams, "no_perf=", RUBY_METHOD_FUNC(llama_sampler_chain_params_set_no_perf), 1);
 
-  /* llama_chat_message */
+  /**
+   * Document-class: LlamaCpp::LlamaChatMessage
+   * "struct llama_chat_message" wrapper class
+   */
   VALUE rb_cLlamaChatMessage = rb_define_class_under(rb_mLlamaCpp, "LlamaChatMessage", rb_cObject);
   rb_define_alloc_func(rb_cLlamaChatMessage, llama_chat_message_alloc);
+  /**
+   * Document-method: role
+   * @return [String]
+   */
   rb_define_method(rb_cLlamaChatMessage, "role", RUBY_METHOD_FUNC(llama_chat_message_get_role), 0);
+  /**
+   * Document-method: content
+   * @return [String]
+   */
   rb_define_method(rb_cLlamaChatMessage, "content", RUBY_METHOD_FUNC(llama_chat_message_get_content), 0);
 
-  /* llama_adapter_lora */
+  /**
+   * Document-class: LlamaCpp::LlamaAdapterLora
+   * "struct llama_adapter_lora" wrapper class
+   */
   rb_cLlamaAdapterLora = rb_define_class_under(rb_mLlamaCpp, "LlamaAdapterLora", rb_cObject);
   rb_define_alloc_func(rb_cLlamaAdapterLora, llama_adapter_lora_wrapper_alloc);
 
@@ -3674,19 +4175,53 @@ void Init_llama_cpp(void) {
 
   /* TODO: llama_apply_adapter_cvec */
 
-  /* struct llama_kv_cache_view_cell */
+  /**
+   * Document-class: LlamaCpp::LlamaKvCacheViewCell
+   * "struct llama_kv_cache_view_cell" wrapper class
+   */
   VALUE rb_cLlamaKvCacheViewCell = rb_define_class_under(rb_mLlamaCpp, "LlamaKvCacheViewCell", rb_cObject);
   rb_define_alloc_func(rb_cLlamaKvCacheViewCell, llama_kv_cache_view_cell_alloc);
+  /**
+   * Document-method: pos
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaKvCacheViewCell, "pos", RUBY_METHOD_FUNC(llama_kv_cache_view_cell_get_pos), 0);
 
-  /* struct llama_kv_cache_view */
+  /**
+   * Document-class: LlamaCpp::LlamaKvCacheView
+   * "struct llama_kv_cache_view" wrapper class
+   */
   rb_cLlamaKvCacheView = rb_define_class_under(rb_mLlamaCpp, "LlamaKvCacheView", rb_cObject);
   rb_define_alloc_func(rb_cLlamaKvCacheView, llama_kv_cache_view_alloc);
+  /**
+   * Document-method: n_cells
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaKvCacheView, "n_cells", RUBY_METHOD_FUNC(llama_kv_cache_view_get_n_cells), 0);
+  /**
+   * Document-method: n_seq_max
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaKvCacheView, "n_seq_max", RUBY_METHOD_FUNC(llama_kv_cache_view_get_n_seq_max), 0);
+  /**
+   * Document-method: token_count
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaKvCacheView, "token_count", RUBY_METHOD_FUNC(llama_kv_cache_view_get_token_count), 0);
+  /**
+   * Document-method: used_cells
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaKvCacheView, "used_cells", RUBY_METHOD_FUNC(llama_kv_cache_view_get_used_cells), 0);
+  /**
+   * Document-method: max_contiguous
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaKvCacheView, "max_contiguous", RUBY_METHOD_FUNC(llama_kv_cache_view_get_max_contiguous), 0);
+  /**
+   * Document-method: max_contiguous_idx
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaKvCacheView, "max_contiguous_idx", RUBY_METHOD_FUNC(llama_kv_cache_view_get_max_contiguous_idx), 0);
 
   /* llama_kv_cache_view_init */
@@ -3862,7 +4397,10 @@ void Init_llama_cpp(void) {
 
   /* TODO: struct llama_sampler_i */
 
-  /* llama_sampler */
+  /**
+   * Document-class: LlamaCpp::LlamaSampler
+   * "struct llama_sampler" wrapper class
+   */
   rb_cLlamaSampler = rb_define_class_under(rb_mLlamaCpp, "LlamaSampler", rb_cObject);
   rb_define_alloc_func(rb_cLlamaSampler, llama_sampler_alloc);
 
@@ -3962,20 +4500,58 @@ void Init_llama_cpp(void) {
 
   /* TODO: llama_log_set */
 
-  /* struct llama_perf_context_data */
+  /**
+   * Document-class: LlamaCpp::LlamaPerfContextData
+   * "struct llama_perf_context_data" wrapper class
+   */
   rb_cLlamaPerfContextData = rb_define_class_under(rb_mLlamaCpp, "LlamaPerfContextData", rb_cObject);
   rb_define_alloc_func(rb_cLlamaPerfContextData, llama_perf_context_data_alloc);
+  /**
+   * Document-method: t_start_ms
+   * @return [Float]
+   */
   rb_define_method(rb_cLlamaPerfContextData, "t_start_ms", RUBY_METHOD_FUNC(llama_perf_context_data_get_t_start_ms), 0);
+  /**
+   * Document-method: t_load_ms
+   * @return [Float]
+   */
   rb_define_method(rb_cLlamaPerfContextData, "t_load_ms", RUBY_METHOD_FUNC(llama_perf_context_data_get_t_load_ms), 0);
+  /**
+   * Document-method: t_p_eval_ms
+   * @return [Float]
+   */
   rb_define_method(rb_cLlamaPerfContextData, "t_p_eval_ms", RUBY_METHOD_FUNC(llama_perf_context_data_get_t_p_eval_ms), 0);
+  /**
+   * Document-method: t_eval_ms
+   * @return [Float]
+   */
   rb_define_method(rb_cLlamaPerfContextData, "t_eval_ms", RUBY_METHOD_FUNC(llama_perf_context_data_get_t_eval_ms), 0);
+  /**
+   * Document-method: n_p_eval
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaPerfContextData, "n_p_eval", RUBY_METHOD_FUNC(llama_perf_context_data_get_n_p_eval), 0);
+  /**
+   * Document-method: n_eval
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaPerfContextData, "n_eval", RUBY_METHOD_FUNC(llama_perf_context_data_get_n_eval), 0);
 
-  /* struct llama_perf_sampler_data */
+  /**
+   * Document-class: LlamaCpp::LlamaPerfSamplerData
+   * "struct llama_perf_sampler_data" wrapper class
+   */
   rb_cLlamaPerfSamplerData = rb_define_class_under(rb_mLlamaCpp, "LlamaPerfSamplerData", rb_cObject);
   rb_define_alloc_func(rb_cLlamaPerfSamplerData, llama_perf_sampler_data_alloc);
+  /**
+   * Document-method: t_sample_ms
+   * @return [Float]
+   */
   rb_define_method(rb_cLlamaPerfSamplerData, "t_sample_ms", RUBY_METHOD_FUNC(llama_perf_sampler_data_get_t_sample_ms), 0);
+  /**
+   * Document-method: n_sample
+   * @return [Integer]
+   */
   rb_define_method(rb_cLlamaPerfSamplerData, "n_sample", RUBY_METHOD_FUNC(llama_perf_sampler_data_get_n_sample), 0);
 
   /* llama_perf_context */
