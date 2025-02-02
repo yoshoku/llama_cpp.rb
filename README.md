@@ -57,40 +57,19 @@ An example of Ruby code that generates sentences with the quantization model is 
 ```ruby
 require 'llama_cpp'
 
-model_params = LLaMACpp::ModelParams.new
-model = LLaMACpp::Model.new(model_path: '/home/user/llama.cpp/models/open_llama_7b/ggml-model-q4_0.bin', params: model_params)
+LlamaCpp.ggml_backend_load_all
 
-context_params = LLaMACpp::ContextParams.new
-context_params.seed = 42
-context = LLaMACpp::Context.new(model: model, params: context_params)
+model_params = LlamaCpp::LlamaModelParams.new
+model = LlamaCpp::llama_model_load_from_file('/home/user/llama.cpp/models/open_llama_7b/ggml-model-q4_0.bin', model_params)
+
+context_params = LlamaCpp::LlamaContextParams.new
+context = LlamaCpp.llama_init_from_model(model, context_params)
 
 puts LLaMACpp.generate(context, 'Hello, World.')
+
+LlamaCpp.llama_free(context)
+LlamaCpp.llama_model_free(model)
 ```
-
-## Examples
-There is a sample program in the [examples](https://github.com/yoshoku/llama_cpp.rb/tree/main/examples) directory that allow interactvie communication like ChatGPT.
-
-```sh
-$ git clone https://github.com/yoshoku/llama_cpp.rb.git
-$ cd examples
-$ bundle install
-$ ruby chat.rb --model /home/user/llama.cpp/models/open_llama_7b/ggml-model-q4_0.bin --seed 2023
-...
-User: Who is the originator of the Ruby programming language?
-Bob: The originator of the Ruby programming language is Mr. Yukihiro Matsumoto.
-User:
-```
-
-![llama_cpp_chat_example](https://github.com/yoshoku/llama_cpp.rb/assets/5562409/374ae3d8-63a6-498f-ae6e-5552b464bdda)
-
-Japanse chat is also possible using the [Vicuna model on Hugging Face](https://huggingface.co/CRD716/ggml-vicuna-1.1-quantized).
-
-```sh
-$ wget https://huggingface.co/CRD716/ggml-vicuna-1.1-quantized/resolve/main/ggml-vicuna-7b-1.1-q4_0.bin
-$ ruby chat.rb --model ggml-vicuna-7b-1.1-q4_0.bin --file prompt_jp.txt
-```
-
-![llama_cpp rb-jpchat](https://github.com/yoshoku/llama_cpp.rb/assets/5562409/526ff18c-2bb2-4b06-8933-f72960024033)
 
 ## Contributing
 
