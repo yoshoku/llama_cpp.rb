@@ -6,8 +6,6 @@
 
 llama_cpp.rb provides Ruby bindings for the [llama.cpp](https://github.com/ggerganov/llama.cpp).
 
-This gem is still under development and may undergo many changes in the future.
-
 ## Installation
 
 Install the llama.cpp. If you use homebrew, install it by executing:
