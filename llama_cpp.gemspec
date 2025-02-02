@@ -28,7 +28,6 @@ Gem::Specification.new do |spec|
                      .reject { |f| f.match(%r{\A(?:(?:bin|doc|test|spec|node_modules|pkg|tmp|\.git|\.github|\.husky)/)}) }
                      .select { |f| f.match(/\.(?:rb|rbs|h|hpp|c|cpp|cu|m|metal|mk|md|txt)$/) }
   end
-  spec.files.delete('ext/llama_cpp/dummy.rb')
 
   spec.bindir = 'exe'
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
