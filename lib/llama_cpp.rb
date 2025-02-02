@@ -9,98 +9,54 @@ module LlamaCpp
 
   # Generates sentences following the given prompt for operation check.
   #
-  # @param context [LLaMACpp::Context] The context to use.
+  # @param context [LlamaCpp::LlamaContext] The context to use.
   # @param prompt [String] The prompt to start generation with.
   # @param n_predict [Integer] The number of tokens to predict.
-  # @param n_keep [Integer] The number of tokens to keep in the context.
-  # @param n_batch [Integer] The number of tokens to process in a batch.
-  # @param repeat_last_n [Integer] The number of tokens to consider for repetition penalty.
-  # @param repeat_penalty [Float] The repetition penalty.
-  # @param frequency [Float] The frequency penalty.
-  # @param presence [Float] The presence penalty.
-  # @param top_k [Integer] The number of tokens to consider for top-k sampling.
-  # @param top_p [Float] The probability threshold for nucleus sampling.
-  # @param tfs_z [Float] The z parameter for tail-free sampling.
-  # @param typical_p [Float] The probability for typical sampling.
-  # @param temperature [Float] The temperature for temperature sampling.
   # @return [String]
-  def generate(context, prompt, # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/ParameterLists, Metrics/PerceivedComplexity
-               n_predict: 128, n_keep: 10, n_batch: 512, repeat_last_n: 64,
-               repeat_penalty: 1.1, frequency: 0.0, presence: 0.0, top_k: 40,
-               top_p: 0.95, tfs_z: 1.0, typical_p: 1.0, temperature: 0.8)
-    raise ArgumentError, 'context must be an instance of LLaMACpp::Context' unless context.is_a?(LLaMACpp::Context)
+  def generate(context, prompt, n_predict: 128) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    raise ArgumentError, 'context must be a LlamaContext' unless context.is_a?(LlamaCpp::LlamaContext)
     raise ArgumentError, 'prompt must be a String' unless prompt.is_a?(String)
 
-    spaced_prompt = " #{prompt}"
-    embd_input = context.model.tokenize(text: spaced_prompt, add_bos: true)
+    model = LlamaCpp.llama_get_model(context)
+    vocab = LlamaCpp.llama_model_get_vocab(model)
 
-    n_ctx = context.n_ctx
-    raise ArgumentError, "prompt is too long #{embd_input.size} tokens, maximum is #{n_ctx - 4}" if embd_input.size > n_ctx - 4
+    n_prompt = -LlamaCpp.llama_tokenize(vocab, prompt, [], 0, true, true)
 
-    last_n_tokens = [0] * n_ctx
+    prompt_tokens = []
+    raise 'Failed to tokenize the prompt' if LlamaCpp.llama_tokenize(vocab, prompt, prompt_tokens, n_prompt, true,
+                                                                     true).negative?
 
-    embd = []
-    n_consumed = 0
-    n_past = 0
-    n_remain = n_predict
-    n_vocab = context.model.n_vocab
+    ctx_params = LlamaCpp::LlamaContextParams.new
+    ctx_params.n_ctx = n_prompt + n_predict - 1
+    ctx_params.n_batch = n_prompt
+    ctx_params.no_perf = false
+
+    ctx = LlamaCpp.llama_init_from_model(model, ctx_params)
+
+    sparams = LlamaCpp::LlamaSamplerChainParams.new
+    sparams.no_perf = false
+    smpl = LlamaCpp.llama_sampler_chain_init(sparams)
+    LlamaCpp.llama_sampler_chain_add(smpl, LlamaCpp.llama_sampler_init_greedy)
+
+    batch = LlamaCpp.llama_batch_get_one(prompt_tokens)
+
+    n_pos = 0
     output = []
+    while n_pos + batch.n_tokens < n_prompt + n_predict
+      break if LlamaCpp.llama_decode(ctx, batch) != 0
 
-    while n_remain != 0
-      unless embd.empty?
-        if n_past + embd.size > n_ctx
-          n_left = n_past - n_keep
-          n_past = n_keep
-          embd.insert(0, last_n_tokens[(n_ctx - (n_left / 2) - embd.size)...-embd.size])
-        end
+      n_pos += batch.n_tokens
 
-        context.decode(LLaMACpp::Batch.get_one(tokens: embd, n_tokens: embd.size, pos_zero: n_past, seq_id: 0))
-      end
+      new_token_id = LlamaCpp.llama_sampler_sample(smpl, ctx, -1)
+      break if llama_vocab_is_eog?(vocab, new_token_id)
 
-      n_past += embd.size
-      embd.clear
+      buf = llama_token_to_piece(vocab, new_token_id, 0, true)
+      output << buf
 
-      if embd_input.size <= n_consumed
-        logits = context.logits
-        base_candidates = Array.new(n_vocab) { |i| LLaMACpp::TokenData.new(id: i, logit: logits[i], p: 0.0) }
-        candidates = LLaMACpp::TokenDataArray.new(base_candidates)
-
-        # apply penalties
-        last_n_repeat = [last_n_tokens.size, repeat_last_n, n_ctx].min
-        context.sample_repetition_penalties(
-          candidates, last_n_tokens[-last_n_repeat..],
-          penalty_repeat: repeat_penalty, penalty_freq: frequency, penalty_present: presence
-        )
-
-        # temperature sampling
-        context.sample_top_k(candidates, k: top_k)
-        context.sample_tail_free(candidates, z: tfs_z)
-        context.sample_typical(candidates, prob: typical_p)
-        context.sample_top_p(candidates, prob: top_p)
-        context.sample_temp(candidates, temp: temperature)
-        id = context.sample_token(candidates)
-
-        last_n_tokens.shift
-        last_n_tokens.push(id)
-
-        embd.push(id)
-        n_remain -= 1
-      else
-        while embd_input.size > n_consumed
-          embd.push(embd_input[n_consumed])
-          last_n_tokens.shift
-          last_n_tokens.push(embd_input[n_consumed])
-          n_consumed += 1
-          break if embd.size >= n_batch
-        end
-      end
-
-      embd.each { |token| output << context.model.token_to_piece(token) }
-
-      break if !embd.empty? && embd[-1] == context.model.token_eos
+      batch = LlamaCpp.llama_batch_get_one([new_token_id])
     end
 
-    output.join.scrub('?').strip.delete_prefix(prompt).strip
+    output.join
   end
 end
 
