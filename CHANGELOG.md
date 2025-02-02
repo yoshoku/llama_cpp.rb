@@ -1,6 +1,7 @@
 ## [[0.18.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.17.10...v0.18.0)] - 2025-02-02
 
 **Breaking Changes**
+
 All the native extensions code was rewritten in C. The high-level API has been removed and replaced with a simple bindings library.
 The fast update speed of llama.cpp makes it difficult to keep up with the creation of this binding library.
 [As previously noted](https://github.com/yoshoku/llama_cpp.rb/blob/main/CHANGELOG.md#060---2023-09-30),
