@@ -1079,19 +1079,29 @@ static llama_adapter_lora_wrapper* get_llama_adapter_lora_wrapper(VALUE self) {
   return data;
 }
 
-/* llama_backend_init */
+/**
+ * @overload llama_backend_init
+ *   @return [NilClass]
+ */
 static VALUE rb_llama_backend_init(VALUE self) {
   llama_backend_init();
   return Qnil;
 }
 
-/* llama_backend_free */
+/**
+ * @overload llama_backend_free
+ *   @return [NilClass]
+ */
 static VALUE rb_llama_backend_free(VALUE self) {
   llama_backend_free();
   return Qnil;
 }
 
-/* llama_numa_init */
+/**
+ * @overload llama_numa_init(numa)
+ *  @param [Integer] numa
+ *  @return [NilClass]
+ */
 static VALUE rb_llama_numa_init(VALUE self, VALUE numa) {
   if (!RB_INTEGER_TYPE_P(numa)) {
     rb_raise(rb_eArgError, "numa must be an Integer");
@@ -1101,7 +1111,11 @@ static VALUE rb_llama_numa_init(VALUE self, VALUE numa) {
   return Qnil;
 }
 
-/* llama_model_free */
+/**
+ * @overload llama_model_free(model)
+ *  @param [LlamaModel] model
+ *  @return [NilClass]
+ */
 static VALUE rb_llama_model_free(VALUE self, VALUE model) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
     rb_raise(rb_eArgError, "model must be a LlamaModel");
@@ -1115,7 +1129,12 @@ static VALUE rb_llama_model_free(VALUE self, VALUE model) {
   return Qnil;
 }
 
-/* llama_model_load_from_file */
+/**
+ * @overload llama_model_load_from_file(path_model)
+ *  @param [String] path_model
+ *  @param [LlamaModelParams] params
+ *  @return [LlamaModel]
+ */
 static VALUE rb_llama_model_load_from_file(VALUE self, VALUE path_model, VALUE params) {
   if (!RB_TYPE_P(path_model, T_STRING)) {
     rb_raise(rb_eArgError, "path_model must be a String");
@@ -1134,7 +1153,12 @@ static VALUE rb_llama_model_load_from_file(VALUE self, VALUE path_model, VALUE p
   return TypedData_Wrap_Struct(rb_cLlamaModel, &llama_model_wrapper_data_type, model_wrapper);
 }
 
-/* llama_model_load_from_splits */
+/**
+ * @overload llama_model_load_from_splits(paths, params)
+ *  @param [Array<String>] paths
+ *  @param [LlamaModelParams] params
+ *  @return [LlamaModel]
+ */
 static VALUE rb_llama_model_load_from_splits(VALUE self, VALUE paths, VALUE params) {
   if (!RB_TYPE_P(paths, T_ARRAY)) {
     rb_raise(rb_eArgError, "paths must be an Array");
@@ -1162,7 +1186,12 @@ static VALUE rb_llama_model_load_from_splits(VALUE self, VALUE paths, VALUE para
   return TypedData_Wrap_Struct(rb_cLlamaModel, &llama_model_wrapper_data_type, model_wrapper);
 }
 
-/* llama_init_from_model */
+/**
+ * @overload llama_init_from_model(model, params)
+ *  @param [LlamaModel] model
+ *  @param [LlamaContextParams] params
+ *  @return [LlamaContext]
+ */
 static VALUE rb_llama_init_from_model(VALUE self, VALUE model, VALUE params) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
     rb_raise(rb_eArgError, "model must be a LlamaModel");
@@ -1181,7 +1210,11 @@ static VALUE rb_llama_init_from_model(VALUE self, VALUE model, VALUE params) {
   return TypedData_Wrap_Struct(rb_cLlamaContext, &llama_context_wrapper_data_type, context_wrapper);
 }
 
-/* llama_free */
+/**
+ * @overload llama_free(context)
+ *  @param [LlamaContext] context
+ *  @return [NilClass]
+ */
 static VALUE rb_llama_free(VALUE self, VALUE context) {
   if (!rb_obj_is_kind_of(context, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "context must be a LlamaContext");
@@ -1195,37 +1228,59 @@ static VALUE rb_llama_free(VALUE self, VALUE context) {
   return Qnil;
 }
 
-/* llama_time_us */
+/**
+ * @overload llama_time_us
+ *  @return [Integer]
+ */
 static VALUE rb_llama_time_us(VALUE self) {
   return LONG2NUM(llama_time_us());
 }
 
-/* llama_max_devices */
+/**
+ * @overload llama_max_devices
+ *  @return [Integer]
+ */
 static VALUE rb_llama_max_devices(VALUE self) {
   return SIZET2NUM(llama_max_devices());
 }
 
-/* llama_supports_mmap */
+/**
+ * @overload llama_supports_mmap?
+ *  @return [Boolean]
+ */
 static VALUE rb_llama_supports_mmap(VALUE self) {
   return llama_supports_mmap() ? Qtrue : Qfalse;
 }
 
-/* llama_supports_mlock */
+/**
+ * @overload llama_supports_mlock?
+ *  @return [Boolean]
+ */
 static VALUE rb_llama_supports_mlock(VALUE self) {
   return llama_supports_mlock() ? Qtrue : Qfalse;
 }
 
-/* llama_supports_gpu_offload */
+/**
+ * @overload llama_supports_gpu_offload?
+ *  @return [Boolean]
+ */
 static VALUE rb_llama_supports_gpu_offload(VALUE self) {
   return llama_supports_gpu_offload() ? Qtrue : Qfalse;
 }
 
-/* llama_supports_rpc */
+/**
+ * @overload llama_supports_rpc?
+ *  @return [Boolean]
+ */
 static VALUE rb_llama_supports_rpc(VALUE self) {
   return llama_supports_rpc() ? Qtrue : Qfalse;
 }
 
-/* llama_n_ctx */
+/**
+ * @overload llama_n_ctx(context)
+ *  @param [LlamaContext] context
+ *  @return [Integer]
+ */
 static VALUE rb_llama_n_ctx(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
@@ -1235,7 +1290,11 @@ static VALUE rb_llama_n_ctx(VALUE self, VALUE ctx) {
   return UINT2NUM(llama_n_ctx(context_wrapper->context));
 }
 
-/* llama_n_batch */
+/**
+ * @overload llama_n_batch(context)
+ *  @param [LlamaContext] context
+ *  @return [Integer]
+ */
 static VALUE rb_llama_n_batch(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
@@ -1245,7 +1304,11 @@ static VALUE rb_llama_n_batch(VALUE self, VALUE ctx) {
   return UINT2NUM(llama_n_batch(context_wrapper->context));
 }
 
-/* llama_n_ubatch */
+/**
+ * @overload llama_n_ubatch(context)
+ *  @param [LlamaContext] context
+ *  @return [Integer]
+ */
 static VALUE rb_llama_n_ubatch(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
@@ -1255,7 +1318,11 @@ static VALUE rb_llama_n_ubatch(VALUE self, VALUE ctx) {
   return UINT2NUM(llama_n_ubatch(context_wrapper->context));
 }
 
-/* llama_n_seq_max */
+/**
+ * @overload llama_n_seq_max(context)
+ *  @param [LlamaContext] context
+ *  @return [Integer]
+ */
 static VALUE rb_llama_n_seq_max(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
@@ -1265,7 +1332,11 @@ static VALUE rb_llama_n_seq_max(VALUE self, VALUE ctx) {
   return UINT2NUM(llama_n_seq_max(context_wrapper->context));
 }
 
-/* llama_get_model */
+/**
+ * @overload llama_get_model(context)
+ *  @param [LlamaContext] context
+ *  @return [LlamaModel]
+ */
 static VALUE rb_llama_get_model(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a Context");
@@ -1279,7 +1350,11 @@ static VALUE rb_llama_get_model(VALUE self, VALUE ctx) {
   return TypedData_Wrap_Struct(rb_cLlamaModel, &llama_model_wrapper_data_type, model_wrapper);
 }
 
-/* llama_pooling_type */
+/**
+ * @overload llama_pooling_type(context)
+ *  @param [LlamaContext] context
+ *  @return [Integer]
+ */
 static VALUE rb_llama_pooling_type(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
@@ -1289,7 +1364,11 @@ static VALUE rb_llama_pooling_type(VALUE self, VALUE ctx) {
   return INT2NUM(llama_pooling_type(context_wrapper->context));
 }
 
-/* llama_model_get_vocab */
+/**
+ * @overload llama_model_get_vocab(model)
+ *  @param [LlamaModel] model
+ *  @return [LlamaVocab]
+ */
 static VALUE rb_llama_model_get_vocab(VALUE self, VALUE model) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
     rb_raise(rb_eArgError, "model must be a LlamaModel");
@@ -1303,7 +1382,11 @@ static VALUE rb_llama_model_get_vocab(VALUE self, VALUE model) {
   return TypedData_Wrap_Struct(rb_cLlamaVocab, &llama_vocab_wrapper_data_type, vocab_wrapper);
 }
 
-/* llama_model_rope_type */
+/**
+ * @overload llama_model_rope_type(model)
+ *  @param [LlamaModel] model
+ *  @return [Integer]
+ */
 static VALUE rb_llama_model_rope_type(VALUE self, VALUE model) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
     rb_raise(rb_eArgError, "model must be a LlamaModel");
@@ -1313,7 +1396,11 @@ static VALUE rb_llama_model_rope_type(VALUE self, VALUE model) {
   return INT2NUM(llama_model_rope_type(model_wrapper->model));
 }
 
-/* llama_model_n_ctx_train */
+/**
+ * @overload llama_model_n_ctx_train(model)
+ *  @param [LlamaModel] model
+ *  @return [Integer]
+ */
 static VALUE rb_llama_model_n_ctx_train(VALUE self, VALUE model) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
     rb_raise(rb_eArgError, "model must be a LlamaModel");
@@ -1323,7 +1410,11 @@ static VALUE rb_llama_model_n_ctx_train(VALUE self, VALUE model) {
   return INT2NUM(llama_model_n_ctx_train(model_wrapper->model));
 }
 
-/* llama_model_n_embd */
+/**
+ * @overload llama_model_n_embd(model)
+ *  @param [LlamaModel] model
+ *  @return [Integer]
+ */
 static VALUE rb_llama_model_n_embd(VALUE self, VALUE model) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
     rb_raise(rb_eArgError, "model must be a LlamaModel");
@@ -1333,7 +1424,11 @@ static VALUE rb_llama_model_n_embd(VALUE self, VALUE model) {
   return INT2NUM(llama_model_n_embd(model_wrapper->model));
 }
 
-/* llama_model_n_layer */
+/**
+ * @overload llama_model_n_layer(model)
+ *  @param [LlamaModel] model
+ *  @return [Integer]
+ */
 static VALUE rb_llama_model_n_layer(VALUE self, VALUE model) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
     rb_raise(rb_eArgError, "model must be a LlamaModel");
@@ -1343,7 +1438,11 @@ static VALUE rb_llama_model_n_layer(VALUE self, VALUE model) {
   return INT2NUM(llama_model_n_layer(model_wrapper->model));
 }
 
-/* llama_model_n_head */
+/**
+ * @overload llama_model_n_head(model)
+ *  @param [LlamaModel] model
+ *  @return [Integer]
+ */
 static VALUE rb_llama_model_n_head(VALUE self, VALUE model) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
     rb_raise(rb_eArgError, "model must be a LlamaModel");
@@ -1353,7 +1452,11 @@ static VALUE rb_llama_model_n_head(VALUE self, VALUE model) {
   return INT2NUM(llama_model_n_head(model_wrapper->model));
 }
 
-/* llama_model_rope_freq_scale_train */
+/**
+ * @overload llama_model_rope_freq_scale_train(model)
+ *  @param [LlamaModel] model
+ *  @return [Float]
+ */
 static VALUE rb_llama_model_rope_freq_scale_train(VALUE self, VALUE model) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
     rb_raise(rb_eArgError, "model must be a LlamaModel");
@@ -1363,7 +1466,11 @@ static VALUE rb_llama_model_rope_freq_scale_train(VALUE self, VALUE model) {
   return DBL2NUM(llama_model_rope_freq_scale_train(model_wrapper->model));
 }
 
-/* llama_vocab_type */
+/**
+ * @overload llama_vocab_type(vocab)
+ *  @param [LlamaVocab] vocab
+ *  @return [Integer]
+ */
 static VALUE rb_llama_vocab_type(VALUE self, VALUE vocab) {
   if (!rb_obj_is_kind_of(vocab, rb_cLlamaVocab)) {
     rb_raise(rb_eArgError, "vocab must be a LlamaVocab");
@@ -1375,7 +1482,11 @@ static VALUE rb_llama_vocab_type(VALUE self, VALUE vocab) {
   return vt;
 }
 
-/* llama_vocab_n_tokens */
+/**
+ * @overload llama_vocab_n_tokens(vocab)
+ *  @param [LlamaVocab] vocab
+ *  @return [Integer]
+ */
 static VALUE rb_llama_vocab_n_tokens(VALUE self, VALUE vocab) {
   if (!rb_obj_is_kind_of(vocab, rb_cLlamaVocab)) {
     rb_raise(rb_eArgError, "vocab must be a LlamaVocab");
@@ -1387,7 +1498,11 @@ static VALUE rb_llama_vocab_n_tokens(VALUE self, VALUE vocab) {
   return n_tokens;
 }
 
-/* llama_model_desc */
+/**
+ * @overload llama_model_desc(model)
+ *  @param [LlamaModel] model
+ *  @return [String]
+ */
 static VALUE rb_llama_model_desc(VALUE self, VALUE model) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
     rb_raise(rb_eArgError, "model must be a LlamaModel");
@@ -1400,7 +1515,11 @@ static VALUE rb_llama_model_desc(VALUE self, VALUE model) {
   return rb_utf8_str_new_cstr(buf);
 }
 
-/* llama_model_size */
+/**
+ * @overload llama_model_size(model)
+ *  @param [LlamaModel] model
+ *  @return [Integer]
+ */
 static VALUE rb_llama_model_size(VALUE self, VALUE model) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
     rb_raise(rb_eArgError, "model must be a LlamaModel");
@@ -1424,7 +1543,11 @@ static VALUE rb_llama_model_chat_template(VALUE self, VALUE model) {
 }
 */
 
-/* llama_model_n_params */
+/**
+ * @overload llama_model_n_params(model)
+ *  @param [LlamaModel] model
+ *  @return [Integer]
+ */
 static VALUE rb_llama_model_n_params(VALUE self, VALUE model) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
     rb_raise(rb_eArgError, "model must be a LlamaModel");
@@ -1434,7 +1557,11 @@ static VALUE rb_llama_model_n_params(VALUE self, VALUE model) {
   return ULONG2NUM(llama_model_n_params(model_wrapper->model));
 }
 
-/* llama_model_has_encoder */
+/**
+ * @overload llama_model_has_encoder?(model)
+ *  @param [LlamaModel] model
+ *  @return [Boolean]
+ */
 static VALUE rb_llama_model_has_encoder(VALUE self, VALUE model) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
     rb_raise(rb_eArgError, "model must be a LlamaModel");
@@ -1444,7 +1571,11 @@ static VALUE rb_llama_model_has_encoder(VALUE self, VALUE model) {
   return llama_model_has_encoder(model_wrapper->model) ? Qtrue : Qfalse;
 }
 
-/* llama_model_has_decoder */
+/**
+ * @overload llama_model_has_decoder(model)
+ *  @param [LlamaModel] model
+ *  @return [Boolean]
+ */
 static VALUE rb_llama_model_has_decoder(VALUE self, VALUE model) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
     rb_raise(rb_eArgError, "model must be a LlamaModel");
@@ -1454,7 +1585,11 @@ static VALUE rb_llama_model_has_decoder(VALUE self, VALUE model) {
   return llama_model_has_decoder(model_wrapper->model) ? Qtrue : Qfalse;
 }
 
-/* llama_model_decoder_start_token */
+/**
+ * @overload llama_model_decoder_start_token(model)
+ *  @param [LlamaModel] model
+ *  @return [Integer]
+ */
 static VALUE rb_llama_model_decoder_start_token(VALUE self, VALUE model) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
     rb_raise(rb_eArgError, "model must be a LlamaModel");
@@ -1464,7 +1599,11 @@ static VALUE rb_llama_model_decoder_start_token(VALUE self, VALUE model) {
   return INT2NUM(llama_model_decoder_start_token(model_wrapper->model));
 }
 
-/* llama_model_is_recurrent */
+/**
+ * @overload llama_model_is_recurrent?(model)
+ *  @param [LlamaModel] model
+ *  @return [Boolean]
+ */
 static VALUE rb_llama_model_is_recurrent(VALUE self, VALUE model) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
     rb_raise(rb_eArgError, "model must be a LlamaModel");
@@ -1474,7 +1613,13 @@ static VALUE rb_llama_model_is_recurrent(VALUE self, VALUE model) {
   return llama_model_is_recurrent(model_wrapper->model) ? Qtrue : Qfalse;
 }
 
-/* llama_model_quantize */
+/**
+ * @overload llama_model_quantize(fname_inp, fname_out, params)
+ *  @param [String] fname_inp
+ *  @param [String] fname_out
+ *  @param [LlamaModelQuantizeParams] params
+ *  @return [Boolean]
+ */
 static VALUE rb_llama_model_quantize(VALUE self, VALUE fname_inp, VALUE fname_out, VALUE params) {
   if (!RB_TYPE_P(fname_inp, T_STRING)) {
     rb_raise(rb_eArgError, "fname_inp must be a String");
@@ -1498,7 +1643,12 @@ static VALUE rb_llama_model_quantize(VALUE self, VALUE fname_inp, VALUE fname_ou
   return res == 0 ? Qtrue : Qfalse;
 }
 
-/* llama_adapter_lora_init */
+/**
+ * @overload llama_adapter_lora_init(model, path_lora)
+ *  @param [LlamaModel] model
+ *  @param [String] path_lora
+ *  @return [LlamaAdapterLora]
+ */
 static VALUE rb_llama_adapter_lora_init(VALUE self, VALUE model, VALUE path_lora) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
     rb_raise(rb_eArgError, "model must be a LlamaModel");
@@ -1517,7 +1667,13 @@ static VALUE rb_llama_adapter_lora_init(VALUE self, VALUE model, VALUE path_lora
   return TypedData_Wrap_Struct(rb_cLlamaAdapterLora, &llama_adapter_lora_wrapper_data_type, adapter_wrapper);
 }
 
-/* llama_set_adapter_lora */
+/**
+ * @overload llama_set_adapter_lora(context, adapter, scale)
+ *  @param [LlamaContext] context
+ *  @param [LlamaAdapterLora] adapter
+ *  @param [Float] scale
+ *  @return [Integer]
+ */
 static VALUE rb_llama_set_adapter_lora(VALUE self, VALUE ctx, VALUE adapter, VALUE scale) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
@@ -1539,7 +1695,12 @@ static VALUE rb_llama_set_adapter_lora(VALUE self, VALUE ctx, VALUE adapter, VAL
   return NUM2INT(res);
 }
 
-/* llama_rm_adapter_lora */
+/**
+ * @overload llama_rm_adapter_lora(context, adapter)
+ *  @param [LlamaContext] context
+ *  @param [LlamaAdapterLora] adapter
+ *  @return [Integer]
+ */
 static VALUE rb_llama_rm_adapter_lora(VALUE self, VALUE ctx, VALUE adapter) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
@@ -1557,7 +1718,11 @@ static VALUE rb_llama_rm_adapter_lora(VALUE self, VALUE ctx, VALUE adapter) {
   return NUM2INT(res);
 }
 
-/* llama_clear_adapter_lora */
+/**
+ * @overload llama_clear_adapter_lora(context)
+ *  @param [LlamaContext] context
+ *  @return [NilClass]
+ */
 static VALUE rb_llama_clear_adapter_lora(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
@@ -1569,7 +1734,11 @@ static VALUE rb_llama_clear_adapter_lora(VALUE self, VALUE ctx) {
   return Qnil;
 }
 
-/* llama_adapter_lora_free */
+/**
+ * @overload llama_adapter_lora_free(adapter)
+ *  @param [LlamaAdapterLora] adapter
+ *  @return [NilClass]
+ */
 static VALUE rb_llama_adapter_lora_free(VALUE self, VALUE adapter) {
   if (!rb_obj_is_kind_of(adapter, rb_cLlamaAdapterLora)) {
     rb_raise(rb_eArgError, "adapter must be a LlamaAdapterLora");
@@ -1692,7 +1861,12 @@ static VALUE llama_kv_cache_view_get_max_contiguous_idx(VALUE self) {
 /* TODO: struct llama_kv_cache_view_cell * cells; */
 /* TODO: llama_seq_id * cells_sequences; */
 
-/* llama_kv_cache_view_init */
+/**
+ * @overload llama_kv_cache_view_init(context, n_seq_max)
+ *  @param [LlamaContext] context
+ *  @param [Integer] n_seq_max
+ *  @return [LlamaKvCacheView]
+ */
 static VALUE rb_llama_kv_cache_view_init(VALUE self, VALUE ctx, VALUE n_seq_max) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
@@ -1709,7 +1883,11 @@ static VALUE rb_llama_kv_cache_view_init(VALUE self, VALUE ctx, VALUE n_seq_max)
   return TypedData_Wrap_Struct(rb_cLlamaKvCacheView, &llama_kv_cache_view_type, data);
 }
 
-/* llama_kv_cache_view_free */
+/**
+ * @overload llama_kv_cache_view_free(view)
+ *  @param [LlamaKvCacheView] view
+ *  @return [NilClass]
+ */
 static VALUE rb_llama_kv_cache_view_free(VALUE self, VALUE view) {
   if (!rb_obj_is_kind_of(view, rb_cLlamaKvCacheView)) {
     rb_raise(rb_eArgError, "view must be a LlamaKvCacheView");
@@ -1722,7 +1900,12 @@ static VALUE rb_llama_kv_cache_view_free(VALUE self, VALUE view) {
   return Qnil;
 }
 
-/* llama_kv_cache_view_update */
+/**
+ * @overload llama_kv_cache_view_update(context, view)
+ *  @param [LlamaContext] context
+ *  @param [LlamaKvCacheView] view
+ *  @return [NilClass]
+ */
 static VALUE rb_llama_kv_cache_view_update(VALUE self, VALUE ctx, VALUE view) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
@@ -1740,6 +1923,11 @@ static VALUE rb_llama_kv_cache_view_update(VALUE self, VALUE ctx, VALUE view) {
   return Qnil;
 }
 
+/**
+ * @overload llama_get_kv_cache_token_count(context)
+ *  @param [LlamaContext] context
+ *  @return [Integer]
+ */
 static VALUE rb_llama_get_kv_cache_token_count(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
@@ -1751,6 +1939,11 @@ static VALUE rb_llama_get_kv_cache_token_count(VALUE self, VALUE ctx) {
   return INT2NUM(n_tokens_kv_cache);
 }
 
+/**
+ * @overload llama_get_kv_cache_used_cells(context)
+ *  @param [LlamaContext] context
+ *  @return [Integer]
+ */
 static VALUE rb_llama_get_kv_cache_used_cells(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
@@ -1762,6 +1955,11 @@ static VALUE rb_llama_get_kv_cache_used_cells(VALUE self, VALUE ctx) {
   return INT2NUM(n_used_kv_cells);
 }
 
+/**
+ * @overload llama_kv_cache_clear(context)
+ *  @param [LlamaContext] context
+ *  @return [NilClass]
+ */
 static VALUE rb_llama_kv_cache_clear(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
@@ -1773,7 +1971,14 @@ static VALUE rb_llama_kv_cache_clear(VALUE self, VALUE ctx) {
   return Qnil;
 }
 
-/* llama_kv_cache_seq_rm */
+/**
+ * @overload llama_kv_cache_seq_rm(context, seq_id, p0, p1)
+ *  @param [LlamaContext] context
+ *  @param [Integer] seq_id
+ *  @param [Integer] p0
+ *  @param [Integer] p1
+ *  @return [Boolean]
+ */
 static VALUE rb_llama_kv_cache_seq_rm(VALUE self, VALUE ctx, VALUE seq_id, VALUE p0, VALUE p1) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
@@ -1797,7 +2002,15 @@ static VALUE rb_llama_kv_cache_seq_rm(VALUE self, VALUE ctx, VALUE seq_id, VALUE
   return res ? Qtrue : Qfalse;
 }
 
-/* llama_kv_cache_seq_cp */
+/**
+ * @overload llama_kv_cache_seq_cp(context, seq_id_src, seq_id_dst, p0, p1)
+ *  @param [LlamaContext] context
+ *  @param [Integer] seq_id_src
+ *  @param [Integer] seq_id_dst
+ *  @param [Integer] p0
+ *  @param [Integer] p1
+ *  @return [NilClass]
+ */
 static VALUE rb_llama_kv_cache_seq_cp(VALUE self, VALUE ctx, VALUE seq_id_src, VALUE seq_id_dst, VALUE p0, VALUE p1) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
@@ -1825,7 +2038,12 @@ static VALUE rb_llama_kv_cache_seq_cp(VALUE self, VALUE ctx, VALUE seq_id_src, V
   return Qnil;
 }
 
-/* llama_kv_cache_seq_keep */
+/**
+ * @overload llama_kv_cache_seq_keep(context, seq_id)
+ *  @param [LlamaContext] context
+ *  @param [Integer] seq_id
+ *  @return [NilClass]
+ */
 static VALUE rb_llama_kv_cache_seq_keep(VALUE self, VALUE ctx, VALUE seq_id) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
@@ -1841,7 +2059,15 @@ static VALUE rb_llama_kv_cache_seq_keep(VALUE self, VALUE ctx, VALUE seq_id) {
   return Qnil;
 }
 
-/* llama_kv_cache_seq_add */
+/**
+ * @overload llama_kv_cache_seq_add(context, seq_id, p0, p1, delta)
+ *  @param [LlamaContext] context
+ *  @param [Integer] seq_id
+ *  @param [Integer] p0
+ *  @param [Integer] p1
+ *  @param [Integer] delta
+ *  @return [NilClass]
+ */
 static VALUE rb_llama_kv_cache_seq_add(VALUE self, VALUE ctx, VALUE seq_id, VALUE p0, VALUE p1, VALUE delta) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
@@ -1869,7 +2095,15 @@ static VALUE rb_llama_kv_cache_seq_add(VALUE self, VALUE ctx, VALUE seq_id, VALU
   return Qnil;
 }
 
-/* llama_kv_cache_seq_div */
+/**
+ * @overload llama_kv_cache_seq_div(context, seq_id, p0, p1, d)
+ *  @param [LlamaContext] context
+ *  @param [Integer] seq_id
+ *  @param [Integer] p0
+ *  @param [Integer] p1
+ *  @param [Integer] d
+ *  @return [NilClass]
+ */
 static VALUE rb_llama_kv_cache_seq_div(VALUE self, VALUE ctx, VALUE seq_id, VALUE p0, VALUE p1, VALUE d) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
@@ -1897,7 +2131,12 @@ static VALUE rb_llama_kv_cache_seq_div(VALUE self, VALUE ctx, VALUE seq_id, VALU
   return Qnil;
 }
 
-/* llama_kv_cache_seq_pos_max */
+/**
+ * @overload llama_kv_cache_seq_pos_max(context, seq_id)
+ *  @param [LlamaContext] context
+ *  @param [Integer] seq_id
+ *  @return [Integer]
+ */
 static VALUE rb_llama_kv_cache_seq_pos_max(VALUE self, VALUE ctx, VALUE seq_id) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
@@ -1913,7 +2152,11 @@ static VALUE rb_llama_kv_cache_seq_pos_max(VALUE self, VALUE ctx, VALUE seq_id) 
   return INT2NUM(pos_max);
 }
 
-/* llama_kv_cache_defrag */
+/**
+ * @overload llama_kv_cache_defrag(context)
+ *  @param [LlamaContext] context
+ *  @return [NilClass]
+ */
 static VALUE rb_llama_kv_cache_defrag(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
@@ -1925,7 +2168,11 @@ static VALUE rb_llama_kv_cache_defrag(VALUE self, VALUE ctx) {
   return Qnil;
 }
 
-/* llama_kv_cache_update */
+/**
+ * @overload llama_kv_cache_update(context)
+ *  @param [LlamaContext] context
+ *  @return [NilClass]
+ */
 static VALUE rb_llama_kv_cache_update(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
@@ -1937,7 +2184,11 @@ static VALUE rb_llama_kv_cache_update(VALUE self, VALUE ctx) {
   return Qnil;
 }
 
-/* llama_kv_cache_can_shift */
+/**
+ * @overload llama_kv_cache_can_shift?(context)
+ *  @param [LlamaContext] context
+ *  @return [Boolean]
+ */
 static VALUE rb_llama_kv_cache_can_shift(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
@@ -1949,7 +2200,11 @@ static VALUE rb_llama_kv_cache_can_shift(VALUE self, VALUE ctx) {
   return res ? Qtrue : Qfalse;
 }
 
-/* llama_state_get_size */
+/**
+ * @overload llama_state_get_size(context)
+ *  @param [LlamaContext] context
+ *  @return [Integer]
+ */
 static VALUE rb_llama_state_get_size(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
@@ -1961,7 +2216,12 @@ static VALUE rb_llama_state_get_size(VALUE self, VALUE ctx) {
   return SIZET2NUM(size);
 }
 
-/*  llama_state_seq_get_size */
+/**
+ * @overload llama_state_seq_get_size(context, seq_id)
+ *  @param [LlamaContext] context
+ *  @param [Integer] seq_id
+ *  @return [Integer]
+ */
 static VALUE rb_llama_state_seq_get_size(VALUE self, VALUE ctx, VALUE seq_id) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
@@ -1977,7 +2237,11 @@ static VALUE rb_llama_state_seq_get_size(VALUE self, VALUE ctx, VALUE seq_id) {
   return SIZET2NUM(size);
 }
 
-/* llama_batch_get_one */
+/**
+ * @overload llama_batch_get_one(tokens)
+ *  @param [Array<Integer>] tokens
+ *  @return [LlamaBatch]
+ */
 static VALUE rb_llama_batch_get_one(VALUE self, VALUE tokens) {
   if (!RB_TYPE_P(tokens, T_ARRAY)) {
     rb_raise(rb_eArgError, "tokens must be an Array");
@@ -2003,7 +2267,13 @@ static VALUE rb_llama_batch_get_one(VALUE self, VALUE tokens) {
   return TypedData_Wrap_Struct(rb_cLlamaBatch, &llama_batch_type, batch);
 }
 
-/* llama_batch_init */
+/**
+ * @overload llama_batch_init(n_tokens, embd, n_seq_max)
+ *  @param [Integer] n_tokens
+ *  @param [Integer] embd
+ *  @param [Integer] n_seq_max
+ *  @return [LlamaBatch]
+ */
 static VALUE rb_llama_batch_init(VALUE self, VALUE n_tokens, VALUE embd, VALUE n_seq_max) {
   if (!RB_INTEGER_TYPE_P(n_tokens)) {
     rb_raise(rb_eArgError, "n_tokens must be an Integer");
@@ -2022,7 +2292,11 @@ static VALUE rb_llama_batch_init(VALUE self, VALUE n_tokens, VALUE embd, VALUE n
   return TypedData_Wrap_Struct(rb_cLlamaBatch, &llama_batch_type, batch);
 }
 
-/* llama_batch_free */
+/**
+ * @overload llama_batch_free(batch)
+ *  @param [LlamaBatch] batch
+ *  @return [NilClass]
+ */
 static VALUE rb_llama_batch_free(VALUE self, VALUE batch) {
   if (!rb_obj_is_kind_of(batch, rb_cLlamaBatch)) {
     rb_raise(rb_eArgError, "batch must be a LlamaBatch");
@@ -2035,7 +2309,12 @@ static VALUE rb_llama_batch_free(VALUE self, VALUE batch) {
   return Qnil;
 }
 
-/* llama_encode */
+/**
+ * @overload llama_encode(context, batch)
+ *  @param [LlamaContext] context
+ *  @param [LlamaBatch] batch
+ *  @return [Integer]
+ */
 static VALUE rb_llama_encode(VALUE self, VALUE ctx, VALUE batch) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
@@ -2053,7 +2332,12 @@ static VALUE rb_llama_encode(VALUE self, VALUE ctx, VALUE batch) {
   return INT2NUM(res);
 }
 
-/* llama_decode */
+/**
+ * @overload llama_decode(context, batch)
+ *  @param [LlamaContext] context
+ *  @param [LlamaBatch] batch
+ *  @return [Integer]
+ */
 static VALUE rb_llama_decode(VALUE self, VALUE ctx, VALUE batch) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
@@ -2071,7 +2355,13 @@ static VALUE rb_llama_decode(VALUE self, VALUE ctx, VALUE batch) {
   return INT2NUM(res);
 }
 
-/* llama_set_n_threads */
+/**
+ * @overload llama_set_n_threads(context, n_threads, n_threads_batch)
+ *  @param [LlamaContext] context
+ *  @param [Integer] n_threads
+ *  @param [Integer] n_threads_batch
+ *  @return [NilClass]
+ */
 static VALUE rb_llama_set_n_threads(VALUE self, VALUE ctx, VALUE n_threads, VALUE n_threads_batch) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
@@ -2091,7 +2381,11 @@ static VALUE rb_llama_set_n_threads(VALUE self, VALUE ctx, VALUE n_threads, VALU
   return Qnil;
 }
 
-/* llama_n_threads */
+/**
+ * @overload llama_n_threads(context)
+ *  @param [LlamaContext] context
+ *  @return [Integer]
+ */
 static VALUE rb_llama_n_threads(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
@@ -2103,7 +2397,11 @@ static VALUE rb_llama_n_threads(VALUE self, VALUE ctx) {
   return INT2NUM(n_threads);
 }
 
-/* llama_n_threads_batch */
+/**
+ * @overload llama_n_threads_batch(context)
+ *  @param [LlamaContext] context
+ *  @return [Integer]
+ */
 static VALUE rb_llama_n_threads_batch(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
@@ -2115,7 +2413,12 @@ static VALUE rb_llama_n_threads_batch(VALUE self, VALUE ctx) {
   return INT2NUM(n_threads_batch);
 }
 
-/* llama_set_embeddings */
+/**
+ * @overload llama_set_embeddings(context, embeddings)
+ *  @param [LlamaContext] context
+ *  @param [Boolean] embeddings
+ *  @return [NilClass]
+ */
 static VALUE rb_llama_set_embeddings(VALUE self, VALUE ctx, VALUE embeddings) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
@@ -2128,7 +2431,12 @@ static VALUE rb_llama_set_embeddings(VALUE self, VALUE ctx, VALUE embeddings) {
   return Qnil;
 }
 
-/* llama_set_causal_attn */
+/**
+ * @overload llama_set_causal_attn(context, causal_attn)
+ *  @param [LlamaContext] context
+ *  @param [Boolean] causal_attn
+ *  @return [NilClass]
+ */
 static VALUE rb_llama_set_causal_attn(VALUE self, VALUE ctx, VALUE causal_attn) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
@@ -2141,7 +2449,11 @@ static VALUE rb_llama_set_causal_attn(VALUE self, VALUE ctx, VALUE causal_attn) 
   return Qnil;
 }
 
-/* llama_synchronize */
+/**
+ * @overload llama_synchronize(context)
+ *  @param [LlamaContext] context
+ *  @return [NilClass]
+ */
 static VALUE rb_llama_synchronize(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
@@ -2153,7 +2465,12 @@ static VALUE rb_llama_synchronize(VALUE self, VALUE ctx) {
   return Qnil;
 }
 
-/* llama_vocab_get_text */
+/**
+ * @overload llama_vocab_get_text(vocab, token)
+ *  @param [LlamaVocab] vocab
+ *  @param [Integer] token
+ *  @return [String]
+ */
 static VALUE rb_llama_vocab_get_text(VALUE self, VALUE vocab, VALUE token) {
   if (!rb_obj_is_kind_of(vocab, rb_cLlamaVocab)) {
     rb_raise(rb_eArgError, "vocab must be a LlamaVocab");
@@ -2169,7 +2486,12 @@ static VALUE rb_llama_vocab_get_text(VALUE self, VALUE vocab, VALUE token) {
   return rb_utf8_str_new_cstr(text);
 }
 
-/* llama_vocab_get_score */
+/**
+ * @overload llama_vocab_get_score(vocab, token)
+ *  @param [LlamaVocab] vocab
+ *  @param [Integer] token
+ *  @return [Float]
+ */
 static VALUE rb_llama_vocab_get_score(VALUE self, VALUE vocab, VALUE token) {
   if (!rb_obj_is_kind_of(vocab, rb_cLlamaVocab)) {
     rb_raise(rb_eArgError, "vocab must be a LlamaVocab");
@@ -2185,7 +2507,12 @@ static VALUE rb_llama_vocab_get_score(VALUE self, VALUE vocab, VALUE token) {
   return DBL2NUM(score);
 }
 
-/* llama_vocab_get_attr */
+/**
+ * @overload llama_vocab_get_attr(vocab, token)
+ *  @param [LlamaVocab] vocab
+ *  @param [Integer] token
+ *  @return [Integer]
+ */
 static VALUE rb_llama_vocab_get_attr(VALUE self, VALUE vocab, VALUE token) {
   if (!rb_obj_is_kind_of(vocab, rb_cLlamaVocab)) {
     rb_raise(rb_eArgError, "vocab must be a LlamaVocab");
@@ -2201,7 +2528,12 @@ static VALUE rb_llama_vocab_get_attr(VALUE self, VALUE vocab, VALUE token) {
   return INT2NUM(attr);
 }
 
-/* llama_vocab_is_eog */
+/**
+ * @overload llama_vocab_is_eog?(vocab, token)
+ *  @param [LlamaVocab] vocab
+ *  @param [Integer] token
+ *  @return [Boolean]
+ */
 static VALUE rb_llama_vocab_is_eog(VALUE self, VALUE vocab, VALUE token) {
   if (!rb_obj_is_kind_of(vocab, rb_cLlamaVocab)) {
     rb_raise(rb_eArgError, "vocab must be a LlamaVocab");
@@ -2217,7 +2549,12 @@ static VALUE rb_llama_vocab_is_eog(VALUE self, VALUE vocab, VALUE token) {
   return is_eog ? Qtrue : Qfalse;
 }
 
-/* llama_vocab_is_control */
+/**
+ * @overload llama_vocab_is_control?(vocab, token)
+ *  @param [LlamaVocab] vocab
+ *  @param [Integer] token
+ *  @return [Boolean]
+ */
 static VALUE rb_llama_vocab_is_control(VALUE self, VALUE vocab, VALUE token) {
   if (!rb_obj_is_kind_of(vocab, rb_cLlamaVocab)) {
     rb_raise(rb_eArgError, "model must be a LlamaVocab");
@@ -2233,7 +2570,11 @@ static VALUE rb_llama_vocab_is_control(VALUE self, VALUE vocab, VALUE token) {
   return is_control ? Qtrue : Qfalse;
 }
 
-/* llama_vocab_bos */
+/**
+ * @overload llama_vocab_bos(vocab)
+ *  @param [LlamaVocab] vocab
+ *  @return [Integer]
+ */
 static VALUE rb_llama_vocab_bos(VALUE self, VALUE vocab) {
   if (!rb_obj_is_kind_of(vocab, rb_cLlamaVocab)) {
     rb_raise(rb_eArgError, "vocab must be a LlamaVocab");
@@ -2245,7 +2586,11 @@ static VALUE rb_llama_vocab_bos(VALUE self, VALUE vocab) {
   return INT2NUM(token);
 }
 
-/* llama_vocab_eos */
+/**
+ * @overload llama_vocab_eos(vocab)
+ *  @param [LlamaVocab] vocab
+ *  @return [Integer]
+ */
 static VALUE rb_llama_vocab_eos(VALUE self, VALUE vocab) {
   if (!rb_obj_is_kind_of(vocab, rb_cLlamaVocab)) {
     rb_raise(rb_eArgError, "vocab must be a LlamaVocab");
@@ -2257,7 +2602,11 @@ static VALUE rb_llama_vocab_eos(VALUE self, VALUE vocab) {
   return INT2NUM(token);
 }
 
-/* llama_vocab_eot */
+/**
+ * @overload llama_vocab_eot(vocab)
+ *  @param [LlamaVocab] vocab
+ *  @return [Integer]
+ */
 static VALUE rb_llama_vocab_eot(VALUE self, VALUE vocab) {
   if (!rb_obj_is_kind_of(vocab, rb_cLlamaVocab)) {
     rb_raise(rb_eArgError, "vocab must be a LlamaVocab");
@@ -2269,7 +2618,11 @@ static VALUE rb_llama_vocab_eot(VALUE self, VALUE vocab) {
   return INT2NUM(token);
 }
 
-/* llama_vocab_sep */
+/**
+ * @overload llama_vocab_sep(vocab)
+ *  @param [LlamaVocab] vocab
+ *  @return [Integer]
+ */
 static VALUE rb_llama_vocab_sep(VALUE self, VALUE vocab) {
   if (!rb_obj_is_kind_of(vocab, rb_cLlamaVocab)) {
     rb_raise(rb_eArgError, "vocab must be a LlamaVocab");
@@ -2281,7 +2634,11 @@ static VALUE rb_llama_vocab_sep(VALUE self, VALUE vocab) {
   return INT2NUM(token);
 }
 
-/* llama_vocab_nl */
+/**
+ * @overload llama_vocab_nl(vocab)
+ *  @param [LlamaVocab] vocab
+ *  @return [Integer]
+ */
 static VALUE rb_llama_vocab_nl(VALUE self, VALUE vocab) {
   if (!rb_obj_is_kind_of(vocab, rb_cLlamaVocab)) {
     rb_raise(rb_eArgError, "vocab must be a LlamaVocab");
@@ -2293,7 +2650,11 @@ static VALUE rb_llama_vocab_nl(VALUE self, VALUE vocab) {
   return INT2NUM(token);
 }
 
-/* llama_vocab_pad */
+/**
+ * @overload llama_vocab_pad(vocab)
+ *  @param [LlamaVocab] vocab
+ *  @return [Integer]
+ */
 static VALUE rb_llama_vocab_pad(VALUE self, VALUE vocab) {
   if (!rb_obj_is_kind_of(vocab, rb_cLlamaVocab)) {
     rb_raise(rb_eArgError, "vocab must be a LlamaVocab");
@@ -2305,7 +2666,11 @@ static VALUE rb_llama_vocab_pad(VALUE self, VALUE vocab) {
   return INT2NUM(token);
 }
 
-/* llama_vocab_get_add_bos */
+/**
+ * @overload llama_vocab_get_add_bos
+ *  @param [LlamaVocab] vocab
+ *  @return [Boolean]
+ */
 static VALUE rb_llama_vocab_get_add_bos(VALUE self, VALUE vocab) {
   if (!rb_obj_is_kind_of(vocab, rb_cLlamaVocab)) {
     rb_raise(rb_eArgError, "vocab must be a LlamaVocab");
@@ -2317,7 +2682,11 @@ static VALUE rb_llama_vocab_get_add_bos(VALUE self, VALUE vocab) {
   return flag ? Qtrue : Qfalse;
 }
 
-/* llama_vocab_get_add_eos */
+/**
+ * @overload llama_vocab_get_add_eos(vocab)
+ *  @param [LlamaVocab] vocab
+ *  @return [Boolean]
+ */
 static VALUE rb_llama_vocab_get_add_eos(VALUE self, VALUE vocab) {
   if (!rb_obj_is_kind_of(vocab, rb_cLlamaVocab)) {
     rb_raise(rb_eArgError, "vocab must be a LlamaVocab");
@@ -2329,7 +2698,11 @@ static VALUE rb_llama_vocab_get_add_eos(VALUE self, VALUE vocab) {
   return flag ? Qtrue : Qfalse;
 }
 
-/* llama_vocab_fim_pre */
+/**
+ * @overload llama_vocab_fim_pre(vocab)
+ *  @param [LlamaVocab] vocab
+ *  @return [Integer]
+ */
 static VALUE rb_llama_vocab_fim_pre(VALUE self, VALUE vocab) {
   if (!rb_obj_is_kind_of(vocab, rb_cLlamaVocab)) {
     rb_raise(rb_eArgError, "vocab must be a LlamaVocab");
@@ -2341,7 +2714,11 @@ static VALUE rb_llama_vocab_fim_pre(VALUE self, VALUE vocab) {
   return INT2NUM(token);
 }
 
-/* llama_vocab_fim_suf */
+/**
+ * @overload llama_vocab_fim_suf(vocab)
+ *  @param [LlamaVocab] vocab
+ *  @return [Integer]
+ */
 static VALUE rb_llama_vocab_fim_suf(VALUE self, VALUE vocab) {
   if (!rb_obj_is_kind_of(vocab, rb_cLlamaVocab)) {
     rb_raise(rb_eArgError, "vocab must be a LlamaVocab");
@@ -2353,7 +2730,11 @@ static VALUE rb_llama_vocab_fim_suf(VALUE self, VALUE vocab) {
   return INT2NUM(token);
 }
 
-/* llama_vocab_fim_mid */
+/**
+ * @overload llama_vocab_fim_mid(vocab)
+ *  @param [LlamaVocab] vocab
+ *  @return [Integer]
+ */
 static VALUE rb_llama_vocab_fim_mid(VALUE self, VALUE vocab) {
   if (!rb_obj_is_kind_of(vocab, rb_cLlamaVocab)) {
     rb_raise(rb_eArgError, "vocab must be a LlamaVocab");
@@ -2365,7 +2746,11 @@ static VALUE rb_llama_vocab_fim_mid(VALUE self, VALUE vocab) {
   return INT2NUM(token);
 }
 
-/* llama_vocab_fim_pad */
+/**
+ * @overload llama_vocab_fim_pad(vocab)
+ *  @param [LlamaVocab] vocab
+ *  @return [Integer]
+ */
 static VALUE rb_llama_vocab_fim_pad(VALUE self, VALUE vocab) {
   if (!rb_obj_is_kind_of(vocab, rb_cLlamaVocab)) {
     rb_raise(rb_eArgError, "vocab must be a LlamaVocab");
@@ -2377,7 +2762,11 @@ static VALUE rb_llama_vocab_fim_pad(VALUE self, VALUE vocab) {
   return INT2NUM(token);
 }
 
-/* llama_vocab_fim_rep */
+/**
+ * @overload llama_vocab_fim_rep(vocab)
+ *  @param [LlamaVocab] vocab
+ *  @return [Integer]
+ */
 static VALUE rb_llama_vocab_fim_rep(VALUE self, VALUE vocab) {
   if (!rb_obj_is_kind_of(vocab, rb_cLlamaVocab)) {
     rb_raise(rb_eArgError, "vocab must be a LlamaVocab");
@@ -2389,7 +2778,11 @@ static VALUE rb_llama_vocab_fim_rep(VALUE self, VALUE vocab) {
   return INT2NUM(token);
 }
 
-/* llama_vocab_fim_sep */
+/**
+ * @overload llama_vocab_fim_sep(vocab)
+ *  @param [LlamaVocab] vocab
+ *  @return [Integer]
+ */
 static VALUE rb_llama_vocab_fim_sep(VALUE self, VALUE vocab) {
   if (!rb_obj_is_kind_of(vocab, rb_cLlamaVocab)) {
     rb_raise(rb_eArgError, "vocab must be a LlamaVocab");
@@ -2401,7 +2794,16 @@ static VALUE rb_llama_vocab_fim_sep(VALUE self, VALUE vocab) {
   return INT2NUM(token);
 }
 
-/* llama_tokenize */
+/**
+ * @overload llama_tokenize(vocab, text, tokens, n_tokens_max, add_special, parse_special)
+ *  @param [LlamaVocab] vocab
+ *  @param [String] text
+ *  @param [Array<Integer>] tokens
+ *  @param [Integer] n_tokens_max
+ *  @param [Boolean] add_special
+ *  @param [Boolean] parse_special
+ *  @return [Integer]
+ */
 static VALUE rb_llama_tokenize(VALUE self, VALUE vocab, VALUE text, VALUE tokens, VALUE n_tokens_max, VALUE add_special, VALUE parse_special) {
   if (!rb_obj_is_kind_of(vocab, rb_cLlamaVocab)) {
     rb_raise(rb_eArgError, "vocab must be a LlamaVocab");
@@ -2462,7 +2864,14 @@ static VALUE rb_llama_tokenize(VALUE self, VALUE vocab, VALUE text, VALUE tokens
   return INT2NUM(n_tokens);
 }
 
-/* llama_token_to_piece */
+/**
+ * @overload llama_token_to_piece(vocab, token, lstrip, special)
+ *  @param [LlamaVocab] vocab
+ *  @param [Integer] token
+ *  @param [Integer] lstrip
+ *  @param [Boolean] special
+ *  @return [String]
+ */
 static VALUE rb_llama_token_to_piece(VALUE self, VALUE vocab, VALUE token, VALUE lstrip, VALUE special) {
   if (!rb_obj_is_kind_of(vocab, rb_cLlamaVocab)) {
     rb_raise(rb_eArgError, "vocab must be a LlamaVocab");
@@ -2502,7 +2911,14 @@ static VALUE rb_llama_token_to_piece(VALUE self, VALUE vocab, VALUE token, VALUE
   return ret;
 }
 
-/* llama_detokenize */
+/**
+ * @overload llama_detokenize(vocab, tokens, remove_special, unparse_special)
+ *  @param [LlamaVocab] vocab
+ *  @param [Array<Integer>] tokens
+ *  @param [Boolean] remove_special
+ *  @param [Boolean] unparse_special
+ *  @return [String]
+ */
 static VALUE rb_llama_detokenize(VALUE self, VALUE vocab, VALUE tokens, VALUE remove_special, VALUE unparse_special) {
   if (!rb_obj_is_kind_of(vocab, rb_cLlamaVocab)) {
     rb_raise(rb_eArgError, "vocab must be a LlamaVocab");
@@ -2582,6 +2998,11 @@ static struct llama_sampler* get_llama_sampler(VALUE self) {
   return data;
 }
 
+/**
+ * @overload llama_sampler_name(sampler)
+ *  @param [LlamaSampler] sampler
+ *  @return [String]
+ */
 static VALUE rb_llama_sampler_name(VALUE self, VALUE sampler) {
   if (!rb_obj_is_kind_of(sampler, rb_cLlamaSampler)) {
     rb_raise(rb_eArgError, "sampler must be a LlamaSampler");
@@ -2594,7 +3015,12 @@ static VALUE rb_llama_sampler_name(VALUE self, VALUE sampler) {
   return ret;
 }
 
-/* llama_sampler_accept */
+/**
+ * @overload llama_sampler_accept(sampler, token)
+ *  @param [LlamaSampler] sampler
+ *  @param [Integer] token
+ *  @return [NilClass]
+ */
 static VALUE rb_llama_sampler_accept(VALUE self, VALUE sampler, VALUE token) {
   if (!rb_obj_is_kind_of(sampler, rb_cLlamaSampler)) {
     rb_raise(rb_eArgError, "sampler must be a LlamaSampler");
@@ -2611,7 +3037,12 @@ static VALUE rb_llama_sampler_accept(VALUE self, VALUE sampler, VALUE token) {
   return Qnil;
 }
 
-/* llama_sampler_apply */
+/**
+ * @overload llama_sampler_apply(sampler, cur_p)
+ *  @param [LlamaSampler] sampler
+ *  @param [LlamaTokenDataArray] cur_p
+ *  @return [NilClass]
+ */
 static VALUE rb_llama_sampler_apply(VALUE self, VALUE sampler, VALUE cur_p) {
   if (!rb_obj_is_kind_of(sampler, rb_cLlamaSampler)) {
     rb_raise(rb_eArgError, "sampler must be a LlamaSampler");
@@ -2629,7 +3060,11 @@ static VALUE rb_llama_sampler_apply(VALUE self, VALUE sampler, VALUE cur_p) {
   return Qnil;
 }
 
-/* llama_sampler_reset */
+/**
+ * @overload llama_sampler_reset(sampler)
+ *  @param [LlamaSampler] sampler
+ *  @return [NilClass]
+ */
 static VALUE rb_llama_sampler_reset(VALUE self, VALUE sampler) {
   if (!rb_obj_is_kind_of(sampler, rb_cLlamaSampler)) {
     rb_raise(rb_eArgError, "sampler must be a LlamaSampler");
@@ -2641,7 +3076,11 @@ static VALUE rb_llama_sampler_reset(VALUE self, VALUE sampler) {
   return Qnil;
 }
 
-/* llama_sampler_clone */
+/**
+ * @overload llama_sampler_clone(sampler)
+ *  @param [LlamaSampler] sampler
+ *  @return [LlamaSampler]
+ */
 static VALUE rb_llama_sampler_clone(VALUE self, VALUE sampler) {
   if (!rb_obj_is_kind_of(sampler, rb_cLlamaSampler)) {
     rb_raise(rb_eArgError, "sampler must be a LlamaSampler");
@@ -2653,7 +3092,11 @@ static VALUE rb_llama_sampler_clone(VALUE self, VALUE sampler) {
   return TypedData_Wrap_Struct(rb_cLlamaSampler, &llama_sampler_data_type, clone);
 }
 
-/* llama_sampler_free */
+/**
+ * @overload llama_sampler_free(sampler)
+ *  @param [LlamaSampler] sampler
+ *  @return [NilClass]
+ */
 static VALUE rb_llama_sampler_free(VALUE self, VALUE sampler) {
   if (!rb_obj_is_kind_of(sampler, rb_cLlamaSampler)) {
     rb_raise(rb_eArgError, "sampler must be a LlamaSampler");
@@ -2666,7 +3109,11 @@ static VALUE rb_llama_sampler_free(VALUE self, VALUE sampler) {
   return Qnil;
 }
 
-/* llama_sampler_chain_init */
+/**
+ * @overload llama_sampler_chain_init(params)
+ *  @param [LlamaSamplerChainParams] params
+ *  @return [LlamaSampler]
+ */
 static VALUE rb_llama_sampler_chain_init(VALUE self, VALUE params) {
   if (!rb_obj_is_kind_of(params, rb_cLlamaSamplerChainParams)) {
     rb_raise(rb_eArgError, "params must be a LlamaSamplerChainParams");
@@ -2678,7 +3125,12 @@ static VALUE rb_llama_sampler_chain_init(VALUE self, VALUE params) {
   return TypedData_Wrap_Struct(rb_cLlamaSampler, &llama_sampler_data_type, sampler);
 }
 
-/* llama_sampler_chain_add */
+/**
+ * @overload llama_sampler_chain_add(chain, smpl)
+ *  @param [LlamaSampler] chain
+ *  @param [LlamaSampler] smpl
+ *  @return [NilClass]
+ */
 static VALUE rb_llama_sampler_chain_add(VALUE self, VALUE chain, VALUE smpl) {
   if (!rb_obj_is_kind_of(chain, rb_cLlamaSampler)) {
     rb_raise(rb_eArgError, "chain must be a LlamaSampler");
@@ -2696,7 +3148,12 @@ static VALUE rb_llama_sampler_chain_add(VALUE self, VALUE chain, VALUE smpl) {
   return Qnil;
 }
 
-/* llama_sampler_chain_get */
+/**
+ * @overload llama_sampler_chain_get(chain, i)
+ *  @param [LlamaSampler] chain
+ *  @param [Integer] i
+ *  @return [LlamaSampler]
+ */
 static VALUE rb_llama_sampler_chain_get(VALUE self, VALUE chain, VALUE i) {
   if (!rb_obj_is_kind_of(chain, rb_cLlamaSampler)) {
     rb_raise(rb_eArgError, "chain must be a LlamaSampler");
@@ -2712,7 +3169,11 @@ static VALUE rb_llama_sampler_chain_get(VALUE self, VALUE chain, VALUE i) {
   return TypedData_Wrap_Struct(rb_cLlamaSampler, &llama_sampler_data_type, smpl);
 }
 
-/* llama_sampler_chain_n */
+/**
+ * @overload llama_sampler_chain_n(chain)
+ *  @param [LlamaSampler] chain
+ *  @return [Integer]
+ */
 static VALUE rb_llama_sampler_chain_n(VALUE self, VALUE chain) {
   if (!rb_obj_is_kind_of(chain, rb_cLlamaSampler)) {
     rb_raise(rb_eArgError, "chain must be a LlamaSampler");
@@ -2724,7 +3185,12 @@ static VALUE rb_llama_sampler_chain_n(VALUE self, VALUE chain) {
   return INT2NUM(n);
 }
 
-/* llama_sampler_chain_remove */
+/**
+ * @overload llama_sampler_chain_remove(chain, i)
+ *  @param [LlamaSampler] chain
+ *  @param [Integer] i
+ *  @return [LlamaSampler]
+ */
 static VALUE rb_llama_sampler_chain_remove(VALUE self, VALUE chain, VALUE i) {
   if (!rb_obj_is_kind_of(chain, rb_cLlamaSampler)) {
     rb_raise(rb_eArgError, "chain must be a LlamaSampler");
@@ -2740,13 +3206,20 @@ static VALUE rb_llama_sampler_chain_remove(VALUE self, VALUE chain, VALUE i) {
   return TypedData_Wrap_Struct(rb_cLlamaSampler, &llama_sampler_data_type, smpl);
 }
 
-/* llama_sampler_init_greedy */
+/**
+ * @overload llama_sampler_init_greedy
+ *  @return [LlamaSampler]
+ */
 static VALUE rb_llama_sampler_init_greedy(VALUE self) {
   struct llama_sampler* sampler = llama_sampler_init_greedy();
   return TypedData_Wrap_Struct(rb_cLlamaSampler, &llama_sampler_data_type, sampler);
 }
 
-/* llama_sampler_init_dist */
+/**
+ * @overload llama_sampler_init_dist(seed)
+ *  @param [Integer] seed
+ *  @return [LlamaSampler]
+ */
 static VALUE rb_llama_sampler_init_dist(VALUE self, VALUE seed) {
   if (!RB_INTEGER_TYPE_P(seed)) {
     rb_raise(rb_eArgError, "seed must be an Integer");
@@ -2756,7 +3229,11 @@ static VALUE rb_llama_sampler_init_dist(VALUE self, VALUE seed) {
   return TypedData_Wrap_Struct(rb_cLlamaSampler, &llama_sampler_data_type, sampler);
 }
 
-/* llama_sampler_init_top_k */
+/**
+ * @overload llama_sampler_init_top_k(k)
+ *  @param [Integer] k
+ *  @return [LlamaSampler]
+ */
 static VALUE rb_llama_sampler_init_top_k(VALUE self, VALUE k) {
   if (!RB_INTEGER_TYPE_P(k)) {
     rb_raise(rb_eArgError, "k must be an Integer");
@@ -2766,7 +3243,12 @@ static VALUE rb_llama_sampler_init_top_k(VALUE self, VALUE k) {
   return TypedData_Wrap_Struct(rb_cLlamaSampler, &llama_sampler_data_type, sampler);
 }
 
-/* llama_sampler_init_top_p */
+/**
+ * @overload llama_sampler_init_top_p(p, min_keep)
+ *  @param [Float] p
+ *  @param [Integer] min_keep
+ *  @return [LlamaSampler]
+ */
 static VALUE rb_llama_sampler_init_top_p(VALUE self, VALUE p, VALUE min_keep) {
   if (!RB_FLOAT_TYPE_P(p)) {
     rb_raise(rb_eArgError, "p must be a Float");
@@ -2780,7 +3262,12 @@ static VALUE rb_llama_sampler_init_top_p(VALUE self, VALUE p, VALUE min_keep) {
   return TypedData_Wrap_Struct(rb_cLlamaSampler, &llama_sampler_data_type, sampler);
 }
 
-/* llama_sampler_init_min_p */
+/**
+ * @overload llama_sampler_init_min_p(p, min_keep)
+ *  @param [Float] p
+ *  @param [Integer] min_keep
+ *  @return [LlamaSampler]
+ */
 static VALUE rb_llama_sampler_init_min_p(VALUE self, VALUE p, VALUE min_keep) {
   if (!RB_FLOAT_TYPE_P(p)) {
     rb_raise(rb_eArgError, "p must be a Float");
@@ -2794,7 +3281,12 @@ static VALUE rb_llama_sampler_init_min_p(VALUE self, VALUE p, VALUE min_keep) {
   return TypedData_Wrap_Struct(rb_cLlamaSampler, &llama_sampler_data_type, sampler);
 }
 
-/* llama_sampler_init_typical */
+/**
+ * @overload llama_sampler_init_typical(p, min_keep)
+ *  @param [Float] p
+ *  @param [Integer] min_keep
+ *  @return [LlamaSampler]
+ */
 static VALUE rb_llama_sampler_init_typical(VALUE self, VALUE p, VALUE min_keep) {
   if (!RB_FLOAT_TYPE_P(p)) {
     rb_raise(rb_eArgError, "p must be a Float");
@@ -2808,7 +3300,11 @@ static VALUE rb_llama_sampler_init_typical(VALUE self, VALUE p, VALUE min_keep) 
   return TypedData_Wrap_Struct(rb_cLlamaSampler, &llama_sampler_data_type, sampler);
 }
 
-/* llama_sampler_init_temp */
+/**
+ * @overload llama_sampler_init_temp(t)
+ *  @param [Float] t
+ *  @return [LlamaSampler]
+ */
 static VALUE rb_llama_sampler_init_temp(VALUE self, VALUE t) {
   if (!RB_FLOAT_TYPE_P(t)) {
     rb_raise(rb_eArgError, "t must be a Float");
@@ -2818,7 +3314,13 @@ static VALUE rb_llama_sampler_init_temp(VALUE self, VALUE t) {
   return TypedData_Wrap_Struct(rb_cLlamaSampler, &llama_sampler_data_type, sampler);
 }
 
-/* llama_sampler_init_temp_ext */
+/**
+ * @overload llama_sampler_init_temp_ext(t, delta, exponent)
+ *  @param [Float] t
+ *  @param [Float] delta
+ *  @param [Float] exponent
+ *  @return [LlamaSampler]
+ */
 static VALUE rb_llama_sampler_init_temp_ext(VALUE self, VALUE t, VALUE delta, VALUE exponent) {
   if (!RB_FLOAT_TYPE_P(t)) {
     rb_raise(rb_eArgError, "t must be a Float");
@@ -2836,7 +3338,14 @@ static VALUE rb_llama_sampler_init_temp_ext(VALUE self, VALUE t, VALUE delta, VA
   return TypedData_Wrap_Struct(rb_cLlamaSampler, &llama_sampler_data_type, sampler);
 }
 
-/* llama_sampler_init_xtc */
+/**
+ * @overload llama_sampler_init_xtc(p, t, min_keep, seed)
+ *  @param [Float] p
+ *  @param [Float] t
+ *  @param [Integer] min_keep
+ *  @param [Integer] seed
+ *  @return [LlamaSampler]
+ */
 static VALUE rb_llama_sampler_init_xtc(VALUE self, VALUE p, VALUE t, VALUE min_keep, VALUE seed ) {
   if (!RB_FLOAT_TYPE_P(p)) {
     rb_raise(rb_eArgError, "p must be a Float");
@@ -2858,7 +3367,15 @@ static VALUE rb_llama_sampler_init_xtc(VALUE self, VALUE p, VALUE t, VALUE min_k
   return TypedData_Wrap_Struct(rb_cLlamaSampler, &llama_sampler_data_type, sampler);
 }
 
-/* llama_sampler_init_mirostat */
+/**
+ * @overload llama_sampler_init_mirostat(n_vocab, seed, tau, eta, m)
+ *  @param [Integer] n_vocab
+ *  @param [Integer] seed
+ *  @param [Float] tau
+ *  @param [Float] eta
+ *  @param [Integer] m
+ *  @return [LlamaSampler]
+ */
 static VALUE rb_llama_sampler_init_mirostat(VALUE self, VALUE n_vocab, VALUE seed, VALUE tau, VALUE eta, VALUE m) {
   if (!RB_INTEGER_TYPE_P(n_vocab)) {
     rb_raise(rb_eArgError, "n_vocab must be an Integer");
@@ -2884,7 +3401,13 @@ static VALUE rb_llama_sampler_init_mirostat(VALUE self, VALUE n_vocab, VALUE see
   return TypedData_Wrap_Struct(rb_cLlamaSampler, &llama_sampler_data_type, sampler);
 }
 
-/* llama_sampler_init_mirostat_v2 */
+/**
+ * @overload llama_sampler_init_mirostat_v2(seed, tau, eta)
+ *  @param [Integer] seed
+ *  @param [Float] tau
+ *  @param [Float] eta
+ *  @return [LlamaSampler]
+ */
 static VALUE rb_llama_sampler_init_mirostat_v2(VALUE self, VALUE seed, VALUE tau, VALUE eta) {
   if (!RB_INTEGER_TYPE_P(seed)) {
     rb_raise(rb_eArgError, "seed must be an Integer");
@@ -2902,7 +3425,13 @@ static VALUE rb_llama_sampler_init_mirostat_v2(VALUE self, VALUE seed, VALUE tau
   return TypedData_Wrap_Struct(rb_cLlamaSampler, &llama_sampler_data_type, sampler);
 }
 
-/* llama_sampler_init_grammar */
+/**
+ * @overload llama_sampler_init_grammar(vocab, grammar_str, grammar_root)
+ *  @param [LlamaVocab] vocab
+ *  @param [String] grammar_str
+ *  @param [String] grammar_root
+ *  @return [LlamaSampler]
+ */
 static VALUE rb_llama_sampler_init_grammar(VALUE self, VALUE vocab, VALUE grammar_str, VALUE grammar_root) {
   if (!rb_obj_is_kind_of(vocab, rb_cLlamaVocab)) {
     rb_raise(rb_eArgError, "vocab must be a LlamaVocab");
@@ -2926,7 +3455,14 @@ static VALUE rb_llama_sampler_init_grammar(VALUE self, VALUE vocab, VALUE gramma
   return TypedData_Wrap_Struct(rb_cLlamaSampler, &llama_sampler_data_type, sampler);
 }
 
-/* llama_sampler_init_penalties */
+/**
+ * @overload llama_sampler_init_penalties(penalty_last_n, penalty_repeat, penalty_freq, penalty_present)
+ *  @param [Integer] penalty_last_n
+ *  @param [Float] penalty_repeat
+ *  @param [Float] penalty_freq
+ *  @param [Float] penalty_present
+ *  @return [LlamaSampler]
+ */
 static VALUE rb_llama_sampler_init_penalties(VALUE self, VALUE penalty_last_n, VALUE penalty_repeat, VALUE penalty_freq, VALUE penalty_present) {
   if (!RB_INTEGER_TYPE_P(penalty_last_n)) {
     rb_raise(rb_eArgError, "penalty_last_n must be an Integer");
@@ -2948,7 +3484,13 @@ static VALUE rb_llama_sampler_init_penalties(VALUE self, VALUE penalty_last_n, V
   return TypedData_Wrap_Struct(rb_cLlamaSampler, &llama_sampler_data_type, sampler);
 }
 
-/* llama_sampler_init_logit_bias */
+/**
+ * @overload llama_sampler_init_logit_bias(n_vocab, n_logit_bias, logit_bias)
+ *  @param [Integer] n_vocab
+ *  @param [Integer] n_logit_bias
+ *  @param [LlamaLogitBias] logit_bias
+ *  @return [LlamaSampler]
+ */
 static VALUE rb_llama_sampler_init_logit_bias(VALUE self, VALUE n_vocab, VALUE n_logit_bias, VALUE logit_bias) {
   if (!RB_INTEGER_TYPE_P(n_vocab)) {
     rb_raise(rb_eArgError, "n_vocab must be an Integer");
@@ -2970,7 +3512,11 @@ static VALUE rb_llama_sampler_init_logit_bias(VALUE self, VALUE n_vocab, VALUE n
   return TypedData_Wrap_Struct(rb_cLlamaSampler, &llama_sampler_data_type, sampler);
 }
 
-/* llama_sampler_init_infill */
+/**
+ * @overload llama_sampler_init_infill(vocab)
+ *  @param [LlamaVocab] vocab
+ *  @return [LlamaSampler]
+ */
 static VALUE rb_llama_sampler_init_infill(VALUE self, VALUE vocab) {
   if (!rb_obj_is_kind_of(vocab, rb_cLlamaVocab)) {
     rb_raise(rb_eArgError, "vocab must be a LlamaVocab");
@@ -2982,7 +3528,11 @@ static VALUE rb_llama_sampler_init_infill(VALUE self, VALUE vocab) {
   return TypedData_Wrap_Struct(rb_cLlamaSampler, &llama_sampler_data_type, sampler);
 }
 
-/* llama_sampler_get_seed */
+/**
+ * @overload llama_sampler_get_seed(sampler)
+ *  @param [LlamaSampler] sampler
+ *  @return [Integer]
+ */
 static VALUE rb_llama_sampler_get_seed(VALUE self, VALUE smpl) {
   if (!rb_obj_is_kind_of(smpl, rb_cLlamaSampler)) {
     rb_raise(rb_eArgError, "smpl must be a LlamaSampler");
@@ -2994,7 +3544,13 @@ static VALUE rb_llama_sampler_get_seed(VALUE self, VALUE smpl) {
   return UINT2NUM(seed);
 }
 
-/* llama_sampler_sample */
+/**
+ * @overload llama_sampler_sample(sampler, context, idx)
+ *  @param [LlamaSampler] sampler
+ *  @param [LlamaContext] context
+ *  @param [Integer] idx
+ *  @return [Integer]
+ */
 static VALUE rb_llama_sampler_sample(VALUE self, VALUE smpl, VALUE ctx, VALUE idx) {
   if (!rb_obj_is_kind_of(smpl, rb_cLlamaSampler)) {
     rb_raise(rb_eArgError, "smpl must be a LlamaSampler");
@@ -3016,7 +3572,10 @@ static VALUE rb_llama_sampler_sample(VALUE self, VALUE smpl, VALUE ctx, VALUE id
   return INT2NUM(token);
 }
 
-/* llama_print_system_info */
+/**
+ * @overload llama_print_system_info
+ *  @return [String]
+ */
 static VALUE rb_llama_print_system_info(VALUE self) {
   const char* info = llama_print_system_info();
   return rb_utf8_str_new_cstr(info);
@@ -3134,7 +3693,11 @@ static VALUE llama_perf_sampler_data_get_n_sample(VALUE self) {
   return INT2NUM(data->n_sample);
 }
 
-/* llama_perf_context */
+/**
+ * @overload llama_perf_context(context)
+ *  @param [LlamaContext] context
+ *  @return [LlamaPerfContextData]
+ */
 static VALUE rb_llama_perf_context(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
@@ -3147,7 +3710,11 @@ static VALUE rb_llama_perf_context(VALUE self, VALUE ctx) {
   return TypedData_Wrap_Struct(rb_cLlamaPerfContextData, &llama_perf_context_data_type, data);
 }
 
-/* llama_perf_context_print */
+/**
+ * @overload llama_perf_context_print(context)
+ *  @param [LlamaContext] context
+ *  @return [NilClass]
+ */
 static VALUE rb_llama_perf_context_print(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
@@ -3159,7 +3726,11 @@ static VALUE rb_llama_perf_context_print(VALUE self, VALUE ctx) {
   return Qnil;
 }
 
-/* llama_perf_sampler_print */
+/**
+ * @overload llama_perf_sampler_print(chain)
+ *  @param [LlamaSampler] chain
+ *  @return [NilClass]
+ */
 static VALUE rb_llama_perf_sampler_print(VALUE self, VALUE chain) {
   if (!rb_obj_is_kind_of(chain, rb_cLlamaSampler)) {
     rb_raise(rb_eArgError, "chain must be a LlamaSampler");
@@ -3171,7 +3742,11 @@ static VALUE rb_llama_perf_sampler_print(VALUE self, VALUE chain) {
   return Qnil;
 }
 
-/* llama_perf_context_reset */
+/**
+ * @overload llama_perf_context_reset(context)
+ *  @param [LlamaContext] context
+ *  @return [NilClass]
+ */
 static VALUE rb_llama_perf_context_reset(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
@@ -3183,7 +3758,11 @@ static VALUE rb_llama_perf_context_reset(VALUE self, VALUE ctx) {
   return Qnil;
 }
 
-/* llama_perf_sampler */
+/**
+ * @overload llama_perf_sampler(chain)
+ *  @param [LlamaSampler] chain
+ *  @return [LlamaPerfSamplerData]
+ */
 static VALUE rb_llama_perf_sampler(VALUE self, VALUE chain) {
   if (!rb_obj_is_kind_of(chain, rb_cLlamaSampler)) {
     rb_raise(rb_eArgError, "chain must be a LlamaSampler");
@@ -3196,7 +3775,11 @@ static VALUE rb_llama_perf_sampler(VALUE self, VALUE chain) {
   return TypedData_Wrap_Struct(rb_cLlamaPerfSamplerData, &llama_perf_sampler_data_type, data);
 }
 
-/* llama_perf_sampler_reset */
+/**
+ * @overload llama_perf_sampler_reset(chain)
+ *  @param [LlamaSampler] chain
+ *  @return [NilClass]
+ */
 static VALUE rb_llama_perf_sampler_reset(VALUE self, VALUE chain) {
   if (!rb_obj_is_kind_of(chain, rb_cLlamaSampler)) {
     rb_raise(rb_eArgError, "chain must be a LlamaSampler");
@@ -4070,16 +4653,16 @@ void Init_llama_cpp(void) {
   rb_define_module_function(rb_mLlamaCpp, "llama_max_devices", rb_llama_max_devices, 0);
 
   /* llama_supports_mmap */
-  rb_define_module_function(rb_mLlamaCpp, "llama_supports_mmap", rb_llama_supports_mmap, 0);
+  rb_define_module_function(rb_mLlamaCpp, "llama_supports_mmap?", rb_llama_supports_mmap, 0);
 
   /* llama_supports_mlock */
-  rb_define_module_function(rb_mLlamaCpp, "llama_supports_mlock", rb_llama_supports_mlock, 0);
+  rb_define_module_function(rb_mLlamaCpp, "llama_supports_mlock?", rb_llama_supports_mlock, 0);
 
   /* llama_supports_gpu_offload */
-  rb_define_module_function(rb_mLlamaCpp, "llama_supports_gpu_offload", rb_llama_supports_gpu_offload, 0);
+  rb_define_module_function(rb_mLlamaCpp, "llama_supports_gpu_offload?", rb_llama_supports_gpu_offload, 0);
 
   /* llama_supports_rpc */
-  rb_define_module_function(rb_mLlamaCpp, "llama_supports_rpc", rb_llama_supports_rpc, 0);
+  rb_define_module_function(rb_mLlamaCpp, "llama_supports_rpc?", rb_llama_supports_rpc, 0);
 
   /* llama_n_ctx */
   rb_define_module_function(rb_mLlamaCpp, "llama_n_ctx", rb_llama_n_ctx, 1);
@@ -4144,16 +4727,16 @@ void Init_llama_cpp(void) {
   rb_define_module_function(rb_mLlamaCpp, "llama_model_n_params", rb_llama_model_n_params, 1);
 
   /* llama_model_has_encoder */
-  rb_define_module_function(rb_mLlamaCpp, "llama_model_has_encoder", rb_llama_model_has_encoder, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_model_has_encoder?", rb_llama_model_has_encoder, 1);
 
   /* llama_model_has_decoder */
-  rb_define_module_function(rb_mLlamaCpp, "llama_model_has_decoder", rb_llama_model_has_decoder, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_model_has_decoder?", rb_llama_model_has_decoder, 1);
 
   /* llama_model_decoder_start_token */
   rb_define_module_function(rb_mLlamaCpp, "llama_model_decoder_start_token", rb_llama_model_decoder_start_token, 1);
 
   /* llama_model_is_recurrent */
-  rb_define_module_function(rb_mLlamaCpp, "llama_model_is_recurrent", rb_llama_model_is_recurrent, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_model_is_recurrent?", rb_llama_model_is_recurrent, 1);
 
   /* llama_model_quantize */
   rb_define_module_function(rb_mLlamaCpp, "llama_model_quantize", rb_llama_model_quantize, 3);
@@ -4267,7 +4850,7 @@ void Init_llama_cpp(void) {
   rb_define_module_function(rb_mLlamaCpp, "llama_kv_cache_update", rb_llama_kv_cache_update, 1);
 
   /* llama_kv_cache_can_shift */
-  rb_define_module_function(rb_mLlamaCpp, "llama_kv_cache_can_shift", rb_llama_kv_cache_can_shift, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_kv_cache_can_shift?", rb_llama_kv_cache_can_shift, 1);
 
   /* llama_state_get_size */
   rb_define_module_function(rb_mLlamaCpp, "llama_state_get_size", rb_llama_state_get_size, 1);
@@ -4336,10 +4919,10 @@ void Init_llama_cpp(void) {
   rb_define_module_function(rb_mLlamaCpp, "llama_vocab_get_attr", rb_llama_vocab_get_attr, 2);
 
   /* llama_vocab_is_eog */
-  rb_define_module_function(rb_mLlamaCpp, "llama_vocab_is_eog", rb_llama_vocab_is_eog, 2);
+  rb_define_module_function(rb_mLlamaCpp, "llama_vocab_is_eog?", rb_llama_vocab_is_eog, 2);
 
   /* llama_vocab_is_control */
-  rb_define_module_function(rb_mLlamaCpp, "llama_vocab_is_control", rb_llama_vocab_is_control, 2);
+  rb_define_module_function(rb_mLlamaCpp, "llama_vocab_is_control?", rb_llama_vocab_is_control, 2);
 
   /* llama_vocab_bos */
   rb_define_module_function(rb_mLlamaCpp, "llama_vocab_bos", rb_llama_vocab_bos, 1);
