@@ -26,7 +26,7 @@ Gem::Specification.new do |spec|
     end
     `git ls-files -z`.split("\x0")
                      .reject { |f| f.match(%r{\A(?:(?:bin|doc|test|spec|node_modules|pkg|tmp|\.git|\.github|\.husky)/)}) }
-                     .select { |f| f.match(/\.(?:rb|rbs|h|hpp|c|cpp|cu|m|metal|mk|md|txt)$/) }
+                     .select { |f| f.match(/\.(?:rb|h|hpp|c|cpp|cu|m|metal|mk|md|txt)$/) }
   end
 
   spec.bindir = 'exe'
