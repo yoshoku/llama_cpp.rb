@@ -1,3 +1,10 @@
+
+## [[0.18.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.18.0...v0.18.1)] - 2025-02-15
+
+- Change supported llama.cpp version to b4713
+  - Add `llama_sampler_init_top_n_sigma` module function.
+- Remove old type declaration file.
+
 ## [[0.18.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.17.10...v0.18.0)] - 2025-02-02
 
 **Breaking Changes**
