@@ -3368,6 +3368,20 @@ static VALUE rb_llama_sampler_init_xtc(VALUE self, VALUE p, VALUE t, VALUE min_k
 }
 
 /**
+ * @overload llama_sampler_init_top_n_sigma(n)
+ *  @param [Float] n
+ *  @return [LlamaSampler]
+ */
+static VALUE rb_llama_sampler_init_top_n_sigma(VALUE self, VALUE n) {
+  if (!RB_FLOAT_TYPE_P(n)) {
+    rb_raise(rb_eArgError, "n must be a Float");
+    return Qnil;
+  }
+  struct llama_sampler* sampler = llama_sampler_init_top_n_sigma(NUM2DBL(n));
+  return TypedData_Wrap_Struct(rb_cLlamaSampler, &llama_sampler_data_type, sampler);
+}
+
+/**
  * @overload llama_sampler_init_mirostat(n_vocab, seed, tau, eta, m)
  *  @param [Integer] n_vocab
  *  @param [Integer] seed
@@ -5046,6 +5060,9 @@ void Init_llama_cpp(void) {
 
   /* llama_sampler_init_xtc */
   rb_define_module_function(rb_mLlamaCpp, "llama_sampler_init_xtc", rb_llama_sampler_init_xtc, 4);
+
+  /* llama_sampler_init_top_n_sigma */
+  rb_define_module_function(rb_mLlamaCpp, "llama_sampler_init_top_n_sigma", rb_llama_sampler_init_top_n_sigma, 1);
 
   /* llama_sampler_init_mirostat */
   rb_define_module_function(rb_mLlamaCpp, "llama_sampler_init_mirostat", rb_llama_sampler_init_mirostat, 5);
