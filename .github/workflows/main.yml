@@ -10,7 +10,7 @@ on:
 jobs:
   build:
     runs-on: macos-latest
-    name: Ruby 3.3 (macOS)
+    name: Ruby 3.4 (macOS)
     steps:
     - uses: actions/checkout@v4
     - name: Install llama.cpp
@@ -18,10 +18,10 @@ jobs:
         brew update
         brew install llama.cpp
         brew info llama.cpp
-    - name: Set up Ruby 3.3
+    - name: Set up Ruby 3.4
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 3.3
+        ruby-version: 3.4
         bundler-cache: true
     - name: Build and test with Rake
       run: |
