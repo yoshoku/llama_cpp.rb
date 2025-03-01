@@ -3909,6 +3909,7 @@ void Init_llama_cpp(void) {
   rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_PRE_TYPE_CHAMELEON", INT2NUM(LLAMA_VOCAB_PRE_TYPE_CHAMELEON));
   rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_PRE_TYPE_MINERVA", INT2NUM(LLAMA_VOCAB_PRE_TYPE_MINERVA));
   rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_PRE_TYPE_DEEPSEEK3_LLM", INT2NUM(LLAMA_VOCAB_PRE_TYPE_DEEPSEEK3_LLM));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_PRE_TYPE_GPT4O", INT2NUM(LLAMA_VOCAB_PRE_TYPE_GPT4O));
   /* llama_rope_type */
   /* Document-const: LlamaCpp::LLAMA_ROPE_TYPE_NONE */
   rb_define_const(rb_mLlamaCpp, "LLAMA_ROPE_TYPE_NONE", INT2NUM(LLAMA_ROPE_TYPE_NONE));
