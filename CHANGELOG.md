@@ -1,4 +1,10 @@
 
+## [[0.18.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.18.1...v0.18.2)] - 2025-03-01
+
+- Change supported llama.cpp version to b4793
+  - Add `llama_model_n_head_kv` module function.
+  - Add `LLAMA_VOCAB_PRE_TYPE_GPT4O` constant.
+
 ## [[0.18.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.18.0...v0.18.1)] - 2025-02-15
 
 - Change supported llama.cpp version to b4713
