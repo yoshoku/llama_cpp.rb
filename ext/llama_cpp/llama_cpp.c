@@ -5091,7 +5091,7 @@ void Init_llama_cpp(void) {
   /* llama_sampler_init_grammar */
   rb_define_module_function(rb_mLlamaCpp, "llama_sampler_init_grammar", rb_llama_sampler_init_grammar, 3);
 
-  /* TODO: llama_sampler_init_grammar_lazy */
+  /* TODO: llama_sampler_init_grammar_lazy_patterns */
 
   /* llama_sampler_init_penalties */
   rb_define_module_function(rb_mLlamaCpp, "llama_sampler_init_penalties", rb_llama_sampler_init_penalties, 4);
