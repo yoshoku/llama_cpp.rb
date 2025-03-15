@@ -2072,7 +2072,7 @@ static VALUE rb_llama_kv_self_seq_rm(VALUE self, VALUE ctx, VALUE seq_id, VALUE 
 }
 
 /**
- * @overload llama_kv_cache_seq_cp(context, seq_id_src, seq_id_dst, p0, p1)
+ * @overload llama_kv_self_seq_cp(context, seq_id_src, seq_id_dst, p0, p1)
  *  @param [LlamaContext] context
  *  @param [Integer] seq_id_src
  *  @param [Integer] seq_id_dst
@@ -2080,7 +2080,7 @@ static VALUE rb_llama_kv_self_seq_rm(VALUE self, VALUE ctx, VALUE seq_id, VALUE 
  *  @param [Integer] p1
  *  @return [NilClass]
  */
-static VALUE rb_llama_kv_cache_seq_cp(VALUE self, VALUE ctx, VALUE seq_id_src, VALUE seq_id_dst, VALUE p0, VALUE p1) {
+static VALUE rb_llama_kv_self_seq_cp(VALUE self, VALUE ctx, VALUE seq_id_src, VALUE seq_id_dst, VALUE p0, VALUE p1) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
     return Qnil;
@@ -2102,7 +2102,7 @@ static VALUE rb_llama_kv_cache_seq_cp(VALUE self, VALUE ctx, VALUE seq_id_src, V
     return Qnil;
   }
   llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
-  llama_kv_cache_seq_cp(context_wrapper->context, NUM2INT(seq_id_src), NUM2INT(seq_id_dst), NUM2INT(p0), NUM2INT(p1));
+  llama_kv_self_seq_cp(context_wrapper->context, NUM2INT(seq_id_src), NUM2INT(seq_id_dst), NUM2INT(p0), NUM2INT(p1));
   RB_GC_GUARD(ctx);
   return Qnil;
 }
@@ -4925,8 +4925,8 @@ void Init_llama_cpp(void) {
   /* llama_kv_self_seq_rm */
   rb_define_module_function(rb_mLlamaCpp, "llama_kv_self_seq_rm", rb_llama_kv_self_seq_rm, 4);
 
-  /* llama_kv_cache_seq_cp */
-  rb_define_module_function(rb_mLlamaCpp, "llama_kv_cache_seq_cp", rb_llama_kv_cache_seq_cp, 5);
+  /* llama_kv_self_seq_cp */
+  rb_define_module_function(rb_mLlamaCpp, "llama_kv_self_seq_cp", rb_llama_kv_self_seq_cp, 5);
 
   /* llama_kv_cache_seq_keep */
   rb_define_module_function(rb_mLlamaCpp, "llama_kv_cache_seq_keep", rb_llama_kv_cache_seq_keep, 2);
