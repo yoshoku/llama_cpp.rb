@@ -9,6 +9,7 @@ VALUE rb_cLlamaContextParams;
 VALUE rb_cLlamaModelQuantizeParams;
 VALUE rb_cLlamaLogitBias;
 VALUE rb_cLlamaAdapterLora;
+VALUE rb_cLlamaKvCache;
 VALUE rb_cLlamaKvCacheView;
 VALUE rb_cLlamaTokenDataArray;
 VALUE rb_cLlamaBatch;
@@ -1765,6 +1766,43 @@ static VALUE rb_llama_adapter_lora_free(VALUE self, VALUE adapter) {
   }
   RB_GC_GUARD(adapter);
   return Qnil;
+}
+
+/* llama_kv_cache wrapper */
+typedef struct {
+  struct llama_kv_cache* kv_cache;
+} llama_kv_cache_wrapper;
+
+static void llama_kv_cache_wrapper_free(void *ptr) {
+  if (ptr) {
+    ruby_xfree(ptr);
+  }
+}
+
+static size_t llama_kv_cache_wrapper_size(const void *ptr) {
+  return sizeof(*((llama_kv_cache_wrapper*)ptr));
+}
+
+static rb_data_type_t llama_kv_cache_wrapper_type = {
+  "LlamaKvCache",
+  { NULL,
+    llama_kv_cache_wrapper_free,
+    llama_kv_cache_wrapper_size },
+  NULL,
+  NULL,
+  RUBY_TYPED_FREE_IMMEDIATELY
+};
+
+static VALUE llama_kv_cache_wrapper_alloc(VALUE self) {
+  llama_kv_cache_wrapper* data = (llama_kv_cache_wrapper*)ruby_xmalloc(sizeof(llama_kv_cache_wrapper));
+  data->kv_cache = NULL;
+  return TypedData_Wrap_Struct(self, &llama_kv_cache_wrapper_type, data);
+}
+
+static llama_kv_cache_wrapper* get_llama_kv_cache_wrapper(VALUE self) {
+  llama_kv_cache_wrapper* data = NULL;
+  TypedData_Get_Struct(self, llama_kv_cache_wrapper, &llama_kv_cache_wrapper_type, data);
+  return data;
 }
 
 /* struct llama_kv_cache_view_cell */
@@ -4801,6 +4839,13 @@ void Init_llama_cpp(void) {
    * @return [Integer]
    */
   rb_define_method(rb_cLlamaKvCacheViewCell, "pos", RUBY_METHOD_FUNC(llama_kv_cache_view_cell_get_pos), 0);
+
+  /**
+   * Document-class: LlamaCpp::LlamaKvCache
+   * "struct llama_kv_cache" wrapper class
+   */
+  rb_cLlamaKvCache = rb_define_class_under(rb_mLlamaCpp, "LlamaKvCache", rb_cObject);
+  rb_define_alloc_func(rb_cLlamaKvCache, llama_kv_cache_wrapper_alloc);
 
   /**
    * Document-class: LlamaCpp::LlamaKvCacheView
