@@ -2222,17 +2222,17 @@ static VALUE rb_llama_kv_self_seq_pos_max(VALUE self, VALUE ctx, VALUE seq_id) {
 }
 
 /**
- * @overload llama_kv_cache_defrag(context)
+ * @overload llama_kv_self_defrag(context)
  *  @param [LlamaContext] context
  *  @return [NilClass]
  */
-static VALUE rb_llama_kv_cache_defrag(VALUE self, VALUE ctx) {
+static VALUE rb_llama_kv_self_defrag(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
     return Qnil;
   }
   llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
-  llama_kv_cache_defrag(context_wrapper->context);
+  llama_kv_self_defrag(context_wrapper->context);
   RB_GC_GUARD(ctx);
   return Qnil;
 }
@@ -4940,8 +4940,8 @@ void Init_llama_cpp(void) {
   /* llama_kv_self_seq_pos_max */
   rb_define_module_function(rb_mLlamaCpp, "llama_kv_self_seq_pos_max", rb_llama_kv_self_seq_pos_max, 2);
 
-  /* llama_kv_cache_defrag */
-  rb_define_module_function(rb_mLlamaCpp, "llama_kv_cache_defrag", rb_llama_kv_cache_defrag, 1);
+  /* llama_kv_self_defrag */
+  rb_define_module_function(rb_mLlamaCpp, "llama_kv_self_defrag", rb_llama_kv_self_defrag, 1);
 
   /* llama_kv_cache_update */
   rb_define_module_function(rb_mLlamaCpp, "llama_kv_cache_update", rb_llama_kv_cache_update, 1);
