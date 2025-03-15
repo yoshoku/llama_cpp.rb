@@ -2009,17 +2009,17 @@ static VALUE rb_llama_kv_self_n_tokens(VALUE self, VALUE ctx) {
 }
 
 /**
- * @overload llama_get_kv_cache_used_cells(context)
+ * @overload llama_kv_self_used_cells(context)
  *  @param [LlamaContext] context
  *  @return [Integer]
  */
-static VALUE rb_llama_get_kv_cache_used_cells(VALUE self, VALUE ctx) {
+static VALUE rb_llama_kv_self_used_cells(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
     return Qnil;
   }
   llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
-  const int32_t n_used_kv_cells = llama_get_kv_cache_used_cells(context_wrapper->context);
+  const int32_t n_used_kv_cells = llama_kv_self_used_cells(context_wrapper->context);
   RB_GC_GUARD(ctx);
   return INT2NUM(n_used_kv_cells);
 }
@@ -4916,8 +4916,8 @@ void Init_llama_cpp(void) {
   /* llama_kv_self_n_tokens */
   rb_define_module_function(rb_mLlamaCpp, "llama_kv_self_n_tokens", rb_llama_kv_self_n_tokens, 1);
 
-  /* llama_get_kv_cache_used_cells */
-  rb_define_module_function(rb_mLlamaCpp, "llama_get_kv_cache_used_cells", rb_llama_get_kv_cache_used_cells, 1);
+  /* llama_kv_self_used_cells */
+  rb_define_module_function(rb_mLlamaCpp, "llama_kv_self_used_cells", rb_llama_kv_self_used_cells, 1);
 
   /* llama_kv_cache_clear */
   rb_define_module_function(rb_mLlamaCpp, "llama_kv_cache_clear", rb_llama_kv_cache_clear, 1);
