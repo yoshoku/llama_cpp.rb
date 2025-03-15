@@ -1799,11 +1799,11 @@ static VALUE llama_kv_cache_wrapper_alloc(VALUE self) {
   return TypedData_Wrap_Struct(self, &llama_kv_cache_wrapper_data_type, data);
 }
 
-static llama_kv_cache_wrapper* get_llama_kv_cache_wrapper(VALUE self) {
-  llama_kv_cache_wrapper* data = NULL;
-  TypedData_Get_Struct(self, llama_kv_cache_wrapper, &llama_kv_cache_wrapper_data_type, data);
-  return data;
-}
+// static llama_kv_cache_wrapper* get_llama_kv_cache_wrapper(VALUE self) {
+//   llama_kv_cache_wrapper* data = NULL;
+//   TypedData_Get_Struct(self, llama_kv_cache_wrapper, &llama_kv_cache_wrapper_data_type, data);
+//   return data;
+// }
 
 /**
  * @overload llama_get_kv_self(context)
