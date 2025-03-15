@@ -2165,7 +2165,7 @@ static VALUE rb_llama_kv_self_seq_add(VALUE self, VALUE ctx, VALUE seq_id, VALUE
 }
 
 /**
- * @overload llama_kv_cache_seq_div(context, seq_id, p0, p1, d)
+ * @overload llama_kv_self_seq_div(context, seq_id, p0, p1, d)
  *  @param [LlamaContext] context
  *  @param [Integer] seq_id
  *  @param [Integer] p0
@@ -2173,7 +2173,7 @@ static VALUE rb_llama_kv_self_seq_add(VALUE self, VALUE ctx, VALUE seq_id, VALUE
  *  @param [Integer] d
  *  @return [NilClass]
  */
-static VALUE rb_llama_kv_cache_seq_div(VALUE self, VALUE ctx, VALUE seq_id, VALUE p0, VALUE p1, VALUE d) {
+static VALUE rb_llama_kv_self_seq_div(VALUE self, VALUE ctx, VALUE seq_id, VALUE p0, VALUE p1, VALUE d) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
     return Qnil;
@@ -2195,7 +2195,7 @@ static VALUE rb_llama_kv_cache_seq_div(VALUE self, VALUE ctx, VALUE seq_id, VALU
     return Qnil;
   }
   llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
-  llama_kv_cache_seq_div(context_wrapper->context, NUM2INT(seq_id), NUM2INT(p0), NUM2INT(p1), NUM2INT(d));
+  llama_kv_self_seq_div(context_wrapper->context, NUM2INT(seq_id), NUM2INT(p0), NUM2INT(p1), NUM2INT(d));
   RB_GC_GUARD(ctx);
   return Qnil;
 }
@@ -4934,8 +4934,8 @@ void Init_llama_cpp(void) {
   /* llama_kv_self_seq_add */
   rb_define_module_function(rb_mLlamaCpp, "llama_kv_self_seq_add", rb_llama_kv_self_seq_add, 5);
 
-  /* llama_kv_cache_seq_div */
-  rb_define_module_function(rb_mLlamaCpp, "llama_kv_cache_seq_div", rb_llama_kv_cache_seq_div, 5);
+  /* llama_kv_self_seq_div */
+  rb_define_module_function(rb_mLlamaCpp, "llama_kv_self_seq_div", rb_llama_kv_self_seq_div, 5);
 
   /* llama_kv_cache_seq_pos_max */
   rb_define_module_function(rb_mLlamaCpp, "llama_kv_cache_seq_pos_max", rb_llama_kv_cache_seq_pos_max, 2);
