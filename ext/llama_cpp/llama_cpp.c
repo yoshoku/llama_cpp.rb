@@ -2254,17 +2254,17 @@ static VALUE rb_llama_kv_self_update(VALUE self, VALUE ctx) {
 }
 
 /**
- * @overload llama_kv_cache_can_shift?(context)
+ * @overload llama_kv_self_can_shift?(context)
  *  @param [LlamaContext] context
  *  @return [Boolean]
  */
-static VALUE rb_llama_kv_cache_can_shift(VALUE self, VALUE ctx) {
+static VALUE rb_llama_kv_self_can_shift(VALUE self, VALUE ctx) {
   if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
     rb_raise(rb_eArgError, "ctx must be a LlamaContext");
     return Qnil;
   }
   llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
-  const bool res = llama_kv_cache_can_shift(context_wrapper->context);
+  const bool res = llama_kv_self_can_shift(context_wrapper->context);
   RB_GC_GUARD(ctx);
   return res ? Qtrue : Qfalse;
 }
@@ -4946,8 +4946,8 @@ void Init_llama_cpp(void) {
   /* llama_kv_self_update */
   rb_define_module_function(rb_mLlamaCpp, "llama_kv_self_update", rb_llama_kv_self_update, 1);
 
-  /* llama_kv_cache_can_shift */
-  rb_define_module_function(rb_mLlamaCpp, "llama_kv_cache_can_shift?", rb_llama_kv_cache_can_shift, 1);
+  /* llama_kv_self_can_shift */
+  rb_define_module_function(rb_mLlamaCpp, "llama_kv_self_can_shift?", rb_llama_kv_self_can_shift, 1);
 
   /* llama_state_get_size */
   rb_define_module_function(rb_mLlamaCpp, "llama_state_get_size", rb_llama_state_get_size, 1);
