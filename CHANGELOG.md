@@ -1,4 +1,25 @@
 
+## [[0.19.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.18.2...v0.19.0)] - 2025-03-16
+
+**Breaking Changes**
+
+- Change supported llama.cpp version to b4885
+  - Add `LlamaKvCache` class.
+  - Add `llama_get_kv_cache_token_count` module function.
+  - Rename module functions in `LLaMACpp`:
+    - `llama_get_kv_cache_token_count` to `llama_kv_self_n_tokens`
+    - `llama_get_kv_cache_used_cells` to `llama_kv_self_used_cells`
+    - `llama_kv_cache_clear` to `llama_kv_self_clear`
+    - `llama_kv_cache_seq_rm` to `llama_kv_self_seq_rm`
+    - `llama_kv_cache_seq_cp` to `llama_kv_self_seq_cp`
+    - `llama_kv_cache_seq_keep` to `llama_kv_self_seq_keep`
+    - `llama_kv_cache_seq_add` to `llama_kv_self_seq_add`
+    - `llama_kv_cache_seq_div` to `llama_kv_self_seq_div`
+    - `llama_kv_cache_seq_pos_max` to `llama_kv_self_seq_pos_max`
+    - `llama_kv_cache_defrag` to `llama_kv_self_defrag`
+    - `llama_kv_cache_update` to `llama_kv_self_update`
+    - `llama_kv_cache_can_shift?` to `llama_kv_self_can_shift?`
+
 ## [[0.18.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.18.1...v0.18.2)] - 2025-03-01
 
 - Change supported llama.cpp version to b4793
