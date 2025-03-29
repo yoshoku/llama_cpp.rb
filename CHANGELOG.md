@@ -1,4 +1,10 @@
 
+## [[0.19.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.19.0...v0.19.1)] - 2025-03-29
+
+- Change supported llama.cpp version to b4980
+  - Add `LLAMA_VOCAB_PRE_TYPE_SUPERBPE` constant.
+  - Add `llama_set_warmup` module function.
+
 ## [[0.19.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.18.2...v0.19.0)] - 2025-03-16
 
 **Breaking Changes**
