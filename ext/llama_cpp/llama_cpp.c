@@ -2519,6 +2519,24 @@ static VALUE rb_llama_set_causal_attn(VALUE self, VALUE ctx, VALUE causal_attn) 
 }
 
 /**
+ * @overload llama_set_warmup(context, warmup)
+ *  @param [LlamaContext] context
+ *  @param [Boolean] warmup
+ *  @return [NilClass]
+ */
+static VALUE rb_llama_set_warmup(VALUE self, VALUE ctx, VALUE warmup) {
+  if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
+    return Qnil;
+  }
+  llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
+  const bool warmup_ = RTEST(warmup) ? true : false;
+  llama_set_warmup(context_wrapper->context, warmup_);
+  RB_GC_GUARD(ctx);
+  return Qnil;
+}
+
+/**
  * @overload llama_synchronize(context)
  *  @param [LlamaContext] context
  *  @return [NilClass]
@@ -4995,6 +5013,9 @@ void Init_llama_cpp(void) {
 
   /* llama_set_causal_attn */
   rb_define_module_function(rb_mLlamaCpp, "llama_set_causal_attn", rb_llama_set_causal_attn, 2);
+
+  /* llama_set_warmup */
+  rb_define_module_function(rb_mLlamaCpp, "llama_set_warmup", rb_llama_set_warmup, 2);
 
   /* llama_set_abort_callback */
 
