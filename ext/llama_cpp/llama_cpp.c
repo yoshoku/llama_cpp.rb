@@ -4,6 +4,7 @@ VALUE rb_mLlamaCpp;
 VALUE rb_cLlamaVocab;
 VALUE rb_cLlamaModel;
 VALUE rb_cLlamaContext;
+VALUE rb_cLlamaModelTensorBuftOverride;
 VALUE rb_cLlamaModelParams;
 VALUE rb_cLlamaContextParams;
 VALUE rb_cLlamaModelQuantizeParams;
@@ -360,6 +361,49 @@ static VALUE llama_model_kv_override_get_val_str(VALUE self) {
   struct llama_model_kv_override* data = get_llama_model_kv_override(self);
   return rb_utf8_str_new_cstr(data->val_str);
 }
+
+/* struct llama_model_tensor_buft_override */
+static void llama_model_tensor_buft_override_free(void *ptr) {
+  if (ptr) {
+    ruby_xfree(ptr);
+  }
+}
+
+static size_t llama_model_tensor_buft_override_size(const void *ptr) {
+  return sizeof(*((struct llama_model_tensor_buft_override*)ptr));
+}
+
+static rb_data_type_t llama_model_tensor_buft_override_type = {
+  "LlamaModelTensorBuftOverride",
+  { NULL,
+    llama_model_tensor_buft_override_free,
+    llama_model_tensor_buft_override_size },
+  NULL,
+  NULL,
+  RUBY_TYPED_FREE_IMMEDIATELY
+};
+
+static VALUE llama_model_tensor_buft_override_alloc(VALUE self) {
+  struct llama_model_tensor_buft_override* data = (struct llama_model_tensor_buft_override*)ruby_xmalloc(sizeof(struct llama_model_tensor_buft_override));
+  return TypedData_Wrap_Struct(self, &llama_model_tensor_buft_override_type, data);
+}
+
+static struct llama_model_tensor_buft_override* get_llama_model_tensor_buft_override(VALUE self) {
+  struct llama_model_tensor_buft_override* data = NULL;
+  TypedData_Get_Struct(self, struct llama_model_tensor_buft_override, &llama_model_tensor_buft_override_type, data);
+  return data;
+}
+
+static VALUE llama_model_tensor_buft_override_get_pattern(VALUE self) {
+  struct llama_model_tensor_buft_override* data = get_llama_model_tensor_buft_override(self);
+  const char* pattern = data->pattern;
+  return rb_utf8_str_new_cstr(pattern);
+}
+
+// static VALUE llama_model_tensor_buft_override_get_buft(VALUE self) {
+//   struct llama_model_tensor_buft_override* data = get_llama_model_tensor_buft_override(self);
+//   return TypedData_Wrap_Struct(rb_cGgmlBackendBufferTypeT, &llama_model_wrapper_data_type, data->buft);
+// }
 
 /* struct llama_model_params */
 static void llama_model_params_free(void *ptr) {
@@ -4188,6 +4232,18 @@ void Init_llama_cpp(void) {
    */
   rb_define_method(rb_cLlamaModelKvOverride, "val_str", RUBY_METHOD_FUNC(llama_model_kv_override_get_val_str), 0);
 
+  /**
+   * Document-class: LlamaCpp::LlamaModelTensorBuftOverride
+   * "struct llama_model_tensor_buf_override" wrapper class
+   */
+  rb_cLlamaModelTensorBuftOverride = rb_define_class_under(rb_mLlamaCpp, "LlamaModelTensorBuftOverride", rb_cObject);
+  rb_define_alloc_func(rb_cLlamaModelTensorBuftOverride, llama_model_tensor_buft_override_alloc);
+  /**
+   * Document-method: pattern
+   * @return [String]
+   */
+  rb_define_method(rb_cLlamaModelTensorBuftOverride, "pattern", RUBY_METHOD_FUNC(llama_model_tensor_buft_override_get_pattern), 0);
+  /* TODO: ggml_backend_buffer_type_t buff */
 
   /**
    * Document-class: LlamaCpp::LlamaModelParams
@@ -4196,6 +4252,7 @@ void Init_llama_cpp(void) {
   rb_cLlamaModelParams = rb_define_class_under(rb_mLlamaCpp, "LlamaModelParams", rb_cObject);
   rb_define_alloc_func(rb_cLlamaModelParams, llama_model_params_alloc);
   /* TODO: ggml_backend_dev_t* devices */
+  /* TODO: const struct llama_model_tensor_buft_override * tensor_buft_overrides */
   /**
    * Document-method: n_gpu_layers
    * @return [Integer]
