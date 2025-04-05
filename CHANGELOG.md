@@ -1,5 +1,12 @@
 
-## [[0.19.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.19.0...v0.19.1)] - 2025-03-29
+## [[0.19.2](https://github.com/yoshoku/llama_cpp.rb/compare/v0.19.1...v0.19.2)] - 2025-04-05
+
+- Change supported llama.cpp version to b5050
+  - Add `LLAMA_VOCAB_PRE_TYPE_TRILLION` constant.
+  - Add `LLAMA_VOCAB_PRE_TYPE_BAILINGMOE` constant.
+  - Add `LlamaModelTensorBuftOverride` class.
+
+## [[0.19.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.19.0...v0.19.1)] - 2025-03-29
 
 - Change supported llama.cpp version to b4980
   - Add `LLAMA_VOCAB_PRE_TYPE_SUPERBPE` constant.
