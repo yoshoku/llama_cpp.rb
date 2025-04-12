@@ -1,3 +1,7 @@
+## [[0.19.2](https://github.com/yoshoku/llama_cpp.rb/compare/v0.19.2...v0.19.3)] - 2025-04-12
+
+- Change supported llama.cpp version to b5120
+  - Add `LLAMA_VOCAB_PRE_TYPE_LLAMA4` constant.
 
 ## [[0.19.2](https://github.com/yoshoku/llama_cpp.rb/compare/v0.19.1...v0.19.2)] - 2025-04-05
 
