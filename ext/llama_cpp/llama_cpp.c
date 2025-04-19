@@ -4722,6 +4722,7 @@ void Init_llama_cpp(void) {
   rb_define_method(rb_cLlamaModelQuantizeParams, "keep_split=", RUBY_METHOD_FUNC(llama_model_quantize_params_set_keep_split), 1);
   /* TODO: void* imatrix */
   /* TODO: void* kv_overrides */
+  /* TODO: void* tensor_types */
 
   /**
    * Document-class: LlamaCpp::LlamaLogitBias
