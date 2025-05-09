@@ -772,17 +772,6 @@ static VALUE llama_context_params_set_type_v(VALUE self, VALUE type_v) {
   return type_v;
 }
 
-static VALUE llama_context_params_get_logits_all(VALUE self) {
-  struct llama_context_params* data = get_llama_context_params(self);
-  return data->logits_all ? Qtrue : Qfalse;
-}
-
-static VALUE llama_context_params_set_logits_all(VALUE self, VALUE logits_all) {
-  struct llama_context_params* data = get_llama_context_params(self);
-  data->logits_all = RTEST(logits_all) ? true : false;
-  return logits_all;
-}
-
 static VALUE llama_context_params_get_embeddings(VALUE self) {
   struct llama_context_params* data = get_llama_context_params(self);
   return data->embeddings ? Qtrue : Qfalse;
@@ -4558,17 +4547,6 @@ void Init_llama_cpp(void) {
    * @return [Integer]
    */
   rb_define_method(rb_cLlamaContextParams, "type_v=", RUBY_METHOD_FUNC(llama_context_params_set_type_v), 1);
-  /**
-   * Document-method: logits_all
-   * @return [Boolean]
-   */
-  rb_define_method(rb_cLlamaContextParams, "logits_all", RUBY_METHOD_FUNC(llama_context_params_get_logits_all), 0);
-  /**
-   * Document-method: logits_all=
-   * @param [Boolean] logits_all
-   * @return [Boolean]
-   */
-  rb_define_method(rb_cLlamaContextParams, "logits_all=", RUBY_METHOD_FUNC(llama_context_params_set_logits_all), 1);
   /**
    * Document-method: embeddings
    * @return [Boolean]
