@@ -1,3 +1,8 @@
+## [[0.19.5](https://github.com/yoshoku/llama_cpp.rb/compare/v0.19.4...v0.19.5)] - 2025-05-10
+
+- Change supported llama.cpp version to b5320
+  - Remove deprecated logits_all accessor in LlamaContextParams.
+
 ## [[0.19.4](https://github.com/yoshoku/llama_cpp.rb/compare/v0.19.3...v0.19.4)] - 2025-04-26
 
 - Change supported llama.cpp version to b5180
