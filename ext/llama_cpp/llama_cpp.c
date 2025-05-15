@@ -5365,4 +5365,10 @@ void Init_llama_cpp(void) {
 
   /* llama_perf_sampler_reset */
   rb_define_module_function(rb_mLlamaCpp, "llama_perf_sampler_reset", rb_llama_perf_sampler_reset, 1);
+
+  /* TODO: typedef bool (*llama_opt_param_filter) */
+  /* TODO: bool llama_opt_param_filter_all */
+  /* TODO: struct llama_opt_params */
+  /* TODO: void llama_opt_init */
+  /* TODO: void llama_opt_epoch */
 }
