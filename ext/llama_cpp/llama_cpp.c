@@ -816,6 +816,17 @@ static VALUE llama_context_params_set_no_perf(VALUE self, VALUE no_perf) {
   return no_perf;
 }
 
+static VALUE llama_context_params_get_op_offload(VALUE self) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  return data->op_offload ? Qtrue : Qfalse;
+}
+
+static VALUE llama_context_params_set_op_offload(VALUE self, VALUE op_offload) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  data->op_offload = RTEST(op_offload) ? true : false;
+  return op_offload;
+}
+
 /* llama_model_quantize_params */
 static void llama_model_quantize_params_free(void *ptr) {
   if (ptr) {
@@ -4592,6 +4603,17 @@ void Init_llama_cpp(void) {
    * @return [Boolean]
    */
   rb_define_method(rb_cLlamaContextParams, "no_perf=", RUBY_METHOD_FUNC(llama_context_params_set_no_perf), 1);
+  /**
+   * Document-method: op_offload
+   * @return [Boolean]
+   */
+  rb_define_method(rb_cLlamaContextParams, "op_offload", RUBY_METHOD_FUNC(llama_context_params_get_op_offload), 0);
+  /**
+   * Document-method: op_offload=
+   * @param [Boolean] op_offload
+   * @return [Boolean]
+   */
+  rb_define_method(rb_cLlamaContextParams, "op_offload=", RUBY_METHOD_FUNC(llama_context_params_set_op_offload), 1);
   /* TODO: ggml_abort_callback abort_callback */
   /* TODO: void* abort_callback_data */
 
