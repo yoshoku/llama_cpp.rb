@@ -1232,6 +1232,29 @@ static VALUE rb_llama_model_load_from_splits(VALUE self, VALUE paths, VALUE para
 }
 
 /**
+ * @overload llama_model_save_to_file(model, path_model)
+ *  @param [LlamaModel] model
+ *  @param [String] path_model
+ *  @return [NilClass]
+ */
+static VALUE rb_llama_model_save_to_file(VALUE self, VALUE model, VALUE path_model) {
+  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
+    return Qnil;
+  }
+  if (!RB_TYPE_P(path_model, T_STRING)) {
+    rb_raise(rb_eArgError, "path_model must be a String");
+    return Qnil;
+  }
+  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
+  const char* path_model_ = StringValueCStr(path_model);
+  llama_model_save_to_file(model_wrapper->model, path_model_);
+  RB_GC_GUARD(model);
+  RB_GC_GUARD(path_model);
+  return Qnil;
+}
+
+/**
  * @overload llama_init_from_model(model, params)
  *  @param [LlamaModel] model
  *  @param [LlamaContextParams] params
@@ -4802,6 +4825,9 @@ void Init_llama_cpp(void) {
 
   /* llama_model_load_from_splits */
   rb_define_module_function(rb_mLlamaCpp, "llama_model_load_from_splits", rb_llama_model_load_from_splits, 2);
+
+  /* llama_model_save_to_file */
+  rb_define_module_function(rb_mLlamaCpp, "llama_model_save_to_file", rb_llama_model_save_to_file, 2);
 
   /* llama_model_free */
   rb_define_module_function(rb_mLlamaCpp, "llama_model_free", rb_llama_model_free, 1);
