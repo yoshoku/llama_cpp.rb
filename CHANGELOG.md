@@ -1,3 +1,10 @@
+## [[0.19.6](https://github.com/yoshoku/llama_cpp.rb/compare/v0.19.5...v0.19.6)] - 2025-05-17
+
+- Change supported llama.cpp version to b5410
+  - Add `LLAMA_VOCAB_PRE_TYPE_SEED_CODER` constant.
+  - Add `op_offload` accessor to `LlamaContextParams`.
+  - Add `llama_model_save_to_file` module function.
+
 ## [[0.19.5](https://github.com/yoshoku/llama_cpp.rb/compare/v0.19.4...v0.19.5)] - 2025-05-10
 
 - Change supported llama.cpp version to b5320
