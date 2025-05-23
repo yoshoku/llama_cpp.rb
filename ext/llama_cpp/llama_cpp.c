@@ -826,6 +826,17 @@ static VALUE llama_context_params_set_op_offload(VALUE self, VALUE op_offload) {
   return op_offload;
 }
 
+static VALUE llama_context_params_get_swa_full(VALUE self) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  return data->swa_full ? Qtrue : Qfalse;
+}
+
+static VALUE llama_context_params_set_swa_full(VALUE self, VALUE swa_full) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  data->swa_full = RTEST(swa_full) ? true : false;
+  return swa_full;
+}
+
 /* llama_model_quantize_params */
 static void llama_model_quantize_params_free(void *ptr) {
   if (ptr) {
@@ -4434,6 +4445,17 @@ void Init_llama_cpp(void) {
    * @return [Boolean]
    */
   rb_define_method(rb_cLlamaContextParams, "op_offload=", RUBY_METHOD_FUNC(llama_context_params_set_op_offload), 1);
+  /**
+   * Document-method: swa_full
+   * @return [Boolean]
+   */
+  rb_define_method(rb_cLlamaContextParams, "swa_full", RUBY_METHOD_FUNC(llama_context_params_get_swa_full), 0);
+  /**
+   * Document-method: swa_full=
+   * @param [Boolean] swa_full
+   * @return [Boolean]
+   */
+  rb_define_method(rb_cLlamaContextParams, "swa_full=", RUBY_METHOD_FUNC(llama_context_params_set_swa_full), 1);
   /* TODO: ggml_abort_callback abort_callback */
   /* TODO: void* abort_callback_data */
 
