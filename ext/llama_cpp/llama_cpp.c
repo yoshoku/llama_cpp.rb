@@ -1889,42 +1889,6 @@ static VALUE rb_llama_get_kv_self(VALUE self, VALUE ctx) {
   return TypedData_Wrap_Struct(rb_cLlamaKvCache, &llama_kv_cache_wrapper_data_type, kv_cache_wrapper);
 }
 
-/* struct llama_kv_cache_view_cell */
-static void llama_kv_cache_view_cell_free(void *ptr) {
-  ruby_xfree(ptr);
-}
-
-static size_t llama_kv_cache_view_cell_size(const void *ptr) {
-  return sizeof(*((struct llama_kv_cache_view_cell*)ptr));
-}
-
-static rb_data_type_t llama_kv_cache_view_cell_type = {
-  "LlamaKvCacheViewCell",
-  { NULL,
-    llama_kv_cache_view_cell_free,
-    llama_kv_cache_view_cell_size },
-  NULL,
-  NULL,
-  RUBY_TYPED_FREE_IMMEDIATELY
-};
-
-static VALUE llama_kv_cache_view_cell_alloc(VALUE self) {
-  struct llama_kv_cache_view_cell* data = (struct llama_kv_cache_view_cell*)ruby_xmalloc(sizeof(struct llama_kv_cache_view_cell));
-  data->pos = 0;
-  return TypedData_Wrap_Struct(self, &llama_kv_cache_view_cell_type, data);
-}
-
-static struct llama_kv_cache_view_cell* get_llama_kv_cache_view_cell(VALUE self) {
-  struct llama_kv_cache_view_cell* data = NULL;
-  TypedData_Get_Struct(self, struct llama_kv_cache_view_cell, &llama_kv_cache_view_cell_type, data);
-  return data;
-}
-
-static VALUE llama_kv_cache_view_cell_get_pos(VALUE self) {
-  struct llama_kv_cache_view_cell* data = get_llama_kv_cache_view_cell(self);
-  return INT2NUM(data->pos);
-}
-
 /* struct llama_kv_cache_view */
 static void llama_kv_cache_view_free_(void *ptr) {
   if (ptr != NULL) {
@@ -1994,7 +1958,6 @@ static VALUE llama_kv_cache_view_get_max_contiguous_idx(VALUE self) {
   struct llama_kv_cache_view* data = get_llama_kv_cache_view(self);
   return INT2NUM(data->max_contiguous_idx);
 }
-/* TODO: struct llama_kv_cache_view_cell * cells; */
 /* TODO: llama_seq_id * cells_sequences; */
 
 /**
@@ -4955,18 +4918,6 @@ void Init_llama_cpp(void) {
   rb_define_module_function(rb_mLlamaCpp, "llama_adapter_lora_free", rb_llama_adapter_lora_free, 1);
 
   /* TODO: llama_apply_adapter_cvec */
-
-  /**
-   * Document-class: LlamaCpp::LlamaKvCacheViewCell
-   * "struct llama_kv_cache_view_cell" wrapper class
-   */
-  VALUE rb_cLlamaKvCacheViewCell = rb_define_class_under(rb_mLlamaCpp, "LlamaKvCacheViewCell", rb_cObject);
-  rb_define_alloc_func(rb_cLlamaKvCacheViewCell, llama_kv_cache_view_cell_alloc);
-  /**
-   * Document-method: pos
-   * @return [Integer]
-   */
-  rb_define_method(rb_cLlamaKvCacheViewCell, "pos", RUBY_METHOD_FUNC(llama_kv_cache_view_cell_get_pos), 0);
 
   /**
    * Document-class: LlamaCpp::LlamaKvCache
