@@ -1889,22 +1889,6 @@ static VALUE rb_llama_get_kv_self(VALUE self, VALUE ctx) {
 }
 
 /**
- * @overload llama_kv_self_used_cells(context)
- *  @param [LlamaContext] context
- *  @return [Integer]
- */
-static VALUE rb_llama_kv_self_used_cells(VALUE self, VALUE ctx) {
-  if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
-    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
-    return Qnil;
-  }
-  llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
-  const int32_t n_used_kv_cells = llama_kv_self_used_cells(context_wrapper->context);
-  RB_GC_GUARD(ctx);
-  return INT2NUM(n_used_kv_cells);
-}
-
-/**
  * @overload llama_kv_self_clear(context)
  *  @param [LlamaContext] context
  *  @return [NilClass]
@@ -4775,9 +4759,6 @@ void Init_llama_cpp(void) {
    */
   rb_cLlamaKvCache = rb_define_class_under(rb_mLlamaCpp, "LlamaKvCache", rb_cObject);
   rb_define_alloc_func(rb_cLlamaKvCache, llama_kv_cache_wrapper_alloc);
-
-  /* llama_kv_self_used_cells */
-  rb_define_module_function(rb_mLlamaCpp, "llama_kv_self_used_cells", rb_llama_kv_self_used_cells, 1);
 
   /* llama_kv_self_clear */
   rb_define_module_function(rb_mLlamaCpp, "llama_kv_self_clear", rb_llama_kv_self_clear, 1);
