@@ -1,3 +1,13 @@
+## [[0.20.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.19.6...v0.20.0)] - 2025-05-23
+
+- Change supported llama.cpp version to b5460
+  - Remove `LlamaKvChacheViewCell` class.
+  - Remove `deprecated LlamaKvCacheView` class.
+  - Remove `llama_kv_self_n_tokens` module function.
+  - Remove `llama_kv_self_used_cells` module function.
+  - Add `swa_full` accessor to `LlamaContextParams`.
+  - Add `llama_kv_self_seq_pos_min` module function.
+
 ## [[0.19.6](https://github.com/yoshoku/llama_cpp.rb/compare/v0.19.5...v0.19.6)] - 2025-05-17
 
 - Change supported llama.cpp version to b5410
