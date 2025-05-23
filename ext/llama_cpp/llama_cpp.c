@@ -11,7 +11,6 @@ VALUE rb_cLlamaModelQuantizeParams;
 VALUE rb_cLlamaLogitBias;
 VALUE rb_cLlamaAdapterLora;
 VALUE rb_cLlamaKvCache;
-VALUE rb_cLlamaKvCacheView;
 VALUE rb_cLlamaTokenDataArray;
 VALUE rb_cLlamaBatch;
 VALUE rb_cLlamaSampler;
@@ -1887,139 +1886,6 @@ static VALUE rb_llama_get_kv_self(VALUE self, VALUE ctx) {
   kv_cache_wrapper->kv_cache = llama_get_kv_self(context_wrapper->context);
   RB_GC_GUARD(ctx);
   return TypedData_Wrap_Struct(rb_cLlamaKvCache, &llama_kv_cache_wrapper_data_type, kv_cache_wrapper);
-}
-
-/* struct llama_kv_cache_view */
-static void llama_kv_cache_view_free_(void *ptr) {
-  if (ptr != NULL) {
-    ruby_xfree(ptr);
-  }
-}
-
-static size_t llama_kv_cache_view_size(const void *ptr) {
-  return sizeof(*((struct llama_kv_cache_view*)ptr));
-}
-
-static rb_data_type_t llama_kv_cache_view_type = {
-  "LlamaKvCacheView",
-  { NULL,
-    llama_kv_cache_view_free_,
-    llama_kv_cache_view_size },
-  NULL,
-  NULL,
-  RUBY_TYPED_FREE_IMMEDIATELY
-};
-
-static VALUE llama_kv_cache_view_alloc(VALUE self) {
-  struct llama_kv_cache_view* data = (struct llama_kv_cache_view*)ruby_xmalloc(sizeof(struct llama_kv_cache_view));
-  data->n_cells = 0;
-  data->n_seq_max = 0;
-  data->token_count = 0;
-  data->used_cells = 0;
-  data->max_contiguous = 0;
-  data->max_contiguous_idx = 0;
-  data->cells = NULL;
-  data->cells_sequences = NULL;
-  return TypedData_Wrap_Struct(self, &llama_kv_cache_view_type, data);
-}
-
-static struct llama_kv_cache_view* get_llama_kv_cache_view(VALUE self) {
-  struct llama_kv_cache_view* data = NULL;
-  TypedData_Get_Struct(self, struct llama_kv_cache_view, &llama_kv_cache_view_type, data);
-  return data;
-}
-
-static VALUE llama_kv_cache_view_get_n_cells(VALUE self) {
-  struct llama_kv_cache_view* data = get_llama_kv_cache_view(self);
-  return INT2NUM(data->n_cells);
-}
-
-static VALUE llama_kv_cache_view_get_n_seq_max(VALUE self) {
-  struct llama_kv_cache_view* data = get_llama_kv_cache_view(self);
-  return INT2NUM(data->n_seq_max);
-}
-
-static VALUE llama_kv_cache_view_get_token_count(VALUE self) {
-  struct llama_kv_cache_view* data = get_llama_kv_cache_view(self);
-  return INT2NUM(data->token_count);
-}
-
-static VALUE llama_kv_cache_view_get_used_cells(VALUE self) {
-  struct llama_kv_cache_view* data = get_llama_kv_cache_view(self);
-  return INT2NUM(data->used_cells);
-}
-
-static VALUE llama_kv_cache_view_get_max_contiguous(VALUE self) {
-  struct llama_kv_cache_view* data = get_llama_kv_cache_view(self);
-  return INT2NUM(data->max_contiguous);
-}
-
-static VALUE llama_kv_cache_view_get_max_contiguous_idx(VALUE self) {
-  struct llama_kv_cache_view* data = get_llama_kv_cache_view(self);
-  return INT2NUM(data->max_contiguous_idx);
-}
-/* TODO: llama_seq_id * cells_sequences; */
-
-/**
- * @overload llama_kv_cache_view_init(context, n_seq_max)
- *  @param [LlamaContext] context
- *  @param [Integer] n_seq_max
- *  @return [LlamaKvCacheView]
- */
-static VALUE rb_llama_kv_cache_view_init(VALUE self, VALUE ctx, VALUE n_seq_max) {
-  if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
-    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
-    return Qnil;
-  }
-  if (!RB_INTEGER_TYPE_P(n_seq_max)) {
-    rb_raise(rb_eArgError, "n_seq_max must be an Integer");
-    return Qnil;
-  }
-  llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
-  struct llama_kv_cache_view* data = (struct llama_kv_cache_view*)ruby_xmalloc(sizeof(struct llama_kv_cache_view));
-  *data = llama_kv_cache_view_init(context_wrapper->context, NUM2UINT(n_seq_max));
-  RB_GC_GUARD(ctx);
-  return TypedData_Wrap_Struct(rb_cLlamaKvCacheView, &llama_kv_cache_view_type, data);
-}
-
-/**
- * @overload llama_kv_cache_view_free(view)
- *  @param [LlamaKvCacheView] view
- *  @return [NilClass]
- */
-static VALUE rb_llama_kv_cache_view_free(VALUE self, VALUE view) {
-  if (!rb_obj_is_kind_of(view, rb_cLlamaKvCacheView)) {
-    rb_raise(rb_eArgError, "view must be a LlamaKvCacheView");
-    return Qnil;
-  }
-  struct llama_kv_cache_view* view_ = get_llama_kv_cache_view(view);
-  llama_kv_cache_view_free(view_);
-  view_ = NULL;
-  RB_GC_GUARD(view);
-  return Qnil;
-}
-
-/**
- * @overload llama_kv_cache_view_update(context, view)
- *  @param [LlamaContext] context
- *  @param [LlamaKvCacheView] view
- *  @return [NilClass]
- */
-static VALUE rb_llama_kv_cache_view_update(VALUE self, VALUE ctx, VALUE view) {
-  if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
-    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
-    return Qnil;
-  }
-  if (!rb_obj_is_kind_of(view, rb_cLlamaKvCacheView)) {
-    rb_raise(rb_eArgError, "view must be a LlamaKvCacheView");
-    return Qnil;
-  }
-  llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
-  struct llama_kv_cache_view* view_ = get_llama_kv_cache_view(view);
-  llama_kv_cache_view_update(context_wrapper->context, view_);
-  RB_GC_GUARD(ctx);
-  RB_GC_GUARD(view);
-  return Qnil;
 }
 
 /**
@@ -4925,52 +4791,6 @@ void Init_llama_cpp(void) {
    */
   rb_cLlamaKvCache = rb_define_class_under(rb_mLlamaCpp, "LlamaKvCache", rb_cObject);
   rb_define_alloc_func(rb_cLlamaKvCache, llama_kv_cache_wrapper_alloc);
-
-  /**
-   * Document-class: LlamaCpp::LlamaKvCacheView
-   * "struct llama_kv_cache_view" wrapper class
-   */
-  rb_cLlamaKvCacheView = rb_define_class_under(rb_mLlamaCpp, "LlamaKvCacheView", rb_cObject);
-  rb_define_alloc_func(rb_cLlamaKvCacheView, llama_kv_cache_view_alloc);
-  /**
-   * Document-method: n_cells
-   * @return [Integer]
-   */
-  rb_define_method(rb_cLlamaKvCacheView, "n_cells", RUBY_METHOD_FUNC(llama_kv_cache_view_get_n_cells), 0);
-  /**
-   * Document-method: n_seq_max
-   * @return [Integer]
-   */
-  rb_define_method(rb_cLlamaKvCacheView, "n_seq_max", RUBY_METHOD_FUNC(llama_kv_cache_view_get_n_seq_max), 0);
-  /**
-   * Document-method: token_count
-   * @return [Integer]
-   */
-  rb_define_method(rb_cLlamaKvCacheView, "token_count", RUBY_METHOD_FUNC(llama_kv_cache_view_get_token_count), 0);
-  /**
-   * Document-method: used_cells
-   * @return [Integer]
-   */
-  rb_define_method(rb_cLlamaKvCacheView, "used_cells", RUBY_METHOD_FUNC(llama_kv_cache_view_get_used_cells), 0);
-  /**
-   * Document-method: max_contiguous
-   * @return [Integer]
-   */
-  rb_define_method(rb_cLlamaKvCacheView, "max_contiguous", RUBY_METHOD_FUNC(llama_kv_cache_view_get_max_contiguous), 0);
-  /**
-   * Document-method: max_contiguous_idx
-   * @return [Integer]
-   */
-  rb_define_method(rb_cLlamaKvCacheView, "max_contiguous_idx", RUBY_METHOD_FUNC(llama_kv_cache_view_get_max_contiguous_idx), 0);
-
-  /* llama_kv_cache_view_init */
-  rb_define_module_function(rb_mLlamaCpp, "llama_kv_cache_view_init", rb_llama_kv_cache_view_init, 2);
-
-  /* llama_kv_cache_view_free */
-  rb_define_module_function(rb_mLlamaCpp, "llama_kv_cache_view_free", rb_llama_kv_cache_view_free, 1);
-
-  /* llama_kv_cache_view_update */
-  rb_define_module_function(rb_mLlamaCpp, "llama_kv_cache_view_update", rb_llama_kv_cache_view_update, 2);
 
   /* llama_kv_self_n_tokens */
   rb_define_module_function(rb_mLlamaCpp, "llama_kv_self_n_tokens", rb_llama_kv_self_n_tokens, 1);
