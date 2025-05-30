@@ -1323,6 +1323,14 @@ static VALUE rb_llama_max_devices(VALUE self) {
 }
 
 /**
+ * @overload llama_max_parallel_sequences
+ *  @return [Integer]
+ */
+static VALUE rb_llama_max_parallel_sequences(VALUE self) {
+  return SIZET2NUM(llama_max_parallel_sequences());
+}
+
+/**
  * @overload llama_supports_mmap?
  *  @return [Boolean]
  */
@@ -4683,6 +4691,9 @@ void Init_llama_cpp(void) {
 
   /* llama_max_devices */
   rb_define_module_function(rb_mLlamaCpp, "llama_max_devices", rb_llama_max_devices, 0);
+
+  /* llama_max_parallel_sequences */
+  rb_define_module_function(rb_mLlamaCpp, "llama_max_parallel_sequences", rb_llama_max_parallel_sequences, 0);
 
   /* llama_supports_mmap */
   rb_define_module_function(rb_mLlamaCpp, "llama_supports_mmap?", rb_llama_supports_mmap, 0);
