@@ -1,3 +1,8 @@
+## [[0.20.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.20.0...v0.20.1)] - 2025-05-31
+
+- Change supported llama.cpp version to b5530
+  - Add `llama_max_parallel_sequences` module function.
+
 ## [[0.20.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.19.6...v0.20.0)] - 2025-05-23
 
 - Change supported llama.cpp version to b5460
