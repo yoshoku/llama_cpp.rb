@@ -1,3 +1,21 @@
+## [[0.20.2](https://github.com/yoshoku/llama_cpp.rb/compare/v0.20.1...v0.20.2)] - 2025-06-07
+
+- Change supported llama.cpp version to b5600
+  - Add `llama_model_n_swa` module function.
+  - Add `llama_model_n_cls_out` module function.
+  - Add `llama_model_cls_label` module function.
+  - Add `LlamaMemoryT` class.
+  - Add `llama_memory_clear` module function.
+  - Add `llama_memory_seq_rm` module function.
+  - Add `llama_memory_seq_cp` module function.
+  - Add `llama_memory_seq_keep` module function.
+  - Add `llama_memory_seq_add` module function.
+  - Add `llama_memory_seq_div` module function.
+  - Add `llama_memory_seq_pos_min` module function.
+  - Add `llama_memory_seq_pos_max` module function.
+  - Add `llama_memory_can_shift?` module function.
+  - Add `llama_get_memory` module function.
+
 ## [[0.20.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.20.0...v0.20.1)] - 2025-05-31
 
 - Change supported llama.cpp version to b5530
