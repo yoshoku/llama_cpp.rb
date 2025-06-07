@@ -1581,6 +1581,41 @@ static VALUE rb_llama_model_rope_freq_scale_train(VALUE self, VALUE model) {
 }
 
 /**
+ * @overload llama_model_n_cls_out(model)
+ *  @param [LlamaModel] model
+ *  @return [Integer]
+ */
+static VALUE rb_llama_model_n_cls_out(VALUE self, VALUE model) {
+  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
+    return Qnil;
+  }
+  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
+  return UINT2NUM(llama_model_n_cls_out(model_wrapper->model));
+}
+
+/**
+ * @overload llama_model_cls_label(model, id)
+ *  @param [LlamaModel] model
+ *  @param [Integer] id
+ *  @return [Integer]
+ */
+static VALUE rb_llama_model_cls_label(VALUE self, VALUE model, VALUE id) {
+  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
+    return Qnil;
+  }
+  if (!RB_INTEGER_TYPE_P(id)) {
+    rb_raise(rb_eArgError, "id must be an Integer");
+    return Qnil;
+  }
+  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
+  const char* str = llama_model_cls_label(model_wrapper->model, NUM2UINT(id));
+  RB_GC_GUARD(model);
+  return rb_utf8_str_new_cstr(str);
+}
+
+/**
  * @overload llama_vocab_type(vocab)
  *  @param [LlamaVocab] vocab
  *  @return [Integer]
@@ -4768,6 +4803,12 @@ void Init_llama_cpp(void) {
 
   /* llama_model_rope_freq_scale_train */
   rb_define_module_function(rb_mLlamaCpp, "llama_model_rope_freq_scale_train", rb_llama_model_rope_freq_scale_train, 1);
+
+  /* llama_model_n_cls_out */
+  rb_define_module_function(rb_mLlamaCpp, "llama_model_n_cls_out", rb_llama_model_n_cls_out, 1);
+
+  /* llama_model_cls_label */
+  rb_define_module_function(rb_mLlamaCpp, "llama_model_cls_label", rb_llama_model_cls_label, 2);
 
   /* llama_vocab_type */
   rb_define_module_function(rb_mLlamaCpp, "llama_vocab_type", rb_llama_vocab_type, 1);
