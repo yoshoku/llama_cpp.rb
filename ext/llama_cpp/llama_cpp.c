@@ -1940,6 +1940,17 @@ static llama_memory_t_wrapper* get_llama_memory_t_wrapper(VALUE self) {
   return data;
 }
 
+static VALUE rb_llama_memory_clear(VALUE self, VALUE memory) {
+  if (!rb_obj_is_kind_of(memory, rb_cLlamaMemoryT)) {
+    rb_raise(rb_eArgError, "memory must be a LlamaMemoryT");
+    return Qnil;
+  }
+  llama_memory_t_wrapper* memory_wrapper = get_llama_memory_t_wrapper(memory);
+  llama_memory_clear(memory_wrapper->memory);
+  RB_GC_GUARD(memory);
+  return Qnil;
+}
+
 /* llama_kv_cache wrapper */
 typedef struct {
   struct llama_kv_cache* kv_cache;
@@ -4908,7 +4919,10 @@ void Init_llama_cpp(void) {
    * "struct llama_memory_t" wrapper class
    */
   rb_cLlamaMemoryT = rb_define_class_under(rb_mLlamaCpp, "LlamaMemoryT", rb_cObject);
-  rb_define_alloc_func(rb_cLlamaMemoryT, llama_memory_t_alloc);
+  rb_define_alloc_func(rb_cLlamaMemoryT, llama_memory_t_wrapper_alloc);
+
+  /* llama_memory_clear */
+  rb_define_module_function(rb_mLlamaCpp, "llama_memory_clear", rb_llama_memory_clear, 1);
 
   /**
    * Document-class: LlamaCpp::LlamaKvCache
