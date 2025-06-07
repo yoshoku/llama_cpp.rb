@@ -2100,6 +2100,17 @@ static VALUE rb_llama_memory_seq_pos_max(VALUE self, VALUE memory, VALUE seq_id)
   return INT2NUM(pos_max);
 }
 
+static VALUE rb_llama_memory_can_shift(VALUE self, VALUE memory) {
+  if (!rb_obj_is_kind_of(memory, rb_cLlamaMemoryT)) {
+    rb_raise(rb_eArgError, "memory must be a LlamaMemoryT");
+    return Qnil;
+  }
+  llama_memory_t_wrapper* memory_wrapper = get_llama_memory_t_wrapper(memory);
+  const bool can_shift = llama_memory_can_shift(memory_wrapper->memory);
+  RB_GC_GUARD(memory);
+  return can_shift ? Qtrue : Qfalse;
+}
+
 /* llama_kv_cache wrapper */
 typedef struct {
   struct llama_kv_cache* kv_cache;
@@ -5093,6 +5104,9 @@ void Init_llama_cpp(void) {
 
   /* llama_memory_seq_pos_max */
   rb_define_module_function(rb_mLlamaCpp, "llama_memory_seq_pos_max", rb_llama_memory_seq_pos_max, 2);
+
+  /* llama_memory_can_shift */
+  rb_define_module_function(rb_mLlamaCpp, "llama_memory_can_shift?", rb_llama_memory_can_shift, 1);
 
   /**
    * Document-class: LlamaCpp::LlamaKvCache
