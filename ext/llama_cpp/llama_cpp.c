@@ -10,6 +10,7 @@ VALUE rb_cLlamaContextParams;
 VALUE rb_cLlamaModelQuantizeParams;
 VALUE rb_cLlamaLogitBias;
 VALUE rb_cLlamaAdapterLora;
+VALUE rb_cLlamaMemoryT;
 VALUE rb_cLlamaKvCache;
 VALUE rb_cLlamaTokenDataArray;
 VALUE rb_cLlamaBatch;
@@ -1900,6 +1901,43 @@ static VALUE rb_llama_adapter_lora_free(VALUE self, VALUE adapter) {
   }
   RB_GC_GUARD(adapter);
   return Qnil;
+}
+
+/* llama_memory_t wrapper */
+typedef struct {
+  struct llama_memory_t* memory;
+} llama_memory_t_wrapper;
+
+static void llama_memory_t_wrapper_free(void *ptr) {
+  if (ptr) {
+    ruby_xfree(ptr);
+  }
+}
+
+static size_t llama_memory_t_wrapper_size(const void *ptr) {
+  return sizeof(*((llama_memory_t_wrapper*)ptr));
+}
+
+static rb_data_type_t llama_memory_t_wrapper_data_type = {
+  "LlamaMemory",
+  { NULL,
+    llama_memory_t_wrapper_free,
+    llama_memory_t_wrapper_size },
+  NULL,
+  NULL,
+  RUBY_TYPED_FREE_IMMEDIATELY
+};
+
+static VALUE llama_memory_t_wrapper_alloc(VALUE self) {
+  llama_memory_t_wrapper* data = (llama_memory_t_wrapper*)ruby_xmalloc(sizeof(llama_memory_t_wrapper));
+  data->memory = NULL;
+  return TypedData_Wrap_Struct(self, &llama_memory_t_wrapper_data_type, data);
+}
+
+static llama_memory_t_wrapper* get_llama_memory_t_wrapper(VALUE self) {
+  llama_memory_t_wrapper* data = NULL;
+  TypedData_Get_Struct(self, llama_memory_t_wrapper, &llama_memory_t_wrapper_data_type, data);
+  return data;
 }
 
 /* llama_kv_cache wrapper */
@@ -4864,6 +4902,13 @@ void Init_llama_cpp(void) {
   rb_define_module_function(rb_mLlamaCpp, "llama_adapter_lora_free", rb_llama_adapter_lora_free, 1);
 
   /* TODO: llama_apply_adapter_cvec */
+
+  /**
+   * Document-class: LlamaCpp::LlamaMemoryT
+   * "struct llama_memory_t" wrapper class
+   */
+  rb_cLlamaMemoryT = rb_define_class_under(rb_mLlamaCpp, "LlamaMemoryT", rb_cObject);
+  rb_define_alloc_func(rb_cLlamaMemoryT, llama_memory_t_alloc);
 
   /**
    * Document-class: LlamaCpp::LlamaKvCache
