@@ -2111,6 +2111,24 @@ static VALUE rb_llama_memory_can_shift(VALUE self, VALUE memory) {
   return can_shift ? Qtrue : Qfalse;
 }
 
+/**
+ * @overload llama_get_memory(context)
+ *  @param [LlamaContext] context
+ *  @return [LlamaMemoryT]
+ */
+static VALUE rb_llama_get_memory(VALUE self, VALUE ctx) {
+  if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
+    return Qnil;
+  }
+  llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
+  llama_memory_t memory = llama_get_memory(context_wrapper->context);
+  llama_memory_t_wrapper* memory_wrapper = (llama_memory_t_wrapper*)ruby_xmalloc(sizeof(llama_memory_t_wrapper));
+  memory_wrapper->memory = memory;
+  RB_GC_GUARD(ctx);
+  return TypedData_Wrap_Struct(rb_cLlamaMemoryT, &llama_memory_t_wrapper_data_type, memory_wrapper);
+}
+
 /* llama_kv_cache wrapper */
 typedef struct {
   struct llama_kv_cache* kv_cache;
@@ -4982,6 +5000,9 @@ void Init_llama_cpp(void) {
 
   /* llama_get_kv_self */
   rb_define_module_function(rb_mLlamaCpp, "llama_get_kv_self", rb_llama_get_kv_self, 1);
+
+  /* llama_get_memory */
+  rb_define_module_function(rb_mLlamaCpp, "llama_get_memory", rb_llama_get_memory, 1);
 
   /* llama_pooling_type */
   rb_define_module_function(rb_mLlamaCpp, "llama_pooling_type", rb_llama_pooling_type, 1);
