@@ -1553,6 +1553,20 @@ static VALUE rb_llama_model_n_head_kv(VALUE self, VALUE model) {
 }
 
 /**
+ * @overload llama_model_n_swa(model)
+ *  @param [LlamaModel] model
+ *  @return [Integer]
+ */
+static VALUE rb_llama_model_n_swa(VALUE self, VALUE model) {
+  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
+    return Qnil;
+  }
+  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
+  return INT2NUM(llama_model_n_swa(model_wrapper->model));
+}
+
+/**
  * @overload llama_model_rope_freq_scale_train(model)
  *  @param [LlamaModel] model
  *  @return [Float]
@@ -4748,6 +4762,9 @@ void Init_llama_cpp(void) {
 
   /* llama_model_n_head_kv */
   rb_define_module_function(rb_mLlamaCpp, "llama_model_n_head_kv", rb_llama_model_n_head_kv, 1);
+
+  /* llama_model_n_swa */
+  rb_define_module_function(rb_mLlamaCpp, "llama_model_n_swa", rb_llama_model_n_swa, 1);
 
   /* llama_model_rope_freq_scale_train */
   rb_define_module_function(rb_mLlamaCpp, "llama_model_rope_freq_scale_train", rb_llama_model_rope_freq_scale_train, 1);
