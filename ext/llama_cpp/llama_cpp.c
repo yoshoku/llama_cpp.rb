@@ -1909,6 +1909,13 @@ typedef struct {
 } llama_memory_t_wrapper;
 
 static void llama_memory_t_wrapper_free(void *ptr) {
+  llama_memory_t_wrapper* memory_wrapper = (llama_memory_t_wrapper*)ptr;
+  if (memory_wrapper) {
+    if (memory_wrapper->memory != NULL) {
+      llama_memory_clear(memory_wrapper->memory);
+      memory_wrapper->memory = NULL;
+    }
+  }
   if (ptr) {
     ruby_xfree(ptr);
   }
