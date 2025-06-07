@@ -2070,6 +2070,21 @@ static VALUE rb_llama_memory_seq_div(VALUE self, VALUE memory, VALUE seq_id, VAL
   return Qnil;
 }
 
+static VALUE rb_llama_memory_seq_pos_min(VALUE self, VALUE memory, VALUE seq_id) {
+  if (!rb_obj_is_kind_of(memory, rb_cLlamaMemoryT)) {
+    rb_raise(rb_eArgError, "memory must be a LlamaMemoryT");
+    return Qnil;
+  }
+  if (!RB_INTEGER_TYPE_P(seq_id)) {
+    rb_raise(rb_eArgError, "seq_id must be an Integer");
+    return Qnil;
+  }
+  llama_memory_t_wrapper* memory_wrapper = get_llama_memory_t_wrapper(memory);
+  llama_pos pos_min = llama_memory_seq_pos_min(memory_wrapper->memory, NUM2INT(seq_id));
+  RB_GC_GUARD(memory);
+  return INT2NUM(pos_min);
+}
+
 /* llama_kv_cache wrapper */
 typedef struct {
   struct llama_kv_cache* kv_cache;
@@ -5057,6 +5072,9 @@ void Init_llama_cpp(void) {
 
   /* llama_memory_seq_div */
   rb_define_module_function(rb_mLlamaCpp, "llama_memory_seq_div", rb_llama_memory_seq_div, 5);
+
+  /* llama_memory_seq_pos_min */
+  rb_define_module_function(rb_mLlamaCpp, "llama_memory_seq_pos_min", rb_llama_memory_seq_pos_min, 2);
 
   /**
    * Document-class: LlamaCpp::LlamaKvCache
