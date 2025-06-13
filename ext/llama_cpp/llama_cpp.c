@@ -1905,7 +1905,7 @@ static VALUE rb_llama_adapter_lora_free(VALUE self, VALUE adapter) {
 
 /* llama_memory_t wrapper */
 typedef struct {
-  struct llama_memory_t* memory;
+  llama_memory_t memory;
 } llama_memory_t_wrapper;
 
 static void llama_memory_t_wrapper_free(void *ptr) {
