@@ -1912,7 +1912,7 @@ static void llama_memory_t_wrapper_free(void *ptr) {
   llama_memory_t_wrapper* memory_wrapper = (llama_memory_t_wrapper*)ptr;
   if (memory_wrapper) {
     if (memory_wrapper->memory != NULL) {
-      llama_memory_clear(memory_wrapper->memory);
+      llama_memory_clear(memory_wrapper->memory, true);
       memory_wrapper->memory = NULL;
     }
   }
@@ -1947,13 +1947,13 @@ static llama_memory_t_wrapper* get_llama_memory_t_wrapper(VALUE self) {
   return data;
 }
 
-static VALUE rb_llama_memory_clear(VALUE self, VALUE memory) {
+static VALUE rb_llama_memory_clear(VALUE self, VALUE memory, VALUE data) {
   if (!rb_obj_is_kind_of(memory, rb_cLlamaMemoryT)) {
     rb_raise(rb_eArgError, "memory must be a LlamaMemoryT");
     return Qnil;
   }
   llama_memory_t_wrapper* memory_wrapper = get_llama_memory_t_wrapper(memory);
-  llama_memory_clear(memory_wrapper->memory);
+  llama_memory_clear(memory_wrapper->memory, RTEST(data) ? true : false);
   RB_GC_GUARD(memory);
   return Qnil;
 }
@@ -5110,7 +5110,7 @@ void Init_llama_cpp(void) {
   rb_define_alloc_func(rb_cLlamaMemoryT, llama_memory_t_wrapper_alloc);
 
   /* llama_memory_clear */
-  rb_define_module_function(rb_mLlamaCpp, "llama_memory_clear", rb_llama_memory_clear, 1);
+  rb_define_module_function(rb_mLlamaCpp, "llama_memory_clear", rb_llama_memory_clear, 2);
 
   /* llama_memory_seq_rm */
   rb_define_module_function(rb_mLlamaCpp, "llama_memory_seq_rm", rb_llama_memory_seq_rm, 4);
