@@ -1,3 +1,10 @@
+## [[0.20.3](https://github.com/yoshoku/llama_cpp.rb/compare/v0.20.2...v0.20.3)] - 2025-06-14
+
+- Change supported llama.cpp version to b5650
+  - Add `data` argument to `llama_memory_clear` module function.
+- Fix llama_memory_t wrapper by removing unnecessary struct keyword and pointer symbol.
+
+
 ## [[0.20.2](https://github.com/yoshoku/llama_cpp.rb/compare/v0.20.1...v0.20.2)] - 2025-06-07
 
 - Change supported llama.cpp version to b5600
