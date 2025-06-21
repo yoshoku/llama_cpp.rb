@@ -1,4 +1,10 @@
+## [[0.20.4](https://github.com/yoshoku/llama_cpp.rb/compare/v0.20.3...v0.20.4)] - 2025-06-21
+
+- Change supported llama.cpp version to b5720.
+  - Add `llama_vocab_get_add_sep` module function.
+
 ## [[0.20.3](https://github.com/yoshoku/llama_cpp.rb/compare/v0.20.2...v0.20.3)] - 2025-06-14
+
 
 - Change supported llama.cpp version to b5650
   - Add `data` argument to `llama_memory_clear` module function.
