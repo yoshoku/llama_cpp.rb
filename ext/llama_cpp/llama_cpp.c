@@ -4895,6 +4895,7 @@ void Init_llama_cpp(void) {
   /* TODO: void* imatrix */
   /* TODO: void* kv_overrides */
   /* TODO: void* tensor_types */
+  /* TODO: void* prune_layers */
 
   /**
    * Document-class: LlamaCpp::LlamaLogitBias
