@@ -1,3 +1,8 @@
+## [[0.21.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.20.4...v0.21.0)] - 2025-07-12
+
+- Change supported llama.cpp version to b5870.
+  - Remove constants for `llama_voca_pre_type` such as `LLAMA_VOCAB_PRE_TYPE_DEFAULT` and `LLAMA_VOCAB_PRE_TYPE_LLAMA3`.
+
 ## [[0.20.4](https://github.com/yoshoku/llama_cpp.rb/compare/v0.20.3...v0.20.4)] - 2025-06-21
 
 - Change supported llama.cpp version to b5720.
@@ -5,11 +10,9 @@
 
 ## [[0.20.3](https://github.com/yoshoku/llama_cpp.rb/compare/v0.20.2...v0.20.3)] - 2025-06-14
 
-
 - Change supported llama.cpp version to b5650
   - Add `data` argument to `llama_memory_clear` module function.
 - Fix llama_memory_t wrapper by removing unnecessary struct keyword and pointer symbol.
-
 
 ## [[0.20.2](https://github.com/yoshoku/llama_cpp.rb/compare/v0.20.1...v0.20.2)] - 2025-06-07
 
