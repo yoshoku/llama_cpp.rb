@@ -2952,6 +2952,22 @@ static VALUE rb_llama_vocab_pad(VALUE self, VALUE vocab) {
 }
 
 /**
+ * @overload llama_vocab_mask(vocab)
+ *  @param [LlamaVocab] vocab
+ *  @return [Integer]
+ */
+static VALUE rb_llama_vocab_mask(VALUE self, VALUE vocab) {
+  if (!rb_obj_is_kind_of(vocab, rb_cLlamaVocab)) {
+    rb_raise(rb_eArgError, "vocab must be a LlamaVocab");
+    return Qnil;
+  }
+  llama_vocab_wrapper* vocab_wrapper = get_llama_vocab_wrapper(vocab);
+  const int32_t token = llama_vocab_mask(vocab_wrapper->vocab);
+  RB_GC_GUARD(vocab);
+  return INT2NUM(token);
+}
+
+/**
  * @overload llama_vocab_get_add_bos
  *  @param [LlamaVocab] vocab
  *  @return [Boolean]
@@ -5270,6 +5286,9 @@ void Init_llama_cpp(void) {
 
   /* llama_vocab_pad */
   rb_define_module_function(rb_mLlamaCpp, "llama_vocab_pad", rb_llama_vocab_pad, 1);
+
+  /* llama_vocab_mask */
+  rb_define_module_function(rb_mLlamaCpp, "llama_vocab_mask", rb_llama_vocab_mask, 1);
 
   /* llama_vocab_get_add_bos */
   rb_define_module_function(rb_mLlamaCpp, "llama_vocab_get_add_bos", rb_llama_vocab_get_add_bos, 1);
