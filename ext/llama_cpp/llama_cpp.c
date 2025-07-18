@@ -838,6 +838,17 @@ static VALUE llama_context_params_set_swa_full(VALUE self, VALUE swa_full) {
   return swa_full;
 }
 
+static VALUE llama_context_params_get_kv_unified(VALUE self) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  return data->kv_unified ? Qtrue : Qfalse;
+}
+
+static VALUE llama_context_params_set_kv_unified(VALUE self, VALUE kv_unified) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  data->kv_unified = RTEST(kv_unified) ? true : false;
+  return kv_unified;
+}
+
 /* llama_model_quantize_params */
 static void llama_model_quantize_params_free(void *ptr) {
   if (ptr) {
@@ -4747,6 +4758,17 @@ void Init_llama_cpp(void) {
    * @return [Boolean]
    */
   rb_define_method(rb_cLlamaContextParams, "swa_full=", RUBY_METHOD_FUNC(llama_context_params_set_swa_full), 1);
+  /**
+   * Document-method: kv_unified
+   * @return [Boolean]
+   */
+  rb_define_method(rb_cLlamaContextParams, "kv_unified", RUBY_METHOD_FUNC(llama_context_params_get_kv_unified), 0);
+  /**
+   * Document-method: kv_unified=
+   * @param [Boolean] kv_unified
+   * @return [Boolean]
+   */
+  rb_define_method(rb_cLlamaContextParams, "kv_unified=", RUBY_METHOD_FUNC(llama_context_params_set_kv_unified), 1);
   /* TODO: ggml_abort_callback abort_callback */
   /* TODO: void* abort_callback_data */
 
