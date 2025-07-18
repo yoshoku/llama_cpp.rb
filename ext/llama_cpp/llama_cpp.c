@@ -4154,6 +4154,7 @@ void Init_llama_cpp(void) {
   rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_TYPE_WPM", INT2NUM(LLAMA_VOCAB_TYPE_WPM));
   rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_TYPE_UGM", INT2NUM(LLAMA_VOCAB_TYPE_UGM));
   rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_TYPE_RWKV", INT2NUM(LLAMA_VOCAB_TYPE_RWKV));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_VOCAB_TYPE_PLAMO2", INT2NUM(LLAMA_VOCAB_TYPE_PLAMO2));
   /* llama_rope_type */
   /* Document-const: LlamaCpp::LLAMA_ROPE_TYPE_NONE */
   rb_define_const(rb_mLlamaCpp, "LLAMA_ROPE_TYPE_NONE", INT2NUM(LLAMA_ROPE_TYPE_NONE));
