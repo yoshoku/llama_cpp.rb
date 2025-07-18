@@ -3941,6 +3941,7 @@ static VALUE llama_perf_context_data_alloc(VALUE self) {
   data->t_eval_ms = 0.0;
   data->n_p_eval = 0;
   data->n_eval = 0;
+  data->n_reused = 0;
   return TypedData_Wrap_Struct(self, &llama_perf_context_data_type, data);
 }
 
@@ -3978,6 +3979,11 @@ static VALUE llama_perf_context_data_get_n_p_eval(VALUE self) {
 static VALUE llama_perf_context_data_get_n_eval(VALUE self) {
   struct llama_perf_context_data* data = get_llama_perf_context_data(self);
   return INT2NUM(data->n_eval);
+}
+
+static VALUE llama_perf_context_data_get_n_reused(VALUE self) {
+  struct llama_perf_context_data* data = get_llama_perf_context_data(self);
+  return INT2NUM(data->n_reused);
 }
 
 /* struct llama_perf_sampler_data */
@@ -5473,6 +5479,11 @@ void Init_llama_cpp(void) {
    * @return [Integer]
    */
   rb_define_method(rb_cLlamaPerfContextData, "n_eval", RUBY_METHOD_FUNC(llama_perf_context_data_get_n_eval), 0);
+  /**
+   * Document-method: n_reused
+   * @return [Integer]
+   */
+  rb_define_method(rb_cLlamaPerfContextData, "n_reused", RUBY_METHOD_FUNC(llama_perf_context_data_get_n_reused), 0);
 
   /**
    * Document-class: LlamaCpp::LlamaPerfSamplerData
