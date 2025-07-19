@@ -1,3 +1,11 @@
+## [[0.21.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.21.0...v0.21.1)] - 2025-07-19
+
+- Change supported llama.cpp version to b5930.
+  - Add `n_reused` reader to `LlamaPerfContextData`.
+  - Add `llama_vocab_mask` module function.
+  - Add `kv_unified` accessor to `LlamaContextParams`.
+  - Add `LLAMA_VOCAB_TYPE_PLAMO2` contant.
+
 ## [[0.21.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.20.4...v0.21.0)] - 2025-07-12
 
 - Change supported llama.cpp version to b5870.
