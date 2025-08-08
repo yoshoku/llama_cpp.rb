@@ -1,10 +1,17 @@
+## [[0.21.2](https://github.com/yoshoku/llama_cpp.rb/compare/v0.21.1...v0.21.2)] - 2025-08-09
+
+- Change supported llama.cpp version to b6100.
+  - Add `LLAMA_FTYPE_MOSTLY_MXFP4_MOE` constant.
+  - Add `use_extra_bufts` accessor to `LlamaModelParams`.
+  - Add `llama_model_is_diffusion?` module function.
+
 ## [[0.21.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.21.0...v0.21.1)] - 2025-07-19
 
 - Change supported llama.cpp version to b5930.
   - Add `n_reused` reader to `LlamaPerfContextData`.
   - Add `llama_vocab_mask` module function.
   - Add `kv_unified` accessor to `LlamaContextParams`.
-  - Add `LLAMA_VOCAB_TYPE_PLAMO2` contant.
+  - Add `LLAMA_VOCAB_TYPE_PLAMO2` constant.
 
 ## [[0.21.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.20.4...v0.21.0)] - 2025-07-12
 
