@@ -530,6 +530,17 @@ static VALUE llama_model_params_set_check_tensors(VALUE self, VALUE check_tensor
   return check_tensors;
 }
 
+static VALUE llama_model_params_get_use_extra_bufts(VALUE self) {
+  struct llama_model_params* data = get_llama_model_params(self);
+  return data->use_extra_bufts ? Qtrue : Qfalse;
+}
+
+static VALUE llama_model_params_set_use_extra_bufts(VALUE self, VALUE use_extra_bufts) {
+  struct llama_model_params* data = get_llama_model_params(self);
+  data->use_extra_bufts = RTEST(use_extra_bufts) ? true : false;
+  return use_extra_bufts;
+}
+
 /* struct llama_context_params */
 static void llama_context_params_free(void *ptr) {
   if (ptr) {
@@ -4497,6 +4508,17 @@ void Init_llama_cpp(void) {
    * @return [Boolean]
    */
   rb_define_method(rb_cLlamaModelParams, "check_tensors=", RUBY_METHOD_FUNC(llama_model_params_set_check_tensors), 1);
+  /**
+   * Document-method: use_extra_bufts
+   * @return [Boolean]
+   */
+  rb_define_method(rb_cLlamaModelParams, "use_extra_bufts", RUBY_METHOD_FUNC(llama_model_params_get_use_extra_bufts), 0);
+  /**
+   * Document-method: use_extra_bufts=
+   * @param [Boolean] use_extra_bufts
+   * @return [Boolean]
+   */
+  rb_define_method(rb_cLlamaModelParams, "use_extra_bufts=", RUBY_METHOD_FUNC(llama_model_params_set_use_extra_bufts), 1);
 
   /**
    * Document-class: LlamaCpp::LlamaContextParams
