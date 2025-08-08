@@ -4251,6 +4251,7 @@ void Init_llama_cpp(void) {
   rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_BF16", INT2NUM(LLAMA_FTYPE_MOSTLY_BF16));
   rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_TQ1_0", INT2NUM(LLAMA_FTYPE_MOSTLY_TQ1_0));
   rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_TQ2_0", INT2NUM(LLAMA_FTYPE_MOSTLY_TQ2_0));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_MXFP4_MOE", INT2NUM(LLAMA_FTYPE_MOSTLY_MXFP4_MOE));
   rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_GUESSED", INT2NUM(LLAMA_FTYPE_GUESSED));
   /* llama_rope_scaling_type */
   /* Document-const: LlamaCpp::LLAMA_ROPE_SCALING_TYPE_UNSPECIFIED */
