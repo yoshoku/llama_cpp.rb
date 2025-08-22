@@ -2172,42 +2172,6 @@ static VALUE rb_llama_get_memory(VALUE self, VALUE ctx) {
 }
 
 /**
- * @overload llama_kv_self_seq_div(context, seq_id, p0, p1, d)
- *  @param [LlamaContext] context
- *  @param [Integer] seq_id
- *  @param [Integer] p0
- *  @param [Integer] p1
- *  @param [Integer] d
- *  @return [NilClass]
- */
-static VALUE rb_llama_kv_self_seq_div(VALUE self, VALUE ctx, VALUE seq_id, VALUE p0, VALUE p1, VALUE d) {
-  if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
-    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
-    return Qnil;
-  }
-  if (!RB_INTEGER_TYPE_P(seq_id)) {
-    rb_raise(rb_eArgError, "seq_id must be an Integer");
-    return Qnil;
-  }
-  if (!RB_INTEGER_TYPE_P(p0)) {
-    rb_raise(rb_eArgError, "p0 must be an Integer");
-    return Qnil;
-  }
-  if (!RB_INTEGER_TYPE_P(p1)) {
-    rb_raise(rb_eArgError, "p1 must be an Integer");
-    return Qnil;
-  }
-  if (!RB_INTEGER_TYPE_P(d)) {
-    rb_raise(rb_eArgError, "d must be an Integer");
-    return Qnil;
-  }
-  llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
-  llama_kv_self_seq_div(context_wrapper->context, NUM2INT(seq_id), NUM2INT(p0), NUM2INT(p1), NUM2INT(d));
-  RB_GC_GUARD(ctx);
-  return Qnil;
-}
-
-/**
  * @overload llama_kv_self_seq_pos_min(context, seq_id)
  *  @param [LlamaContext] context
  *  @param [Integer] seq_id
@@ -5001,9 +4965,6 @@ void Init_llama_cpp(void) {
 
   /* llama_memory_can_shift */
   rb_define_module_function(rb_mLlamaCpp, "llama_memory_can_shift?", rb_llama_memory_can_shift, 1);
-
-  /* llama_kv_self_seq_div */
-  rb_define_module_function(rb_mLlamaCpp, "llama_kv_self_seq_div", rb_llama_kv_self_seq_div, 5);
 
   /* llama_kv_self_seq_pos_min */
   rb_define_module_function(rb_mLlamaCpp, "llama_kv_self_seq_pos_min", rb_llama_kv_self_seq_pos_min, 2);
