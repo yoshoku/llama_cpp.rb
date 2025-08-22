@@ -2172,23 +2172,6 @@ static VALUE rb_llama_get_memory(VALUE self, VALUE ctx) {
 }
 
 /**
- * @overload llama_get_kv_self(context)
- *  @param [LlamaContext] context
- *  @return [LlamaKvCache]
- */
-static VALUE rb_llama_get_kv_self(VALUE self, VALUE ctx) {
-  if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
-    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
-    return Qnil;
-  }
-  llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
-  llama_kv_cache_wrapper* kv_cache_wrapper = (llama_kv_cache_wrapper*)ruby_xmalloc(sizeof(llama_kv_cache_wrapper));
-  kv_cache_wrapper->kv_cache = llama_get_kv_self(context_wrapper->context);
-  RB_GC_GUARD(ctx);
-  return TypedData_Wrap_Struct(rb_cLlamaKvCache, &llama_kv_cache_wrapper_data_type, kv_cache_wrapper);
-}
-
-/**
  * @overload llama_kv_self_clear(context)
  *  @param [LlamaContext] context
  *  @return [NilClass]
@@ -5027,9 +5010,6 @@ void Init_llama_cpp(void) {
 
   /* TODO: llama_get_model */
   rb_define_module_function(rb_mLlamaCpp, "llama_get_model", rb_llama_get_model, 1);
-
-  /* llama_get_kv_self */
-  rb_define_module_function(rb_mLlamaCpp, "llama_get_kv_self", rb_llama_get_kv_self, 1);
 
   /* llama_get_memory */
   rb_define_module_function(rb_mLlamaCpp, "llama_get_memory", rb_llama_get_memory, 1);
