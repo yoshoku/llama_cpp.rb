@@ -2172,22 +2172,6 @@ static VALUE rb_llama_get_memory(VALUE self, VALUE ctx) {
 }
 
 /**
- * @overload llama_kv_self_clear(context)
- *  @param [LlamaContext] context
- *  @return [NilClass]
- */
-static VALUE rb_llama_kv_self_clear(VALUE self, VALUE ctx) {
-  if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
-    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
-    return Qnil;
-  }
-  llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
-  llama_kv_self_clear(context_wrapper->context);
-  RB_GC_GUARD(ctx);
-  return Qnil;
-}
-
-/**
  * @overload llama_kv_self_seq_rm(context, seq_id, p0, p1)
  *  @param [LlamaContext] context
  *  @param [Integer] seq_id
@@ -5141,9 +5125,6 @@ void Init_llama_cpp(void) {
 
   /* llama_memory_can_shift */
   rb_define_module_function(rb_mLlamaCpp, "llama_memory_can_shift?", rb_llama_memory_can_shift, 1);
-
-  /* llama_kv_self_clear */
-  rb_define_module_function(rb_mLlamaCpp, "llama_kv_self_clear", rb_llama_kv_self_clear, 1);
 
   /* llama_kv_self_seq_rm */
   rb_define_module_function(rb_mLlamaCpp, "llama_kv_self_seq_rm", rb_llama_kv_self_seq_rm, 4);
