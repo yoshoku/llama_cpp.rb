@@ -3866,6 +3866,7 @@ void Init_llama_cpp(void) {
   rb_define_const(rb_mLlamaCpp, "LLAMA_DEFAULT_SEED", rb_str_new2(tmp));
 
   rb_define_const(rb_mLlamaCpp, "LLAMA_TOKEN_NULL", INT2NUM(LLAMA_TOKEN_NULL));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_STATE_SEQ_FLAGS_SWA_ONLY", INT2NUM(LLAMA_STATE_SEQ_FLAGS_SWA_ONLY));
 
   sprintf(tmp, "0x%x", LLAMA_FILE_MAGIC_GGLA);
   rb_define_const(rb_mLlamaCpp, "LLAMA_FILE_MAGIC_GGLA", rb_str_new2(tmp));
