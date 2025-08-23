@@ -4919,6 +4919,8 @@ void Init_llama_cpp(void) {
   /* TODO: llama_state_seq_save_file */
   /* TODO: llama_state_seq_load_file */
   rb_define_module_function(rb_mLlamaCpp, "llama_state_seq_get_size_ext", rb_llama_state_seq_get_size_ext, 3);
+  /* TODO: llama_state_seq_get_data_ext */
+  /* TODO: llama_state_seq_set_data_ext */
 
   /* llama_batch_get_one */
   rb_define_module_function(rb_mLlamaCpp, "llama_batch_get_one", rb_llama_batch_get_one, 1);
