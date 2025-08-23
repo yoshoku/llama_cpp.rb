@@ -2209,6 +2209,32 @@ static VALUE rb_llama_state_seq_get_size(VALUE self, VALUE ctx, VALUE seq_id) {
 }
 
 /**
+ * @overload llama_state_seq_get_size_ext(context, seq_id, flags)
+ *  @param [LlamaContext] context
+ *  @param [Integer] seq_id
+ *  @param [Integer] flags
+ *  @return [Integer]
+ */
+static VALUE rb_llama_state_seq_get_size_ext(VALUE self, VALUE ctx, VALUE seq_id, VALUE flags) {
+  if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
+    return Qnil;
+  }
+  if (!RB_INTEGER_TYPE_P(seq_id)) {
+    rb_raise(rb_eArgError, "seq_id must be an Integer");
+    return Qnil;
+  }
+  if (!RB_INTEGER_TYPE_P(flags)) {
+    rb_raise(rb_eArgError, "flags must be an Integer");
+    return Qnil;
+  }
+  llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
+  const size_t size = llama_state_seq_get_size_ext(context_wrapper->context, NUM2INT(seq_id), (uint32_t)NUM2UINT(flags));
+  RB_GC_GUARD(ctx);
+  return SIZET2NUM(size);
+}
+
+/**
  * @overload llama_batch_get_one(tokens)
  *  @param [Array<Integer>] tokens
  *  @return [LlamaBatch]
@@ -4892,6 +4918,7 @@ void Init_llama_cpp(void) {
   /* TODO: llama_state_seq_set_data */
   /* TODO: llama_state_seq_save_file */
   /* TODO: llama_state_seq_load_file */
+  rb_define_module_function(rb_mLlamaCpp, "llama_state_seq_get_size_ext", rb_llama_state_seq_get_size_ext, 3);
 
   /* llama_batch_get_one */
   rb_define_module_function(rb_mLlamaCpp, "llama_batch_get_one", rb_llama_batch_get_one, 1);
