@@ -1,3 +1,22 @@
+## [[0.22.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.21.2...v0.22.0)] - 2025-08-23
+
+- Change supported llama.cpp version to b6240.
+  - Add `llama_state_seq_get_size_ext` module function.
+  - Add `LLAMA_STATE_SEQ_FLAGS_SWA_ONLY` constant.
+  - Remove `LlamaKvCache` class.
+  - Remove `llama_get_kv_self` module function.
+  - Remove ` llama_get_kv_self_clear` module function.
+  - Remove `llama_kv_self_seq_rm` module function.
+  - Remove `llama_kv_self_seq_cp` module function.
+  - Remove `llama_kv_self_seq_keep` module function.
+  - Remove `llama_kv_self_seq_add` module function.
+  - Remove `llama_kv_self_seq_div` module function.
+  - Remove `llama_kv_self_seq_pos_min` module function.
+  - Remove `llama_kv_self_seq_pos_max` module function.
+  - Remove `llama_kv_self_deflag` module function.
+  - Remove `llama_kv_self_can_shift?` module function.
+  - Remove `llama_kv_self_update` module function.
+
 ## [[0.21.2](https://github.com/yoshoku/llama_cpp.rb/compare/v0.21.1...v0.21.2)] - 2025-08-09
 
 - Change supported llama.cpp version to b6100.
