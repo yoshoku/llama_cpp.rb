@@ -1853,6 +1853,20 @@ static VALUE rb_llama_adapter_lora_init(VALUE self, VALUE model, VALUE path_lora
 }
 
 /**
+ * @overload llama_adapter_meta_count(adapter)
+ * @param [LlamaAdapterLora] adapter
+ * @return [Integer]
+ */
+static VALUE rb_llama_adapter_meta_count(VALUE self, VALUE adapter) {
+  if (!rb_obj_is_kind_of(adapter, rb_cLlamaAdapterLora)) {
+    rb_raise(rb_eArgError, "adapter must be a LlamaAdapterLora");
+    return Qnil;
+  }
+  llama_adapter_lora_wrapper* adapter_wrapper = get_llama_adapter_lora_wrapper(adapter);
+  return INT2NUM(llama_adapter_meta_count(adapter_wrapper->adapter));
+}
+
+/**
  * @overload llama_set_adapter_lora(context, adapter, scale)
  *  @param [LlamaContext] context
  *  @param [LlamaAdapterLora] adapter
@@ -4856,6 +4870,10 @@ void Init_llama_cpp(void) {
   rb_define_module_function(rb_mLlamaCpp, "llama_adapter_lora_init", rb_llama_adapter_lora_init, 2);
 
   /* TODO: llama_adapter_meta_val_str */
+
+  /* llama_adapter_meta_count */
+  rb_define_module_function(rb_mLlamaCpp, "llama_adapter_meta_count", rb_llama_adapter_meta_count, 1);
+
   /* TODO: llama_adapter_meta_key_by_index */
   /* TODO: llama_adapter_meta_val_str_by_index */
 
