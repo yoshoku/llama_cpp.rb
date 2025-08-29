@@ -4855,6 +4855,10 @@ void Init_llama_cpp(void) {
   /* llama_adapter_lora_init */
   rb_define_module_function(rb_mLlamaCpp, "llama_adapter_lora_init", rb_llama_adapter_lora_init, 2);
 
+  /* TODO: llama_adapter_meta_val_str */
+  /* TODO: llama_adapter_meta_key_by_index */
+  /* TODO: llama_adapter_meta_val_str_by_index */
+
   /* llama_set_adapter_lora */
   rb_define_module_function(rb_mLlamaCpp, "llama_set_adapter_lora", rb_llama_set_adapter_lora, 3);
 
