@@ -1,3 +1,8 @@
+## [[0.22.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.22.0...v0.22.1)] - 2025-08-30
+
+- Change supported llama.cpp version to b6310.
+  - Add `llama_adapter_meta_count` module function.
+
 ## [[0.22.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.21.2...v0.22.0)] - 2025-08-23
 
 - Change supported llama.cpp version to b6240.
