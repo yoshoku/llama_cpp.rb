@@ -3872,6 +3872,20 @@ static VALUE rb_llama_perf_sampler_reset(VALUE self, VALUE chain) {
   return Qnil;
 }
 
+/**
+ * @overload llama_flash_attn_type_name(flash_attn_type)
+ *  @param [Integer] flash_attn_type
+ *  @return [String]
+ */
+static VALUE rb_llama_flash_attn_type_name(VALUE self, VALUE flash_attn_type) {
+  if (!RB_INTEGER_TYPE_P(flash_attn_type)) {
+    rb_raise(rb_eArgError, "flash_attn_type must be an Integer");
+    return Qnil;
+  }
+  const char* name = llama_flash_attn_type_name((enum llama_flash_attn_type)NUM2INT(flash_attn_type));
+  return rb_utf8_str_new_cstr(name);
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -4029,6 +4043,8 @@ void Init_llama_cpp(void) {
   rb_define_const(rb_mLlamaCpp, "LLAMA_SPLIT_MODE_NONE", INT2NUM(LLAMA_SPLIT_MODE_NONE));
   rb_define_const(rb_mLlamaCpp, "LLAMA_SPLIT_MODE_LAYER", INT2NUM(LLAMA_SPLIT_MODE_LAYER));
   rb_define_const(rb_mLlamaCpp, "LLAMA_SPLIT_MODE_ROW", INT2NUM(LLAMA_SPLIT_MODE_ROW));
+
+  rb_define_module_function(rb_mLlamaCpp, "llama_flash_attn_type_name", rb_llama_flash_attn_type_name, 1);
 
   /**
    * Document-class: LlamaCpp::LlamaTokenData
