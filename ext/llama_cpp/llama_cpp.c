@@ -672,6 +672,17 @@ static VALUE llama_context_params_set_attention_type(VALUE self, VALUE attention
   return attention_type;
 }
 
+static VALUE llama_context_params_get_flash_attn_type(VALUE self) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  return INT2NUM(data->flash_attn_type);
+}
+
+static VALUE llama_context_params_set_flash_attn_type(VALUE self, VALUE flash_attn_type) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  data->flash_attn_type = (enum llama_flash_attn_type)NUM2INT(flash_attn_type);
+  return flash_attn_type;
+}
+
 static VALUE llama_context_params_get_rope_freq_base(VALUE self) {
   struct llama_context_params* data = get_llama_context_params(self);
   return DBL2NUM(data->rope_freq_base);
@@ -4353,6 +4364,17 @@ void Init_llama_cpp(void) {
    * @return [Integer]
    */
   rb_define_method(rb_cLlamaContextParams, "attention_type=", RUBY_METHOD_FUNC(llama_context_params_set_attention_type), 1);
+  /**
+   * Document-method: flash_attn_type
+   * @return [Integer]
+   */
+  rb_define_method(rb_cLlamaContextParams, "flash_attn_type", RUBY_METHOD_FUNC(llama_context_params_get_flash_attn_type), 0);
+  /**
+   * Document-method: flash_attn_type=
+   * @param [Integer] flash_attn_type
+   * @return [Integer]
+   */
+  rb_define_method(rb_cLlamaContextParams, "flash_attn_type=", RUBY_METHOD_FUNC(llama_context_params_set_flash_attn_type), 1);
   /**
    * Document-method: rope_freq_base
    * @return [Float]
