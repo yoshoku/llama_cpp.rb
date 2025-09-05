@@ -4008,6 +4008,11 @@ void Init_llama_cpp(void) {
   rb_define_const(rb_mLlamaCpp, "LLAMA_ATTENTION_TYPE_UNSPECIFIED", INT2NUM(LLAMA_ATTENTION_TYPE_UNSPECIFIED));
   rb_define_const(rb_mLlamaCpp, "LLAMA_ATTENTION_TYPE_CAUSAL", INT2NUM(LLAMA_ATTENTION_TYPE_CAUSAL));
   rb_define_const(rb_mLlamaCpp, "LLAMA_ATTENTION_TYPE_NON_CAUSAL", INT2NUM(LLAMA_ATTENTION_TYPE_NON_CAUSAL));
+  /* llama_flash_attn_type */
+  /* Document-const: LlamaCpp::LLAMA_FLASH_ATTN_TYPE_AUTO */
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FLASH_ATTN_TYPE_AUTO", INT2NUM(LLAMA_FLASH_ATTN_TYPE_AUTO));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FLASH_ATTN_TYPE_DISABLED", INT2NUM(LLAMA_FLASH_ATTN_TYPE_DISABLED));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FLASH_ATTN_TYPE_ENABLED", INT2NUM(LLAMA_FLASH_ATTN_TYPE_ENABLED));
   /* llama_split_mode */
   /* Document-const: LlamaCpp::LLAMA_SPLIT_MODE_NONE */
   rb_define_const(rb_mLlamaCpp, "LLAMA_SPLIT_MODE_NONE", INT2NUM(LLAMA_SPLIT_MODE_NONE));
