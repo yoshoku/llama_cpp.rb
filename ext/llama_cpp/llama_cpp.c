@@ -804,17 +804,6 @@ static VALUE llama_context_params_set_offload_kqv(VALUE self, VALUE offload_kqv)
   return offload_kqv;
 }
 
-static VALUE llama_context_params_get_flash_attn(VALUE self) {
-  struct llama_context_params* data = get_llama_context_params(self);
-  return data->flash_attn ? Qtrue : Qfalse;
-}
-
-static VALUE llama_context_params_set_flash_attn(VALUE self, VALUE flash_attn) {
-  struct llama_context_params* data = get_llama_context_params(self);
-  data->flash_attn = RTEST(flash_attn) ? true : false;
-  return flash_attn;
-}
-
 static VALUE llama_context_params_get_no_perf(VALUE self) {
   struct llama_context_params* data = get_llama_context_params(self);
   return data->no_perf ? Qtrue : Qfalse;
@@ -4493,17 +4482,6 @@ void Init_llama_cpp(void) {
    * @return [Boolean]
    */
   rb_define_method(rb_cLlamaContextParams, "offload_kqv=", RUBY_METHOD_FUNC(llama_context_params_set_offload_kqv), 1);
-  /**
-   * Document-method: flash_attn
-   * @return [Boolean]
-   */
-  rb_define_method(rb_cLlamaContextParams, "flash_attn", RUBY_METHOD_FUNC(llama_context_params_get_flash_attn), 0);
-  /**
-   * Document-method: flash_attn=
-   * @param [Boolean] flash_attn
-   * @return [Boolean]
-   */
-  rb_define_method(rb_cLlamaContextParams, "flash_attn=", RUBY_METHOD_FUNC(llama_context_params_set_flash_attn), 1);
   /**
    * Document-method: no_perf
    * @return [Boolean]
