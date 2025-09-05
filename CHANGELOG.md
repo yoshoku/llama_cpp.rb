@@ -1,3 +1,11 @@
+## [[0.23.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.22.1...v0.23.0)] - 2025-09-05
+
+- Change supported llama.cpp version to b6380.
+  - Add `llama_flash_attn_type_name` module function.
+  - Add `flash_attn_type` accessor to `LlamaContextParams`.
+  - Add `LLAMA_FLASH_ATTN_TYPE_AUTO`, `LLAMA_FLASH_ATTN_TYPE_DISABLED`, and `LLAMA_FLASH_ATTN_TYPE_ENABLED` constants.
+  - Remove `flash_attn` accessor from `LlamaContextParams`.
+
 ## [[0.22.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.22.0...v0.22.1)] - 2025-08-30
 
 - Change supported llama.cpp version to b6310.
