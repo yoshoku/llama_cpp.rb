@@ -1,3 +1,8 @@
+## [[0.23.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.23.0...v0.23.1)] - 2025-09-13
+
+- Change supported llama.cpp version to b6440.
+  - Add `llama_adapter_get_alora_n_invocation_tokens` module function.
+
 ## [[0.23.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.22.1...v0.23.0)] - 2025-09-05
 
 - Change supported llama.cpp version to b6380.
