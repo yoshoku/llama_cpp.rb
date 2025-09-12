@@ -1952,6 +1952,20 @@ static VALUE rb_llama_adapter_lora_free(VALUE self, VALUE adapter) {
   return Qnil;
 }
 
+/**
+ * @overload llama_adapter_get_alora_n_invocation_tokens(adapter)
+ *  @param [LlamaAdapterLora] adapter
+ *  @return [Integer]
+ */
+static VALUE rb_llama_adapter_get_alora_n_invocation_tokens(VALUE self, VALUE adapter) {
+  if (!rb_obj_is_kind_of(adapter, rb_cLlamaAdapterLora)) {
+    rb_raise(rb_eArgError, "adapter must be a LlamaAdapterLora");
+    return Qnil;
+  }
+  llama_adapter_lora_wrapper* adapter_wrapper = get_llama_adapter_lora_wrapper(adapter);
+  return UINT2NUM(llama_adapter_get_alora_n_invocation_tokens(adapter_wrapper->adapter));
+}
+
 /* llama_memory_t wrapper */
 typedef struct {
   llama_memory_t memory;
@@ -4909,6 +4923,9 @@ void Init_llama_cpp(void) {
 
   /* llama_adapter_lora_free */
   rb_define_module_function(rb_mLlamaCpp, "llama_adapter_lora_free", rb_llama_adapter_lora_free, 1);
+
+  /* llama_adapter_get_alora_n_invocation_tokens */
+  rb_define_module_function(rb_mLlamaCpp, "llama_adapter_get_alora_n_invocation_tokens", rb_llama_adapter_get_alora_n_invocation_tokens, 1);
 
   /* TODO: llama_apply_adapter_cvec */
 
