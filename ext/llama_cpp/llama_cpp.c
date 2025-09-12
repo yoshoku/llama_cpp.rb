@@ -4927,6 +4927,8 @@ void Init_llama_cpp(void) {
   /* llama_adapter_get_alora_n_invocation_tokens */
   rb_define_module_function(rb_mLlamaCpp, "llama_adapter_get_alora_n_invocation_tokens", rb_llama_adapter_get_alora_n_invocation_tokens, 1);
 
+  /* TODO: llama_adapter_get_alora_invocation_tokens */
+
   /* TODO: llama_apply_adapter_cvec */
 
   /**
