@@ -1,3 +1,8 @@
+## [[0.23.2](https://github.com/yoshoku/llama_cpp.rb/compare/v0.23.1...v0.23.2)] - 2025-09-27
+
+- Change supported llama.cpp version to b6580.
+  - Add `llama_memory_breakdown_print` module function.
+
 ## [[0.23.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.23.0...v0.23.1)] - 2025-09-13
 
 - Change supported llama.cpp version to b6440.
