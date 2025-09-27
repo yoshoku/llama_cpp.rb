@@ -3152,6 +3152,22 @@ static VALUE rb_llama_sampler_reset(VALUE self, VALUE sampler) {
 }
 
 /**
+ * @overload llama_memory_breakdown_print(context)
+ *  @param [LlamaContext] context
+ *  @return [NilClass]
+ */
+static VALUE rb_llama_memory_breakdown_print(VALUE self, VALUE ctx) {
+  if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
+    return Qnil;
+  }
+  llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
+  llama_memory_breakdown_print(context_wrapper->context);
+  RB_GC_GUARD(ctx);
+  return Qnil;
+}
+
+/**
  * @overload llama_sampler_clone(sampler)
  *  @param [LlamaSampler] sampler
  *  @return [LlamaSampler]
@@ -5287,6 +5303,9 @@ void Init_llama_cpp(void) {
 
   /* llama_perf_sampler_reset */
   rb_define_module_function(rb_mLlamaCpp, "llama_perf_sampler_reset", rb_llama_perf_sampler_reset, 1);
+
+  /* llama_memory_breakdown_print */
+  rb_define_module_function(rb_mLlamaCpp, "llama_memory_breakdown_print", rb_llama_memory_breakdown_print, 1);
 
   /* TODO: typedef bool (*llama_opt_param_filter) */
   /* TODO: bool llama_opt_param_filter_all */
