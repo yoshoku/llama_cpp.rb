@@ -1963,7 +1963,7 @@ static VALUE rb_llama_adapter_get_alora_n_invocation_tokens(VALUE self, VALUE ad
     return Qnil;
   }
   llama_adapter_lora_wrapper* adapter_wrapper = get_llama_adapter_lora_wrapper(adapter);
-  return UINT2NUM(llama_adapter_get_alora_n_invocation_tokens(adapter_wrapper->adapter));
+  return ULONG2NUM(llama_adapter_get_alora_n_invocation_tokens(adapter_wrapper->adapter));
 }
 
 /* llama_memory_t wrapper */
