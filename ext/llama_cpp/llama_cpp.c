@@ -540,6 +540,17 @@ static VALUE llama_model_params_set_use_extra_bufts(VALUE self, VALUE use_extra_
   return use_extra_bufts;
 }
 
+static VALUE llama_model_params_get_no_host(VALUE self) {
+  struct llama_model_params* data = get_llama_model_params(self);
+  return data->no_host ? Qtrue : Qfalse;
+}
+
+static VALUE llama_model_params_set_no_host(VALUE self, VALUE no_host) {
+  struct llama_model_params* data = get_llama_model_params(self);
+  data->no_host = RTEST(no_host) ? true : false;
+  return no_host;
+}
+
 /* struct llama_context_params */
 static void llama_context_params_free(void *ptr) {
   if (ptr) {
@@ -4305,6 +4316,17 @@ void Init_llama_cpp(void) {
    * @return [Boolean]
    */
   rb_define_method(rb_cLlamaModelParams, "use_extra_bufts=", RUBY_METHOD_FUNC(llama_model_params_set_use_extra_bufts), 1);
+  /**
+   * Document-method: no_host
+   * @return [Boolean]
+   */
+  rb_define_method(rb_cLlamaModelParams, "no_host", RUBY_METHOD_FUNC(llama_model_params_get_no_host), 0);
+  /**
+   * Document-method: no_host=
+   * @param [Boolean] no_host
+   * @return [Boolean]
+   */
+  rb_define_method(rb_cLlamaModelParams, "no_host=", RUBY_METHOD_FUNC(llama_model_params_set_no_host), 1);
 
   /**
    * Document-class: LlamaCpp::LlamaContextParams
