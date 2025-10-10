@@ -1796,6 +1796,20 @@ static VALUE rb_llama_model_is_recurrent(VALUE self, VALUE model) {
 }
 
 /**
+ * @overload llama_model_is_hybrid?(model)
+ *  @param [LlamaModel] model
+ *  @return [Boolean]
+ */
+static VALUE rb_llama_model_is_hybrid(VALUE self, VALUE model) {
+  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
+    return Qnil;
+  }
+  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
+  return llama_model_is_hybrid(model_wrapper->model) ? Qtrue : Qfalse;
+}
+
+/**
  * @overload llama_model_is_diffusion?(model)
  *  @param [LlamaModel] model
  *  @return [Boolean]
@@ -4933,6 +4947,9 @@ void Init_llama_cpp(void) {
 
   /* llama_model_is_recurrent */
   rb_define_module_function(rb_mLlamaCpp, "llama_model_is_recurrent?", rb_llama_model_is_recurrent, 1);
+
+  /* llama_model_is_hybrid */
+  rb_define_module_function(rb_mLlamaCpp, "llama_model_is_hybrid?", rb_llama_model_is_hybrid, 1);
 
   /* llama_model_is_diffusion */
   rb_define_module_function(rb_mLlamaCpp, "llama_model_is_diffusion?", rb_llama_model_is_diffusion, 1);
