@@ -1,3 +1,10 @@
+## [[0.23.3](https://github.com/yoshoku/llama_cpp.rb/compare/v0.23.2...v0.23.3)] - 2025-10-11
+
+- Change supported llama.cpp version to b6730.
+  - Add `llama_model_is_hybrid?` module function.
+  - Add `no_host` accessor to `LlamaModelParams`.
+  - Add `LLAMA_STATE_SEQ_FLAGS_PARTIAL_ONLY` constant.
+
 ## [[0.23.2](https://github.com/yoshoku/llama_cpp.rb/compare/v0.23.1...v0.23.2)] - 2025-09-27
 
 - Change supported llama.cpp version to b6580.
