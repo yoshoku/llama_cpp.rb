@@ -6,6 +6,9 @@
 
 llama_cpp.rb provides Ruby bindings for the [llama.cpp](https://github.com/ggerganov/llama.cpp).
 
+Note: [rllama](https://github.com/docusealco/rllama) is another Ruby binding for llama.cpp using FFI.
+It provides a high-level API for easier integration.
+
 ## Installation
 
 Install the llama.cpp. If you use homebrew, install it by executing:
