@@ -1,3 +1,8 @@
+## [[0.23.4](https://github.com/yoshoku/llama_cpp.rb/compare/v0.23.3...v0.23.4)] - 2025-11-01
+
+- Change supported llama.cpp version to b6900.
+  - Add `LLAMA_ROPE_TYPE_IMROPE` constant.
+
 ## [[0.23.3](https://github.com/yoshoku/llama_cpp.rb/compare/v0.23.2...v0.23.3)] - 2025-10-11
 
 - Change supported llama.cpp version to b6730.
