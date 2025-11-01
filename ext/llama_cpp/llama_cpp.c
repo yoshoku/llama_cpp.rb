@@ -4009,6 +4009,7 @@ void Init_llama_cpp(void) {
   rb_define_const(rb_mLlamaCpp, "LLAMA_ROPE_TYPE_NORM", INT2NUM(LLAMA_ROPE_TYPE_NORM));
   rb_define_const(rb_mLlamaCpp, "LLAMA_ROPE_TYPE_NEOX", INT2NUM(LLAMA_ROPE_TYPE_NEOX));
   rb_define_const(rb_mLlamaCpp, "LLAMA_ROPE_TYPE_MROPE", INT2NUM(LLAMA_ROPE_TYPE_MROPE));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_ROPE_TYPE_IMROPE", INT2NUM(LLAMA_ROPE_TYPE_IMROPE));
   rb_define_const(rb_mLlamaCpp, "LLAMA_ROPE_TYPE_VISION", INT2NUM(LLAMA_ROPE_TYPE_VISION));
   /* llama_token_type */
   /* Document-const: LlamaCpp::LLAMA_TOKEN_TYPE_UNDEFINED */
