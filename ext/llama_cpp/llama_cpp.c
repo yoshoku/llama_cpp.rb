@@ -1410,6 +1410,20 @@ static VALUE rb_llama_n_ctx(VALUE self, VALUE ctx) {
 }
 
 /**
+ * @overload llama_n_ctx_seq(context)
+ *  @param [LlamaContext] context
+ *  @return [Integer]
+ */
+static VALUE rb_llama_n_ctx_seq(VALUE self, VALUE ctx) {
+  if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
+    return Qnil;
+  }
+  llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
+  return UINT2NUM(llama_n_ctx_seq(context_wrapper->context));
+}
+
+/**
  * @overload llama_n_batch(context)
  *  @param [LlamaContext] context
  *  @return [Integer]
@@ -4862,6 +4876,9 @@ void Init_llama_cpp(void) {
 
   /* llama_n_ctx */
   rb_define_module_function(rb_mLlamaCpp, "llama_n_ctx", rb_llama_n_ctx, 1);
+
+  /* llama_n_ctx_seq */
+  rb_define_module_function(rb_mLlamaCpp, "llama_n_ctx_seq", rb_llama_n_ctx_seq, 1);
 
   /* llama_n_batch */
   rb_define_module_function(rb_mLlamaCpp, "llama_n_batch", rb_llama_n_batch, 1);
