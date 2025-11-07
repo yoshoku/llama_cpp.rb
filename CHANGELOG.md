@@ -1,3 +1,8 @@
+## [[0.23.5](https://github.com/yoshoku/llama_cpp.rb/compare/v0.23.4...v0.23.5)] - 2025-11-08
+
+- Change supported llama.cpp version to b6970.
+  - Add `llama_n_ctx_seq` module function to `LlamaCpp`.
+
 ## [[0.23.4](https://github.com/yoshoku/llama_cpp.rb/compare/v0.23.3...v0.23.4)] - 2025-11-01
 
 - Change supported llama.cpp version to b6900.
