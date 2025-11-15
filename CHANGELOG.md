@@ -1,3 +1,8 @@
+## [[0.23.6](https://github.com/yoshoku/llama_cpp.rb/compare/v0.23.5...v0.23.6)] - 2025-11-15
+
+- Change supported llama.cpp version to b7030.
+  - Add `llama_model_n_embd_inp` module function to `LlamaCpp`.
+
 ## [[0.23.5](https://github.com/yoshoku/llama_cpp.rb/compare/v0.23.4...v0.23.5)] - 2025-11-08
 
 - Change supported llama.cpp version to b6970.
