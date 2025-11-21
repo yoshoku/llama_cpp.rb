@@ -1,3 +1,7 @@
+## [[0.23.7](https://github.com/yoshoku/llama_cpp.rb/compare/v0.23.6...v0.23.7)] - 2025-11-22
+
+- Fix to use require for compatibility with distributions installing extensions separately.
+
 ## [[0.23.6](https://github.com/yoshoku/llama_cpp.rb/compare/v0.23.5...v0.23.6)] - 2025-11-15
 
 - Change supported llama.cpp version to b7030.

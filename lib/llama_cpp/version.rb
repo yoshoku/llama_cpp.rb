@@ -3,8 +3,8 @@
 # llama_cpp.rb provides Ruby bindings for the llama.cpp.
 module LlamaCpp
   # The version of llama_cpp.rb you install.
-  VERSION = '0.23.6'
+  VERSION = '0.23.7'
 
   # The supported version of llama.cpp.
-  LLAMA_CPP_VERSION = 'b7030'
+  LLAMA_CPP_VERSION = 'b7120'
 end
