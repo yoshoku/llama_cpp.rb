@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 require_relative 'llama_cpp/version'
-require_relative 'llama_cpp/llama_cpp'
+# On distributions like Rocky Linux, native extensions are installed in a separate
+# directory from Ruby code, so use require to load them.
+require 'llama_cpp/llama_cpp'
 
 # llama_cpp.rb provides Ruby bindings for the llama.cpp.
 module LlamaCpp
