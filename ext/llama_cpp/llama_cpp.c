@@ -1709,6 +1709,20 @@ static VALUE rb_llama_vocab_n_tokens(VALUE self, VALUE vocab) {
 }
 
 /**
+ * @overload llama_model_meta_count(model)
+ *  @param [LlamaModel] model
+ *  @return [Integer]
+ */
+static VALUE rb_llama_model_meta_count(VALUE self, VALUE model) {
+  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
+    return Qnil;
+  }
+  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
+  return INT2NUM(llama_model_meta_count(model_wrapper->model));
+}
+
+/**
  * @overload llama_model_desc(model)
  *  @param [LlamaModel] model
  *  @return [String]
@@ -4954,8 +4968,10 @@ void Init_llama_cpp(void) {
   /* llama_vocab_n_tokens */
   rb_define_module_function(rb_mLlamaCpp, "llama_vocab_n_tokens", rb_llama_vocab_n_tokens, 1);
 
+  /* llama_model_meta_count */
+  rb_define_module_function(rb_mLlamaCpp, "llama_model_meta_count", rb_llama_model_meta_count, 1);
+
   /* TODO: llama_model_meta_val_str */
-  /* TODO: llama_model_meta_count */
   /* TODO: llama_model_meta_key_by_index */
   /* TODO: llama_model_meta_val_str_by_index */
 
