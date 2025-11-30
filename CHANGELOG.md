@@ -1,3 +1,22 @@
+## [[0.23.8](https://github.com/yoshoku/llama_cpp.rb/compare/v0.23.7...v0.23.8)] - 2025-11-30
+
+- Change supported llama.cpp version to b7180
+  - Add `llama_model_meta_key_str` module function to `LlamaCpp`.
+  - Add constant values for `enum llama_model_meta_key` to `LlamaCpp`.
+    - `LLAMA_MODEL_META_KEY_SAMPLING_SEQUENCE`
+    - `LLAMA_MODEL_META_KEY_SAMPLING_TOP_K`
+    - `LLAMA_MODEL_META_KEY_SAMPLING_TOP_P`
+    - `LLAMA_MODEL_META_KEY_SAMPLING_MIN_P`
+    - `LLAMA_MODEL_META_KEY_SAMPLING_XTC_PROBABILITY`
+    - `LLAMA_MODEL_META_KEY_SAMPLING_XTC_THRESHOLD`
+    - `LLAMA_MODEL_META_KEY_SAMPLING_TEMP`
+    - `LLAMA_MODEL_META_KEY_SAMPLING_PENALTY_LAST_N`
+    - `LLAMA_MODEL_META_KEY_SAMPLING_PENALTY_REPEAT`
+    - `LLAMA_MODEL_META_KEY_SAMPLING_MIROSTAT`
+    - `LLAMA_MODEL_META_KEY_SAMPLING_MIROSTAT_TAU`
+    - `LLAMA_MODEL_META_KEY_SAMPLING_MIROSTAT_ETA`
+- Add `llama_model_meta_count` module function to `LlamaCpp`
+
 ## [[0.23.7](https://github.com/yoshoku/llama_cpp.rb/compare/v0.23.6...v0.23.7)] - 2025-11-22
 
 - Fix to use require for compatibility with distributions installing extensions separately.
