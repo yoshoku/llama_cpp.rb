@@ -1723,6 +1723,20 @@ static VALUE rb_llama_model_meta_count(VALUE self, VALUE model) {
 }
 
 /**
+ * @overload llama_model_meta_key_str(key)
+ *  @param [Integer] key (must be one of Llama::LLAMA_MODEL_META_KEY_* constants)
+ *  @return [String]
+ */
+static VALUE rb_llama_model_meta_key_str(VALUE self, VALUE key) {
+  if (!RB_INTEGER_TYPE_P(key)) {
+    rb_raise(rb_eArgError, "key must be an Integer");
+    return Qnil;
+  }
+  const char* key_str = llama_model_meta_key_str(NUM2INT(key));
+  return rb_utf8_str_new_cstr(key_str);
+}
+
+/**
  * @overload llama_model_desc(model)
  *  @param [LlamaModel] model
  *  @return [String]
@@ -4985,7 +4999,8 @@ void Init_llama_cpp(void) {
 
   /* llama_model_meta_count */
   rb_define_module_function(rb_mLlamaCpp, "llama_model_meta_count", rb_llama_model_meta_count, 1);
-
+  /* llama_model_meta_key_str */
+  rb_define_module_function(rb_mLlamaCpp, "llama_model_meta_key_str", rb_llama_model_meta_key_str, 1);
   /* TODO: llama_model_meta_val_str */
   /* TODO: llama_model_meta_key_by_index */
   /* TODO: llama_model_meta_val_str_by_index */
