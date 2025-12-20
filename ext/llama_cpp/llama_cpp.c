@@ -4940,6 +4940,8 @@ void Init_llama_cpp(void) {
   /* llama_free */
   rb_define_module_function(rb_mLlamaCpp, "llama_free", rb_llama_free, 1);
 
+  /* TODO: llama_params_fit */
+
   /* llama_time_us */
   rb_define_module_function(rb_mLlamaCpp, "llama_time_us", rb_llama_time_us, 0);
 
