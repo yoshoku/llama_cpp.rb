@@ -1,3 +1,9 @@
+## [[0.23.9](https://github.com/yoshoku/llama_cpp.rb/compare/v0.23.8...v0.23.9)] - 2025-12-20
+
+- Change supported llama.cpp version to b7470
+  - Add `no_alloc` accessor to `LlamaModelParams`.
+  - Add `llama_max_tensor_buft_overrides` module function to `LlamaCpp`.
+
 ## [[0.23.8](https://github.com/yoshoku/llama_cpp.rb/compare/v0.23.7...v0.23.8)] - 2025-11-30
 
 - Change supported llama.cpp version to b7180
