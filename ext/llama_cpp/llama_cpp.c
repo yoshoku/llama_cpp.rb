@@ -1375,6 +1375,14 @@ static VALUE rb_llama_max_parallel_sequences(VALUE self) {
 }
 
 /**
+ * @overload llama_max_tensor_buft_overrides
+ *  @return [Integer]
+ */
+static VALUE rb_llama_max_tensor_buft_overrides(VALUE self) {
+  return SIZET2NUM(llama_max_tensor_buft_overrides());
+}
+
+/**
  * @overload llama_supports_mmap?
  *  @return [Boolean]
  */
@@ -4940,6 +4948,9 @@ void Init_llama_cpp(void) {
 
   /* llama_max_parallel_sequences */
   rb_define_module_function(rb_mLlamaCpp, "llama_max_parallel_sequences", rb_llama_max_parallel_sequences, 0);
+
+  /* llama_max_tensor_buft_overrides */
+  rb_define_module_function(rb_mLlamaCpp, "llama_max_tensor_buft_overrides", rb_llama_max_tensor_buft_overrides, 0);
 
   /* llama_supports_mmap */
   rb_define_module_function(rb_mLlamaCpp, "llama_supports_mmap?", rb_llama_supports_mmap, 0);
