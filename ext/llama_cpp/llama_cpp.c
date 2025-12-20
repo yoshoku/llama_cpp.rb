@@ -5381,6 +5381,7 @@ void Init_llama_cpp(void) {
   /* llama_print_system_info */
   rb_define_module_function(rb_mLlamaCpp, "llama_print_system_info", rb_llama_print_system_info, 0);
 
+  /* TODO: llama_log_get */
   /* TODO: llama_log_set */
 
   /**
