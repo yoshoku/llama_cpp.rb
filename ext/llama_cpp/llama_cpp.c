@@ -551,6 +551,17 @@ static VALUE llama_model_params_set_no_host(VALUE self, VALUE no_host) {
   return no_host;
 }
 
+static VALUE llama_model_params_get_no_alloc(VALUE self) {
+  struct llama_model_params* data = get_llama_model_params(self);
+  return data->no_alloc ? Qtrue : Qfalse;
+}
+
+static VALUE llama_model_params_set_no_alloc(VALUE self, VALUE no_alloc) {
+  struct llama_model_params* data = get_llama_model_params(self);
+  data->no_alloc = RTEST(no_alloc) ? true : false;
+  return no_alloc;
+}
+
 /* struct llama_context_params */
 static void llama_context_params_free(void *ptr) {
   if (ptr) {
@@ -4413,6 +4424,17 @@ void Init_llama_cpp(void) {
    * @return [Boolean]
    */
   rb_define_method(rb_cLlamaModelParams, "no_host=", RUBY_METHOD_FUNC(llama_model_params_set_no_host), 1);
+  /**
+   * Document-method: no_alloc
+   * @return [Boolean]
+   */
+  rb_define_method(rb_cLlamaModelParams, "no_alloc", RUBY_METHOD_FUNC(llama_model_params_get_no_alloc), 0);
+  /**
+   * Document-method: no_alloc=
+   * @param [Boolean] no_alloc_
+   * @return [Boolean]
+   */
+  rb_define_method(rb_cLlamaModelParams, "no_alloc=", RUBY_METHOD_FUNC(llama_model_params_set_no_alloc), 1);
 
   /**
    * Document-class: LlamaCpp::LlamaContextParams
