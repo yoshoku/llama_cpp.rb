@@ -4940,6 +4940,12 @@ void Init_llama_cpp(void) {
   /* llama_free */
   rb_define_module_function(rb_mLlamaCpp, "llama_free", rb_llama_free, 1);
 
+  /* llama_params_fit_status */
+  /* Document-const: LlamaCpp::LLAMA_PARAMS_FIT_STATUS_SUCCESS */
+  rb_define_const(rb_mLlamaCpp, "LLAMA_PARAMS_FIT_STATUS_SUCCESS", INT2NUM(LLAMA_PARAMS_FIT_STATUS_SUCCESS));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_PARAMS_FIT_STATUS_FAILURE", INT2NUM(LLAMA_PARAMS_FIT_STATUS_FAILURE));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_PARAMS_FIT_STATUS_ERROR", INT2NUM(LLAMA_PARAMS_FIT_STATUS_ERROR));
+
   /* TODO: llama_params_fit */
 
   /* llama_time_us */
