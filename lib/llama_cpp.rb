@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'llama_cpp/version'
-# On distributions like Rocky Linux, native extensions are installed in a separate
+# On RHEL-based linux distributions, native extensions are installed in a separate
 # directory from Ruby code, so use require to load them.
 require 'llama_cpp/llama_cpp'
 
