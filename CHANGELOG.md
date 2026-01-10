@@ -1,12 +1,22 @@
+## [[0.23.10](https://github.com/yoshoku/llama_cpp.rb/compare/v0.23.9...v0.23.10)] - 2026-01-10
+
+- Change supported llama.cpp version to b7690.
+  - Add `llama_model_n_embd_out` module function to `LlamaCpp`.
+  - Add `use_direct_io` accessor to `LlamaModelParams`.
+  - Add constant values for `enum llama_params_fit_status` to `LlamaCpp`.
+    - `LLAMA_PARAMS_FIT_STATUS_SUCCESS`
+    - `LLAMA_PARAMS_FIT_STATUS_FAILURE`
+    - `LLAMA_PARAMS_FIT_STATUS_ERROR`
+
 ## [[0.23.9](https://github.com/yoshoku/llama_cpp.rb/compare/v0.23.8...v0.23.9)] - 2025-12-20
 
-- Change supported llama.cpp version to b7470
+- Change supported llama.cpp version to b7470.
   - Add `no_alloc` accessor to `LlamaModelParams`.
   - Add `llama_max_tensor_buft_overrides` module function to `LlamaCpp`.
 
 ## [[0.23.8](https://github.com/yoshoku/llama_cpp.rb/compare/v0.23.7...v0.23.8)] - 2025-11-30
 
-- Change supported llama.cpp version to b7180
+- Change supported llama.cpp version to b7180.
   - Add `llama_model_meta_key_str` module function to `LlamaCpp`.
   - Add constant values for `enum llama_model_meta_key` to `LlamaCpp`.
     - `LLAMA_MODEL_META_KEY_SAMPLING_SEQUENCE`
@@ -21,7 +31,7 @@
     - `LLAMA_MODEL_META_KEY_SAMPLING_MIROSTAT`
     - `LLAMA_MODEL_META_KEY_SAMPLING_MIROSTAT_TAU`
     - `LLAMA_MODEL_META_KEY_SAMPLING_MIROSTAT_ETA`
-- Add `llama_model_meta_count` module function to `LlamaCpp`
+- Add `llama_model_meta_count` module function to `LlamaCpp`.
 
 ## [[0.23.7](https://github.com/yoshoku/llama_cpp.rb/compare/v0.23.6...v0.23.7)] - 2025-11-22
 
