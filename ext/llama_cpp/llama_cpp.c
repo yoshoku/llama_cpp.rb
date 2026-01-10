@@ -5251,6 +5251,14 @@ void Init_llama_cpp(void) {
   /* TODO: llama_get_embeddings_ith */
   /* TODO: llama_get_embeddings_seq */
 
+  /* TODO: llama_get_sampled_token_ith */
+  /* TODO: llama_get_sampled_probs_ith */
+  /* TODO: llama_get_sampled_probs_count_ith */
+  /* TODO: llama_get_sampled_logits_ith */
+  /* TODO: llama_get_sampled_logits_count_ith */
+  /* TODO: llama_get_sampled_candidates_ith */
+  /* TODO: llama_get_sampled_candidates_count_ith */
+
   /* llama_vocab_get_text */
   rb_define_module_function(rb_mLlamaCpp, "llama_vocab_get_text", rb_llama_vocab_get_text, 2);
 
@@ -5326,6 +5334,9 @@ void Init_llama_cpp(void) {
   /* TODO: llama_chat_apply_template */
   /* TODO: llama_chat_builtin_templates */
 
+  /* TODO: llama_sampler_context_t */
+  /* TODO: struct llama_sampler_data */
+
   /* TODO: struct llama_sampler_i */
 
   /**
@@ -5334,6 +5345,8 @@ void Init_llama_cpp(void) {
    */
   rb_cLlamaSampler = rb_define_class_under(rb_mLlamaCpp, "LlamaSampler", rb_cObject);
   rb_define_alloc_func(rb_cLlamaSampler, llama_sampler_alloc);
+
+  /* TODO: llama_set_sampler */
 
   /* llama_sampler_name */
   rb_define_module_function(rb_mLlamaCpp, "llama_sampler_name", rb_llama_sampler_name, 1);
