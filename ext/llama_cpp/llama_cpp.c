@@ -5348,6 +5348,8 @@ void Init_llama_cpp(void) {
 
   /* TODO: llama_set_sampler */
 
+  /* TODO: llama_sampler_init */
+
   /* llama_sampler_name */
   rb_define_module_function(rb_mLlamaCpp, "llama_sampler_name", rb_llama_sampler_name, 1);
 
