@@ -4466,6 +4466,8 @@ void Init_llama_cpp(void) {
    */
   rb_define_method(rb_cLlamaModelParams, "no_alloc=", RUBY_METHOD_FUNC(llama_model_params_set_no_alloc), 1);
 
+  /* TODO: struct llama_sampler_seq_config */
+
   /**
    * Document-class: LlamaCpp::LlamaContextParams
    * "struct llama_context_params" wrapper class
@@ -4754,6 +4756,10 @@ void Init_llama_cpp(void) {
    * @return [Boolean]
    */
   rb_define_method(rb_cLlamaContextParams, "kv_unified", RUBY_METHOD_FUNC(llama_context_params_get_kv_unified), 0);
+
+  /* TODO: struct llama_sampler_seq_config * samplers */
+  /* TODO: size_t n_samplers */
+
   /**
    * Document-method: kv_unified=
    * @param [Boolean] kv_unified
