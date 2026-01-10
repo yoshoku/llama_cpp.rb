@@ -507,6 +507,17 @@ static VALUE llama_model_params_set_use_mmap(VALUE self, VALUE use_mmap) {
   return use_mmap;
 }
 
+static VALUE llama_model_params_get_use_direct_io(VALUE self) {
+  struct llama_model_params* data = get_llama_model_params(self);
+  return data->use_direct_io ? Qtrue : Qfalse;
+}
+
+static VALUE llama_model_params_set_use_direct_io(VALUE self, VALUE use_direct_io) {
+  struct llama_model_params* data = get_llama_model_params(self);
+  data->use_direct_io = RTEST(use_direct_io) ? true : false;
+  return use_direct_io;
+}
+
 static VALUE llama_model_params_get_use_mlock(VALUE self) {
   struct llama_model_params* data = get_llama_model_params(self);
   return data->use_mlock ? Qtrue : Qfalse;
@@ -4388,6 +4399,17 @@ void Init_llama_cpp(void) {
    * @return [Boolean]
    */
   rb_define_method(rb_cLlamaModelParams, "use_mmap=", RUBY_METHOD_FUNC(llama_model_params_set_use_mmap), 1);
+  /**
+   * Document-method: use_direct_io
+   * @return [Boolean]
+   */
+  rb_define_method(rb_cLlamaModelParams, "use_direct_io", RUBY_METHOD_FUNC(llama_model_params_get_use_direct_io), 0);
+  /**
+   * Document-method: use_direct_io=
+   * @param [Boolean] use_direct_io
+   * @return [Boolean]
+   */
+  rb_define_method(rb_cLlamaModelParams, "use_direct_io=", RUBY_METHOD_FUNC(llama_model_params_set_use_direct_io), 1);
   /**
    * Document-method: use_mlock
    * @return [Boolean]
