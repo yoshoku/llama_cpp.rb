@@ -3715,6 +3715,30 @@ static VALUE rb_llama_sampler_init_penalties(VALUE self, VALUE penalty_last_n, V
 }
 
 /**
+ * @overload llama_sampler_init_adaptive_p(target, decay, seed)
+ *  @param [Float] target
+ *  @param [Float] decay
+ *  @param [Integer] seed
+ *  @return [LlamaSampler]
+ */
+static VALUE rb_llama_sampler_init_adaptive_p(VALUE self, VALUE target, VALUE decay, VALUE seed) {
+  if (!RB_FLOAT_TYPE_P(target)) {
+    rb_raise(rb_eArgError, "target must be a Float");
+    return Qnil;
+  }
+  if (!RB_FLOAT_TYPE_P(decay)) {
+    rb_raise(rb_eArgError, "decay must be a Float");
+    return Qnil;
+  }
+  if (!RB_INTEGER_TYPE_P(seed)) {
+    rb_raise(rb_eArgError, "seed must be an Integer");
+    return Qnil;
+  }
+  struct llama_sampler* sampler = llama_sampler_init_adaptive_p(NUM2DBL(target), NUM2DBL(decay), NUM2UINT(seed));
+  return TypedData_Wrap_Struct(rb_cLlamaSampler, &llama_sampler_data_type, sampler);
+}
+
+/**
  * @overload llama_sampler_init_logit_bias(n_vocab, n_logit_bias, logit_bias)
  *  @param [Integer] n_vocab
  *  @param [Integer] n_logit_bias
@@ -5428,6 +5452,9 @@ void Init_llama_cpp(void) {
   rb_define_module_function(rb_mLlamaCpp, "llama_sampler_init_penalties", rb_llama_sampler_init_penalties, 4);
 
   /* TODO: llama_sampler_init_dry */
+
+  /* llama_sampler_init_adaptive_p */
+  rb_define_module_function(rb_mLlamaCpp, "llama_sampler_init_adaptive_p", rb_llama_sampler_init_adaptive_p, 3);
 
   /* llama_sampler_init_logit_bias */
   rb_define_module_function(rb_mLlamaCpp, "llama_sampler_init_logit_bias", rb_llama_sampler_init_logit_bias, 3);
