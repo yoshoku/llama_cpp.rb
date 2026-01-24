@@ -1,3 +1,8 @@
+## [[0.23.11](https://github.com/yoshoku/llama_cpp.rb/compare/v0.23.10...v0.23.11)] - 2026-01-24
+
+- Change supported llama.cpp version to b7790.
+  - Add `llama_sampler_init_adaptive_p` module function to `LlamaCpp`.
+
 ## [[0.23.10](https://github.com/yoshoku/llama_cpp.rb/compare/v0.23.9...v0.23.10)] - 2026-01-10
 
 - Change supported llama.cpp version to b7690.
