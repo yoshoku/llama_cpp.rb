@@ -1992,34 +1992,6 @@ static VALUE rb_llama_adapter_meta_count(VALUE self, VALUE adapter) {
 }
 
 /**
- * @overload llama_set_adapter_lora(context, adapter, scale)
- *  @param [LlamaContext] context
- *  @param [LlamaAdapterLora] adapter
- *  @param [Float] scale
- *  @return [Integer]
- */
-static VALUE rb_llama_set_adapter_lora(VALUE self, VALUE ctx, VALUE adapter, VALUE scale) {
-  if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
-    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
-    return Qnil;
-  }
-  if (!rb_obj_is_kind_of(adapter, rb_cLlamaAdapterLora)) {
-    rb_raise(rb_eArgError, "adapter must be a LlamaAdapterLora");
-    return Qnil;
-  }
-  if (!RB_FLOAT_TYPE_P(scale)) {
-    rb_raise(rb_eArgError, "scale must be a Float");
-    return Qnil;
-  }
-  llama_adapter_lora_wrapper* adapter_wrapper = get_llama_adapter_lora_wrapper(adapter);
-  llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
-  const int32_t res = llama_set_adapter_lora(context_wrapper->context, adapter_wrapper->adapter, (float)NUM2DBL(scale));
-  RB_GC_GUARD(ctx);
-  RB_GC_GUARD(adapter);
-  return NUM2INT(res);
-}
-
-/**
  * @overload llama_adapter_lora_free(adapter)
  *  @param [LlamaAdapterLora] adapter
  *  @return [NilClass]
@@ -5119,9 +5091,6 @@ void Init_llama_cpp(void) {
 
   /* TODO: llama_adapter_meta_key_by_index */
   /* TODO: llama_adapter_meta_val_str_by_index */
-
-  /* llama_set_adapter_lora */
-  rb_define_module_function(rb_mLlamaCpp, "llama_set_adapter_lora", rb_llama_set_adapter_lora, 3);
 
   /* llama_adapter_lora_free */
   rb_define_module_function(rb_mLlamaCpp, "llama_adapter_lora_free", rb_llama_adapter_lora_free, 1);
