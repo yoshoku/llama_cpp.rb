@@ -1,3 +1,11 @@
+## [[0.24.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.23.11...v0.24.0)] - 2026-02-22
+
+- Change supported llama.cpp version to b8110.
+  - Add `llama_set_adapters_lora` module function to `LlamaCpp`.
+  - Remove `llama_set_adapter_lora` module function.
+  - Remove `llama_clear_adapter_lora` module function.
+  - Remove `llama_rm_adapter_lora` module function.
+
 ## [[0.23.11](https://github.com/yoshoku/llama_cpp.rb/compare/v0.23.10...v0.23.11)] - 2026-01-24
 
 - Change supported llama.cpp version to b7790.
