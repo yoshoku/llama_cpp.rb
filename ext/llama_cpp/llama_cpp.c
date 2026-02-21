@@ -1992,6 +1992,65 @@ static VALUE rb_llama_adapter_meta_count(VALUE self, VALUE adapter) {
 }
 
 /**
+ * @overload llama_set_adapters_lora(context, adapters, scales)
+ *  @param [LlamaContext] context
+ *  @param [Array<LlamaAdapterLora>] adapters
+ *  @param [Array<Float>] scales
+ *  @return [Integer]
+ */
+static VALUE rb_llama_set_adapters_lora(VALUE self, VALUE ctx, VALUE adapters, VALUE scales) {
+  if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
+    return Qnil;
+  }
+  if (!RB_TYPE_P(adapters, T_ARRAY)) {
+    rb_raise(rb_eArgError, "adapters must be an Array");
+    return Qnil;
+  }
+  if (!RB_TYPE_P(scales, T_ARRAY)) {
+    rb_raise(rb_eArgError, "scales must be an Array");
+    return Qnil;
+  }
+  long n_adapters = RARRAY_LEN(adapters);
+  long n_scales = RARRAY_LEN(scales);
+  if (n_adapters != n_scales) {
+    rb_raise(rb_eArgError, "adapters and scales must have the same length");
+    return Qnil;
+  }
+  for (long i = 0; i < n_adapters; i++) {
+    VALUE adapter = rb_ary_entry(adapters, i);
+    if (!rb_obj_is_kind_of(adapter, rb_cLlamaAdapterLora)) {
+      rb_raise(rb_eArgError, "adapters must be an Array of LlamaAdapterLora");
+      return Qnil;
+    }
+  }
+  for (long i = 0; i < n_scales; i++) {
+    VALUE scale = rb_ary_entry(scales, i);
+    if (!RB_FLOAT_TYPE_P(scale)) {
+      rb_raise(rb_eArgError, "scales must be an Array of Float");
+      return Qnil;
+    }
+  }
+  struct llama_adapter_lora** adapters_ = ALLOCA_N(struct llama_adapter_lora*, n_adapters);
+  for (long i = 0; i < n_adapters; i++) {
+    VALUE adapter = rb_ary_entry(adapters, i);
+    llama_adapter_lora_wrapper* adapter_wrapper = get_llama_adapter_lora_wrapper(adapter);
+    adapters_[i] = adapter_wrapper->adapter;
+  }
+  float* scales_ = ALLOCA_N(float, n_scales);
+  for (long i = 0; i < n_scales; i++) {
+    VALUE scale = rb_ary_entry(scales, i);
+    scales_[i] = (float)NUM2DBL(scale);
+  }
+  llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
+  const int32_t res = llama_set_adapters_lora(context_wrapper->context, adapters_, n_adapters, scales_);
+  RB_GC_GUARD(ctx);
+  RB_GC_GUARD(adapters);
+  RB_GC_GUARD(scales);
+  return NUM2INT(res);
+}
+
+/**
  * @overload llama_adapter_lora_free(adapter)
  *  @param [LlamaAdapterLora] adapter
  *  @return [NilClass]
@@ -5091,6 +5150,9 @@ void Init_llama_cpp(void) {
 
   /* TODO: llama_adapter_meta_key_by_index */
   /* TODO: llama_adapter_meta_val_str_by_index */
+
+  /* llama_set_adapters_lora */
+  rb_define_module_function(rb_mLlamaCpp, "llama_set_adapters_lora", rb_llama_set_adapters_lora, 3);
 
   /* llama_adapter_lora_free */
   rb_define_module_function(rb_mLlamaCpp, "llama_adapter_lora_free", rb_llama_adapter_lora_free, 1);
