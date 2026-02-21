@@ -2020,29 +2020,6 @@ static VALUE rb_llama_set_adapter_lora(VALUE self, VALUE ctx, VALUE adapter, VAL
 }
 
 /**
- * @overload llama_rm_adapter_lora(context, adapter)
- *  @param [LlamaContext] context
- *  @param [LlamaAdapterLora] adapter
- *  @return [Integer]
- */
-static VALUE rb_llama_rm_adapter_lora(VALUE self, VALUE ctx, VALUE adapter) {
-  if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
-    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
-    return Qnil;
-  }
-  if (!rb_obj_is_kind_of(adapter, rb_cLlamaAdapterLora)) {
-    rb_raise(rb_eArgError, "adapter must be a LlamaAdapterLora");
-    return Qnil;
-  }
-  llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
-  llama_adapter_lora_wrapper* adapter_wrapper = get_llama_adapter_lora_wrapper(adapter);
-  const int32_t res = llama_rm_adapter_lora(context_wrapper->context, adapter_wrapper->adapter);
-  RB_GC_GUARD(ctx);
-  RB_GC_GUARD(adapter);
-  return NUM2INT(res);
-}
-
-/**
  * @overload llama_clear_adapter_lora(context)
  *  @param [LlamaContext] context
  *  @return [NilClass]
@@ -5161,9 +5138,6 @@ void Init_llama_cpp(void) {
 
   /* llama_set_adapter_lora */
   rb_define_module_function(rb_mLlamaCpp, "llama_set_adapter_lora", rb_llama_set_adapter_lora, 3);
-
-  /* llama_rm_adapter_lora */
-  rb_define_module_function(rb_mLlamaCpp, "llama_rm_adapter_lora", rb_llama_rm_adapter_lora, 2);
 
   /* llama_clear_adapter_lora */
   rb_define_module_function(rb_mLlamaCpp, "llama_clear_adapter_lora", rb_llama_clear_adapter_lora, 1);
