@@ -1024,6 +1024,17 @@ static VALUE llama_model_quantize_params_set_keep_split(VALUE self, VALUE keep_s
   return keep_split;
 }
 
+static VALUE llama_model_quantize_params_get_dry_run(VALUE self) {
+  llama_model_quantize_params* data = get_llama_model_quantize_params(self);
+  return data->dry_run ? Qtrue : Qfalse;
+}
+
+static VALUE llama_model_quantize_params_set_dry_run(VALUE self, VALUE dry_run) {
+  llama_model_quantize_params* data = get_llama_model_quantize_params(self);
+  data->dry_run = RTEST(dry_run) ? true : false;
+  return dry_run;
+}
+
 /* llama_logit_bias */
 static void llama_logit_bias_free(void *ptr) {
   if (ptr) {
@@ -4904,6 +4915,17 @@ void Init_llama_cpp(void) {
    * @return [Boolean]
    */
   rb_define_method(rb_cLlamaModelQuantizeParams, "keep_split=", RUBY_METHOD_FUNC(llama_model_quantize_params_set_keep_split), 1);
+  /**
+   * Document-method: dry_run
+   * @return [Boolean]
+   */
+  rb_define_method(rb_cLlamaModelQuantizeParams, "dry_run", RUBY_METHOD_FUNC(llama_model_quantize_params_get_dry_run), 0);
+  /**
+   * Document-method: dry_run=
+   * @param [Boolean] dry_run
+   * @return [Boolean]
+   */
+  rb_define_method(rb_cLlamaModelQuantizeParams, "dry_run=", RUBY_METHOD_FUNC(llama_model_quantize_params_set_dry_run), 1);
   /* TODO: void* imatrix */
   /* TODO: void* kv_overrides */
   /* TODO: void* tensor_types */
