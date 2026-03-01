@@ -1,3 +1,8 @@
+## [[0.24.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.24.0...v0.24.1)] - 2026-03-01
+
+- Change supported llama.cpp version to b8170.
+  - Add `dry_run` accessor to `LlamaModelQuantizeParams`.
+
 ## [[0.24.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.23.11...v0.24.0)] - 2026-02-22
 
 - Change supported llama.cpp version to b8110.
