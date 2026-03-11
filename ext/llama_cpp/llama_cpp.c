@@ -5001,6 +5001,7 @@ void Init_llama_cpp(void) {
 
   /* TODO: llama_attach_threadpool */
   /* TODO: llama_detach_threadpool */
+  /* TODO: llama_model_init_from_user */
 
   /* llama_model_load_from_file */
   rb_define_module_function(rb_mLlamaCpp, "llama_model_load_from_file", rb_llama_model_load_from_file, 2);
