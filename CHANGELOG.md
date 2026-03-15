@@ -1,3 +1,8 @@
+## [[0.24.2](https://github.com/yoshoku/llama_cpp.rb/compare/v0.24.1...v0.24.2)] - 2026-03-15
+
+- Change supported llama.cpp version to b8340.
+  - Add `LLAMA_FTYPE_MOSTLY_NVFP4` constant value.
+
 ## [[0.24.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.24.0...v0.24.1)] - 2026-03-01
 
 - Change supported llama.cpp version to b8170.
