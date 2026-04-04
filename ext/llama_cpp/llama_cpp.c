@@ -8,6 +8,7 @@ VALUE rb_cLlamaModelTensorBuftOverride;
 VALUE rb_cLlamaModelParams;
 VALUE rb_cLlamaContextParams;
 VALUE rb_cLlamaModelTensorOverride;
+VALUE rb_cLlamaModelImatrixData;
 VALUE rb_cLlamaModelQuantizeParams;
 VALUE rb_cLlamaLogitBias;
 VALUE rb_cLlamaAdapterLora;
@@ -893,7 +894,7 @@ static VALUE llama_context_params_set_kv_unified(VALUE self, VALUE kv_unified) {
   return kv_unified;
 }
 
-/* llama_model_tensor_override */
+/* struct llama_model_tensor_override */
 static void llama_model_tensor_override_free(void *ptr) {
   if (ptr) {
     ruby_xfree(ptr);
@@ -934,6 +935,57 @@ static VALUE llama_model_tensor_override_get_pattern(VALUE self) {
 static VALUE llama_model_tensor_override_get_type(VALUE self) {
   struct llama_model_tensor_override* data = get_llama_model_tensor_override(self);
   return INT2NUM(data->type);
+}
+
+/* struct llama_model_imatrix_data */
+static void llama_model_imatrix_data_free(void *ptr) {
+  if (ptr) {
+    ruby_xfree(ptr);
+  }
+}
+
+static size_t llama_model_imatrix_data_size(const void *ptr) {
+  return sizeof(*((struct llama_model_imatrix_data*)ptr));
+}
+
+static rb_data_type_t llama_model_imatrix_data_type = {
+  "LlamaModelImatrixData",
+  { NULL,
+    llama_model_imatrix_data_free,
+    llama_model_imatrix_data_size },
+  NULL,
+  NULL,
+  RUBY_TYPED_FREE_IMMEDIATELY
+};
+
+static VALUE llama_model_imatrix_data_alloc(VALUE self) {
+  struct llama_model_imatrix_data* data = (struct llama_model_imatrix_data*)ruby_xmalloc(sizeof(struct llama_model_imatrix_data));
+  return TypedData_Wrap_Struct(self, &llama_model_imatrix_data_type, data);
+}
+
+static struct llama_model_imatrix_data* get_llama_model_imatrix_data(VALUE self) {
+  struct llama_model_imatrix_data* data = NULL;
+  TypedData_Get_Struct(self, struct llama_model_imatrix_data, &llama_model_imatrix_data_type, data);
+  return data;
+}
+
+static VALUE llama_model_imatrix_data_get_name(VALUE self) {
+  struct llama_model_imatrix_data* data = get_llama_model_imatrix_data(self);
+  return rb_utf8_str_new_cstr(data->name);
+}
+
+static VALUE llama_model_imatrix_data_get_size(VALUE self) {
+  struct llama_model_imatrix_data* data = get_llama_model_imatrix_data(self);
+  return SIZET2NUM(data->size);
+}
+
+static VALUE llama_model_imatrix_data_get_data(VALUE self) {
+  struct llama_model_imatrix_data* data = get_llama_model_imatrix_data(self);
+  VALUE ary = rb_ary_new2(data->size);
+  for (size_t i = 0; i < data->size; i++) {
+    rb_ary_store(ary, i, DBL2NUM(data->data[i]));
+  }
+  return ary;
 }
 
 /* llama_model_quantize_params */
@@ -4871,6 +4923,28 @@ void Init_llama_cpp(void) {
    * @return [Integer]
    */
   rb_define_method(rb_cLlamaModelTensorOverride, "type", RUBY_METHOD_FUNC(llama_model_tensor_override_get_type), 0);
+
+  /**
+   * Document-class: LlamaCpp::LlamaModelImatrixData
+   * "struct llama_model_i_matrix_data" wrapper class
+   */
+  rb_cLlamaModelImatrixData = rb_define_class_under(rb_mLlamaCpp, "LlamaModelImatrixData", rb_cObject);
+  rb_define_alloc_func(rb_cLlamaModelImatrixData, llama_model_imatrix_data_alloc);
+  /**
+   * Document-method: name
+   * @return [String]
+   */
+  rb_define_method(rb_cLlamaModelImatrixData, "name", RUBY_METHOD_FUNC(llama_model_imatrix_data_get_name), 0);
+  /**
+   * Document-method: size
+   * @return [Integer]
+   */
+  rb_define_method(rb_cLlamaModelImatrixData, "size", RUBY_METHOD_FUNC(llama_model_imatrix_data_get_size), 0);
+  /**
+   * Document-method: data
+   * @return [Array<Float>]
+   */
+  rb_define_method(rb_cLlamaModelImatrixData, "data", RUBY_METHOD_FUNC(llama_model_imatrix_data_get_data), 0);
 
   /**
    * Document-class: LlamaCpp::LlamaModelQuantizeParams
