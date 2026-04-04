@@ -7,6 +7,7 @@ VALUE rb_cLlamaContext;
 VALUE rb_cLlamaModelTensorBuftOverride;
 VALUE rb_cLlamaModelParams;
 VALUE rb_cLlamaContextParams;
+VALUE rb_cLlamaModelTensorOverride;
 VALUE rb_cLlamaModelQuantizeParams;
 VALUE rb_cLlamaLogitBias;
 VALUE rb_cLlamaAdapterLora;
@@ -890,6 +891,49 @@ static VALUE llama_context_params_set_kv_unified(VALUE self, VALUE kv_unified) {
   struct llama_context_params* data = get_llama_context_params(self);
   data->kv_unified = RTEST(kv_unified) ? true : false;
   return kv_unified;
+}
+
+/* llama_model_tensor_override */
+static void llama_model_tensor_override_free(void *ptr) {
+  if (ptr) {
+    ruby_xfree(ptr);
+  }
+}
+
+static size_t llama_model_tensor_override_size(const void *ptr) {
+  return sizeof(*((struct llama_model_tensor_override*)ptr));
+}
+
+static rb_data_type_t llama_model_tensor_override_type = {
+  "LlamaModelTensorOverride",
+  { NULL,
+    llama_model_tensor_override_free,
+    llama_model_tensor_override_size },
+  NULL,
+  NULL,
+  RUBY_TYPED_FREE_IMMEDIATELY
+};
+
+static VALUE llama_model_tensor_override_alloc(VALUE self) {
+  struct llama_model_tensor_override* data = (struct llama_model_tensor_override*)ruby_xmalloc(sizeof(struct llama_model_tensor_override));
+  return TypedData_Wrap_Struct(self, &llama_model_tensor_override_type, data);
+}
+
+static struct llama_model_tensor_override* get_llama_model_tensor_override(VALUE self) {
+  struct llama_model_tensor_override* data = NULL;
+  TypedData_Get_Struct(self, struct llama_model_tensor_override, &llama_model_tensor_override_type, data);
+  return data;
+}
+
+static VALUE llama_model_tensor_override_get_pattern(VALUE self) {
+  struct llama_model_tensor_override* data = get_llama_model_tensor_override(self);
+  const char* pattern = data->pattern;
+  return rb_utf8_str_new_cstr(pattern);
+}
+
+static VALUE llama_model_tensor_override_get_type(VALUE self) {
+  struct llama_model_tensor_override* data = get_llama_model_tensor_override(self);
+  return INT2NUM(data->type);
 }
 
 /* llama_model_quantize_params */
@@ -4810,6 +4854,23 @@ void Init_llama_cpp(void) {
   rb_define_method(rb_cLlamaContextParams, "kv_unified=", RUBY_METHOD_FUNC(llama_context_params_set_kv_unified), 1);
   /* TODO: ggml_abort_callback abort_callback */
   /* TODO: void* abort_callback_data */
+
+  /**
+   * Document-class: LlamaCpp::LlamaModelTensorOverride
+   * "struct llama_model_tensor_override" wrapper class
+   */
+  rb_cLlamaModelTensorOverride = rb_define_class_under(rb_mLlamaCpp, "LlamaModelTensorOverride", rb_cObject);
+  rb_define_alloc_func(rb_cLlamaModelTensorOverride, llama_model_tensor_override_alloc);
+  /**
+   * Document-method: pattern
+   * @return [String]
+   */
+  rb_define_method(rb_cLlamaModelTensorOverride, "pattern", RUBY_METHOD_FUNC(llama_model_tensor_override_get_pattern), 0);
+  /**
+   * Document-method: type
+   * @return [Integer]
+   */
+  rb_define_method(rb_cLlamaModelTensorOverride, "type", RUBY_METHOD_FUNC(llama_model_tensor_override_get_type), 0);
 
   /**
    * Document-class: LlamaCpp::LlamaModelQuantizeParams
