@@ -5062,10 +5062,10 @@ void Init_llama_cpp(void) {
    * @return [Boolean]
    */
   rb_define_method(rb_cLlamaModelQuantizeParams, "dry_run=", RUBY_METHOD_FUNC(llama_model_quantize_params_set_dry_run), 1);
-  /* TODO: void* imatrix */
-  /* TODO: void* kv_overrides */
-  /* TODO: void* tensor_types */
-  /* TODO: void* prune_layers */
+  /* TODO: const struct llama_model_imatrix_data* imatrix */
+  /* TODO: const struct llama_model_kv_override* kv_overrides */
+  /* TODO: const struct llama_model_tensor_override* tt_overrides */
+  /* TODO: const int32_t* prune_layers */
 
   /**
    * Document-class: LlamaCpp::LlamaLogitBias
