@@ -1,3 +1,9 @@
+## [[0.24.2](https://github.com/yoshoku/llama_cpp.rb/compare/v0.24.2...v0.24.3)] - 2026-04-06
+
+- Change supported llama.cpp version to b8640.
+  - Add `LlamaModelImatrixData` class to `LlamaCpp`.
+  - Add `LlamaModelTensorOverride` class to `LlamaCpp`.
+
 ## [[0.24.2](https://github.com/yoshoku/llama_cpp.rb/compare/v0.24.1...v0.24.2)] - 2026-03-15
 
 - Change supported llama.cpp version to b8340.
