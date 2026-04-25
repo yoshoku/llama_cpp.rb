@@ -4309,6 +4309,7 @@ void Init_llama_cpp(void) {
   rb_define_const(rb_mLlamaCpp, "LLAMA_SPLIT_MODE_NONE", INT2NUM(LLAMA_SPLIT_MODE_NONE));
   rb_define_const(rb_mLlamaCpp, "LLAMA_SPLIT_MODE_LAYER", INT2NUM(LLAMA_SPLIT_MODE_LAYER));
   rb_define_const(rb_mLlamaCpp, "LLAMA_SPLIT_MODE_ROW", INT2NUM(LLAMA_SPLIT_MODE_ROW));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_SPLIT_MODE_TENSOR", INT2NUM(LLAMA_SPLIT_MODE_TENSOR));
 
   rb_define_module_function(rb_mLlamaCpp, "llama_flash_attn_type_name", rb_llama_flash_attn_type_name, 1);
 
