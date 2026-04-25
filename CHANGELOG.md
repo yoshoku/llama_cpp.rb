@@ -1,3 +1,13 @@
+## [[0.25.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.24.3...v0.25.0)] - 2026-04-25
+
+- Change supported llama.cpp version to b8920.
+  - Remove `LLAMA_PARAMS_FIT_STATUS_SUCCESS` constant value.
+  - Remove `LLAMA_PARAMS_FIT_STATUS_FAILURE` constant value.
+  - Remove `LLAMA_PARAMS_FIT_STATUS_ERROR` constant value.
+  - Remove `llama_memory_breakdown_print` module function.
+  - Add `LLAMA_FTYPE_MOSTLY_Q1_0` constant value.
+  - Add `LLAMA_SPLIT_MODE_TENSOR` constant value.
+
 ## [[0.24.2](https://github.com/yoshoku/llama_cpp.rb/compare/v0.24.2...v0.24.3)] - 2026-04-06
 
 - Change supported llama.cpp version to b8640.
