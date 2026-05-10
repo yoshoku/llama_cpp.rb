@@ -1,3 +1,8 @@
+## [[0.25.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.25.0...v0.25.1)] - 2026-05-09
+
+- Change supported llama.cpp version to b9070.
+  - ADD `LLAMA_STATE_SEQ_FLAGS_ON_DEVICE` constant value.
+
 ## [[0.25.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.24.3...v0.25.0)] - 2026-04-25
 
 - Change supported llama.cpp version to b8920.
