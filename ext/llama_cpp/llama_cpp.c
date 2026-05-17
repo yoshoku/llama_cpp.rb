@@ -1888,6 +1888,44 @@ static VALUE rb_llama_model_meta_key_str(VALUE self, VALUE key) {
 }
 
 /**
+ * @overload llama_model_meta_val_str(model, key)
+ *  @param [LlamaModel] model
+ *  @param [String] key
+ *  @return [String, nil] nil if the key is not found
+ */
+static VALUE rb_llama_model_meta_val_str(VALUE self, VALUE model, VALUE key) {
+  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
+    return Qnil;
+  }
+  if (!RB_TYPE_P(key, T_STRING)) {
+    rb_raise(rb_eArgError, "key must be a String");
+    return Qnil;
+  }
+  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
+  const char* key_ = StringValueCStr(key);
+  char stack_buf[1024];
+  int32_t n = llama_model_meta_val_str(model_wrapper->model, key_, stack_buf, sizeof(stack_buf));
+  if (n < 0) {
+    RB_GC_GUARD(model);
+    RB_GC_GUARD(key);
+    return Qnil;
+  }
+  VALUE result;
+  if ((size_t)n < sizeof(stack_buf)) {
+    result = rb_utf8_str_new(stack_buf, n);
+  } else {
+    char* heap_buf = (char*)ruby_xmalloc((size_t)n + 1);
+    llama_model_meta_val_str(model_wrapper->model, key_, heap_buf, (size_t)n + 1);
+    result = rb_utf8_str_new(heap_buf, n);
+    ruby_xfree(heap_buf);
+  }
+  RB_GC_GUARD(model);
+  RB_GC_GUARD(key);
+  return result;
+}
+
+/**
  * @overload llama_model_desc(model)
  *  @param [LlamaModel] model
  *  @return [String]
@@ -5253,7 +5291,8 @@ void Init_llama_cpp(void) {
   rb_define_module_function(rb_mLlamaCpp, "llama_model_meta_count", rb_llama_model_meta_count, 1);
   /* llama_model_meta_key_str */
   rb_define_module_function(rb_mLlamaCpp, "llama_model_meta_key_str", rb_llama_model_meta_key_str, 1);
-  /* TODO: llama_model_meta_val_str */
+  /* llama_model_meta_val_str */
+  rb_define_module_function(rb_mLlamaCpp, "llama_model_meta_val_str", rb_llama_model_meta_val_str, 2);
   /* TODO: llama_model_meta_key_by_index */
   /* TODO: llama_model_meta_val_str_by_index */
 
