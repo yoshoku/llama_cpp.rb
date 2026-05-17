@@ -1918,19 +1918,28 @@ static VALUE rb_llama_model_size(VALUE self, VALUE model) {
   return ULONG2NUM(llama_model_size(model_wrapper->model));
 }
 
-/* llama_model_chat_template */
-/*
-static VALUE rb_llama_model_chat_template(VALUE self, VALUE model) {
+/**
+ * @overload llama_model_chat_template(model, name)
+ *  @param [LlamaModel] model
+ *  @param [String, nil] name pass nil to get the default chat template
+ *  @return [String, nil] nil if no chat template is available
+ */
+static VALUE rb_llama_model_chat_template(VALUE self, VALUE model, VALUE name) {
   if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
     rb_raise(rb_eArgError, "model must be a LlamaModel");
     return Qnil;
   }
+  if (!NIL_P(name) && !RB_TYPE_P(name, T_STRING)) {
+    rb_raise(rb_eArgError, "name must be a String or nil");
+    return Qnil;
+  }
   llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
-  const char* templ = llama_model_chat_template(model_wrapper->model)
+  const char* name_ = NIL_P(name) ? NULL : StringValueCStr(name);
+  const char* templ = llama_model_chat_template(model_wrapper->model, name_);
   RB_GC_GUARD(model);
-  return rb_utf8_str_new_cstr(templ);
+  RB_GC_GUARD(name);
+  return templ == NULL ? Qnil : rb_utf8_str_new_cstr(templ);
 }
-*/
 
 /**
  * @overload llama_model_n_params(model)
@@ -5254,8 +5263,8 @@ void Init_llama_cpp(void) {
   /* llama_model_size */
   rb_define_module_function(rb_mLlamaCpp, "llama_model_size", rb_llama_model_size, 1);
 
-  /* TODO: llama_model_chat_template */
-  /* rb_define_module_function(rb_mLlamaCpp, "llama_model_chat_template", rb_llama_model_chat_template, 1); */
+  /* llama_model_chat_template */
+  rb_define_module_function(rb_mLlamaCpp, "llama_model_chat_template", rb_llama_model_chat_template, 2);
 
   /* llama_model_n_params */
   rb_define_module_function(rb_mLlamaCpp, "llama_model_n_params", rb_llama_model_n_params, 1);
