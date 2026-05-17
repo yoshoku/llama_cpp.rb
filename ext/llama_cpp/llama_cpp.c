@@ -1962,6 +1962,42 @@ static VALUE rb_llama_model_meta_key_by_index(VALUE self, VALUE model, VALUE idx
 }
 
 /**
+ * @overload llama_model_meta_val_str_by_index(model, idx)
+ *  @param [LlamaModel] model
+ *  @param [Integer] idx
+ *  @return [String, nil] nil if the index is out of range
+ */
+static VALUE rb_llama_model_meta_val_str_by_index(VALUE self, VALUE model, VALUE idx) {
+  if (!rb_obj_is_kind_of(model, rb_cLlamaModel)) {
+    rb_raise(rb_eArgError, "model must be a LlamaModel");
+    return Qnil;
+  }
+  if (!RB_INTEGER_TYPE_P(idx)) {
+    rb_raise(rb_eArgError, "i must be an Integer");
+    return Qnil;
+  }
+  llama_model_wrapper* model_wrapper = get_llama_model_wrapper(model);
+  int32_t idx_ = NUM2INT(idx);
+  char stack_buf[1024];
+  int32_t n = llama_model_meta_val_str_by_index(model_wrapper->model, idx_, stack_buf, sizeof(stack_buf));
+  if (n < 0) {
+    RB_GC_GUARD(model);
+    return Qnil;
+  }
+  VALUE result;
+  if ((size_t)n < sizeof(stack_buf)) {
+    result = rb_utf8_str_new(stack_buf, n);
+  } else {
+    char* heap_buf = (char*)ruby_xmalloc((size_t)n + 1);
+    llama_model_meta_val_str_by_index(model_wrapper->model, idx_, heap_buf, (size_t)n + 1);
+    result = rb_utf8_str_new(heap_buf, n);
+    ruby_xfree(heap_buf);
+  }
+  RB_GC_GUARD(model);
+  return result;
+}
+
+/**
  * @overload llama_model_desc(model)
  *  @param [LlamaModel] model
  *  @return [String]
@@ -5331,7 +5367,8 @@ void Init_llama_cpp(void) {
   rb_define_module_function(rb_mLlamaCpp, "llama_model_meta_val_str", rb_llama_model_meta_val_str, 2);
   /* llama_model_meta_key_by_index */
   rb_define_module_function(rb_mLlamaCpp, "llama_model_meta_key_by_index", rb_llama_model_meta_key_by_index, 2);
-  /* TODO: llama_model_meta_val_str_by_index */
+  /* llama_model_meta_val_str_by_index */
+  rb_define_module_function(rb_mLlamaCpp, "llama_model_meta_val_str_by_index", rb_llama_model_meta_val_str_by_index, 2);
 
   /* llama_model_desc */
   rb_define_module_function(rb_mLlamaCpp, "llama_model_desc", rb_llama_model_desc, 1);
