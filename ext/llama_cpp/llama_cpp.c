@@ -4434,6 +4434,7 @@ void Init_llama_cpp(void) {
   /* llama_context_type */
   /* Document-const: LlamaCpp::LLAMA_CONTEXT_TYPE_DEFAULT */
   rb_define_const(rb_mLlamaCpp, "LLAMA_CONTEXT_TYPE_DEFAULT", INT2NUM(LLAMA_CONTEXT_TYPE_DEFAULT));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_CONTEXT_TYPE_MTP", INT2NUM(LLAMA_CONTEXT_TYPE_MTP));
 
   rb_define_module_function(rb_mLlamaCpp, "llama_flash_attn_type_name", rb_llama_flash_attn_type_name, 1);
 
