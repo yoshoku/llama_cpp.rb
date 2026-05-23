@@ -652,6 +652,17 @@ static VALUE llama_context_params_set_n_seq_max(VALUE self, VALUE n_seq_max) {
   return n_seq_max;
 }
 
+static VALUE llama_context_params_get_n_rs_seq(VALUE self) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  return UINT2NUM(data->n_rs_seq);
+}
+
+static VALUE llama_context_params_set_n_rs_seq(VALUE self, VALUE n_rs_seq) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  data->n_rs_seq = NUM2UINT(n_rs_seq);
+  return n_rs_seq;
+}
+
 static VALUE llama_context_params_get_n_threads(VALUE self) {
   struct llama_context_params* data = get_llama_context_params(self);
   return INT2NUM(data->n_threads);
@@ -4778,6 +4789,17 @@ void Init_llama_cpp(void) {
    * @return [Integer]
    */
   rb_define_method(rb_cLlamaContextParams, "n_seq_max=", RUBY_METHOD_FUNC(llama_context_params_set_n_seq_max), 1);
+  /**
+   * Document-method: n_rs_seq
+   * @return [Integer]
+   */
+  rb_define_method(rb_cLlamaContextParams, "n_rs_seq", RUBY_METHOD_FUNC(llama_context_params_get_n_rs_seq), 0);
+  /**
+   * Document-method: n_rs_seq=
+   * @param [Integer] n_rs_seq
+   * @return [Integer]
+   */
+  rb_define_method(rb_cLlamaContextParams, "n_rs_seq=", RUBY_METHOD_FUNC(llama_context_params_set_n_rs_seq), 1);
   /**
    * Document-method: n_threads
    * @return [Integer]
