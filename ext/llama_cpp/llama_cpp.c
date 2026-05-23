@@ -674,6 +674,17 @@ static VALUE llama_context_params_set_n_threads_batch(VALUE self, VALUE n_thread
   return n_threads_batch;
 }
 
+static VALUE llama_context_params_get_ctx_type(VALUE self) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  return INT2NUM(data->ctx_type);
+}
+
+static VALUE llama_context_params_set_ctx_type(VALUE self, VALUE ctx_type) {
+  struct llama_context_params* data = get_llama_context_params(self);
+  data->ctx_type = (enum llama_context_type)NUM2INT(ctx_type);
+  return ctx_type;
+}
+
 static VALUE llama_context_params_get_rope_scaling_type(VALUE self) {
   struct llama_context_params* data = get_llama_context_params(self);
   return INT2NUM(data->rope_scaling_type);
@@ -4789,6 +4800,17 @@ void Init_llama_cpp(void) {
    * @return [Integer]
    */
   rb_define_method(rb_cLlamaContextParams, "n_threads_batch=", RUBY_METHOD_FUNC(llama_context_params_set_n_threads_batch), 1);
+  /**
+   * Document-method: ctx_type
+   * @return [Integer]
+   */
+  rb_define_method(rb_cLlamaContextParams, "ctx_type", RUBY_METHOD_FUNC(llama_context_params_get_ctx_type), 0);
+  /**
+   * Document-method: ctx_type=
+   * @param [Integer] ctx_type
+   * @return [Integer]
+   */
+  rb_define_method(rb_cLlamaContextParams, "ctx_type=", RUBY_METHOD_FUNC(llama_context_params_set_ctx_type), 1);
   /**
    * Document-method: rope_scaling_type
    * @return [Integer]
