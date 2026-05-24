@@ -1625,6 +1625,20 @@ static VALUE rb_llama_n_seq_max(VALUE self, VALUE ctx) {
 }
 
 /**
+ * @overload llama_n_rs_seq(context)
+ *  @param [LlamaContext] context
+ *  @return [Integer]
+ */
+static VALUE rb_llama_n_rs_seq(VALUE self, VALUE ctx) {
+  if (!rb_obj_is_kind_of(ctx, rb_cLlamaContext)) {
+    rb_raise(rb_eArgError, "ctx must be a LlamaContext");
+    return Qnil;
+  }
+  llama_context_wrapper* context_wrapper = get_llama_context_wrapper(ctx);
+  return UINT2NUM(llama_n_rs_seq(context_wrapper->context));
+}
+
+/**
  * @overload llama_get_model(context)
  *  @param [LlamaContext] context
  *  @return [LlamaModel]
@@ -5352,6 +5366,9 @@ void Init_llama_cpp(void) {
 
   /* llama_n_seq_max */
   rb_define_module_function(rb_mLlamaCpp, "llama_n_seq_max", rb_llama_n_seq_max, 1);
+
+  /* llama_n_rs_seq */
+  rb_define_module_function(rb_mLlamaCpp, "llama_n_rs_seq", rb_llama_n_rs_seq, 1);
 
   /* TODO: llama_get_model */
   rb_define_module_function(rb_mLlamaCpp, "llama_get_model", rb_llama_get_model, 1);
