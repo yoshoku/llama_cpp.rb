@@ -1,12 +1,25 @@
+## [[0.25.3](https://github.com/yoshoku/llama_cpp.rb/compare/v0.25.2...v0.25.3)] - 2026-05-24
+
+- Add `llama_model_chat_template` module function to `LlamaCpp`.
+- Add `llama_model_meta_val_str` module function to `LlamaCpp`.
+- Add `llama_model_meta_key_by_index` module function to `LlamaCpp`.
+- Add `llama_model_meta_val_str_by_index` module function to `LlamaCpp`.
+- Change supported llama.cpp version to b9290.
+  - Add `LLAMA_CONTEXT_TYPE_DEFAULT` constant value.
+  - Add `LLAMA_CONTEXT_TYPE_MTP` constant value.
+  - Add `ctx_type` accessor to `LlamaContextParams`.
+  - Add `n_rs_seq` accessor to `LlamaContextParams`.
+  - Add `n_rs_seq` module function to `LlamaCpp`.
+
 ## [[0.25.2](https://github.com/yoshoku/llama_cpp.rb/compare/v0.25.1...v0.25.2)] - 2026-05-16
 
 - Change supported llama.cpp version to b9150.
-  - ADD `LLAMA_STATE_SEQ_FLAGS_NONE` constant value.
+  - Add `LLAMA_STATE_SEQ_FLAGS_NONE` constant value.
 
 ## [[0.25.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.25.0...v0.25.1)] - 2026-05-09
 
 - Change supported llama.cpp version to b9070.
-  - ADD `LLAMA_STATE_SEQ_FLAGS_ON_DEVICE` constant value.
+  - Add `LLAMA_STATE_SEQ_FLAGS_ON_DEVICE` constant value.
 
 ## [[0.25.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.24.3...v0.25.0)] - 2026-04-25
 
