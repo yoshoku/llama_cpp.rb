@@ -1,3 +1,8 @@
+## [[0.25.4](https://github.com/yoshoku/llama_cpp.rb/compare/v0.25.3...v0.25.4)] - 2026-06-13
+
+- Change supported llama.cpp version to b9610.
+  - Add `n_outputs_max` accessor to `LlamaContextParams`.
+
 ## [[0.25.3](https://github.com/yoshoku/llama_cpp.rb/compare/v0.25.2...v0.25.3)] - 2026-05-24
 
 - Add `llama_model_chat_template` module function to `LlamaCpp`.
