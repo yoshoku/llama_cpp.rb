@@ -5088,6 +5088,7 @@ void Init_llama_cpp(void) {
 
   /* TODO: struct llama_sampler_seq_config * samplers */
   /* TODO: size_t n_samplers */
+  /* TODO: struct llama_context * ctx_other */
 
   /**
    * Document-method: kv_unified=
