@@ -1,3 +1,8 @@
+## [[0.25.5](https://github.com/yoshoku/llama_cpp.rb/compare/v0.25.4...v0.25.5)] - 2026-06-27
+
+- Change supported llama.cpp version to b9820.
+  - Add `llama_model_n_layer_nextn` module function to `LlamaCpp`.
+
 ## [[0.25.4](https://github.com/yoshoku/llama_cpp.rb/compare/v0.25.3...v0.25.4)] - 2026-06-13
 
 - Change supported llama.cpp version to b9610.
