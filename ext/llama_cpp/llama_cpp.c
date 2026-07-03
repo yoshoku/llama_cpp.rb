@@ -4315,6 +4315,20 @@ static VALUE rb_llama_perf_sampler_reset(VALUE self, VALUE chain) {
 }
 
 /**
+ * @overload llama_ftype_name(ftype)
+ *  @param [Integer] ftype
+ *  @return [String]
+ */
+static VALUE rb_llama_ftype_name(VALUE self, VALUE ftype) {
+  if (!RB_INTEGER_TYPE_P(ftype)) {
+    rb_raise(rb_eArgError, "ftype must be an Integer");
+    return Qnil;
+  }
+  const char* name = llama_ftype_name((enum llama_ftype)NUM2INT(ftype));
+  return rb_utf8_str_new_cstr(name);
+}
+
+/**
  * @overload llama_flash_attn_type_name(flash_attn_type)
  *  @param [Integer] flash_attn_type
  *  @return [String]
@@ -4460,6 +4474,9 @@ void Init_llama_cpp(void) {
   rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_NVFP4", INT2NUM(LLAMA_FTYPE_MOSTLY_NVFP4));
   rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_Q1_0", INT2NUM(LLAMA_FTYPE_MOSTLY_Q1_0));
   rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_GUESSED", INT2NUM(LLAMA_FTYPE_GUESSED));
+
+  rb_define_module_function(rb_mLlamaCpp, "llama_ftype_name", rb_llama_ftype_name, 1);
+
   /* llama_rope_scaling_type */
   /* Document-const: LlamaCpp::LLAMA_ROPE_SCALING_TYPE_UNSPECIFIED */
   rb_define_const(rb_mLlamaCpp, "LLAMA_ROPE_SCALING_TYPE_UNSPECIFIED", INT2NUM(LLAMA_ROPE_SCALING_TYPE_UNSPECIFIED));
