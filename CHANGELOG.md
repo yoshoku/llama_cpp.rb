@@ -1,3 +1,9 @@
+## [[0.25.6](https://github.com/yoshoku/llama_cpp.rb/compare/v0.25.5...v0.25.6)] - 2026-07-04
+
+- Change supported llama.cpp version to b9860.
+    - Add `llama_model_ftype` module function to `LlamaCpp`.
+    - Add `llama_ftype_name` module function to `LlamaCpp`.
+
 ## [[0.25.5](https://github.com/yoshoku/llama_cpp.rb/compare/v0.25.4...v0.25.5)] - 2026-06-27
 
 - Change supported llama.cpp version to b9820.
