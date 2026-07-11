@@ -1,3 +1,8 @@
+## [[0.25.7](https://github.com/yoshoku/llama_cpp.rb/compare/v0.25.6...v0.25.7)] - 2026-07-11
+
+- Change supported llama.cpp version to b9950.
+  - Add `LLAMA_FTYPE_MOSTLY_Q2_0` constant value.
+
 ## [[0.25.6](https://github.com/yoshoku/llama_cpp.rb/compare/v0.25.5...v0.25.6)] - 2026-07-04
 
 - Change supported llama.cpp version to b9860.
