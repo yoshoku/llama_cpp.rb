@@ -4487,6 +4487,7 @@ void Init_llama_cpp(void) {
   rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_MXFP4_MOE", INT2NUM(LLAMA_FTYPE_MOSTLY_MXFP4_MOE));
   rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_NVFP4", INT2NUM(LLAMA_FTYPE_MOSTLY_NVFP4));
   rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_Q1_0", INT2NUM(LLAMA_FTYPE_MOSTLY_Q1_0));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_MOSTLY_Q2_0", INT2NUM(LLAMA_FTYPE_MOSTLY_Q2_0));
   rb_define_const(rb_mLlamaCpp, "LLAMA_FTYPE_GUESSED", INT2NUM(LLAMA_FTYPE_GUESSED));
 
   rb_define_module_function(rb_mLlamaCpp, "llama_ftype_name", rb_llama_ftype_name, 1);
