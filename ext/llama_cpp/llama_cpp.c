@@ -4491,6 +4491,13 @@ void Init_llama_cpp(void) {
   rb_define_const(rb_mLlamaCpp, "LLAMA_SPLIT_MODE_LAYER", INT2NUM(LLAMA_SPLIT_MODE_LAYER));
   rb_define_const(rb_mLlamaCpp, "LLAMA_SPLIT_MODE_ROW", INT2NUM(LLAMA_SPLIT_MODE_ROW));
   rb_define_const(rb_mLlamaCpp, "LLAMA_SPLIT_MODE_TENSOR", INT2NUM(LLAMA_SPLIT_MODE_TENSOR));
+  /* llama_load_type */
+  /* Document-const: LlamaCpp::LLAMA_LOAD_MODE_NONE */
+  rb_define_const(rb_mLlamaCpp, "LLAMA_LOAD_MODE_NONE", INT2NUM(LLAMA_LOAD_MODE_NONE));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_LOAD_MODE_MMAP", INT2NUM(LLAMA_LOAD_MODE_MMAP));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_LOAD_MODE_MLOCK", INT2NUM(LLAMA_LOAD_MODE_MLOCK));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_LOAD_MODE_MMAP_MLOCK", INT2NUM(LLAMA_LOAD_MODE_MMAP_MLOCK));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_LOAD_MODE_DIRECT_IO", INT2NUM(LLAMA_LOAD_MODE_DIRECT_IO));
   /* llama_context_type */
   /* Document-const: LlamaCpp::LLAMA_CONTEXT_TYPE_DEFAULT */
   rb_define_const(rb_mLlamaCpp, "LLAMA_CONTEXT_TYPE_DEFAULT", INT2NUM(LLAMA_CONTEXT_TYPE_DEFAULT));
