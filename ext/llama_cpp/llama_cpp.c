@@ -4337,6 +4337,17 @@ static VALUE rb_llama_load_mode_name(VALUE self, VALUE load_mode) {
   return rb_utf8_str_new_cstr(name);
 }
 
+static VALUE rb_llama_load_mode_from_str(VALUE self, VALUE str) {
+  if (!RB_TYPE_P(str, T_STRING)) {
+    rb_raise(rb_eArgError, "str must be a String");
+    return Qnil;
+  }
+  const char* str_ = StringValueCStr(str);
+  enum llama_load_mode load_mode = llama_load_mode_from_str(str_);
+  RB_GC_GUARD(str);
+  return INT2NUM(load_mode);
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -5900,6 +5911,9 @@ void Init_llama_cpp(void) {
 
   /* llama_load_mode_name */
   rb_define_module_function(rb_mLlamaCpp, "llama_load_mode_name", rb_llama_load_mode_name, 1);
+
+  /* llama_load_mode_from_str */
+  rb_define_module_function(rb_mLlamaCpp, "llama_load_mode_from_str", rb_llama_load_mode_from_str, 1);
 
   /* TODO: typedef bool (*llama_opt_param_filter) */
   /* TODO: bool llama_opt_param_filter_all */
