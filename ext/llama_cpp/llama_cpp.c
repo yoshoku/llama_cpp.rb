@@ -498,17 +498,6 @@ static VALUE llama_model_params_set_vocab_only(VALUE self, VALUE vocab_only) {
   return vocab_only;
 }
 
-static VALUE llama_model_params_get_use_mmap(VALUE self) {
-  struct llama_model_params* data = get_llama_model_params(self);
-  return data->use_mmap ? Qtrue : Qfalse;
-}
-
-static VALUE llama_model_params_set_use_mmap(VALUE self, VALUE use_mmap) {
-  struct llama_model_params* data = get_llama_model_params(self);
-  data->use_mmap = RTEST(use_mmap) ? true : false;
-  return use_mmap;
-}
-
 static VALUE llama_model_params_get_use_direct_io(VALUE self) {
   struct llama_model_params* data = get_llama_model_params(self);
   return data->use_direct_io ? Qtrue : Qfalse;
@@ -4730,17 +4719,6 @@ void Init_llama_cpp(void) {
    * @return [Boolean]
    */
   rb_define_method(rb_cLlamaModelParams, "vocab_only=", RUBY_METHOD_FUNC(llama_model_params_set_vocab_only), 1);
-  /**
-   * Document-method: use_mmap
-   * @return [Boolean]
-   */
-  rb_define_method(rb_cLlamaModelParams, "use_mmap", RUBY_METHOD_FUNC(llama_model_params_get_use_mmap), 0);
-  /**
-   * Document-method: use_mmap=
-   * @param [Boolean] use_mmap
-   * @return [Boolean]
-   */
-  rb_define_method(rb_cLlamaModelParams, "use_mmap=", RUBY_METHOD_FUNC(llama_model_params_set_use_mmap), 1);
   /**
    * Document-method: use_direct_io
    * @return [Boolean]
