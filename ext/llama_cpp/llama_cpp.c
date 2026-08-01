@@ -5683,6 +5683,8 @@ void Init_llama_cpp(void) {
   /* llama_vocab_get_add_sep */
   rb_define_module_function(rb_mLlamaCpp, "llama_vocab_get_add_sep", rb_llama_vocab_get_add_sep, 1);
 
+  /* TODO: llama_vocab_get_suppress_tokens */
+
   /* llama_vocab_fim_pre */
   rb_define_module_function(rb_mLlamaCpp, "llama_vocab_fim_pre", rb_llama_vocab_fim_pre, 1);
 
