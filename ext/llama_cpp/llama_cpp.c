@@ -4323,6 +4323,20 @@ static VALUE rb_llama_flash_attn_type_name(VALUE self, VALUE flash_attn_type) {
   return rb_utf8_str_new_cstr(name);
 }
 
+/**
+ * @overload llama_load_mode_name(load_mode)
+ *  @param [Integer] load_mode
+ *  @return [String]
+ */
+static VALUE rb_llama_load_mode_name(VALUE self, VALUE load_mode) {
+  if (!RB_INTEGER_TYPE_P(load_mode)) {
+    rb_raise(rb_eArgError, "load_mode must be an Integer");
+    return Qnil;
+  }
+  const char* name = llama_load_mode_name((enum llama_load_mode)NUM2INT(load_mode));
+  return rb_utf8_str_new_cstr(name);
+}
+
 /* MAIN */
 void Init_llama_cpp(void) {
   char tmp[12];
@@ -5883,6 +5897,9 @@ void Init_llama_cpp(void) {
 
   /* llama_perf_sampler_reset */
   rb_define_module_function(rb_mLlamaCpp, "llama_perf_sampler_reset", rb_llama_perf_sampler_reset, 1);
+
+  /* llama_load_mode_name */
+  rb_define_module_function(rb_mLlamaCpp, "llama_load_mode_name", rb_llama_load_mode_name, 1);
 
   /* TODO: typedef bool (*llama_opt_param_filter) */
   /* TODO: bool llama_opt_param_filter_all */
