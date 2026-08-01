@@ -1,3 +1,17 @@
+## [[0.26.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.25.7...v0.26.0)] - 2026-08-01
+
+- Change supported llama.cpp version to b10210.
+  - Remove `use_mmap` accessor from LlamaModelParams.
+  - Remove `use_direct_io` accessor from LlamaModelParams.
+  - Remove `use_mlock` accessor from LlamaModelParams.
+  - Add `LLAMA_LOAD_MODE_NONE` constant value.
+  - Add `LLAMA_LOAD_MODE_MMAP` constant value.
+  - Add `LLAMA_LOAD_MODE_MLOCK` constant value.
+  - Add `LLAMA_LOAD_MODE_MMAP_MLOCK` constant value.
+  - Add `LLAMA_LOAD_MODE_DIRECT_IO` constant value.
+  - Add `llama_load_mode_name` module function to `LlamaCpp`.
+  - Add `llama_load_mode_from_str` module function to `LlamaCpp`.
+
 ## [[0.25.7](https://github.com/yoshoku/llama_cpp.rb/compare/v0.25.6...v0.25.7)] - 2026-07-11
 
 - Change supported llama.cpp version to b9950.
@@ -6,8 +20,8 @@
 ## [[0.25.6](https://github.com/yoshoku/llama_cpp.rb/compare/v0.25.5...v0.25.6)] - 2026-07-04
 
 - Change supported llama.cpp version to b9860.
-    - Add `llama_model_ftype` module function to `LlamaCpp`.
-    - Add `llama_ftype_name` module function to `LlamaCpp`.
+  - Add `llama_model_ftype` module function to `LlamaCpp`.
+  - Add `llama_ftype_name` module function to `LlamaCpp`.
 
 ## [[0.25.5](https://github.com/yoshoku/llama_cpp.rb/compare/v0.25.4...v0.25.5)] - 2026-06-27
 
