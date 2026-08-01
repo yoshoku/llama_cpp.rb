@@ -498,17 +498,6 @@ static VALUE llama_model_params_set_vocab_only(VALUE self, VALUE vocab_only) {
   return vocab_only;
 }
 
-static VALUE llama_model_params_get_use_mlock(VALUE self) {
-  struct llama_model_params* data = get_llama_model_params(self);
-  return data->use_mlock ? Qtrue : Qfalse;
-}
-
-static VALUE llama_model_params_set_use_mlock(VALUE self, VALUE use_mlock) {
-  struct llama_model_params* data = get_llama_model_params(self);
-  data->use_mlock = RTEST(use_mlock) ? true : false;
-  return use_mlock;
-}
-
 static VALUE llama_model_params_get_check_tensors(VALUE self) {
   struct llama_model_params* data = get_llama_model_params(self);
   return data->check_tensors ? Qtrue : Qfalse;
@@ -4708,17 +4697,6 @@ void Init_llama_cpp(void) {
    * @return [Boolean]
    */
   rb_define_method(rb_cLlamaModelParams, "vocab_only=", RUBY_METHOD_FUNC(llama_model_params_set_vocab_only), 1);
-  /**
-   * Document-method: use_mlock
-   * @return [Boolean]
-   */
-  rb_define_method(rb_cLlamaModelParams, "use_mlock", RUBY_METHOD_FUNC(llama_model_params_get_use_mlock), 0);
-  /**
-   * Document-method: use_mlock=
-   * @param [Boolean] use_mlock
-   * @return [Boolean]
-   */
-  rb_define_method(rb_cLlamaModelParams, "use_mlock=", RUBY_METHOD_FUNC(llama_model_params_set_use_mlock), 1);
   /**
    * Document-method: check_tensors
    * @return [Boolean]
