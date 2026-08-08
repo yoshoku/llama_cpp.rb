@@ -1,3 +1,9 @@
+## [[0.27.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.26.0...v0.27.0)] - 2026-08-08
+
+- Change supported llama.cpp version to b10310.
+  - Add `n_vocab` argument to `llama_sampler_init_penaltie` module function.
+  - Add `load_mtp` accessor to LlamaModelParams.
+
 ## [[0.26.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.25.7...v0.26.0)] - 2026-08-01
 
 - Change supported llama.cpp version to b10210.
