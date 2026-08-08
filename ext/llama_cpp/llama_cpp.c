@@ -3931,13 +3931,18 @@ static VALUE rb_llama_sampler_init_grammar(VALUE self, VALUE vocab, VALUE gramma
 
 /**
  * @overload llama_sampler_init_penalties(penalty_last_n, penalty_repeat, penalty_freq, penalty_present)
+ *  @param [Integer] n_vocab
  *  @param [Integer] penalty_last_n
  *  @param [Float] penalty_repeat
  *  @param [Float] penalty_freq
  *  @param [Float] penalty_present
  *  @return [LlamaSampler]
  */
-static VALUE rb_llama_sampler_init_penalties(VALUE self, VALUE penalty_last_n, VALUE penalty_repeat, VALUE penalty_freq, VALUE penalty_present) {
+static VALUE rb_llama_sampler_init_penalties(VALUE self, VALUE n_vocab, VALUE penalty_last_n, VALUE penalty_repeat, VALUE penalty_freq, VALUE penalty_present) {
+  if (!RB_INTEGER_TYPE_P(n_vocab)) {
+    rb_raise(rb_eArgError, "n_vocab must be an Integer");
+    return Qnil;
+  }
   if (!RB_INTEGER_TYPE_P(penalty_last_n)) {
     rb_raise(rb_eArgError, "penalty_last_n must be an Integer");
     return Qnil;
@@ -3954,7 +3959,7 @@ static VALUE rb_llama_sampler_init_penalties(VALUE self, VALUE penalty_last_n, V
     rb_raise(rb_eArgError, "penalty_present must be a Float");
     return Qnil;
   }
-  struct llama_sampler* sampler = llama_sampler_init_penalties(NUM2INT(penalty_last_n), NUM2DBL(penalty_repeat), NUM2DBL(penalty_freq), NUM2DBL(penalty_present));
+  struct llama_sampler* sampler = llama_sampler_init_penalties(NUM2INT(n_vocab), NUM2INT(penalty_last_n), NUM2DBL(penalty_repeat), NUM2DBL(penalty_freq), NUM2DBL(penalty_present));
   return TypedData_Wrap_Struct(rb_cLlamaSampler, &llama_sampler_data_type, sampler);
 }
 
@@ -5806,7 +5811,7 @@ void Init_llama_cpp(void) {
   /* TODO: llama_sampler_init_grammar_lazy_patterns */
 
   /* llama_sampler_init_penalties */
-  rb_define_module_function(rb_mLlamaCpp, "llama_sampler_init_penalties", rb_llama_sampler_init_penalties, 4);
+  rb_define_module_function(rb_mLlamaCpp, "llama_sampler_init_penalties", rb_llama_sampler_init_penalties, 5);
 
   /* TODO: llama_sampler_init_dry */
 
