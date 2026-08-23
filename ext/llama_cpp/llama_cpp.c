@@ -4535,6 +4535,7 @@ void Init_llama_cpp(void) {
   /* llama_load_type */
   /* Document-const: LlamaCpp::LLAMA_LOAD_MODE_NONE */
   rb_define_const(rb_mLlamaCpp, "LLAMA_LOAD_MODE_NONE", INT2NUM(LLAMA_LOAD_MODE_NONE));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_LOAD_MODE_AUTO", INT2NUM(LLAMA_LOAD_MODE_AUTO));
   rb_define_const(rb_mLlamaCpp, "LLAMA_LOAD_MODE_MMAP", INT2NUM(LLAMA_LOAD_MODE_MMAP));
   rb_define_const(rb_mLlamaCpp, "LLAMA_LOAD_MODE_MLOCK", INT2NUM(LLAMA_LOAD_MODE_MLOCK));
   rb_define_const(rb_mLlamaCpp, "LLAMA_LOAD_MODE_MMAP_MLOCK", INT2NUM(LLAMA_LOAD_MODE_MMAP_MLOCK));
