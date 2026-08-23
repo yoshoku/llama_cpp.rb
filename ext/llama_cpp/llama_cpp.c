@@ -3584,6 +3584,29 @@ static VALUE rb_llama_sampler_clone(VALUE self, VALUE sampler) {
 }
 
 /**
+ * @overload llama_sampler_copy(src, dst)
+ *  @param [LlamaSampler] src
+ *  @param [LlamaSampler] dst
+ *  @return [NilClass]
+ */
+static VALUE rb_llama_sampler_copy(VALUE self, VALUE src, VALUE dst) {
+  if (!rb_obj_is_kind_of(src, rb_cLlamaSampler)) {
+    rb_raise(rb_eArgError, "src must be a LlamaSampler");
+    return Qnil;
+  }
+  if (!rb_obj_is_kind_of(dst, rb_cLlamaSampler)) {
+    rb_raise(rb_eArgError, "dst must be a LlamaSampler");
+    return Qnil;
+  }
+  struct llama_sampler* src_ = get_llama_sampler(src);
+  struct llama_sampler* dst_ = get_llama_sampler(dst);
+  llama_sampler_copy(src_, dst_);
+  RB_GC_GUARD(src);
+  RB_GC_GUARD(dst);
+  return Qnil;
+}
+
+/**
  * @overload llama_sampler_free(sampler)
  *  @param [LlamaSampler] sampler
  *  @return [NilClass]
@@ -5807,6 +5830,9 @@ void Init_llama_cpp(void) {
 
   /* llama_sampler_clone */
   rb_define_module_function(rb_mLlamaCpp, "llama_sampler_clone", rb_llama_sampler_clone, 1);
+
+  /* llama_sampler_copy */
+  rb_define_module_function(rb_mLlamaCpp, "llama_sampler_copy", rb_llama_sampler_copy, 2);
 
   /* llama_sampler_free */
   rb_define_module_function(rb_mLlamaCpp, "llama_sampler_free", rb_llama_sampler_free, 1);
