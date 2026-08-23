@@ -1319,6 +1319,15 @@ static llama_adapter_lora_wrapper* get_llama_adapter_lora_wrapper(VALUE self) {
 }
 
 /**
+ * @overload llama_version
+ *   @return [String]
+ */
+static VALUE rb_llama_version(VALUE self) {
+  const char* version = llama_version();
+  return rb_utf8_str_new_cstr(version);
+}
+
+/**
  * @overload llama_backend_init
  *   @return [NilClass]
  */
@@ -5379,6 +5388,9 @@ void Init_llama_cpp(void) {
    */
   rb_cLlamaAdapterLora = rb_define_class_under(rb_mLlamaCpp, "LlamaAdapterLora", rb_cObject);
   rb_define_alloc_func(rb_cLlamaAdapterLora, llama_adapter_lora_wrapper_alloc);
+
+  /* llama_version */
+  rb_define_module_function(rb_mLlamaCpp, "llama_version", rb_llama_version, 0);
 
   /* llama_backend_init */
   rb_define_module_function(rb_mLlamaCpp, "llama_backend_init", rb_llama_backend_init, 0);
