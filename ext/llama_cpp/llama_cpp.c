@@ -4583,6 +4583,11 @@ void Init_llama_cpp(void) {
   rb_define_const(rb_mLlamaCpp, "LLAMA_LOAD_MODE_MLOCK", INT2NUM(LLAMA_LOAD_MODE_MLOCK));
   rb_define_const(rb_mLlamaCpp, "LLAMA_LOAD_MODE_MMAP_MLOCK", INT2NUM(LLAMA_LOAD_MODE_MMAP_MLOCK));
   rb_define_const(rb_mLlamaCpp, "LLAMA_LOAD_MODE_DIRECT_IO", INT2NUM(LLAMA_LOAD_MODE_DIRECT_IO));
+  /* llama_lazy_mode */
+  /* Document-const: LlamaCpp::LLAMA_LAZY_MODE_OFF */
+  rb_define_const(rb_mLlamaCpp, "LLAMA_LAZY_MODE_OFF", INT2NUM(LLAMA_LAZY_MODE_OFF));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_LAZY_MODE_AUTO", INT2NUM(LLAMA_LAZY_MODE_AUTO));
+  rb_define_const(rb_mLlamaCpp, "LLAMA_LAZY_MODE_ON", INT2NUM(LLAMA_LAZY_MODE_ON));
   /* llama_context_type */
   /* Document-const: LlamaCpp::LLAMA_CONTEXT_TYPE_DEFAULT */
   rb_define_const(rb_mLlamaCpp, "LLAMA_CONTEXT_TYPE_DEFAULT", INT2NUM(LLAMA_CONTEXT_TYPE_DEFAULT));
