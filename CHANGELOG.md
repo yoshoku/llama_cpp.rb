@@ -1,8 +1,16 @@
+## [[0.28.1](https://github.com/yoshoku/llama_cpp.rb/compare/v0.28.0...v0.28.1)] - 2026-09-05
+
+- Change supported llama.cpp version to v0.4.0.
+  - Add `LLAMA_LAZY_MODE_OFF` constant value.
+  - Add `LLAMA_LAZY_MODE_AUTO` constant value.
+  - Add `LLAMA_LAZY_MODE_ON` constant value.
+  - Add `max_buf_size` accessor to `LlamaModelQuantizeParams`.
+
 ## [[0.28.0](https://github.com/yoshoku/llama_cpp.rb/compare/v0.27.0...v0.28.0)] - 2026-08-23
 
 - Change supported llama.cpp version to v0.2.0.
   - Add `LLAMA_LOAD_MODE_AUTO` constant value.
-  - Add `n_outputs_max_per_seq accessor` to `LlamaContextParams`.
+  - Add `n_outputs_max_per_seq` accessor to `LlamaContextParams`.
   - Add `llama_version` module function to `LlamaCpp`.
   - Add `llama_sampler_copy` module function to `LlamaCpp`.
 
