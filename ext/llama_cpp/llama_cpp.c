@@ -1153,6 +1153,17 @@ static VALUE llama_model_quantize_params_set_dry_run(VALUE self, VALUE dry_run) 
   return dry_run;
 }
 
+static VALUE llama_model_quantize_params_get_max_buf_size(VALUE self) {
+  llama_model_quantize_params* data = get_llama_model_quantize_params(self);
+  return SIZET2NUM(data->max_buf_size);
+}
+
+static VALUE llama_model_quantize_params_set_max_buf_size(VALUE self, VALUE max_buf_size) {
+  llama_model_quantize_params* data = get_llama_model_quantize_params(self);
+  data->max_buf_size = NUM2SIZET(max_buf_size);
+  return max_buf_size;
+}
+
 /* llama_logit_bias */
 static void llama_logit_bias_free(void *ptr) {
   if (ptr) {
@@ -5357,6 +5368,17 @@ void Init_llama_cpp(void) {
   /* TODO: const struct llama_model_kv_override* kv_overrides */
   /* TODO: const struct llama_model_tensor_override* tt_overrides */
   /* TODO: const int32_t* prune_layers */
+  /**
+   * Document-method: max_buf_size
+   * @return [Integer]
+   */
+  rb_define_method(rb_cLlamaModelQuantizeParams, "max_buf_size", RUBY_METHOD_FUNC(llama_model_quantize_params_get_max_buf_size), 0);
+  /**
+   * Document-method: max_buf_size=
+   * @param [Integer] max_buf_size
+   * @return [Integer]
+   */
+  rb_define_method(rb_cLlamaModelQuantizeParams, "max_buf_size=", RUBY_METHOD_FUNC(llama_model_quantize_params_set_max_buf_size), 1);
 
   /**
    * Document-class: LlamaCpp::LlamaLogitBias
